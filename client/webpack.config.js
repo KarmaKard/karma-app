@@ -8,13 +8,14 @@ module.exports = {
   output: {
     path: './dist',
     publicPath: '/',
-    filename: '[name].js'
+    filename: '[name].bundle.js'
   },
   devtool: '#source-map',
   module: {
     loaders: [
       { test: /\.(svg|png|gif|jpg)$/, loaders: [ 'url?limit=10000', 'img?minimize' ] },
       { test: /\.css$/, loaders: [ 'file?name=[name].css', 'cssnext' ] },
+      { test: /\.js$/, exclude: /node_modules/, loader: 'babel?stage=0' },
       { test: /\.js$/, loader: 'envify-loader' }
     ]
   },
