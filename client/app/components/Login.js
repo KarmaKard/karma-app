@@ -3,10 +3,13 @@ import React from 'react'
 export default React.createClass({
   render() {
     return (
-      <div>
-        <input type="text" name="email" placeholder="Email"/>
-        <input type="password" name="password" placeholder="Password"/>
-      </div>
+        <div id="login" >
+          <form>
+            <input type="text" id="email" value="email" />
+            <input type="password" id="password" value="password" />
+            <input type="submit" id="submitbutton" value="Submit"/>
+          </form>
+       </div>
     )
   }
 })
