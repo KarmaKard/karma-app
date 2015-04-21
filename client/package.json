@@ -6,6 +6,7 @@
   "main": "client/app.js",
   "scripts": {
     "start": "rm -rf dist && mkdir -p dist && cp -r assets/* dist && webpack-dev-server --port 4200",
+    "winstart": "webpack-dev-server --port 4200",
     "build": "rm -rf dist && mkdir -p dist && cp -r assets/* dist && webpack -p",
     "test": "mocha --reporter min --compilers js:babel/register 'app/**/*.spec.js'"
   },
