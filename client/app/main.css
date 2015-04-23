@@ -1,17 +1,2 @@
-input {
-    width: 100%;
-    padding: 6px 0;
-    margin: 10px 0;
-    font-size: 16px;
-}
-
-#login {
-    width: 250px;
-    margin: 20px 20px 20px 20px;
-}
-
-#submitbutton{
-    background: rgb(97, 150, 189);
-    color: white;
-    border: black;
-}
+@import './components/login';
+@import './components/profile/profile';
