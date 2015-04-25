@@ -1,10 +1,13 @@
 import React from 'react'
+import Router, {RouteHandler} from 'react-router'
 
 export default React.createClass({
     render: function(){
         return(
-
-            <h1>Hello world!</h1>
+          <div>
+            <h1>This will be the business dashboard</h1>
+            <RouteHandler />
+          </div>
         )
     }
 

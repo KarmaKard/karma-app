@@ -3,6 +3,7 @@
     clear: both;
     float: left;
     width: 100%;
+    margin-bottom: 40px;
 }
 
 .keyword-list__input{
