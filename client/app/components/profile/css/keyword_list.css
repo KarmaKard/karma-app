@@ -1,0 +1,13 @@
+/* KeyWordList component */
+.keyword-list {
+    clear: both;
+    float: left;
+    width: 100%;
+}
+
+.keyword-list__input{
+    width: 100%;
+    padding: 6px 0;
+    margin: 10px 0;
+    font-size: 16px;
+}

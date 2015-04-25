@@ -19,9 +19,10 @@ var App = React.createClass({
 export default (
   <Route handler={App} path="/">
     <DefaultRoute handler={Login} />
-    <Route name="profile" handler={Profile} path="/business"/>
-    <Route name="dashboard" handler={Dashboard} path="/business/dashboard"/>
-    <Route name="deal_builder" handler={DealBuilder} path="/business/deals"/>
+    <Route name="dashboard" handler={Dashboard} path="/business">
+      <Route name="profile" handler={Profile} path="/profile" />
+      <Route name="deal_builder" handler={DealBuilder} path="/deals" />
+    </Route>
   </Route>
 )
 
