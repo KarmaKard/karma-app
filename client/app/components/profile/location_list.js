@@ -23,11 +23,12 @@ var AddKeyword = React.createClass({
       newStreet: '',
       newZip: ''
     })
+    React.findDOMNode(this.refs.location_input).focus()
   },
   render: function(){
     return (
       <div>
-        <input type="text" className="location-list__street-input" placeholder="Full Street Address" value={this.state.newStreet} onChange={this.updateNewStreet} />
+        <input type="text" className="location-list__street-input" placeholder="Full Street Address" ref="location_input" value={this.state.newStreet} onChange={this.updateNewStreet} />
         <input type="text" className="location-list__zip-input" placeholder="Zip" value={this.state.newZip} onChange={this.updateNewZip} />
         <button className="location-list__add-button" onClick={this.handleAddNew}> Add Keyword</button>
       </div>

@@ -9,6 +9,7 @@ import DashboardProfileHandler from './components/profile/handlers/dashboard_pro
 import Registration from './components/registration/registration'
 import Dashboard from './components/dashboard/dashboard'
 import Business from './components/business'
+import Reports from './components/reports/reports'
 
 var App = React.createClass({
   render() {
@@ -29,6 +30,7 @@ export default (
         <Route name="deal_builder" handler={RegistrationDealHandler} path="deal-builder" />
       </Route>
       <Route name="dashboard" handler={Dashboard} path="/dashboard" >
+        <DefaultRoute handler={Reports} />
         <Route name="profile" handler={DashboardProfileHandler} path="profile" />
         <Route name="deals" handler={DashboardDealHandler} path="deals" />
       </Route>
