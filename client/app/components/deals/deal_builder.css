@@ -27,6 +27,10 @@
   background-color: #C0D3E2;
 }
 
+select {
+  padding: 6px 0;
+  font-size: 16px;
+}
 
 /* Table Columns */
 .column-1{
@@ -44,28 +48,36 @@
 
 /* Deal 1 */
 .deal-table__BOGO-input{
-  height: 20px;
   width: 60%;
   margin: 0 20px 0 45px;
+  padding: 6px 0;
+  font-size: 16px;
 }
 
 .deal-table__BOGO-value{
   width:50px;
+  padding: 6px 0;
+  font-size: 16px;
 }
 
 /* Deal 2 */
 .deal-table__FREE__dropdown{
   margin: 0 5px;
+  padding: 6px 0;
+  font-size: 16px;
 }
 
 .deal-table__FREE__input{
-  height: 20px;
   width: 60%;
   margin: 0 20px 0 5px;
+  padding: 6px 0;
+  font-size: 16px;
 }
 
 .deal-table__FREE-value{
   width: 50px;
+  padding: 6px 0;
+  font-size: 16px;
 }
 
 /* Deal 3 */
@@ -74,9 +86,10 @@
 }
 
 .deal-table__DISCOUNT__input{
-  height: 20px;
   width: 60%;
   margin: 0 20px 0 42px;
+  padding: 6px 0;
+  font-size: 16px;
 }
 
 .deal-table__DISCOUNT__dropdown2{
@@ -84,27 +97,33 @@
 }
 .deal-table__DISCOUNT-value{
   width:50px;
+  padding: 6px 0;
+  font-size: 16px;
 }
 
 
 /* Deal 4 */
 .deal-table__PLUS_ONE{
-  height: 90px;
+  height: 120px;
 }
 
 .deal-table__PLUS_ONE-input1{
-  height: 20px;
   width: 60%;
   margin: 0 20px 10px 39px;
+  padding: 6px 0;
+  font-size: 16px;
 }
 
 .deal-table__PLUS_ONE-input2{
-  height: 20px;
   width: 60%;
   margin: 0 20px 0 32px;
+  padding: 6px 0;
+  font-size: 16px;
 }
 
 .deal-table__PLUS_ONE-value{
-  width:50px;
+  width:75px;
+  padding: 6px 0;
+  font-size: 16px;
 }
 
