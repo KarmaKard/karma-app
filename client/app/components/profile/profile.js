@@ -1,20 +1,32 @@
 import React from 'react'
-import LocationList from './js/location_list'
-import KeyWordList from './js/keyword_list'
+import LocationList from './location_list'
+import KeyWordList from './keyword_list'
 
 var NavButton =  React.createClass({
   contextTypes: {
     router: React.PropTypes.func
   },
-  buttonClicked(e){
+  nextClicked(e){
     e.preventDefault()
     this.context.router.transitionTo('deal_builder')
   },
+  saveClicked(e){
+    e.preventDefault()
+
+  },
   render() {
+    var saveButton
+    //check if this is a registration to decided whether to include the skip button
+    if (this.props.isRegistration) {
+      saveButton = <button className="navbuttons__button" onClick={this.nextClicked} >Next</button>
+    }
+    else{
+      saveButton = <button className="navbuttons__button" onClick={this.saveClicked} >Save</button>
+    }
+
     return(
       <div className="navbuttons">
-        <button className="navbuttons__button" onClick={this.buttonClicked} >Save</button>
-        <button className="navbuttons__button">Skip</button>
+        {saveButton}
       </div>
     )
   }
@@ -34,18 +46,6 @@ var GeneralInfo =  React.createClass({
   }
 })
 
-var CheckMap = React.createClass({
-  render() {
-    return (
-      <div className="check-map">
-        <p className="check-map__text">Verify if location(s) shows up correctly on the map</p>
-        <button className="check-map__button">Check Map</button>
-      </div>
-    )
-  }
-})
-
-
 export default React.createClass({
 
   onSubmit(event) {
@@ -54,10 +54,11 @@ export default React.createClass({
   },
   
   render: function() {
+   
     return (
       <div className="pagewrap">
-      
-        <NavButton />
+
+        <NavButton isRegistration={this.props.isRegistration} />
         
         <h2>Business Profile Builder</h2>
         
@@ -67,7 +68,6 @@ export default React.createClass({
         
         <LocationList />
         
-        <CheckMap />
           
       </div>
     )

@@ -1,0 +1,22 @@
+.dashboardLink{
+  clear:both;
+}
+
+.navigation__stripe{
+  float:right;
+  margin-bottom: 30px;
+  width:100%;
+  background-color: #6196BD; 
+}
+
+.navigation__stripe__links{
+  margin: 5px 10px 5px 10px;
+  float:right;
+  color:white;
+} 
+
+.navigation-stripe__section{
+  margin: 5px 10px 5px 10px;
+  float:left;
+  color:white;
+}

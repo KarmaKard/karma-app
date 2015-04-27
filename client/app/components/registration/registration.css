@@ -1,0 +1,13 @@
+.registration__header__stripe{
+  float:right;
+  margin-bottom: 30px;
+  width:100%;
+  background-color: #6196BD; 
+}
+
+.registration__header__title{
+  margin: 5px 10px 5px 10px;
+  float:left;
+  color:white;
+
+}

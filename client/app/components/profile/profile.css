@@ -1,63 +1,67 @@
-@import './css/keyword_list';
-@import './css/location_list';
+@import './keyword_list';
+@import './location_list';
 
 .pagewrap {
-    width: 80%;
-    margin: auto;
+  margin: auto;
+  clear:both;
 }
 
 /* NavButton component */
 .navbuttons {
-    float:right;
+  float:right;
 }
 
 .navbuttons__button {
-    background: rgb(97, 150, 189);
-    color: white;
-    border: black;
-    padding: 5px 10px;
-    margin: 5px;
+  background: #6196bd;
+  color: white;
+  border: black;
+  padding: 5px 10px;
+  margin: 0 5px 0 25px;
+  height: 35px;
+  width: 75px;
 }
 
 /* GeneralInfo component */
 .general-info {
-    width:100%;
+  width:100%;
+  clear: both;
 }
 
 .general-info__logo{
-    float:left;
-    margin: 10px;
-    width: 150px;
-    height: 150px;
+  float:left;
+  margin: 10px;
+  width: 150px;
+  height: 150px;
 }
 
 .general-info__text {
-    margin-left: 170px;
+  margin-left: 170px;
+
 }
 
 .general-info__text__org-name {
-    width: 100%;
-    padding: 6px 0;
-    margin: 10px 0;
-    font-size: 16px;
+  width: 99%;
+  padding: 6px 0;
+  margin: 10px 0;
+  font-size: 16px;
 }
 
 .general-info__text__org-desc {
-    width: 100%;
-    height: 100px;
-    font-size: 16px;
+  width: 99%;
+  height: 100px;
+  font-size: 16px;
 }
 
 /* CheckMap component */
 .check-map__text {
-    float: left;
+  float: left;
 }
 .check-map__button {
-    background: rgb(97, 150, 189);
-    color: white;
-    border: black;
-    padding: 5px 10px;
-    margin: 15px 5px 0 25px;
+  background: rgb(97, 150, 189);
+  color: white;
+  border: black;
+  padding: 5px 10px;
+  margin: 15px 5px 0 25px;
 }
 
 
