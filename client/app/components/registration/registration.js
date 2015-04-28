@@ -5,23 +5,23 @@ export default React.createClass({
   contextTypes: {
     router: React.PropTypes.func
   },
-  profile_NextClicked(e){
+  profileNextClicked(e){
     e.preventDefault()
     alert(nextView)
     this.context.router.transitionTo('deal_builder')
   },
-  deals_NextClicked(e){
+  dealsNextClicked(e){
     e.preventDefault()
     alert(nextView)
     this.context.router.transitionTo('dashboard')
   },
-  render: function(){
+  render(){
     var NextButtonLink
     if(this.props.registrationView === "profile"){
-      NextButtonLink = <button className="navbuttons__button" onClick={this.profile_NextClicked} >Next</button>
+      NextButtonLink = <button className="navbuttons__button" onClick={this.profileNextClicked} >Next</button>
     }
     else if (this.props.registrationView === "deals"){
-      NextButtonLink = <button className="navbuttons__button" onClick={this.deals_NextClicked} >Next</button>
+      NextButtonLink = <button className="navbuttons__button" onClick={this.dealsNextClicked} >Next</button>
     }
     return(
       <div>

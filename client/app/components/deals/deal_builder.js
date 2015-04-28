@@ -5,15 +5,15 @@ var NavButton =  React.createClass({
   contextTypes: {
     router: React.PropTypes.func
   },
-  NextClicked(e){
+  nextClicked(e){
     e.preventDefault()
     this.context.router.transitionTo('dashboard')
   },
-  BackClicked(e){
+  backClicked(e){
     e.preventDefault()
     this.context.router.transitionTo('profile_builder')
   },
-  SaveClicked(e){
+  saveClicked(e){
     e.preventDefault()
 
   },
@@ -21,11 +21,11 @@ var NavButton =  React.createClass({
     var saveButton
     var backButton
     if (this.props.isRegistration) {
-      saveButton = <button className="navbuttons__button" onClick={this.NextClicked} >Next</button>
-      backButton = <button className="navbuttons__button" onClick={this.BackClicked} >Back</button>
+      saveButton = <button className="navbuttons__button" onClick={this.nextClicked} >Next</button>
+      backButton = <button className="navbuttons__button" onClick={this.backClicked} >Back</button>
     }
     else{
-      saveButton = <button className="navbuttons__button" onClick={this.dashboardSaveClicked} >Save</button>
+      saveButton = <button className="navbuttons__button" onClick={this.saveClicked} >Save</button>
     }
 
     return(
@@ -124,7 +124,7 @@ export default React.createClass({
             <td className="column-2">
               $ <input className="deal-table__DISCOUNT-value"/>
             </td>
-            <td  className="column-3">1</td> 
+            <td  className="column-3"></td> 
           </tr>
           <tr className="deal-table__even deal-table__PLUS_ONE">
             <td className="column-1">

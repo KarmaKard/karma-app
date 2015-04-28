@@ -4,14 +4,14 @@
   clear:both;
 }
 
-.navigation__stripe{
+.navigation-stripe{
   float:right;
   margin-bottom: 30px;
   width:100%;
   background-color: #6196BD; 
 }
 
-.navigation__stripe__links{
+.navigation-stripe__links{
   margin: 5px 10px 5px 10px;
   float:right;
   color:white;
