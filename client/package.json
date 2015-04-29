@@ -38,6 +38,7 @@
     "mocha": "2.2.4",
     "path-to-url": "0.1.0",
     "react": "0.13.2",
+    "react-d3": "^0.3.1",
     "react-router": "0.13.2",
     "sinon": "1.14.1",
     "superagent": "1.2.0",
