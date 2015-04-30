@@ -4,5 +4,4 @@ var appRouter = express.Router()
 
 export default appRouter
 
-appRouter.use('/', UsersController.router)
-
+appRouter.use('/api/v1/users', UsersController.router)
