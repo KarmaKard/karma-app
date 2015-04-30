@@ -6,7 +6,7 @@ export default function validateCreate (req, res, next) {
     errors.addToReq(req, 'organization', 'Root "organization" parameter is required')
     return next(new ValidationError(req))
   }
-  req.checkBody(['organization', 'name'], 'Organization first_name is required').notEmpty()
-  req.checkBody(['organization', 'type'], 'Organization last_name is required').notEmpty()
+  req.checkBody(['organization', 'name'], 'Organization name is required').notEmpty()
+  req.checkBody(['organization', 'type'], 'Organization type is required').notEmpty()
   next(req.validationErrors() ? new ValidationError(req) : null)
 }
