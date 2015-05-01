@@ -1,9 +1,9 @@
 import should from 'should'
 import sinon from 'sinon'
-import stubReq from '../../util/stub-request'
-import validateCreate from '../../../app/organizations/validators/validate-create'
-import { ValidationError } from '../../../app/common/errors'
 import { serialize } from 'express-validator-errors'
+import validateCreate from './validate-create'
+import { ValidationError } from '../../common/errors'
+import stubReq from '../../../test/util/stub-request'
 
 describe('Organizations: Validate Create', function () {
   var req, res, next
