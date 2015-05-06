@@ -1,6 +1,5 @@
 import React from 'react'
 
-
 export default React.createClass({
   getInitialState(){
     return {
@@ -8,40 +7,44 @@ export default React.createClass({
       keywords: []
     }
   },
+
   updateNewKeyword(e){
     this.setState({
       newKeyword: e.target.value
     })
   },
+
   handleAddNew(){
-    this.addKeyword(this.state.newKeyword)
     this.setState({
-      newKeyword: ''
+      newKeyword: '',
+      keywords: this.state.keywords.concat(this.state.newKeyword)
     })
-    React.findDOMNode(this.refs.keyword_input).focus();
+    React.findDOMNode(this.refs.keywordInput).focus()
   },
-  addKeyword(keyword){
-    this.setState({
-      keywords: this.state.keywords.concat([keyword])
-    })
-  },
+
   render(){
-    var listItems = this.state.keywords.map(function(keywords){
-      return <li> {keywords} </li>
-      })
+    var listItems = this.state.keywords.map(keywords => {
+      return <li>{keywords}</li>
+    })
     return (
       <div>
-        <h3> Keywords </h3>
+        <h3>Keywords</h3>
         <div>
           <ul>
             {listItems}
           </ul>
         </div>
         <div>
-          <input type="text" className="keyword-list__input" ref="keyword_input" placeholder="Type Keyword" value={this.state.newKeyword} onChange={this.updateNewKeyword} />
-          <button className="keyword-list__add-button" onClick={this.handleAddNew}> Add Keyword</button>
+          <input
+            type="text"
+            className="keyword-list__input"
+            ref="keywordInput"
+            placeholder="Type Keyword"
+            value={this.state.newKeyword}
+            onChange={this.updateNewKeyword}
+          />
+          <button className="keyword-list__add-button" onClick={this.handleAddNew}>Add Keyword</button>
         </div>
-        
       </div>
     )
   }

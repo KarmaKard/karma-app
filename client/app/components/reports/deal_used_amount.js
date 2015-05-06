@@ -1,11 +1,9 @@
 import React from 'react'
-import rd3 from 'react-d3'
+import { BarChart } from 'react-d3'
 
 
 export default React.createClass({
   render(){
-
-    var BarChart = rd3.BarChart
     var barData = [
       {label: '1', value: 231},
       {label: '2', value: 120},
@@ -16,7 +14,7 @@ export default React.createClass({
     ]
     return (
       <div className="custperday-chart">
-      <h3>Times Each Customer Has Redeemed Deal</h3>
+        <h3>Times Each Customer Has Redeemed Deal</h3>
         <BarChart
           data={barData}
           width={500}

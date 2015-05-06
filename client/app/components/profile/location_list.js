@@ -8,32 +8,40 @@ export default React.createClass({
       locations: []
     }
   },
+
   updateNewStreet(e){
     this.setState({
       newStreet: e.target.value
     })
   },
+
   updateNewZip(e){
     this.setState({
       newZip: e.target.value
     })
   },
+
   handleAddNew(){
-    this.addLocation([this.state.newStreet, this.state.newZip])
+    var newLocation = {
+      street: this.state.newStreet,
+      zip: this.state.newZip
+    }
     this.setState({
       newStreet: '',
-      newZip: ''
+      newZip: '',
+      locations: this.state.locations.concat([newLocation])
     })
-    React.findDOMNode(this.refs.location_input).focus()
+    React.findDOMNode(this.refs.locationInput).focus()
   },
-  addLocation(address){
-     this.setState({
-      locations: this.state.locations.concat([address])
-    })
-  },
+
   render(){
-    var listItems = this.state.locations.map(function(locations){
-      return <li> {locations[0]}, {locations[1]}  <button className="check-map__button" >Check Map</button></li>
+    var listItems = this.state.locations.map(location => {
+      return (
+        <li>
+          {location.street} {location.zip}
+          <button className="check-map__button">Check Map</button>
+        </li>
+      )
     })
 
     return (
@@ -45,7 +53,7 @@ export default React.createClass({
           </ul>
         </div>
         <div>
-          <input type="text" className="location-list__street-input" placeholder="Full Street Address" ref="location_input" value={this.state.newStreet} onChange={this.updateNewStreet} />
+          <input type="text" className="location-list__street-input" placeholder="Full Street Address" ref="locationInput" value={this.state.newStreet} onChange={this.updateNewStreet} />
           <input type="text" className="location-list__zip-input" placeholder="Zip" value={this.state.newZip} onChange={this.updateNewZip} />
           <button className="location-list__add-button" onClick={this.handleAddNew}> Add Keyword</button>
         </div>

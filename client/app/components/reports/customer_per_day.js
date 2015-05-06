@@ -1,10 +1,9 @@
 import React from 'react'
-import rd3 from 'react-d3'
+import { LineChart } from 'react-d3'
 
 export default React.createClass({
   render(){
 
-    var LineChart = rd3.LineChart
     var lineData = [
       {
         name: "Total Customers",

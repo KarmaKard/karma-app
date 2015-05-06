@@ -12,7 +12,6 @@ var NavButton =  React.createClass({
   },
   saveClicked(e){
     e.preventDefault()
-
   },
   render() {
     var saveButton
@@ -47,28 +46,18 @@ var GeneralInfo =  React.createClass({
 })
 
 export default React.createClass({
-
   onSubmit(event) {
     event.preventDefault()
     var name = this.refs.businessNameInput.getDOMNode().value
   },
-  
-  render: function() {
-   
+  render() {
     return (
       <div className="pagewrap">
-
         <NavButton isRegistration={this.props.isRegistration} />
-        
         <h2>Business Profile Builder</h2>
-        
         <GeneralInfo />
-        
         <KeyWordList />
-        
         <LocationList />
-        
-          
       </div>
     )
   }

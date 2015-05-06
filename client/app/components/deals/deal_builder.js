@@ -5,18 +5,21 @@ var NavButton =  React.createClass({
   contextTypes: {
     router: React.PropTypes.func
   },
+
   nextClicked(e){
     e.preventDefault()
     this.context.router.transitionTo('dashboard')
   },
+
   backClicked(e){
     e.preventDefault()
     this.context.router.transitionTo('profile_builder')
   },
+
   saveClicked(e){
     e.preventDefault()
-
   },
+
   render() {
     var saveButton
     var backButton
@@ -38,12 +41,10 @@ var NavButton =  React.createClass({
 })
 
 export default React.createClass({
-  render: function(){
+  render(){
     return(
       <div className="page-wrap">
-
         <NavButton isRegistration={this.props.isRegistration} />
-
         <h2>Deal Builder</h2>
         <table className="deal-table">
           <tr className="deal-table__header">
@@ -124,23 +125,19 @@ export default React.createClass({
             <td className="column-2">
               $ <input className="deal-table__DISCOUNT-value"/>
             </td>
-            <td  className="column-3"></td> 
+            <td className="column-3"></td> 
           </tr>
           <tr className="deal-table__even deal-table__PLUS_ONE">
             <td className="column-1">
               Buy 1 <input placeholder="type Item A here" className="deal-table__PLUS_ONE-input1"/> <br/> and get   <input placeholder="type Item B here" className="deal-table__PLUS_ONE-input2"/> for free!
             </td>
-            <td  className="column-2">
+            <td className="column-2">
               $ <input className="deal-table__BOGO-value"/>
             </td>
-            <td  className="column-3">1</td> 
+            <td className="column-3">1</td> 
           </tr>
         </table>
       </div>   
     )
   }
 })
-
-        
-
-      

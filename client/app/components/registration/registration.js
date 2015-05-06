@@ -7,12 +7,10 @@ export default React.createClass({
   },
   profileNextClicked(e){
     e.preventDefault()
-    alert(nextView)
     this.context.router.transitionTo('deal_builder')
   },
   dealsNextClicked(e){
     e.preventDefault()
-    alert(nextView)
     this.context.router.transitionTo('dashboard')
   },
   render(){
@@ -28,9 +26,7 @@ export default React.createClass({
         <div className="registration__header__stripe"> 
           <div className="registration__header__title">Registration</div>
         </div>
-
         {NextButtonLink}
-     
         <RouteHandler />
       </div>
     )

@@ -1,10 +1,8 @@
 import React from 'react'
-import rd3 from 'react-d3'
+import { PieChart } from 'react-d3'
 
 export default React.createClass({
   render(){
-
-    var PieChart = rd3.PieChart
     var pieData = [
       {label: 'YES', value: 70.0},
       {label: 'NO', value: 30.0}
