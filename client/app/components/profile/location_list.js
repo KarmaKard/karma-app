@@ -35,9 +35,9 @@ export default React.createClass({
   },
 
   render(){
-    var listItems = this.state.locations.map(location => {
+    var listItems = this.state.locations.map((location, index) => {
       return (
-        <li>
+        <li key={index}>
           {location.street} {location.zip}
           <button className="check-map__button">Check Map</button>
         </li>
