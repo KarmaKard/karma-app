@@ -23,9 +23,10 @@ export default React.createClass({
   },
 
   render(){
-    var listItems = this.state.keywords.map(keywords => {
-      return <li>{keywords}</li>
+    var listItems = this.state.keywords.map((keyword, index) => {
+      return <li key={index}>{keyword}</li>
     })
+
     return (
       <div>
         <h3>Keywords</h3>
