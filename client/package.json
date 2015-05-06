@@ -8,7 +8,7 @@
     "start": "rm -rf dist && mkdir -p dist && cp -r assets/* dist && webpack-dev-server --port 4200",
     "winstart": "webpack-dev-server --port 4200",
     "build": "rm -rf dist && mkdir -p dist && cp -r assets/* dist && webpack -p",
-    "test": "mocha --reporter min --compilers js:babel/register 'app/**/*.spec.js'"
+    "test": "mocha --reporter nyan --compilers js:babel/register 'app/**/*.spec.js'"
   },
   "repository": {
     "type": "git",
@@ -34,10 +34,10 @@
     "img-loader": "1.0.2",
     "imports-loader": "~0.6.3",
     "lodash": "3.7.0",
-    "minimal-flux": "^0.4.8",
+    "minimal-flux": "0.4.8",
     "path-to-url": "0.1.0",
     "react": "0.13.2",
-    "react-d3": "^0.3.1",
+    "react-d3": "0.3.1",
     "react-router": "0.13.2",
     "superagent": "1.2.0",
     "url-loader": "0.5.5",
@@ -45,6 +45,7 @@
   },
   "devDependencies": {
     "cheerio": "0.19.0",
+    "expect": "1.6.0",
     "mocha": "2.2.4",
     "sinon": "1.14.1",
     "supertest": "0.15.0",
