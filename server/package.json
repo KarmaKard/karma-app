@@ -6,7 +6,8 @@
   "main": "./app/app.js",
   "scripts": {
     "test": "mocha --harmony \"app/**/*.spec.*\"",
-    "start": "node-dev app/app.js | bunyan -o short"
+    "start": "node-dev app/app.js | bunyan -o short",
+    "migrate": "babel-node node_modules/.bin/klei-migrate run"
   },
   "repository": {
     "type": "git",
@@ -31,6 +32,7 @@
     "express-validator": "^2.9.1",
     "express-validator-errors": "^2.1.0",
     "jwt-simple": "0.3.0",
+    "klei-migrate": "^0.6.2",
     "lodash": "3.7.0",
     "multer": "0.1.8",
     "path-to-url": "0.1.0",
