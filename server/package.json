@@ -32,7 +32,7 @@
     "express": "4.12.3",
     "express-validator": "^2.9.1",
     "express-validator-errors": "^2.1.0",
-    "jwt-simple": "0.3.0",
+    "jwt-simple": "^0.3.0",
     "klei-migrate": "^0.6.2",
     "lodash": "3.7.0",
     "multer": "0.1.8",
