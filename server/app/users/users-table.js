@@ -1,7 +1,7 @@
 import r from '../database'
 
 export function index() {
-  return r.table('users').run() // returns a Promise object
+  return r.table('users').run()
 }
 
 export function insert(user) {

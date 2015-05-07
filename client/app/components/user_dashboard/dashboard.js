@@ -16,7 +16,7 @@ export default React.createClass({
     }
   },
   toggleEdit(e){
-    e.preventDefault();
+    e.preventDefault()
     if(this.state.editstatus == true){
       this.setState({
         disabled: false,

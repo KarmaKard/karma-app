@@ -25,21 +25,35 @@ describe('Users: Validate Create', function () {
   })
 
   it('fails if the user is missing first_name', () => {
-    req.body = {user: {last_name: 'johnson'}}
+    req.body = {user: {last_name: 'johnson', email: 'mickey@mouse.com', password: 'password123'}}
     validateCreate(req, res, next)
     next.getCall(0).args[0].should.be.an.instanceOf(ValidationError)
     req.validationErrors(true)['user.first_name'].should.have.property('msg')
   })
   
   it('fails if the user is missing last_name', () => {
-    req.body = {user: {first_name: 'bob'}}
+    req.body = {user: {first_name: 'bob', email: 'pnemrow@gmail.com', password: 'hello123'}}
     validateCreate(req, res, next)
     next.getCall(0).args[0].should.be.an.instanceOf(ValidationError)
     req.validationErrors(true)['user.last_name'].should.have.property('msg')
   })
 
+  it('fails if the user is missing email', () => {
+    req.body = {user: {first_name: 'peter', last_name: 'nemrow', password: 'password456'}}
+    validateCreate(req, res, next)
+    next.getCall(0).args[0].should.be.an.instanceOf(ValidationError)
+    req.validationErrors(true)['user.email'].should.have.property('msg')
+  })
+
+  it('fails if the user is missing a password', () => {
+    req.body = {user: {first_name: 'Alex', last_name: 'Ahn', email: 'alex@rockahn.com'}}
+    validateCreate(req, res, next)
+    next.getCall(0).args[0].should.be.an.instanceOf(ValidationError)
+    req.validationErrors(true)['user.password'].should.have.property('msg')
+  })
+
   it('succeeds if user object is valid', () => {
-    req.body = {user: {first_name: 'bob', last_name: 'johnson'}}
+    req.body = {user: {first_name: 'bob', last_name: 'johnson', email: 'pnemrow@gmail.com', password: 'hello123'}}
     validateCreate(req, res, next)
     should.not.exist(next.getCall(0).args[0])
   })
