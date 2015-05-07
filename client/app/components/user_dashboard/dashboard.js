@@ -1,8 +1,10 @@
 import React from 'react'
 import Router, {RouteHandler} from 'react-router'
-import {Link} from 'react-router'
 
 export default React.createClass({
+  contextTypes: {
+    router: React.PropTypes.func
+  },
   getInitialState(){
     return {
       editstatus: true,
@@ -33,6 +35,10 @@ export default React.createClass({
       })
     }
   },
+  addBusinessClicked(e){
+    e.preventDefault()
+    this.context.router.transitionTo('profile_builder')
+  },
 
   render: function(){
     return(
@@ -46,7 +52,7 @@ export default React.createClass({
           <button className="user_dashboard-info_edit_button" onClick={this.toggleEdit} hidden={this.state.editHide}>Edit Information</button>
           <button className="user_dashboard-info_save_button" onClick={this.toggleEdit} hidden={this.state.saveHide} >Save</button>
         </form>
-        <p><Link className="add_business-button" to="profile_builder" > Add a Business </Link></p>
+        <button className="add_business-button" onClick={this.addBusinessClicked} > Add a Business</button>
       </div>
     )
   }
