@@ -12,14 +12,14 @@ export default React.createClass({
 
     // if successful
 
-    this.context.router.transitionTo('dashboard')
+    this.context.router.transitionTo('user_dashboard')
   },
   registerClicked (e){
     e.preventDefault()
     // Login to the server
 
     // if successful
-    this.context.router.transitionTo('profile_builder')
+    this.context.router.transitionTo('user_dashboard')
   },
 
   render: function() {

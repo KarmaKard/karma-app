@@ -11,7 +11,7 @@ export default React.createClass({
   },
   dealsNextClicked(e){
     e.preventDefault()
-    this.context.router.transitionTo('dashboard')
+    this.context.router.transitionTo('business_dashboard')
   },
   render(){
     var NextButtonLink

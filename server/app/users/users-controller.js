@@ -1,6 +1,7 @@
 import express from 'express'
 import * as usersTable from './users-table'
 import validateCreate from './validators/validate-create'
+import bcrypt from 'bcryptjs'
 
 export var router = express.Router()
 
@@ -14,8 +15,14 @@ export function list (req, res, next){
 
 router.post('/', validateCreate, create)
 export function create (req, res, next) {
-  var queryPromise = usersTable.insert(req.body.user)
-  queryPromise.then(data => {
-    res.json(req.body)
-  }).catch(next)
+  var user = req.body.user
+  bcrypt.hash(user.password, 10, function(err, hash) { 
+    user.hash = hash
+    delete user.password
+    user.created_at = Date.now()
+    var queryPromise = usersTable.insert(user)
+    queryPromise.then(data => {
+      res.json(req.body)
+    }).catch(next)
+  })  
 }
