@@ -1,7 +1,7 @@
 @import './components/login';
 @import './components/profile/profile';
 @import './components/deals/deal_builder';
-@import './components/dashboard/dashboard';
+@import './components/business_dashboard/dashboard';
 @import './components/business';
 @import './components/registration/registration';
 @import './components/reports/reports'
