@@ -7,7 +7,10 @@ export default React.createClass({
     return(
       <div>
         <h1>This is the user dashboard</h1>
-        <Link className="add_business__button" to="profile_builder" > Add a Business </Link>
+        <p>UserName: </p>
+        <p>Email: </p>
+        <button className="user_info-edit_button">Edit Information</button>
+        <p><Link className="add_business-button" to="profile_builder" > Add a Business </Link></p>
       </div>
     )
   }

@@ -2,6 +2,7 @@
 @import './components/profile/profile';
 @import './components/deals/deal_builder';
 @import './components/business_dashboard/dashboard';
+@import './components/user_dashboard/dashboard';
 @import './components/business';
 @import './components/registration/registration';
 @import './components/reports/reports'
