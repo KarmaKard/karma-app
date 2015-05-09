@@ -37,3 +37,28 @@ export class ValidationError extends BaseError {
     return false
   }
 }
+
+export class UnauthorizedError extends BaseError {
+  constructor() {
+    super('Not Authorized')
+    this.name = 'UnauthorizedError'
+  }
+  handle(req, res) {
+    req.log.warn(req.originalUrl, 'User unauthorized to perform action')
+    res.status(401).json(serializeErrors(this.message))
+  }
+}
+
+export class NotFoundError extends BaseError {
+  constructor(req) {
+    super('Resource Not Found')
+    this.name = 'NotFoundError'
+  }
+  handle(req, res) {
+    req.log.warn(req.originalUrl, 'Resource Not Found at URL')
+    res.status(404).json(serializeErrors(this.message))
+  }
+  shouldLog() {
+    return false
+  }
+}

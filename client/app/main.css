@@ -1,3 +1,5 @@
+@import './reset.css';
+@import './typography.css';
 @import './components/login';
 @import './components/profile/profile';
 @import './components/deals/deal_builder';
@@ -5,9 +7,41 @@
 @import './components/user_dashboard/dashboard';
 @import './components/business';
 @import './components/registration/registration';
-@import './components/reports/reports'
+@import './components/reports/reports';
 
-#application{
-  width:80%;
-  margin: auto;
+.karma_error {
+  color: #a94442;
+  background-color: #f2dede;
+  border-color: #ebccd1;
+  padding: 5px;
+  margin: 10px 0;
+}
+
+.karma_input {
+  border: 1px solid #cdcdcd;
+  display: block;
+  font-size: 16px;
+  margin: 10px 0;
+  padding: 5px;
+  width: 100%;
+}
+
+.karma_button {
+  background: #6196bd;
+  border: 1px solid #5483A5;
+  color: #ffffff;
+  display: inline-block;
+  margin: 10px 0;
+  padding: 10px;
+}
+
+.karma_button:hover {
+  background: #5483A5;
+  border: 1px solid #4E7A99;
+  cursor: pointer;
+}
+
+input[disabled] {
+  cursor: not-allowed;
+  background-color: #eeeeee;
 }

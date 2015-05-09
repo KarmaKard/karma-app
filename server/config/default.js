@@ -1,5 +1,6 @@
+require('dotenv').load()
 
-export default {
+module.exports = {
   database: {
     name: 'karmakard',
     params: {
@@ -13,5 +14,10 @@ export default {
   },
   token: {
     secret: process.env.TOKEN_SECRET || 'asdo98hf2p23iupavgaw4r9ahwefo813bcp9'
+  },
+  cors: {
+    whitelist: [
+      'http://localhost:4200'
+    ]
   }
 }
