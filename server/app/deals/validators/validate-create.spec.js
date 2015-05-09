@@ -68,7 +68,6 @@ describe('Deals: Validate Create', function () {
     req.validationErrors(true)['deals.0.primaryProductName'].should.have.property('msg')
   })
 
-
   it('succeeds if deals object is valid', () => {
     req.body = {deals: [{orgId: 1321, limit: 3, type: "BOGO", discountRate: 3.50, threshold: "2", primaryProductName: "Ribs"}]}
     validateCreate(req, res, next)

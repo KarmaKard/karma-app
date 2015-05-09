@@ -3,11 +3,11 @@ import {ValidationError} from '../../common/errors'
 
 export default function validateCreate (req, res, next) {
   if (!req.body.deals){
-        errors.addToReq(req, 'deals', 'Root "Deal" parameter is required')
+    errors.addToReq(req, 'deals', 'Root "Deal" parameter is required')
     return next(new ValidationError(req))
   }
 
-    if (!Array.isArray(req.body.deals)) {
+  if (!Array.isArray(req.body.deals)) {
     errors.addToReq(req, 'deals', 'Deals must be an array')
     return next(new ValidationError(req))
   }
