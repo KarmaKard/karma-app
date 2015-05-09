@@ -1,0 +1,15 @@
+@import url("https://fonts.googleapis.com/css?family=Noto+Sans:700");
+:root {
+  --helvetica-list: HelveticaNeue-Medium, HelveticaNeue-Bold, Helvetica Neue Medium, Helvetica Neue Bold, Helvetica Neue, Helvetica, sans-serif;
+  --helvetica-list-light: HelveticaNeue-Light, HelveticaNeue-Medium, HelveticaNeue-Bold, Helvetica Neue Medium, Helvetica Neue Bold, Helvetica Neue, Helvetica,
+}
+
+body,
+input,
+textarea {
+  font-family: var(--helvetica-list);
+}
+
+strong {
+  font-weight: bold;
+}

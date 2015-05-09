@@ -29,3 +29,4 @@ node_modules
 rethinkdb_data
 dist
 .migrated.json
+.env*

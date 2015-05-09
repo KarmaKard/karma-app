@@ -1,60 +1,65 @@
 import React from 'react'
 import Router, {RouteHandler} from 'react-router'
+import { flux } from '../../main'
 
 export default React.createClass({
   contextTypes: {
     router: React.PropTypes.func
   },
-  getInitialState(){
+
+  getInitialState() {
+    return Object.assign(this.getStoreState(),{
+      editing: false,
+    })
+  },
+
+  getStoreState() {
     return {
-      editstatus: true,
-      username: 'pnemrow',
-      email: 'pnemrow@gmail.com',
-      disabled: true,
-      editHide: false,
-      saveHide: true
+      users: flux.stores.users.getState()
     }
   },
+
   toggleEdit(e){
     e.preventDefault()
-    if(this.state.editstatus == true){
+
+    if(this.state.editing === true){
       this.setState({
-        disabled: false,
-        editHide: true,
-        saveHide: false,
-        editstatus: false
+        editing: false
       })
       React.findDOMNode(this.refs.usernameInput).focus()
     }
     else{
       this.setState({
-        disabled: true,
-        editHide: false,
-        saveHide: true,
-        editstatus: true
+        editing: true
       })
     }
   },
+
   addBusinessClicked(e){
     e.preventDefault()
     this.context.router.transitionTo('profile_builder')
   },
 
   render: function(){
+    var editButtonText = this.state.editing ? 'Save' : 'Edit'
+
     return(
-      <div>
+      <div className="Dashboard">
         <h1>This is the user dashboard</h1>
-        <form >
-          Username:
-          <input type="text" ref="usernameInput" className="user_dashboard-username" defaultValue={this.state.username} disabled = {this.state.disabled} />
+        <form className="Dashboard_form">
           Email:
-          <input type="text" className="user_dashboard-email" defaultValue={this.state.email} disabled = {this.state.disabled} /> 
-          <button className="user_dashboard-info_edit_button" onClick={this.toggleEdit} hidden={this.state.editHide}>Edit Information</button>
-          <button className="user_dashboard-info_save_button" onClick={this.toggleEdit} hidden={this.state.saveHide} >Save</button>
+          <input
+            type="text"
+            className="karma_input"
+            defaultValue={this.state.users.current.email}
+            disabled={!this.state.editing}
+          /> 
+          <button className="karma_button" onClick={this.toggleEdit}>
+            {editButtonText}
+          </button>
         </form>
-        <button className="add_business-button" onClick={this.addBusinessClicked} > Add a Business</button>
+        <button className="karma_button" onClick={this.addBusinessClicked} > Add a Business</button>
       </div>
     )
   }
 })
-
