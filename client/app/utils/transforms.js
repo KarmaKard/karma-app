@@ -24,9 +24,8 @@ export function camelizeObjectKeys (obj) {
 
 /**
  * Transform a JSON Web Token into a User object
- * with camelCased attributes
  */
 export function tokenToUser (token) {
   // throws JSON Parse error if badly formed token
-  return camelizeObjectKeys(JSON.parse(window.atob(token.split('.')[1])))
+  return JSON.parse(window.atob(token.split('.')[1]))
 }

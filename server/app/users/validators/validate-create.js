@@ -6,8 +6,8 @@ export default function validateCreate (req, res, next) {
     errors.addToReq(req, 'user', 'Root "user" parameter is required')
     return next(new ValidationError(req))
   }
-  req.checkBody(['user', 'first_name'], 'User first_name is required').notEmpty()
-  req.checkBody(['user', 'last_name'], 'User last_name is required').notEmpty()
+  req.checkBody(['user', 'firstName'], 'User firstName is required').notEmpty()
+  req.checkBody(['user', 'lastName'], 'User lastName is required').notEmpty()
   req.checkBody(['user', 'email'], 'User email is required').notEmpty()
   req.checkBody(['user', 'password'], 'User password is required').notEmpty()
   next(req.validationErrors() ? new ValidationError(req) : null)
