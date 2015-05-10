@@ -13,7 +13,7 @@ export default function validateCreate (req, res, next) {
   }
 
   req.body.locations.forEach((location, index) => {
-    req.checkBody(['locations', index, 'orgId'], 'OrgID is required').notEmpty()
+    req.checkBody(['locations', index, 'organizationId'], 'Organization ID is required').notEmpty()
     req.checkBody(['locations', index, 'street'], 'Street is required').notEmpty()
     req.checkBody(['locations', index, 'city'], 'City is required').notEmpty()
     req.checkBody(['locations', index, 'state'], 'State is required').notEmpty()

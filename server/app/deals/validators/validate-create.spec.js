@@ -26,50 +26,50 @@ describe('Deals: Validate Create', function () {
 
     
 
-  it('fails if the deals is missing orgId', () => {
+  it('fails if the deals is missing organizationId', () => {
     req.body = {deals: [{limit: 3, type: "BOGO", discountRate: 3.50, threshold: "2", primaryProductName: "Ribs"}]}
     validateCreate(req, res, next)
     next.getCall(0).args[0].should.be.an.instanceOf(ValidationError)
-    req.validationErrors(true)['deals.0.orgId'].should.have.property('msg')
+    req.validationErrors(true)['deals.0.organizationId'].should.have.property('msg')
   })
   
   it('fails if the deals is missing limit', () => {
-    req.body = {deals: [{orgId: 1321, type: "BOGO", discountRate: 3.50, threshold: "2", primaryProductName: "Ribs"}]}
+    req.body = {deals: [{organizationId: 1321, type: "BOGO", discountRate: 3.50, threshold: "2", primaryProductName: "Ribs"}]}
     validateCreate(req, res, next)
     next.getCall(0).args[0].should.be.an.instanceOf(ValidationError)
     req.validationErrors(true)['deals.0.limit'].should.have.property('msg')
   })
 
   it('fails if the deals is missing type', () => {
-    req.body = {deals: [{orgId: 1321, limit: 3, discountRate: 3.50, threshold: "2", primaryProductName: "Ribs"}]}
+    req.body = {deals: [{organizationId: 1321, limit: 3, discountRate: 3.50, threshold: "2", primaryProductName: "Ribs"}]}
     validateCreate(req, res, next)
     next.getCall(0).args[0].should.be.an.instanceOf(ValidationError)
     req.validationErrors(true)['deals.0.type'].should.have.property('msg')
   })
 
   it('fails if the deals is missing a discount rate', () => {
-    req.body = {deals: [{orgId: 1321, limit: 3, type: "BOGO", threshold: "2", primaryProductName: "Ribs"}]}
+    req.body = {deals: [{organizationId: 1321, limit: 3, type: "BOGO", threshold: "2", primaryProductName: "Ribs"}]}
     validateCreate(req, res, next)
     next.getCall(0).args[0].should.be.an.instanceOf(ValidationError)
     req.validationErrors(true)['deals.0.discountRate'].should.have.property('msg')
   })
 
     it('fails if the deals is missing threshold', () => {
-    req.body = {deals: [{orgId: 1321, limit: 3, type: "BOGO", discountRate: 3.50, primaryProductName: "Ribs"}]}
+    req.body = {deals: [{organizationId: 1321, limit: 3, type: "BOGO", discountRate: 3.50, primaryProductName: "Ribs"}]}
     validateCreate(req, res, next)
     next.getCall(0).args[0].should.be.an.instanceOf(ValidationError)
     req.validationErrors(true)['deals.0.threshold'].should.have.property('msg')
   })
 
   it('fails if the deals is missing a primary product name', () => {
-    req.body = {deals: [{orgId: 1321, limit: 3, type: "BOGO", discountRate: 3.50, threshold: "2"}]}
+    req.body = {deals: [{organizationId: 1321, limit: 3, type: "BOGO", discountRate: 3.50, threshold: "2"}]}
     validateCreate(req, res, next)
     next.getCall(0).args[0].should.be.an.instanceOf(ValidationError)
     req.validationErrors(true)['deals.0.primaryProductName'].should.have.property('msg')
   })
 
   it('succeeds if deals object is valid', () => {
-    req.body = {deals: [{orgId: 1321, limit: 3, type: "BOGO", discountRate: 3.50, threshold: "2", primaryProductName: "Ribs"}]}
+    req.body = {deals: [{organizationId: 1321, limit: 3, type: "BOGO", discountRate: 3.50, threshold: "2", primaryProductName: "Ribs"}]}
     validateCreate(req, res, next)
     should.not.exist(next.getCall(0).args[0])
   })

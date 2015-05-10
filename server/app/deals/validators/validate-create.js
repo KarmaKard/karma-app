@@ -13,7 +13,7 @@ export default function validateCreate (req, res, next) {
   }
 
   req.body.deals.forEach((deal, index) => {
-    req.checkBody(['deals', index, 'orgId'], 'OrgID is required').notEmpty()
+    req.checkBody(['deals', index, 'organizationId'], 'OrgID is required').notEmpty()
     req.checkBody(['deals', index, 'limit'], 'Limit is required').notEmpty()
     req.checkBody(['deals', index, 'type'], 'Deal type is required').notEmpty()
     req.checkBody(['deals', index, 'discountRate'], 'Discount Rate type is required').notEmpty()

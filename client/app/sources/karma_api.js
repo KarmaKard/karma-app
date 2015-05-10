@@ -1,5 +1,5 @@
 import request from 'superagent'
-import { decamelizeObjectKeys, camelizeObjectKeys, tokenToUser } from '../utils/transforms'
+import { tokenToUser } from '../utils/transforms'
 
 const BASE_URL = process.env.API_HOST
 const REGISTER_URL = BASE_URL + '/api/v1/users'
@@ -28,7 +28,6 @@ export function postLoginCredentials (email, password) {
 }
 
 export function postNewUser (user) {
-  user = decamelizeObjectKeys(user)
   return new Promise((resolve, reject) => {
     request
       .post(REGISTER_URL)
