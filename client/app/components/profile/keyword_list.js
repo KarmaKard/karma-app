@@ -21,10 +21,13 @@ export default React.createClass({
     })
     React.findDOMNode(this.refs.keywordInput).focus()
   },
+  getKeywords() {
+    return this.state.keywords
+  },
 
   render(){
     var listItems = this.state.keywords.map((keyword, index) => {
-      return <li key={index}>{keyword}</li>
+      return <li className="keyword_list-item" key={index}>{keyword}</li>
     })
 
     return (

@@ -6,13 +6,17 @@ import Router from 'react-router'
 import routes from './routes'
 import UserActions from './actions/users'
 import UserStore from './stores/users'
+import BusinessActions from './actions/business'
+import BusinessStore from './stores/business'
 
 export var flux = new Flux({
   actions: {
-    users: UserActions
+    users: UserActions,
+    business: BusinessActions
   },
   stores: {
-    users: UserStore
+    users: UserStore,
+    business: BusinessStore
   }
 })
 

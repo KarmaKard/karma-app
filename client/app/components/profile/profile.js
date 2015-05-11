@@ -1,4 +1,5 @@
 import React from 'react'
+import { flux } from '../../main'
 import LocationList from './location_list'
 import KeyWordList from './keyword_list'
 
@@ -8,7 +9,9 @@ var NavButton =  React.createClass({
   },
   nextClicked(e){
     e.preventDefault()
-    this.context.router.transitionTo('deal_builder')
+    if (this.props.onNext) {
+      this.props.onNext(e)
+    }
   },
   saveClicked(e){
     e.preventDefault()
@@ -31,32 +34,42 @@ var NavButton =  React.createClass({
   }
 })
 
-var GeneralInfo =  React.createClass({
-  render() {
-    return(
-     <div className="general-info">
-       <img className="general-info__logo" src="" alt="logo" />
-       <div className="general-info__text">
-         <input type="text" className="general-info__text__org-name" placeholder="Business Name" />
-         <textarea type="text" className="general-info__text__org-desc" placeholder="Business Description" />
-       </div>
-     </div>
-    )
-  }
-})
-
 export default React.createClass({
+  contextTypes: {
+    router: React.PropTypes.func
+  },
+  
   onSubmit(event) {
     event.preventDefault()
     var name = this.refs.businessNameInput.getDOMNode().value
   },
+
+  nextClicked(e) {
+
+    var { router } = this.context
+ 
+    var name = React.findDOMNode(this.refs.business_name).value
+    var description = React.findDOMNode(this.refs.business_description).value
+    var keywords = this.refs.keyword_list.getKeywords()
+
+    var business = { name, description, keywords }
+
+    flux.actions.business.create(router, business)
+  },
+
   render() {
     return (
       <div className="pagewrap">
-        <NavButton isRegistration={this.props.isRegistration} />
+        <NavButton onNext={this.nextClicked} isRegistration={this.props.isRegistration} />
         <h2>Business Profile Builder</h2>
-        <GeneralInfo />
-        <KeyWordList />
+        <div className="general-info">
+         <img className="general-info__logo" src="" alt="logo" />
+         <div className="general-info__text">
+           <input type="text" ref="business_name" className="general-info__text__org-name" placeholder="Business Name" />
+           <textarea type="text" ref="business_description" className="general-info__text__org-desc" placeholder="Business Description" />
+         </div>
+        </div>
+        <KeyWordList ref="keyword_list" />
         <LocationList />
       </div>
     )
