@@ -1,13 +1,23 @@
 var r = require('../app/database')
 
+var tableName = 'organizations'
+
 exports.up = function (next) {
-  r.tableCreate('organizations').run().then(() => {
+  r.tableList().run().then(tables => {
+    if (!tables.find(t => t === tableName)) {
+      return r.tableCreate(tableName).run()
+    }
+  }).then(() => {
     next()
   })
 }
 
 exports.down = function (next) {
-  r.tableDrop('organizations').run().then(() => {
+  r.tableList().run().then(tables => {
+    if (tables.find(t => t === tableName)) {
+      return r.tableCreate(tableName).run()
+    }
+  }).then(() => {
     next()
   })
 }

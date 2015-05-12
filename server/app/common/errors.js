@@ -39,12 +39,12 @@ export class ValidationError extends BaseError {
 }
 
 export class UnauthorizedError extends BaseError {
-  constructor() {
-    super('Not Authorized')
+  constructor(message) {
+    super(message || 'Not Authorized')
     this.name = 'UnauthorizedError'
   }
   handle(req, res) {
-    req.log.warn(req.originalUrl, 'User unauthorized to perform action')
+    req.log.warn(req.originalUrl, this.message)
     res.status(401).json(serializeErrors(this.message))
   }
 }

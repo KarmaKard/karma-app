@@ -51,7 +51,7 @@ export default React.createClass({
           <input
             type="text"
             className="karma_input"
-            defaultValue={this.state.users.current.email}
+            defaultValue={this.state.users.currentUser.email}
             disabled={!this.state.editing}
           /> 
           <button className="karma_button" onClick={this.toggleEdit}>

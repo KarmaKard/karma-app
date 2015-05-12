@@ -32,3 +32,14 @@ export function token (req, res, next) {
   req.user = result
   next()
 }
+
+export function admin (req, res, next) {
+  if (!req.user || !req.user.isSuperAdmin) {
+    return next(new UnauthorizedError())
+  }
+  req.log.trace({
+    url: req.originalUrl,
+    email: req.user.email,
+  }, 'SuperAdmin User performing protected operation')
+  next()
+}
