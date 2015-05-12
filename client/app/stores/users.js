@@ -7,7 +7,7 @@ export default class UserStore extends Store {
     super()
     var token = window.localStorage.getItem('karma-token')
     this.state = {
-      current: token ? tokenToUser(token) : null,
+      user: token ? tokenToUser(token) : null,
       authenticated: token ? true : false,
       createErrors: [],
       loginErrors: []
