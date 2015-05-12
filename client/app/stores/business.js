@@ -7,20 +7,21 @@ export default class BusinessStore extends Store {
     super()
     var token = window.localStorage.getItem('karma-token')
     this.state = {
-      current: token ? tokenToUser(token) : null,
-      authenticated: token ? true : false,
+      businesses: {},
       createErrors: []
     }
-    this.handleAction('business.create',  this.handleAuth)
-    this.handleAction('users.createError', this.storeCreateError)
+
+    this.handleAction('business.create',  this.handleBusinessCreate)
+    this.handleAction('business.createError', this.saveCreateError)
   }
 
-  handleAuth(user) {
-    this.setState({ user, authenticated: true })
-    console.log(this.state)
+  handleBusinessCreate(business) {
+    var businesses = this.state.businesses
+    businesses[business.id] = business
+    this.setState({businesses})
   }
 
-  storeCreateError(error) {
+  saveCreateError(error) {
     this.setState({
         createErrors: this.state.createErrors.concat([error])
     })

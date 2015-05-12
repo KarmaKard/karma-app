@@ -48,8 +48,8 @@ export default React.createClass({
 
     var { router } = this.context
  
-    var name = React.findDOMNode(this.refs.business_name).value
-    var description = React.findDOMNode(this.refs.business_description).value
+    var name = React.findDOMNode(this.refs.name).value
+    var description = React.findDOMNode(this.refs.description).value
     var keywords = this.refs.keyword_list.getKeywords()
 
     var business = { name, description, keywords }
@@ -65,8 +65,8 @@ export default React.createClass({
         <div className="general-info">
          <img className="general-info__logo" src="" alt="logo" />
          <div className="general-info__text">
-           <input type="text" ref="business_name" className="general-info__text__org-name" placeholder="Business Name" />
-           <textarea type="text" ref="business_description" className="general-info__text__org-desc" placeholder="Business Description" />
+           <input type="text" ref="name" className="general-info__text__org-name" placeholder="Business Name" />
+           <textarea type="text" ref="description" className="general-info__text__org-desc" placeholder="Business Description" />
          </div>
         </div>
         <KeyWordList ref="keyword_list" />
