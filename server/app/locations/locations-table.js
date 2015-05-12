@@ -5,7 +5,13 @@ export function index() {
 }
 
 export function insert (locations){
-  return Promise.resolve(locations).then(locations => {
-    return r.table('locations').insert(locations).run()
-  })
+  return r.table('locations')
+    .insert(locations, {returnChanges: true})
+    .run()
+    .then(results => {
+      if (results.changes) {
+        return results.changes.map(c => c['new_val'])
+      }
+      return locations
+    })
 }

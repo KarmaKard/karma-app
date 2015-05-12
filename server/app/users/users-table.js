@@ -4,14 +4,18 @@ export function index () {
   return r.table('users').run()
 }
 
-export function insert (pUser) {
-  return Promise.resolve(pUser).then(user => {
-    return r.table('users').insert(user).run()
+export function insert (user) {
+  return r.table('users')
+  .insert(user, {returnChanges: true})
+  .run()
+  .then(results => {
+    if (results.changes) {
+      return results.changes[0]['new_val']
+    }
+    return user
   })
 }
 
-export function getByEmail (pEmail) {
-  return Promise.resolve(pEmail).then(email => {
-    return r.table('users').getAll(pEmail, {index: 'email'})
-  })
+export function getByEmail (email) {
+  return r.table('users').getAll(email, {index: 'email'}).run()
 }

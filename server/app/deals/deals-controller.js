@@ -17,6 +17,6 @@ router.post('/', auth.token, validateCreate, create)
 export function create(req, res, next){
   var queryPromise = dealsTable.insert(req.body.deals)
   queryPromise.then(data => {
-    res.json(req.body)
+    res.json({deals: data})
   }).catch(next)
 }

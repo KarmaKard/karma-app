@@ -16,10 +16,7 @@ export default function validateCreate (req, res, next) {
     req.checkBody(['deals', index, 'organizationId'], 'OrgID is required').notEmpty()
     req.checkBody(['deals', index, 'limit'], 'Limit is required').notEmpty()
     req.checkBody(['deals', index, 'type'], 'Deal type is required').notEmpty()
-    req.checkBody(['deals', index, 'discountRate'], 'Discount Rate type is required').notEmpty()
-    req.checkBody(['deals', index, 'threshold'], 'threshold is required').notEmpty()
     req.checkBody(['deals', index, 'primaryProductName'], 'threshold is required').notEmpty()
-
   })
 
   next(req.validationErrors() ? new ValidationError(req) : null)
