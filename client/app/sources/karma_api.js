@@ -5,6 +5,8 @@ const BASE_URL = process.env.API_HOST
 const REGISTER_URL = BASE_URL + '/api/v1/users'
 const LOGIN_URL = BASE_URL + '/api/v1/users/login'
 
+const ORGANIZATION_REGISTER_URL = BASE_URL + '/api/v1/organizations'
+
 var token = window.localStorage.getItem('karma-token')
 
 function storeToken (t) {
@@ -38,6 +40,20 @@ export function postNewUser (user) {
         }
         storeToken(res.body.token)
         resolve(tokenToUser(token))
+      })
+  })
+}
+
+export function postNewBusiness (business) {
+  return new Promise((resolve, reject) => {
+    request
+      .post(ORGANIZATION_REGISTER_URL)
+      .send({organization: business})
+      .end((err, res) => {
+        if(err) {
+          return reject(err)
+        }
+        resolve(res.body.organization)
       })
   })
 }
