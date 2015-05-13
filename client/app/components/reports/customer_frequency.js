@@ -3,7 +3,6 @@ import { PieChart } from 'react-d3'
 
 export default  React.createClass({
   render() {
-    var PieChart = rd3.PieChart
     var pieData = [
       {label: 'First Time', value: 70.0},
       {label: '1/Year', value: 70.0},

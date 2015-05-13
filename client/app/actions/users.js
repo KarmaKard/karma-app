@@ -7,7 +7,7 @@ export default class UserActions extends Actions {
     KarmaAPI.postLoginCredentials(email, password).then(user => {
       if (user) {
         this.dispatch('login', user)
-        return router.transitionTo('user_dashboard')
+        return router.transitionTo('account')
       }
       console.warn('No user returned from login')
     }).catch(this.loginError)
@@ -26,7 +26,7 @@ export default class UserActions extends Actions {
     KarmaAPI.postNewUser(userData).then(user => {
       if (user) {
         this.dispatch('create', user)
-        return router.transitionTo('user_dashboard')
+        return router.transitionTo('account')
       }
       console.warn('No user returned from create')
     }).catch(this.createError)

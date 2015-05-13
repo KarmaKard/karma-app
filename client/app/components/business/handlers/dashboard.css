@@ -1,4 +1,7 @@
-
+.custperday-chart{
+  float: left;
+  margin: 20px 2%;
+}
 
 .dashboardLink{
   clear:both;
@@ -6,7 +9,6 @@
 
 .navigation-stripe{
   float:right;
-  margin-bottom: 30px;
   width:100%;
   background-color: #6196BD; 
 }

@@ -41,7 +41,7 @@ export default React.createClass({
         <div>
           <input
             type="text"
-            className="keyword-list__input"
+            className="keyword-list__input karma_input"
             ref="keywordInput"
             placeholder="Type Keyword"
             value={this.state.newKeyword}
