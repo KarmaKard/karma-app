@@ -1,6 +1,6 @@
 import React from 'react'
-import Router, {RouteHandler} from 'react-router'
-import { flux } from '../../main'
+import { Link } from 'react-router'
+import { flux } from '../../../main'
 
 export default React.createClass({
   contextTypes: {
@@ -26,9 +26,10 @@ export default React.createClass({
       this.setState({
         editing: false
       })
-      React.findDOMNode(this.refs.usernameInput).focus()
-    }
-    else{
+    } else {
+      var node = React.findDOMNode(this.refs.emailInput)
+      node.disabled = false
+      node.focus()
       this.setState({
         editing: true
       })
@@ -45,11 +46,12 @@ export default React.createClass({
 
     return(
       <div className="Dashboard">
-        <h1>This is the user dashboard</h1>
+        <h1>Account</h1>
         <form className="Dashboard_form">
           Email:
           <input
             type="text"
+            ref="emailInput"
             className="karma_input"
             defaultValue={this.state.users.currentUser.email}
             disabled={!this.state.editing}
@@ -58,7 +60,7 @@ export default React.createClass({
             {editButtonText}
           </button>
         </form>
-        <button className="karma_button" onClick={this.addBusinessClicked} > Add a Business</button>
+        <Link className="karma_button" to="businesses">Manage Businesses</Link>
       </div>
     )
   }

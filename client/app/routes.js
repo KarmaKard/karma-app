@@ -1,16 +1,13 @@
 import Router, {Route, RouteHandler, DefaultRoute} from 'react-router'
 import React from 'react'
-import Login from './components/login'
-import Profile from './components/profile/profile'
-import RegistrationDealHandler from './components/deals/handlers/registration_deal_handler'
-import BusinessDashboardDealHandler from './components/deals/handlers/dashboard_deal_handler'
-import RegistrationProfileHandler from './components/profile/handlers/registration_profile_handler'
-import BusinessDashboardProfileHandler from './components/profile/handlers/dashboard_profile_handler'
-import Registration from './components/registration/registration'
-import BusinessDashboard from './components/business_dashboard/dashboard'
-import Business from './components/business'
-import Reports from './components/reports/reports'
-import UserDashboard from './components/user_dashboard/dashboard'
+import Login from './components/users/handlers/login'
+import Account from './components/users/handlers/account'
+import BusinessesLinks from './components/business/handlers/multi_links'
+import BusinessLinks from './components/business/handlers/single_links'
+import BusinessDashboard from './components/business/handlers/dashboard'
+import BusinessAnalytics from './components/business/handlers/analytics'
+import NewBusiness from './components/business/handlers/new_business'
+import EditBusiness from './components/business/handlers/edit_business'
 
 var App = React.createClass({
   render() {
@@ -25,16 +22,14 @@ var App = React.createClass({
 export default (
   <Route handler={App} path="/">
     <DefaultRoute handler={Login} />
-    <Route name="user_dashboard" handler={UserDashboard} path="/dashboard" />
-    <Route name="business" handler={Business} path="/business">
-      <Route name="registration" handler={Registration} path="registration">
-        <Route name="profile_builder" handler={RegistrationProfileHandler} path="profile-builder" />
-        <Route name="deal_builder" handler={RegistrationDealHandler} path="deal-builder" />
-      </Route>
-      <Route name="business_dashboard" handler={BusinessDashboard} path="/dashboard" >
-        <DefaultRoute handler={Reports} />
-        <Route name="profile" handler={BusinessDashboardProfileHandler} path="profile" />
-        <Route name="deals" handler={BusinessDashboardDealHandler} path="deals" />
+    <Route name="account" handler={Account} path="/account" />
+    <Route name="login" handler={Login} path="/registration" />
+    <Route name="businesses" handler={BusinessesLinks} path="/business">
+      <DefaultRoute handler={BusinessDashboard} />
+      <Route name="newBusiness" handler={NewBusiness} path="new" />
+      <Route name="business" handler={BusinessLinks} path=":businessId">
+        <DefaultRoute handler={BusinessAnalytics} />
+        <Route name="editBusiness" handler={EditBusiness} path="edit" />
       </Route>
     </Route>
   </Route>
