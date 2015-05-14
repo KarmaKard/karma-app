@@ -44,9 +44,14 @@ export default React.createClass({
     var toggleButtonText = !!this.state.isExistingUser ? 'New User?' : 'Existing User?'
 
     return (
-      <div className="loginwrap"> 
-        <a href="#" className="karma_link" onClick={this.toggleForm}>{toggleButtonText}</a>
-        {form}
+      <div>
+        <div className="page_header">
+          <div className="page_header_title">KarmaKard</div>
+          <a href="#" className="page_header_link" onClick={this.toggleForm}>{toggleButtonText}</a>
+        </div>
+        <div className="content_box">
+            {form}
+        </div>
       </div>
     )
   }
