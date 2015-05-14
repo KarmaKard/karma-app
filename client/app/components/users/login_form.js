@@ -31,11 +31,12 @@ export default React.createClass({
 
     return (
       <div className="login" >
-        <h2>Login</h2>
+        <div className="content_box-header">Login</div>
         {loginErrorMessage}
         <form>
           <input type="text" ref="email" className="karma_input" placeholder="Email" />
           <input type="password" ref="password" className="karma_input" placeholder="Password" />
+          <a className="login_forgot">Forgot Password?</a>
           <input type="submit" ref="button" onClick={this.didLogin} className="karma_button" value="Submit" />
         </form>
       </div>

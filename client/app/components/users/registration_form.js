@@ -41,7 +41,7 @@ export default React.createClass({
 
     return (
       <div className="register" >
-        <h2>Register</h2>
+        <div className="content_box-header">Register</div>
         {mismatchPasswords}
         <form>
           <input type="text" ref="registerFirstName" className="karma_input" placeholder="First Name" />

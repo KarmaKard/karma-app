@@ -1,0 +1,12 @@
+.login_forgot{
+  font-family: 'Quicksand', sans-serif;
+  font-size: 14pt;
+  text-decoration: none;
+  font:black;
+  float:left;
+  margin: 15px 0 0 10px;
+}
+
+.login_forgot:hover{
+  cursor: pointer;
+}

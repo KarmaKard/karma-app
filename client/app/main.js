@@ -8,15 +8,23 @@ import UserActions from './actions/users'
 import UserStore from './stores/users'
 import BusinessActions from './actions/business'
 import BusinessStore from './stores/business'
+import OrganizationActions from './actions/organizations'
+import OrganizationStore from './stores/organizations'
+import OrganizationWizardStore from './stores/organization_wizard'
+import OrganizationWizardActions from './actions/organization_wizard' 
 
 export var flux = new Flux({
   actions: {
     users: UserActions,
-    business: BusinessActions
+    business: BusinessActions,
+    organization: OrganizationActions,
+    wizard: OrganizationWizardActions
   },
   stores: {
     users: UserStore,
-    business: BusinessStore
+    business: BusinessStore,
+    organization: OrganizationStore,
+    wizard: OrganizationWizardStore
   }
 })
 

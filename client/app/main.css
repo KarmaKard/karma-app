@@ -1,10 +1,80 @@
 @import './reset.css';
 @import './typography.css';
-@import './components/users/handlers/login';
 @import './components/users/handlers/account';
+@import './components/users/login_form';
 @import './components/deals/deal_builder';
 @import './components/business/profile';
 @import './components/business/handlers/dashboard';
+@import './components/organization_wizard/organization_wizard';
+@import 'http://fonts.googleapis.com/css?family=Quicksand';
+
+body {
+   background:
+     url("/img/aseninelowercase.png") 
+     top center
+}
+
+a:link {color: black;}     
+a:visited {color: black;}
+a:hover {color: black;}     
+a:active {color: black;}  
+
+.side_bar_navigation {
+  float: left;
+  clear: both;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 24pt;
+  text-decoration: none;
+  font:black;
+  margin: 10px 0 0 80px;
+
+}
+
+.side_bar_navigation_level2{
+  padding-left: 20px;
+}
+
+.content_box {
+  background-color: #FFFFFF;
+  background-image: none;
+  border-width: 2px;
+  border-style: solid;
+  border-color: #000000;
+  opacity: 0.88;
+  width: 500px;
+  margin: auto;
+  padding: 10px 20px 20px 20px;
+  position: absolute;
+  top: 35%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.content_box-header {
+  text-align: center;
+  text-decoration: none;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 42px;
+  margin-bottom: 10px;
+
+}
+
+.page_header_title{
+  font-family: 'Quicksand', sans-serif;
+  font-size: 60px;
+  clear:both;
+  float:left;
+}
+
+.page_header_link{
+  font-family: 'Quicksand', sans-serif;
+  font-size: 24pt;
+  text-decoration: none;
+  font:black;
+  float:right;
+  margin: 10px 30px;
+}
+
 
 .karma_error {
   color: #a94442;
@@ -21,6 +91,7 @@
   margin: 10px 0;
   padding: 5px;
   width: 100%;
+  background-color: white;
 }
 
 .karma_link {
@@ -29,17 +100,19 @@
 }
 
 .karma_button {
-  background: #6196bd;
-  border: 1px solid #5483A5;
-  color: #ffffff;
-  display: inline-block;
-  margin: 10px 0;
-  padding: 10px;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 24pt;
+  text-decoration: none;
+  font:black;
+  float:right;
+  margin: 5px 10px;
+  background: white;
+  border: 1px solid white;
 }
 
+
 .karma_button:hover {
-  background: #5483A5;
-  border: 1px solid #4E7A99;
+  border: 1px solid black;
   cursor: pointer;
 }
 
