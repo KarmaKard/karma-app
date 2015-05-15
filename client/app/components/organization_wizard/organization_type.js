@@ -5,20 +5,20 @@ export default React.createClass({
   contextTypes: {
     router: React.PropTypes.func
   },
-
   businessTypeClicked(e) {
     e.preventDefault()
-    var type = React.findDOMNode(this.refs.business).value
+    var type  =  this.refs.business.getDOMNode().value
     this.props.setType(type)
+    this.props.nextStep()
   },
   fundraiserTypeClicked(e) {
     e.preventDefault()
-    var type = React.findDOMNode(this.refs.fundraiser).value
+    var type  =  this.refs.fundraiser.getDOMNode().value
     this.props.setType(type)
+    this.props.nextStep()
   },
 
   render() {
-    console.log(this.props)
     return (
       <div>
         <div className="content_box-header">Organization Type?</div>
