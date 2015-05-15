@@ -44,11 +44,11 @@ export function postNewUser (user) {
   })
 }
 
-export function postNewBusiness (business) {
+export function postNewOrganization (organization) {
   return new Promise((resolve, reject) => {
     request
       .post(ORGANIZATION_REGISTER_URL)
-      .send({organization: business})
+      .send({organization: organization})
       .end((err, res) => {
         if(err) {
           return reject(err)

@@ -9,10 +9,6 @@ import BusinessAnalytics from './components/business/handlers/analytics'
 import NewBusiness from './components/business/handlers/new_business'
 import EditBusiness from './components/business/handlers/edit_business'
 import OrganizationWizard from './components/organization_wizard/handlers/organization_wizard'
-import OrganizationWizardType from './components/organization_wizard/handlers/organization_type'
-import OrganizationWizardName from './components/organization_wizard/handlers/organization_name'
-import OrganizationWizardCategory from './components/organization_wizard/handlers/organization_category'
-import OrganizationWizardLogo from './components/organization_wizard/handlers/organization_logo'
 import Organization from './components/organization_dashboard/handlers/organization'
 import OrganizationDashboard from './components/organization_dashboard/handlers/dashboard'
 import OrganizationProfile from './components/organization_dashboard/handlers/organization_profile'
@@ -40,13 +36,7 @@ export default (
   <Route handler={App} path="/">
 
     <DefaultRoute handler={Login} />
-    <Route name="wizard" handler={OrganizationWizard} path="wizard" >
-      <DefaultRoute handler={OrganizationWizardType} /> 
-      <Route name="wizard_name" handler={OrganizationWizardName} path="name"/>
-      <Route name="wizard_category" handler={OrganizationWizardCategory} path="category"/>
-      <Route name="wizard_logo" handler={OrganizationWizardLogo} path="logo"/>
-    </Route>
-
+    <Route name="wizard" handler={OrganizationWizard} path="wizard" />
     <Route name="organization" handler={Organization} path="/organization/:organizationId" >
       <DefaultRoute handler={OrganizationDashboard} /> 
       <Route name="organization_profile" handler={OrganizationProfile} path="profile" />

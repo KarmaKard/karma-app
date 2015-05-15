@@ -30,3 +30,15 @@
   border: 1px solid black;
   cursor: pointer;
 }
+
+.wizard_browse_button {
+  font: white;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 36px;
+  text-decoration: none;
+  font-color: white;
+  position: relative;
+  left: 35%;
+  background: white;
+  border: 1px solid black;
+}
