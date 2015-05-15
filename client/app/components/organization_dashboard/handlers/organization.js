@@ -2,12 +2,17 @@ import React from 'react'
 import { flux } from '../../../main'
 import Router, {RouteHandler, Link} from 'react-router'
 
-
-
 export default React.createClass({
 
-  render() {
+  contextTypes: {
+    router: React.PropTypes.func
+  },
 
+  navClicked(e){
+
+  },
+
+  render() {
     return (
       <div>
         <div className="page_header">
@@ -16,15 +21,12 @@ export default React.createClass({
         </div>
         <div className="side_bar_navigation">
           <ul className="side_bar_navigation_level1">
-            <li>Dashboard
-              <ul className="side_bar_navigation_level2">
-                <li>Data</li>
-                <li>Profile</li>
-                <li>Locations</li>
-                <li>Keywords</li>
-                <li>Deals</li>
-              </ul>
-            </li>
+                <li><a href="" ref="data" onClick={this.navClicked()}>Data</a></li>
+                <li><a href="" ref="profile" onClick={this.navClicked}>Profile</a></li>
+                <li><a href="" ref="locations" onClick={this.navClicked}>Locations</a></li>
+                <li><a href="" ref="keywords" onClick={this.navClicked}>Keywords</a></li>
+                <li><a href="" ref="deals" onClick={this.navClicked}>Deals</a></li>
+
            
           </ul>
         </div>

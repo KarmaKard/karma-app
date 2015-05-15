@@ -8,8 +8,13 @@ export default React.createClass({
   
     return (
       <div>
-        <div className="content_box-header">(Org) Logo</div>
-          Hey you have some unfinished stuff!
+        <div className="content_box-header">Dashboard</div>
+          You have some task(s) remaining before your business can be reviewed:
+          <ul className="toDoList">
+            <li>Add Locations</li>
+            <li>Add Deals</li>
+            <li>Add Keywords</li>
+          </ul>
       </div>
     )
   }
