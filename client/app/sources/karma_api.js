@@ -4,7 +4,6 @@ import { tokenToUser } from '../utils/transforms'
 const BASE_URL = process.env.API_HOST
 const REGISTER_URL = BASE_URL + '/api/v1/users'
 const LOGIN_URL = BASE_URL + '/api/v1/users/login'
-
 const ORGANIZATION_REGISTER_URL = BASE_URL + '/api/v1/organizations'
 
 var token = window.localStorage.getItem('karma-token')
@@ -49,6 +48,7 @@ export function postNewOrganization (organization) {
     request
       .post(ORGANIZATION_REGISTER_URL)
       .send({organization: organization})
+      .set('token', token)
       .end((err, res) => {
         if(err) {
           return reject(err)

@@ -4,7 +4,7 @@ export default class OrganizationStore extends Store {
   constructor() {
     super()
     this.state = {
-      currentOrganization: null, 
+      organizations: [], 
       createErrors: []
     }
 
@@ -13,12 +13,18 @@ export default class OrganizationStore extends Store {
   }
 
   handleOrganizationCreate(organization) {
-    this.setState({currentOrganization: organization})
+    this.setState({
+      organizations: this.state.organizations.concat(organization)
+    })
+  }
+
+  getOrganizationsByUserId(userId) {
+    return this.organizations.filter(org => org.userId === userId)
   }
 
   saveCreateError(error) {
     this.setState({
-        createErrors: this.state.createErrors.concat([error])
+        createErrors: this.state.createErrors.concat(error)
     })
   }
 }

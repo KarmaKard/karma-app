@@ -3,6 +3,10 @@ import Organizations from '../user_organizations'
 
 export default React.createClass({
   render(){
-    return <Organizations />
+    return (
+      <div>
+        <Organizations />
+      </div>
+    )
   }
 })

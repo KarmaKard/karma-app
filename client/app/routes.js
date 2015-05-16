@@ -10,6 +10,7 @@ import NewBusiness from './components/business/handlers/new_business'
 import EditBusiness from './components/business/handlers/edit_business'
 import StartWizard from './components/organization/handlers/start_wizard'
 import Organization from './components/organization/handlers/organization'
+import Organizations from './components/organization/handlers/organizations'
 import OrganizationDashboard from './components/organization/handlers/dashboard'
 import OrganizationProfile from './components/organization/handlers/organization_profile'
 import BusinessKeywords from './components/organization/handlers/business_keywords'
@@ -35,23 +36,24 @@ var App = React.createClass({
 export default (
   <Route handler={App} path="/">
     <DefaultRoute handler={Login} />
-
     <Route name="wizard" handler={StartWizard} path="wizard" />
 
-    <Route name="organization" handler={Organization} path="/organization/:organizationId" >
-      <DefaultRoute handler={OrganizationDashboard} /> 
-      <Route name="organization_profile" handler={OrganizationProfile} path="profile" />
-      <Route name="business_keyword" handler={BusinessKeywords} path="keywords" />
-      <Route name="organization_locations" handler={OrganizationLocations} path="locations" />
-      <Route name="business_deals" handler={BusinessDeals} path="deals" />
-      <Route name="organization_analytics" handler={OrganizationAnalytics} path="analytics" />
-      <Route name="fundraiser_team" handler={FundraiserTeam} path="team" />
-      <Route name="fundraiser_bank" handler={FundraiserBank} path="bank" />
+    <Route name="organizations" handler={Organizations} path="/organization" >
+      <DefaultRoute handler={UserOrganizations} />
+      <Route name="organization" handler={Organization} path=":organizationId">
+        <DefaultRoute handler={OrganizationDashboard} /> 
+        <Route name="organization_profile" handler={OrganizationProfile} path="profile" />
+        <Route name="business_keyword" handler={BusinessKeywords} path="keywords" />
+        <Route name="organization_locations" handler={OrganizationLocations} path="locations" />
+        <Route name="business_deals" handler={BusinessDeals} path="deals" />
+        <Route name="organization_analytics" handler={OrganizationAnalytics} path="analytics" />
+        <Route name="fundraiser_team" handler={FundraiserTeam} path="team" />
+        <Route name="fundraiser_bank" handler={FundraiserBank} path="bank" />
+      </Route>
     </Route>
 
-    <Route name="user" handler={User} path="/user/:userId" >
+    <Route name="user" handler={User} path="/user" >
       <DefaultRoute handler={UserAccount} />
-      <Route name="user_organizations" handler={UserOrganizations} path="organizations" />
     </Route>
 
     <Route name="account" handler={Account} path="/account" />

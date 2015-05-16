@@ -9,6 +9,6 @@ export default function validateCreate (req, res, next) {
   req.checkBody(['organization', 'name'], 'Organization name is required').notEmpty()
   req.checkBody(['organization', 'type'], 'Organization type is required').notEmpty()
   req.checkBody(['organization', 'category'], 'Organization description is required').notEmpty()
-  req.checkBody(['organization', 'logoURL'], 'Organization keywords is required').notEmpty()
+  req.checkBody(['organization', 'logoURL'], 'Organization logoURL is required').notEmpty()
   next(req.validationErrors() ? new ValidationError(req) : null)
 }

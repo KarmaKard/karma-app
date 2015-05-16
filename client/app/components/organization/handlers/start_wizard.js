@@ -6,10 +6,11 @@ import WizardName from '../wizard_name'
 import WizardCategory from '../wizard_category'
 import WizardLogo from '../wizard_logo'
 
-var organizationInformation = {
-}
-
 export default React.createClass({
+  contextTypes: {
+    router: React.PropTypes.func
+  },
+
   getInitialState() {
     return {
       type: null,
@@ -33,8 +34,10 @@ export default React.createClass({
   },
 
   setLogo(logoURL){
-    this.setState({logURL, step: this.state.step + 1})
-    flux.actions.organizations.create(router, this.state)
+    var { router } = this.context
+    this.setState({logoURL, step: this.state.step + 1}, () => {
+      flux.actions.organizations.create(router, this.state)
+    })
   },
 
   getWizardComponent() {
@@ -63,7 +66,6 @@ export default React.createClass({
 
   render(){
     var component = this.getWizardComponent()
-
     return (
       <div>
         <div className="page_header">
