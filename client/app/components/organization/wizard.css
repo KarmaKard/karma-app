@@ -1,4 +1,4 @@
-.Organization_is_business-button{
+.Organization_type_button {
   font-family: 'Quicksand', sans-serif;
   font-size: 36px;
   text-decoration: none;
@@ -9,24 +9,7 @@
   border: 1px solid white;
 }
 
-.Organization_is_fundraiser-button{
-  font-family: 'Quicksand', sans-serif;
-  font-size: 36px;
-  text-decoration: none;
-  font:black;
-  float:right;
-  margin: 15px 15px 10px 5px;
-  background: white;
-  border: 1px solid white;
-}
-
-
-.Organization_is_business-button:hover {
-  border: 1px solid black;
-  cursor: pointer;
-}
-
-.Organization_is_fundraiser-button:hover {
+.Organization_type_button:hover {
   border: 1px solid black;
   cursor: pointer;
 }

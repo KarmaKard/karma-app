@@ -6,7 +6,6 @@ export default React.createClass({
   },
 
   didChooseType(e) {
-    e.preventDefault()
     var type = e.target.value
     this.props.setType(type.toLowerCase())
   },
@@ -15,8 +14,8 @@ export default React.createClass({
     return (
       <div>
         <div className="content_box-header">Organization Type?</div>
-        <input type="submit" ref="business" onClick={this.didChooseType} className="Organization_is_business-button" value="Business" />
-        <input type="submit" ref="fundraiser" onClick={this.didChooseType} className="Organization_is_fundraiser-button" value="Fundraiser" />
+        <input type="submit" onClick={this.didChooseType} className="Organization_type_button" value="Business" />
+        <input type="submit" onClick={this.didChooseType} className="Organization_type_button" value="Fundraiser" />
       </div>
     )
   }

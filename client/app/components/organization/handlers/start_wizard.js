@@ -38,7 +38,6 @@ export default React.createClass({
   },
 
   getWizardComponent() {
-    console.log(this.state)
     switch(this.state.step) {
       case 1:
         return <WizardType 
