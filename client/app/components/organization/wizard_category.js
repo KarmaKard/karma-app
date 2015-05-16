@@ -1,16 +1,16 @@
 import React from 'react'
-import { flux } from '../../main'
 
 export default React.createClass({
   contextTypes: {
     router: React.PropTypes.func
   },
+
   nextClicked(e) {
     e.preventDefault()
-    var category  =  this.refs.category.getDOMNode().value
+    var category = React.findDOMNode(this.refs.category).value
     this.props.setCategory(category)
-    this.props.nextStep()
   },
+
   render() {
     return (
       <div>

@@ -5,8 +5,8 @@
 @import './components/deals/deal_builder';
 @import './components/business/profile';
 @import './components/business/handlers/dashboard';
-@import './components/organization_wizard/organization_wizard';
-@import './components/organization_dashboard/dashboard';
+@import './components/organization/wizard';
+@import './components/organization/dashboard';
 @import 'http://fonts.googleapis.com/css?family=Quicksand';
 
 body {

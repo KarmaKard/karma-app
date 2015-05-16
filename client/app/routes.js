@@ -8,16 +8,16 @@ import BusinessDashboard from './components/business/handlers/dashboard'
 import BusinessAnalytics from './components/business/handlers/analytics'
 import NewBusiness from './components/business/handlers/new_business'
 import EditBusiness from './components/business/handlers/edit_business'
-import OrganizationWizard from './components/organization_wizard/handlers/organization_wizard'
-import Organization from './components/organization_dashboard/handlers/organization'
-import OrganizationDashboard from './components/organization_dashboard/handlers/dashboard'
-import OrganizationProfile from './components/organization_dashboard/handlers/organization_profile'
-import BusinessKeywords from './components/organization_dashboard/handlers/business_keywords'
-import OrganizationLocations from './components/organization_dashboard/handlers/organization_locations'
-import BusinessDeals from './components/organization_dashboard/handlers/business_deals'
-import OrganizationAnalytics from './components/organization_dashboard/handlers/organization_analytics'
-import FundraiserTeam from './components/organization_dashboard/handlers/fundraiser_team'
-import FundraiserBank from './components/organization_dashboard/handlers/fundraiser_bank'
+import StartWizard from './components/organization/handlers/start_wizard'
+import Organization from './components/organization/handlers/organization'
+import OrganizationDashboard from './components/organization/handlers/dashboard'
+import OrganizationProfile from './components/organization/handlers/organization_profile'
+import BusinessKeywords from './components/organization/handlers/business_keywords'
+import OrganizationLocations from './components/organization/handlers/organization_locations'
+import BusinessDeals from './components/organization/handlers/business_deals'
+import OrganizationAnalytics from './components/organization/handlers/organization_analytics'
+import FundraiserTeam from './components/organization/handlers/fundraiser_team'
+import FundraiserBank from './components/organization/handlers/fundraiser_bank'
 import User from './components/users/handlers/user'
 import UserAccount from './components/users/handlers/user_account'
 import UserOrganizations from './components/users/handlers/user_organizations'
@@ -34,9 +34,10 @@ var App = React.createClass({
 
 export default (
   <Route handler={App} path="/">
-
     <DefaultRoute handler={Login} />
-    <Route name="wizard" handler={OrganizationWizard} path="wizard" />
+
+    <Route name="wizard" handler={StartWizard} path="wizard" />
+
     <Route name="organization" handler={Organization} path="/organization/:organizationId" >
       <DefaultRoute handler={OrganizationDashboard} /> 
       <Route name="organization_profile" handler={OrganizationProfile} path="profile" />
@@ -54,7 +55,9 @@ export default (
     </Route>
 
     <Route name="account" handler={Account} path="/account" />
+
     <Route name="login" handler={Login} path="/registration" />
+
     <Route name="businesses" handler={BusinessesLinks} path="/business">
       <DefaultRoute handler={BusinessDashboard} />
       <Route name="newBusiness" handler={NewBusiness} path="new" />
