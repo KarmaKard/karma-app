@@ -7,7 +7,7 @@ export default class UserActions extends Actions {
     KarmaAPI.postLoginCredentials(email, password).then(user => {
       if (user) {
         this.dispatch('login', user)
-        return router.transitionTo('account')
+        return router.transitionTo('user/'+user.email)
       }
       console.warn('No user returned from login')
     }).catch(this.loginError)

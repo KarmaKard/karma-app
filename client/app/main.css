@@ -6,6 +6,7 @@
 @import './components/business/profile';
 @import './components/business/handlers/dashboard';
 @import './components/organization_wizard/organization_wizard';
+@import './components/organization_dashboard/dashboard';
 @import 'http://fonts.googleapis.com/css?family=Quicksand';
 
 body {
@@ -14,7 +15,7 @@ body {
      top center
 }
 
-a:link {color: black;}     
+a:link {color: black; text-decoration: none;}     
 a:visited {color: black;}
 a:hover {color: black;}     
 a:active {color: black;}  
@@ -94,6 +95,14 @@ a:active {color: black;}
   background-color: white;
 }
 
+.karma_select{
+  border: 1px solid #cdcdcd;
+  display: block;
+  font-size: 16px;
+  padding: 5px;
+  background-color: white;
+}
+
 .karma_link {
   font-size: 12px;
   color: #aaa;
@@ -120,3 +129,13 @@ input[disabled] {
   cursor: not-allowed;
   background-color: #eeeeee;
 }
+
+hr { 
+    display: block;
+    margin-top: 30px;
+    margin-bottom: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    border-style: inset;
+    border-width: 1px;
+} 
