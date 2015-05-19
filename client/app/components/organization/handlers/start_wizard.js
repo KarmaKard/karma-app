@@ -27,6 +27,9 @@ export default React.createClass({
 
   setName(name){
     this.setState({name, step: this.state.step + 1})
+    if( this.state.type === 'fundraiser'){
+      this.setState({category: 'fundraiser'})
+    }
   },
 
   setCategory(category){

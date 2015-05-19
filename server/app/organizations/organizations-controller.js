@@ -31,3 +31,12 @@ export function update (req, res, next) {
     res.json({organization})
   }).catch(next)
 }
+
+router.get('/user', auth.token, getOrganizations)
+export function getOrganizations(req, res, next) {
+  var queryPromise = organizationsTable.getOrganizations(req.user.id)
+  queryPromise.then(organizations => {
+    res.json({organizations})
+  }).catch(next)
+}
+

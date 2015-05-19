@@ -4,6 +4,27 @@ export function index() {
   return r.table('organizations').run() // returns a Promise object
 }
 
+export function getOrganizations(userId){
+  return r.table('organizations')
+    .filter(r.row('userId')
+    .eq(userId))
+    .run()
+    .then(result => {
+      if (result) {
+        return result
+      }
+    })
+
+  r.table('organizations')
+    .get(organizationId)
+    .run()
+    .then(result => {
+      if (result) {
+        return result
+      }
+    })
+}
+
 export function insert(organization) {
   return r.table('organizations')
     .insert(organization, {returnChanges: true})
