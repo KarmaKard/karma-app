@@ -6,8 +6,8 @@ import * as auth from '../common/middleware/authentication'
 
 export var router = express.Router()
 
-router.get('/', auth.token, auth.admin, list)
-export function list (req, res, next){
+router.get('/', auth.token, list)
+export function list (req, res, next) {
   var queryPromise = organizationsTable.index()
   queryPromise.then(organizations => {
     res.json({organizations})
@@ -32,11 +32,10 @@ export function update (req, res, next) {
   }).catch(next)
 }
 
-router.get('/user', auth.token, getOrganizations)
-export function getOrganizations(req, res, next) {
-  var queryPromise = organizationsTable.getOrganizations(req.user.id)
+router.get('/manage', auth.token, auth.admin, listManagedOrganizations)
+export function listManagedOrganizations (req, res, next){
+  var queryPromise = organizationsTable.getOrganizationsByUserId(req.user.id)
   queryPromise.then(organizations => {
     res.json({organizations})
   }).catch(next)
 }
-
