@@ -9,7 +9,6 @@ export default class OrganizationStore extends Store {
     }
 
     this.handleAction('organizations.create',  this.handleOrganizationCreate)
-    this.handleAction('organizations.updateOrganization', this.updateOrganization)
     this.handleAction('organizations.createError', this.saveCreateError)
     this.handleAction('organizations.getOrganizations', this.saveOrganizations)
   }
@@ -19,7 +18,7 @@ export default class OrganizationStore extends Store {
       organizations: this.state.organizations.concat(organization)
     })
   }
-
+  
   getOrganizations(organizations){
     this.setState({organizations})
   }
