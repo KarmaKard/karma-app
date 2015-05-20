@@ -61,6 +61,11 @@ export default React.createClass({
               {currentOrg.name}
             </Link>
           </div>
+          <div className="page_header_link">
+            <Link to="user">
+              {this.state.user.currentUser.first_name}
+            </Link>
+          </div>
         </div>
 
         {sideBarType}

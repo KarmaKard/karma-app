@@ -22,9 +22,7 @@ export default class OrganizationStore extends Store {
 
 
   updateOrganization(organization){
-    this.setState({
-      currentOrganization: organization
-    })
+
   }
 
   getOrganizations(organizations){

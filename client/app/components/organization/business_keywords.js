@@ -21,7 +21,14 @@ export default React.createClass({
   },
 
   render() {
-
+    var keyword1, keyword2, keyword3, keyword4, keyword5
+    if(this.props.currentOrganization.keywords !== undefined){
+      keyword1 = this.props.currentOrganization.keywords[0]
+      keyword2 = this.props.currentOrganization.keywords[1]
+      keyword3 = this.props.currentOrganization.keywords[2]
+      keyword4 = this.props.currentOrganization.keywords[3]
+      keyword5 = this.props.currentOrganization.keywords[4]
+    }
     
     return (
       <div>
@@ -30,35 +37,35 @@ export default React.createClass({
             type="text"
             className="keyword-list__input karma_input"
             ref="keywordInput1"
-            defaultValue={this.props.currentOrganization.keywords[0]}
+            defaultValue={keyword1}
             placeholder="Keyword 1"/>
 
           <input
             type="text"
             className="keyword-list__input karma_input"
             ref="keywordInput2"
-            defaultValue={this.props.currentOrganization.keywords[1]}
+            defaultValue={keyword2}
             placeholder="Keyword 2"/>
 
           <input
             type="text"
             className="keyword-list__input karma_input"
             ref="keywordInput3"
-            defaultValue={this.props.currentOrganization.keywords[2]}
+            defaultValue={keyword3}
             placeholder="Keyword 3"/>
 
           <input
             type="text"
             className="keyword-list__input karma_input"
             ref="keywordInput4"
-            defaultValue={this.props.currentOrganization.keywords[3]}
+            defaultValue={keyword4}
             placeholder="Keyword 4"/>
 
           <input
             type="text"
             className="keyword-list__input karma_input"
             ref="keywordInput5"
-            defaultValue={this.props.currentOrganization.keywords[4]}
+            defaultValue={keyword5}
             placeholder="Keyword 5"/>
 
           <button className="karma_button" onClick={this.saveKeywords}>Save</button>
