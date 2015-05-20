@@ -4,6 +4,6 @@ import Keywords from '../business_keywords'
 export default React.createClass({
 
   render() {
-    return <Keywords />
+    return <Keywords currentOrganization = {this.props.currentOrganization} updateOrganization = {this.props.updateOrganization}/>
   }
 })

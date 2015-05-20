@@ -18,6 +18,10 @@ export default class OrganizationStore extends Store {
       organizations: this.state.organizations.concat(organization)
     })
   }
+  
+  getOrganizations(organizations){
+    this.setState({organizations})
+  }
 
   saveOrganizations(organizations){
     this.setState({organizations})

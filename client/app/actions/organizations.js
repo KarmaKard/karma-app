@@ -13,6 +13,15 @@ export default class OrganizationsActions extends Actions {
     }).catch(this.createError)
   }
 
+  updateOrganization(organization){
+    var p = KarmaAPI.updateOrganization(organization)
+    p.then(organization => {
+      if (organization){
+        this.dispatch('updateOrganization', organization)
+      }
+    })
+  }
+
   getOrganizations(){
     var p = KarmaAPI.getOrganizations()
       p.then(organizations => {

@@ -39,6 +39,10 @@ export default React.createClass({
     flux.stores.organizations.removeListener('change', this.storeChange)
   },
 
+  updateOrganization(organization) {
+    flux.actions.organizations.updateOrganization(organization)
+  },
+
   render() {
     if (this.state.organizations.organizations.length === 0){
       return <p>No Organizations</p>
@@ -57,13 +61,17 @@ export default React.createClass({
               {currentOrg.name}
             </Link>
           </div>
-          <a href="#" className="page_header_link">{this.state.user.currentUser.first_name}</a>
+          <div className="page_header_link">
+            <Link to="user">
+              {this.state.user.currentUser.first_name}
+            </Link>
+          </div>
         </div>
 
         {sideBarType}
         
         <div className="content_box">
-          <RouteHandler />
+          <RouteHandler currentOrganization = {this.state.currentOrganization} updateOrganization = {this.updateOrganization}/>
         </div>
       </div>
     )

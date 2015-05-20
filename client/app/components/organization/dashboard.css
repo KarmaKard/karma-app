@@ -13,7 +13,7 @@
 .keyword_list{
   list-style: inherit;
   margin-top: 15px; 
-  padding-left: 30px;
+  list-style-type: none;
 }
 
 .street_address_input{
@@ -59,4 +59,13 @@
 
 .deal_limit{
   clear:both;
+}
+
+.organization_profile-logo{
+  float:left;
+  clear: both;
+}
+
+.label-span{
+  float: left;
 }

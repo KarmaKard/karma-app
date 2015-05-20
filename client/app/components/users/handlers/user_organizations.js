@@ -5,7 +5,7 @@ export default React.createClass({
   render(){
     return (
       <div>
-        <Organizations />
+        <Organizations organizations={this.props.organizations}/>
       </div>
     )
   }

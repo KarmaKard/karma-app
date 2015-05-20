@@ -9,45 +9,67 @@ export default React.createClass({
     }
   },
 
-  updateNewKeyword(e){
-    this.setState({
-      newKeyword: e.target.value
-    })
+  saveKeywords(){
+    var keyword1 = React.findDOMNode(this.refs.keywordInput1).value
+    var keyword2 = React.findDOMNode(this.refs.keywordInput2).value
+    var keyword3 = React.findDOMNode(this.refs.keywordInput3).value
+    var keyword4 = React.findDOMNode(this.refs.keywordInput4).value
+    var keyword5 = React.findDOMNode(this.refs.keywordInput5).value
+    var keywordArray = [keyword1, keyword2, keyword3, keyword4, keyword5]
+    this.props.currentOrganization.keywords = keywordArray
+    this.props.updateOrganization(this.props.currentOrganization)
   },
 
-  handleAddNew(){
-    this.setState({
-      newKeyword: '',
-      keywords: this.state.keywords.concat(this.state.newKeyword)
-    })
-    React.findDOMNode(this.refs.keywordInput).focus()
-  },
-  getKeywords() {
-    return this.state.keywords
-  },
   render() {
-    var listItems = this.state.keywords.map((keyword, index) => {
-      return <li className="keyword_list-item" key={index}>{keyword}</li>
-    })
+    var keyword1, keyword2, keyword3, keyword4, keyword5
+    if(this.props.currentOrganization.keywords !== undefined){
+      keyword1 = this.props.currentOrganization.keywords[0]
+      keyword2 = this.props.currentOrganization.keywords[1]
+      keyword3 = this.props.currentOrganization.keywords[2]
+      keyword4 = this.props.currentOrganization.keywords[3]
+      keyword5 = this.props.currentOrganization.keywords[4]
+    }
+    
     return (
       <div>
         <div className="content_box-header">Keywords</div>
-        <div>
-          <ul className="keyword_list">
-            {listItems}
-          </ul>
-        </div>
-        <div>
           <input
             type="text"
             className="keyword-list__input karma_input"
-            ref="keywordInput"
-            placeholder="Type Keyword"
-            value={this.state.newKeyword}
-            onChange={this.updateNewKeyword}
-          />
-          <button className="karma_button" onClick={this.handleAddNew}>Add Keyword</button>
-        </div>
+            ref="keywordInput1"
+            defaultValue={keyword1}
+            placeholder="Keyword 1"/>
+
+          <input
+            type="text"
+            className="keyword-list__input karma_input"
+            ref="keywordInput2"
+            defaultValue={keyword2}
+            placeholder="Keyword 2"/>
+
+          <input
+            type="text"
+            className="keyword-list__input karma_input"
+            ref="keywordInput3"
+            defaultValue={keyword3}
+            placeholder="Keyword 3"/>
+
+          <input
+            type="text"
+            className="keyword-list__input karma_input"
+            ref="keywordInput4"
+            defaultValue={keyword4}
+            placeholder="Keyword 4"/>
+
+          <input
+            type="text"
+            className="keyword-list__input karma_input"
+            ref="keywordInput5"
+            defaultValue={keyword5}
+            placeholder="Keyword 5"/>
+
+          <button className="karma_button" onClick={this.saveKeywords}>Save</button>
+      
       </div>
     )
   }
