@@ -20,11 +20,6 @@ export default class OrganizationStore extends Store {
     })
   }
 
-
-  updateOrganization(organization){
-
-  }
-
   getOrganizations(organizations){
     this.setState({organizations})
   }
