@@ -6,7 +6,15 @@ export default React.createClass({
     return(
       <div>
         <div className="content_box-header">Account</div>
-        This is some Account Stuff.
+        Email
+        <input
+            type="text"
+            className="karma_input"
+            placeholder="Type Keyword"
+            value={this.props.user.currentUser.email}
+          />
+          Change Your Password
+      
       </div>
     )
   }

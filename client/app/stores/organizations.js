@@ -10,6 +10,7 @@ export default class OrganizationStore extends Store {
     }
 
     this.handleAction('organizations.create',  this.handleOrganizationCreate)
+    this.handleAction('organizations.updateOrganization', this.updateOrganization)
     this.handleAction('organizations.createError', this.saveCreateError)
     this.handleAction('organizations.getOrganizations', this.getOrganizations)
   }
@@ -20,12 +21,17 @@ export default class OrganizationStore extends Store {
     })
   }
 
+  updateOrganization(organization){
+    this.setState({
+      currentOrganization: organization
+    })
+  }
+
   getOrganizations(organizations){
     this.setState({organizations})
   }
 
   getOrganizationsByOrganizationId(organizationId) {
-    console.log(this.state.organizations)
     return this.state.organizations.filter(org => org.Id === organizationId)
   }
 

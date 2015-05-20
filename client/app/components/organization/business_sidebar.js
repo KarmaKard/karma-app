@@ -7,7 +7,6 @@ export default React.createClass({
 
   },
   render() {
-  console.log(this.props.orgId)
     return (
       <div className="side_bar_navigation">
         <ul className="side_bar_navigation_level1">

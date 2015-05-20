@@ -71,5 +71,19 @@ export function getOrganizations () {
         resolve(res.body.organizations)
       })
   })
+}
 
+export function updateOrganization(organization){
+  return new Promise((resolve, reject) => {
+    request
+      .put(ORGANIZATION_URL + "/" + organization.id)
+      .send({organization})
+      .set('token', token)
+      .end((err, res) => {
+        if(err) {
+          return reject(err)    
+        }
+        resolve(res.body.organization)
+      })
+  })
 }

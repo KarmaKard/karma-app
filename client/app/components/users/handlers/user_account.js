@@ -3,6 +3,6 @@ import UserAccount from '../user_account'
 
 export default React.createClass({
   render(){
-    return <UserAccount />
+    return <UserAccount user={this.props.user} />
   }
 })
