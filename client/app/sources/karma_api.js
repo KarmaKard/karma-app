@@ -5,6 +5,7 @@ const BASE_URL = process.env.API_HOST
 const REGISTER_URL = BASE_URL + '/api/v1/users'
 const LOGIN_URL = BASE_URL + '/api/v1/users/login'
 const ORGANIZATION_URL = BASE_URL + '/api/v1/organizations'
+const MANAGE_ORGANIZATIONS_URL = ORGANIZATION_URL + '/manage'
 
 
 var token = window.localStorage.getItem('karma-token')
@@ -62,7 +63,7 @@ export function postNewOrganization (organization) {
 export function getOrganizations () {
   return new Promise((resolve, reject) => {
     request
-      .get(ORGANIZATION_URL + "/user")
+      .get(ORGANIZATION_URL)
       .set('token', token)
       .end((err, res) => {
         if(err) {
@@ -73,17 +74,18 @@ export function getOrganizations () {
   })
 }
 
-export function updateOrganization(organization){
+
+export function getManagedOrganizations () {
   return new Promise((resolve, reject) => {
     request
-      .put(ORGANIZATION_URL + "/" + organization.id)
-      .send({organization})
+      .get(MANAGE_ORGANIZATIONS_URL)
       .set('token', token)
       .end((err, res) => {
         if(err) {
-          return reject(err)    
+          return reject(err)
         }
-        resolve(res.body.organization)
+        resolve(res.body.organizations)
       })
   })
 }
+

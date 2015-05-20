@@ -11,8 +11,11 @@ export default React.createClass({
   },
 
   getInitialState() {
-    return Object.assign(this.getStoreState(),{
-    })
+    var storeState = this.getStoreState()
+    if(storeState.organizations.organizations.length === 0){
+      flux.actions.organizations.getOrganizations()
+    }
+    return storeState
   },
 
   storeChange() {
@@ -20,18 +23,11 @@ export default React.createClass({
   },
 
   getStoreState() {
-    if(flux.stores.organizations.getState().organizations.length === 0){
-      flux.actions.organizations.getOrganizations()
-      return {
-        organizations: [],
-        user: {},
-        currentOrganization: {} 
-      }
-    }
+    var orgId = this.context.router.getCurrentParams().organizationId
     return {
       organizations: flux.stores.organizations.getState(),
       user: flux.stores.users.getState(),
-      currentOrganization: flux.stores.organizations.getCurrentOrganization(this.context.router.getCurrentParams().organizationId)
+      currentOrganization: flux.stores.organizations.getOrganization(orgId)
     }
   },
 
@@ -48,26 +44,21 @@ export default React.createClass({
   },
 
   render() {
-    if (this.state.organizations.length === 0){
-      return <p>Wait!</p>
+    if (this.state.organizations.organizations.length === 0){
+      return <p>No Organizations</p>
     }
 
-    var sideBarType
-    if(this.state.currentOrganization.type === "fundraiser"){
-      sideBarType = <FundraiserSideBar orgId={this.state.currentOrganization.id} />  
-    }
-    else if(this.state.currentOrganization.type === "business"){
-      sideBarType = <BusinessSideBar orgId={this.state.currentOrganization.id} />  
-    } 
+    var currentOrg = this.state.currentOrganization
+    var sideBarType = currentOrg.type === 'fundraiser'
+      ? <FundraiserSideBar orgId={currentOrg.id} />  
+      : <BusinessSideBar orgId={currentOrg.id} />
+
     return (
       <div>
         <div className="page_header">
           <div className="page_header_title">
-            {this.state.currentOrganization.name}
-          </div>
-          <div className="page_header_link">
-            <Link to="user">
-              {this.state.user.currentUser.first_name}
+            <Link to="organization_dashboard" params={{organizationId: currentOrg.id}}>
+              {currentOrg.name}
             </Link>
           </div>
         </div>
