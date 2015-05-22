@@ -5,7 +5,7 @@ import * as auth from '../common/middleware/authentication'
 
 export var router = express.Router()
 
-router.get('/', auth.token, auth.admin, list)
+router.get('/', auth.token, list)
 export function list (req, res, next){
   var queryPromise = dealsTable.index()
   queryPromise.then(deals => {
@@ -15,8 +15,23 @@ export function list (req, res, next){
 
 router.post('/', auth.token, validateCreate, create)
 export function create(req, res, next){
-  var queryPromise = dealsTable.insert(req.body.deals)
+  var deal = req.body.deal
+  deal.userId = req.user.id
+  var queryPromise = dealsTable.insert(deal)
   queryPromise.then(data => {
-    res.json({deals: data})
+    res.json({deal: data})
   }).catch(next)
 }
+
+router.put('/', auth.token, update)
+  export function update(req, res, next){
+  console.log(req.body.deals)
+  var pDeals = req.body.deals.map(
+    deal => dealsTable.update(deal)
+  )
+  Promise.all(pDeals).then(data => { 
+    res.json({deals: data}) 
+  })
+}
+
+

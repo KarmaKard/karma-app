@@ -8,6 +8,7 @@
 @import './components/organization/wizard';
 @import './components/organization/dashboard';
 @import 'http://fonts.googleapis.com/css?family=Quicksand';
+@import './components/organization/business_deals';
 
 body {
    background:
@@ -45,12 +46,13 @@ a:active {color: black;}
   border-color: #000000;
   opacity: 0.88;
   width: 500px;
+  margin-top: 200px;
   margin: auto;
   padding: 10px 20px 20px 20px;
   position: absolute;
-  top: 35%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  top: 70px;
+  left: 32%;
+
 }
 
 .content_box-header {

@@ -4,6 +4,6 @@ import Deals from '../business_deals'
 export default React.createClass({
 
   render() {
-    return <Deals />
+    return <Deals currentOrganization = {this.props.currentOrganization} freeDeal = {this.props.freeDeal}/>
   }
 })

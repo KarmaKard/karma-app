@@ -27,40 +27,6 @@
   margin-left: 10% !important;
 }
 
-.deal_header{
-  font-family: 'Quicksand', sans-serif;
-  font-size: 24pt;
-  text-decoration: none;
-  font:black;
-  margin-top: 10px;
-}
-
-.free_deal_input{
-  width:80% !important;
-  float:left;
-  margin-top: 0 !important;
-}
-
-.deal_text-left{
-  float:left;
-  margin-top:5px;
-  margin-right: 10px;
-}
-
-.deal_text-right{
-  float:left;
-  margin-top: 5px;
-  margin-left: 10px;
-}
-
-.deal_contents{
-
-}
-
-.deal_limit{
-  clear:both;
-}
-
 .organization_profile-logo{
   float:left;
   clear: both;

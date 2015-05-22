@@ -52,7 +52,7 @@ export default React.createClass({
     var sideBarType = currentOrg.type === 'fundraiser'
       ? <FundraiserSideBar orgId={currentOrg.id} />  
       : <BusinessSideBar orgId={currentOrg.id} />
-
+      
     return (
       <div>
         <div className="page_header">
@@ -63,7 +63,7 @@ export default React.createClass({
           </div>
           <div className="page_header_link">
             <Link to="user">
-              {this.state.user.currentUser.first_name}
+              {this.state.user.currentUser.firstName}
             </Link>
           </div>
         </div>

@@ -6,6 +6,7 @@ const REGISTER_URL = BASE_URL + '/api/v1/users'
 const LOGIN_URL = BASE_URL + '/api/v1/users/login'
 const ORGANIZATION_URL = BASE_URL + '/api/v1/organizations'
 const MANAGE_ORGANIZATIONS_URL = ORGANIZATION_URL + '/manage'
+const DEALS_URL = BASE_URL + '/api/v1/deals'
 
 
 var token = window.localStorage.getItem('karma-token')
@@ -100,6 +101,52 @@ export function getManagedOrganizations () {
           return reject(err)
         }
         resolve(res.body.organizations)
+      })
+  })
+}
+
+export function postDeal(deal){
+  console.log(deal)
+  return new Promise ((resolve, reject) => {
+    request
+      .post(DEALS_URL)
+      .send({deal})
+      .set('token', token)
+      .end((err, res) => {
+        if(err) {
+          return reject(err)
+        }
+        resolve(res.body.deal)
+      })
+  })
+}
+
+export function updateDeals(deals){
+  return new Promise ((resolve, reject) => {
+    request
+      .put(DEALS_URL)
+      .send({deals})
+      .set('token', token)
+      .end((err, res) => {
+        if (err) {
+          return reject(err)
+        }
+        resolve(res.body.deals)
+      })
+
+  })
+}
+
+export function getDeals () {
+  return new Promise((resolve, reject) => {
+    request
+      .get(DEALS_URL)
+      .set('token', token)
+      .end((err, res) => {
+        if(err) {
+          return reject(err)
+        }
+        resolve(res.body.deals)
       })
   })
 }

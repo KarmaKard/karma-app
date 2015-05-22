@@ -68,7 +68,7 @@ export default React.createClass({
             defaultValue={keyword5}
             placeholder="Keyword 5"/>
 
-          <button className="karma_button" onClick={this.saveKeywords}>Save</button>
+            <button className="karma_button" onClick={this.saveKeywords}>Save</button>
       
       </div>
     )
