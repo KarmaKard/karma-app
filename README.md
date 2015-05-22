@@ -1,6 +1,14 @@
 # karma-app
 ===========
 
+## Development Environment ##
+
+Requires `ruby`, `bundler`, `node`, and `npm` installed.
+
+1. Install rethinkdb `brew install rethinkdb`
+1. Install app dependencies: `make install`
+1. Start App: `bundle exec foreman start`
+
 ## Database Migrations ##
 
 When making changes to the database schema (adding tables or indexes), you
