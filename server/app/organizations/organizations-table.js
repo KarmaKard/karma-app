@@ -11,6 +11,12 @@ export function getOrganizationsByUserId (userId){
     .run()
 }
 
+export function getById (id){
+  return r.table('organizations')
+    .get(organization.id)
+    .run()
+}
+
 export function insert (organization) {
   return r.table('organizations')
     .insert(organization, {returnChanges: true})

@@ -24,11 +24,24 @@ export default class OrganizationsActions extends Actions {
 
   getOrganizations(){
     var p = KarmaAPI.getOrganizations()
-      p.then(organizations => {
-        if (organizations) {
-          this.dispatch('getOrganizations', organizations)
-        }
-      }).catch(this.createError)
+    p.then(organizations => {
+      if (organizations) {
+        this.dispatch('getOrganizations', organizations)
+      }
+    }).catch(this.getOrganizationsError)
+  }
+
+  getOrganization(id){
+    var p = KarmaAPI.getOrganizations(id)
+    p.then(organization => {
+      if (organization) {
+        this.dispatch('getOrganization', organization)
+      }
+    }).catch(this.getOrganizationsError)
+  }
+
+  getOrganizationsError(error) {
+    console.warn(error)
   }
 
   createError(error) {

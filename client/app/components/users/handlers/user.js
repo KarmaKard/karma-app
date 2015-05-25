@@ -1,8 +1,6 @@
 import React from 'react'
 import { flux } from '../../../main'
-import Router, {RouteHandler, Link} from 'react-router'
-
-
+import { RouteHandler, Link } from 'react-router'
 
 export default React.createClass({
 
@@ -11,8 +9,11 @@ export default React.createClass({
   },
 
   getInitialState() {
-    return Object.assign(this.getStoreState(),{
-    })
+    var storeState = this.getStoreState()
+    if(storeState.organizations.length === 0){
+      flux.actions.organizations.getOrganizations()
+    }
+    return storeState
   },
 
   storeChange() {
@@ -20,13 +21,6 @@ export default React.createClass({
   },
 
   getStoreState() {
-    if(flux.stores.organizations.getState().organizations.length === 0){
-      flux.actions.organizations.getOrganizations()
-      return {
-        organizations: [],
-        user: {}
-      }
-    }
     return {
       organizations: flux.stores.organizations.getState(),
       user: flux.stores.users.getState()
@@ -42,28 +36,29 @@ export default React.createClass({
   },
 
   render() {
-    if (!this.state.user.currentUser){
+    var currentUser = this.state.user.currentUser
+    if (!currentUser){
       return <p>Wait!</p>
     }
 
     return (
       <div>
         <div className="page_header">
-          <div className="page_header_title">{this.state.user.currentUser.first_name}</div>
+          <div className="page_header_title">{currentUser.firstName}</div>
           <div className="page_header_link">
-            <Link to="login">
+            <Link to="root">
               Log Out
             </Link>
           </div>
         </div>
         <div className="side_bar_navigation">
           <ul className="side_bar_navigation_level1">
-            <li><Link to="user">Account</Link></li>
-            <li><Link to="user_organizations">Organizations</Link></li>
+            <li><Link to="account">Account</Link></li>
+            <li><Link to="organizations">Organizations</Link></li>
           </ul>
         </div>
         <div className="content_box">
-            <RouteHandler organizations={this.state.organizations} user={this.state.user}/>
+          <RouteHandler user={currentUser} />
         </div>
       </div>
     )

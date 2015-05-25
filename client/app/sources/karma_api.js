@@ -4,8 +4,8 @@ import { tokenToUser } from '../utils/transforms'
 const BASE_URL = process.env.API_HOST
 const REGISTER_URL = BASE_URL + '/api/v1/users'
 const LOGIN_URL = BASE_URL + '/api/v1/users/login'
-const ORGANIZATION_URL = BASE_URL + '/api/v1/organizations'
-const MANAGE_ORGANIZATIONS_URL = ORGANIZATION_URL + '/manage'
+const ORGANIZATIONS_URL = BASE_URL + '/api/v1/organizations'
+const MANAGE_ORGANIZATIONS_URL = ORGANIZATIONS_URL + '/manage'
 const DEALS_URL = BASE_URL + '/api/v1/deals'
 
 
@@ -49,7 +49,7 @@ export function postNewUser (user) {
 export function postNewOrganization (organization) {
   return new Promise((resolve, reject) => {
     request
-      .post(ORGANIZATION_URL)
+      .post(ORGANIZATIONS_URL)
       .send({organization})
       .set('token', token)
       .end((err, res) => {
@@ -64,7 +64,7 @@ export function postNewOrganization (organization) {
 export function getOrganizations () {
   return new Promise((resolve, reject) => {
     request
-      .get(ORGANIZATION_URL)
+      .get(ORGANIZATIONS_URL)
       .set('token', token)
       .end((err, res) => {
         if(err) {
@@ -75,10 +75,24 @@ export function getOrganizations () {
   })
 }
 
+export function getOrganization (id) {
+  return new Promise((resolve, reject) => {
+    request
+      .get(ORGANIZATIONS_URL + '/' + id)
+      .set('token', token)
+      .end((err, res) => {
+        if(err) {
+          return reject(err)
+        }
+        resolve(res.body.organization)
+      })
+  })
+}
+
 export function updateOrganization (organization) {
   return new Promise((resolve, reject) => {
     request
-      .put(ORGANIZATION_URL + "/" + organization.id)
+      .put(ORGANIZATIONS_URL + "/" + organization.id)
       .send({organization})
       .set('token', token)
       .end((err, res) => {

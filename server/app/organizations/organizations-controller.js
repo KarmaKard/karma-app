@@ -32,6 +32,14 @@ export function update (req, res, next) {
   }).catch(next)
 }
 
+router.get('/:orgId', auth.token, find)
+export function find (req, res, next) {
+  var pOrganization = organizationsTable.getById(req.params.orgId)
+  pOrganization.then(organization => {
+    res.json({organization})
+  }).catch(next)
+}
+
 router.get('/manage', auth.token, auth.admin, listManagedOrganizations)
 export function listManagedOrganizations (req, res, next){
   var queryPromise = organizationsTable.getOrganizationsByUserId(req.user.id)

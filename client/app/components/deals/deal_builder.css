@@ -1,129 +1,87 @@
-/* Page */
-.page-wrap{
+.deal_header{
+  font-family: 'Quicksand', sans-serif;
+  font-size: 24pt;
+  text-decoration: none;
+  font:black;
+  margin: 10px 0;
+}
+
+.free_deal_input{
+  width:80% !important;
+  float:left;
+  margin-top: 0 !important;
+}
+
+.deal-input {
+  border: 1px solid #cdcdcd;
+  display: block;
+  font-size: 16px;
+  margin: 0 10px;
+  padding: 5px;
+
+  background-color: white;
+  width: 300px;
+  float: left;
+}
+
+.dox_deal-input {
+  border: 1px solid #cdcdcd;
+  display: block;
+  font-size: 16px;
+  margin: 0 10px;
+  padding: 5px;
+
+  background-color: white;
+  width: 75px;
+  float: left;
+}
+
+.dollar_value-input {
+  width: 150px !important;
+  margin-left: 30px !important;
+}
+
+.deal_text-left{
+  float:left;
+  margin-top:5px;
+  margin-right: 10px;
+}
+
+.deal_text2-left {
+  float:left;
+  margin-top:5px;
+  margin-right: 13px;
+}
+
+.deal_text-right{
+  float:left;
+  margin-top: 5px;
+}
+
+.deal_contents{
+
+}
+
+.deal_limit{
   clear:both;
-  margin: auto;
+  padding: 5px 0;
 }
 
-/* Table */
-.deal-table{
-  margin: auto;
-  width: 100%;
+.required_amount{
+  clear:both;
+  float:left;
 }
 
-/* Table Rows */
-.deal-table__header{
-  height: 50px;
-  background-color: #6196bd;
-  color: white;
-  font-size: 20px;
+.deal-row {
+  overflow: hidden;
+  margin: 5px 0;
 }
 
-.deal-table__odd{
-  height: 80px;
-}
-
-.deal-table__even{
-  height: 80px;
-  background-color: #C0D3E2;
-}
-
-select {
-  padding: 6px 0;
+.deal-select{
+  border: 1px solid #cdcdcd;
+  display: block;
   font-size: 16px;
-}
-
-/* Table Columns */
-.column-1{
-  padding-left: 20px;
-}
-
-.column-2{
-  text-align: center;
-}
-
-.column-3{
-  text-align: center;
-}
-
-
-/* Deal 1 */
-.deal-table__BOGO-input{
-  width: 60%;
-  margin: 0 20px 0 45px;
-  padding: 6px 0;
-  font-size: 16px;
-}
-
-.deal-table__BOGO-value{
-  width:50px;
-  padding: 6px 0;
-  font-size: 16px;
-}
-
-/* Deal 2 */
-.deal-table__FREE__dropdown{
+  padding: 5px;
   margin: 0 5px;
-  padding: 6px 0;
-  font-size: 16px;
+  background-color: white;
 }
-
-.deal-table__FREE__input{
-  width: 60%;
-  margin: 0 20px 0 5px;
-  padding: 6px 0;
-  font-size: 16px;
-}
-
-.deal-table__FREE-value{
-  width: 50px;
-  padding: 6px 0;
-  font-size: 16px;
-}
-
-/* Deal 3 */
-.deal-table__DISCOUNT__dropdown1{
-  margin: 0 5px;
-}
-
-.deal-table__DISCOUNT__input{
-  width: 60%;
-  margin: 0 20px 0 42px;
-  padding: 6px 0;
-  font-size: 16px;
-}
-
-.deal-table__DISCOUNT__dropdown2{
-  margin: 0 5px;
-}
-.deal-table__DISCOUNT-value{
-  width:50px;
-  padding: 6px 0;
-  font-size: 16px;
-}
-
-
-/* Deal 4 */
-.deal-table__PLUS_ONE{
-  height: 120px;
-}
-
-.deal-table__PLUS_ONE-input1{
-  width: 60%;
-  margin: 0 20px 10px 39px;
-  padding: 6px 0;
-  font-size: 16px;
-}
-
-.deal-table__PLUS_ONE-input2{
-  width: 60%;
-  margin: 0 20px 0 32px;
-  padding: 6px 0;
-  font-size: 16px;
-}
-
-.deal-table__PLUS_ONE-value{
-  width:75px;
-  padding: 6px 0;
-  font-size: 16px;
-}
-

@@ -3,20 +3,15 @@
 @import './components/users/handlers/account';
 @import './components/users/login_form';
 @import './components/deals/deal_builder';
-@import './components/business/profile';
-@import './components/business/handlers/dashboard';
-@import './components/organization/wizard';
-@import './components/organization/dashboard';
+@import './components/organizations/wizard/index';
+@import './components/organizations/dashboard';
 @import 'http://fonts.googleapis.com/css?family=Quicksand';
-@import './components/organization/business_deals';
 
 body {
-   background:
-     url("/img/aseninelowercase.png") 
-     top center
+  background:
+  url("/img/aseninelowercase.png") 
+  top center
 }
-
-
 
 a:link {color: black; text-decoration: none;}     
 a:visited {color: black;}
@@ -130,9 +125,9 @@ a:active {color: black;}
 }
 
 .preloader {
-   background:
-     url("/img/282.GIF") 
-     top center
+  background:
+  url("/img/282.GIF") 
+  top center
 }
 
 input[disabled] {
@@ -141,11 +136,11 @@ input[disabled] {
 }
 
 hr { 
-    display: block;
-    margin-top: 30px;
-    margin-bottom: 10px;
-    margin-left: auto;
-    margin-right: auto;
-    border-style: inset;
-    border-width: 1px;
+  display: block;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  border-style: inset;
+  border-width: 1px;
 } 

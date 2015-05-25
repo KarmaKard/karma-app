@@ -10,7 +10,7 @@ export default class DealStore extends Store {
 
     this.handleAction('deals.create',  this.handleDealCreate)
     this.handleAction('deals.createError', this.saveCreateError)
-    this.handleAction('deals.getDeals', this.getDeals)
+    this.handleAction('deals.getDeals', this.replaceDeals)
   }
 
   handleDealCreate(deal) {
@@ -19,7 +19,7 @@ export default class DealStore extends Store {
     })
   }
   
-  getDeals(deals){
+  replaceDeals(deals){
     this.setState({deals})
   }
 

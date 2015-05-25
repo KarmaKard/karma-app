@@ -1,27 +1,24 @@
 import Router, {Route, RouteHandler, DefaultRoute} from 'react-router'
 import React from 'react'
+
 import Login from './components/users/handlers/login'
 import Account from './components/users/handlers/account'
-import BusinessesLinks from './components/business/handlers/multi_links'
-import BusinessLinks from './components/business/handlers/single_links'
-import BusinessDashboard from './components/business/handlers/dashboard'
-import BusinessAnalytics from './components/business/handlers/analytics'
-import NewBusiness from './components/business/handlers/new_business'
-import EditBusiness from './components/business/handlers/edit_business'
-import StartWizard from './components/organization/handlers/start_wizard'
-import Organization from './components/organization/handlers/organization'
-import Organizations from './components/organization/handlers/organizations'
-import OrganizationDashboard from './components/organization/handlers/dashboard'
-import OrganizationProfile from './components/organization/handlers/organization_profile'
-import BusinessKeywords from './components/organization/handlers/business_keywords'
-import OrganizationLocations from './components/organization/handlers/organization_locations'
-import BusinessDeals from './components/organization/handlers/business_deals'
-import OrganizationAnalytics from './components/organization/handlers/organization_analytics'
-import FundraiserTeam from './components/organization/handlers/fundraiser_team'
-import FundraiserBank from './components/organization/handlers/fundraiser_bank'
 import User from './components/users/handlers/user'
-import UserAccount from './components/users/handlers/user_account'
-import UserOrganizations from './components/users/handlers/user_organizations'
+
+import Organizations from './components/organizations/handlers/organizations'
+import ShowOrganizationList from './components/organizations/handlers/show_organization_list'
+import OrganizationsUserManages from './components/organizations/handlers/organizations_user_manages'
+import NewOrganization from './components/organizations/handlers/new_organization'
+import Organization from './components/organizations/handlers/organization'
+import ShowOrganizationProfile from './components/organizations/handlers/show_profile'
+import OrganizationUserManages from './components/organizations/handlers/organization_user_manages'
+import ShowOrganizationDashboard from './components/organizations/handlers/show_dashboard'
+import EditOrganizationProfile from './components/organizations/handlers/edit_profile'
+import EditOrganizationLocations from './components/organizations/handlers/edit_locations'
+import EditOrganizationKeywords from './components/organizations/handlers/edit_keywords'
+import EditBusinessDeals from './components/organizations/handlers/edit_business_deals'
+import EditFundraiserTeam from './components/organizations/handlers/edit_fundraiser_team'
+import EditFundraiserBank from './components/organizations/handlers/edit_fundraiser_bank'
 
 var App = React.createClass({
   render() {
@@ -34,38 +31,31 @@ var App = React.createClass({
 })
 
 export default (
-  <Route handler={App} path="/">
+  <Route name="root" handler={App} path="/">
     <DefaultRoute handler={Login} />
-    <Route name="wizard" handler={StartWizard} path="wizard" />
 
-    <Route name="organization" handler={Organization} path="/organization/:organizationId" >
-        <DefaultRoute handler={OrganizationDashboard} />
-        <Route name="organization_dashboard" handler={OrganizationDashboard} path="dashboard" /> 
-        <Route name="organization_profile" handler={OrganizationProfile} path="profile" />
-        <Route name="business_keywords" handler={BusinessKeywords} path="keywords" />
-        <Route name="organization_locations" handler={OrganizationLocations} path="locations" />
-        <Route name="business_deals" handler={BusinessDeals} path="deals" />
-        <Route name="organization_analytics" handler={OrganizationAnalytics} path="analytics" />
-        <Route name="fundraiser_team" handler={FundraiserTeam} path="team" />
-        <Route name="fundraiser_bank" handler={FundraiserBank} path="bank" />
-    </Route>
+    <Route name="organizations" handler={Organizations} path="organizations">
+      <DefaultRoute handler={ShowOrganizationList} />
+      <Route name="organizations_user_manages" handler={OrganizationsUserManages} path="manage" />
+      <Route name="new_organization" handler={NewOrganization} path="new" />
 
-    <Route name="user" handler={User} path="/user" >
-      <DefaultRoute handler={UserAccount} />
-      <Route name="user_organizations" handler={UserOrganizations} path="organizations" />
-    </Route>
+      <Route name="organization" handler={Organization} path=":organizationId" >
+        <DefaultRoute handler={ShowOrganizationProfile} />
 
-    <Route name="account" handler={Account} path="/account" />
-
-    <Route name="login" handler={Login} path="/registration" />
-
-    <Route name="businesses" handler={BusinessesLinks} path="/business">
-      <DefaultRoute handler={BusinessDashboard} />
-      <Route name="newBusiness" handler={NewBusiness} path="new" />
-      <Route name="business" handler={BusinessLinks} path=":businessId">
-        <DefaultRoute handler={BusinessAnalytics} />
-        <Route name="editBusiness" handler={EditBusiness} path="edit" />
+        <Route name="organization_user_manages" handler={OrganizationUserManages} path="manage">
+          <DefaultRoute handler={ShowOrganizationDashboard} />
+          <Route name="edit_profile" handler={EditOrganizationProfile} path="profile" />
+          <Route name="edit_locations" handler={EditOrganizationLocations} path="locations" />
+          <Route name="edit_keywords" handler={EditOrganizationKeywords} path="keywords" />
+          <Route name="edit_deals" handler={EditBusinessDeals} path="deals" />
+          <Route name="edit_fundraiser_team" handler={EditFundraiserTeam} path="team" />
+          <Route name="edit_fundraiser_bank" handler={EditFundraiserBank} path="bank" />
+        </Route>
       </Route>
+    </Route>
+
+    <Route name="account" handler={User} path="/account" >
+      <DefaultRoute handler={Account} />
     </Route>
   </Route>
 )
