@@ -1,9 +1,10 @@
-# karma-app
-===========
+# karma-app #
+
+Web App for KarmaKard
 
 ## Development Environment ##
 
-Requires `ruby`, `bundler`, `node`, and `npm` installed.
+Requires `brew`, `ruby`, `bundler`, `node`, and `npm` installed.
 
 1. Install rethinkdb `brew install rethinkdb`
 1. Install app dependencies: `make install`
