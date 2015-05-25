@@ -22,6 +22,7 @@ export default React.createClass({
     return (
       <div>
         <h1>Organizations You Manage</h1>
+        <Link to="new_organization">Create an Organization</Link>
         <div className="content_box">
           <ul>
             {organizationLinks}

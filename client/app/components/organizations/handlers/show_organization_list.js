@@ -17,13 +17,15 @@ export default React.createClass({
     })
 
     return (
-      <div>
+      <div className="content_box">
         <div className="content_box-header">
           Organizations
         </div>
         <ul>
           {organizations}
         </ul>
+        <hr />
+        <Link to="organizations_user_manages">Manage Your Organizations</Link>
       </div>
     )
   }
