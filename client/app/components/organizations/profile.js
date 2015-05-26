@@ -26,7 +26,7 @@ export default React.createClass({
             type="text"
             ref="name"
             className="karma_input"
-            defaultValue={this.props.organization.name}
+            defaultValue={this.props.currentOrganization.name}
           />
 
           <span className="label-span">Category</span>

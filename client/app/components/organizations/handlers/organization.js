@@ -8,6 +8,10 @@ export default React.createClass({
     router: React.PropTypes.func
   },
 
+  updateOrganization(organization) {
+    flux.actions.organizations.updateOrganization(organization)
+  },
+
   render() {
     var orgId = this.context.router.getCurrentParams().organizationId
     var organization = this.props.organizations.filter(org => org.id === orgId)[0]

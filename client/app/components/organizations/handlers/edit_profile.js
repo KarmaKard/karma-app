@@ -5,7 +5,7 @@ export default React.createClass({
 
   render() {
     return <Profile 
-            currentOrganization={this.props.currentOrganization} 
+            currentOrganization={this.props.organization} 
             updateOrganization={this.props.updateOrganization} />
   }
 })
