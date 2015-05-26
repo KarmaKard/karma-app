@@ -34,7 +34,9 @@ export default React.createClass({
   },
 
   saveDeals(){
-    flux.actions.deals.updateDeals(this.state.changedDeals)
+    if (this.state.changedDeals.length !== 0) {
+      flux.actions.deals.updateDeals(this.state.changedDeals)
+    }
   },
 
   lookupDeal(deal, i) {
@@ -67,10 +69,14 @@ export default React.createClass({
 
     return (
       <div>
-        <div className="content_box-header">Deals</div>
+        <div className="content_box-header">
+          Deals
+        </div>
         One free deal and one or more paid deal(s) are required
         {dealsComponents}
-        <button className="karma_button" onClick={this.saveDeals}>Save</button>
+        <button className="karma_button" onClick={this.saveDeals}>
+          Save
+        </button>
       </div>
     )
   }

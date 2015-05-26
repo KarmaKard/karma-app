@@ -11,6 +11,7 @@ export default class DealStore extends Store {
     this.handleAction('deals.create',  this.handleDealCreate)
     this.handleAction('deals.createError', this.saveCreateError)
     this.handleAction('deals.getDeals', this.replaceDeals)
+    this.handleAction('deals.updateDeals', this.replaceDeals)
   }
 
   handleDealCreate(deal) {
