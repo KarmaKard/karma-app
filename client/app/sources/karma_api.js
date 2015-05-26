@@ -120,7 +120,6 @@ export function getManagedOrganizations () {
 }
 
 export function postDeal(deal){
-  console.log(deal)
   return new Promise ((resolve, reject) => {
     request
       .post(DEALS_URL)
@@ -145,6 +144,7 @@ export function updateDeals(deals){
         if (err) {
           return reject(err)
         }
+
         resolve(res.body.deals)
       })
 

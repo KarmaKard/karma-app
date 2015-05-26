@@ -31,7 +31,7 @@ export default class DealActions extends Actions {
     var p = KarmaAPI.updateDeals(changedDeals)
     p.then(deals => {
       if (deals) {
-        this.dispatch('update', deals)
+        this.dispatch('updateDeals', deals)
       }
       else{
         console.warn('Updated Deals Not Returned')
