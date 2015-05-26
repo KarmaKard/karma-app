@@ -9,6 +9,11 @@ export default React.createClass({
     }
   },
 
+  changeMade(){
+    console.log("make this red!")
+    React.findDOMNode(this.refs.saveButton).style.border="3px solid rgb(242, 29, 29)"
+  },
+
   saveKeywords(){
     var keyword1 = React.findDOMNode(this.refs.keywordInput1).value
     var keyword2 = React.findDOMNode(this.refs.keywordInput2).value
@@ -18,6 +23,7 @@ export default React.createClass({
     var keywordArray = [keyword1, keyword2, keyword3, keyword4, keyword5]
     this.props.organization.keywords = keywordArray
     this.props.updateOrganization(this.props.organization)
+    React.findDOMNode(this.refs.saveButton).style.border="3px solid rgb(75, 187, 44)"
   },
 
   render() {
@@ -38,6 +44,7 @@ export default React.createClass({
             className="keyword-list__input karma_input"
             ref="keywordInput1"
             defaultValue={keyword1}
+            onChange={this.changeMade}
             placeholder="Keyword 1"/>
 
           <input
@@ -45,6 +52,7 @@ export default React.createClass({
             className="keyword-list__input karma_input"
             ref="keywordInput2"
             defaultValue={keyword2}
+            onChange={this.changeMade}
             placeholder="Keyword 2"/>
 
           <input
@@ -52,6 +60,7 @@ export default React.createClass({
             className="keyword-list__input karma_input"
             ref="keywordInput3"
             defaultValue={keyword3}
+            onChange={this.changeMade}
             placeholder="Keyword 3"/>
 
           <input
@@ -59,6 +68,7 @@ export default React.createClass({
             className="keyword-list__input karma_input"
             ref="keywordInput4"
             defaultValue={keyword4}
+            onChange={this.changeMade}
             placeholder="Keyword 4"/>
 
           <input
@@ -66,9 +76,10 @@ export default React.createClass({
             className="keyword-list__input karma_input"
             ref="keywordInput5"
             defaultValue={keyword5}
+            onChange={this.changeMade}
             placeholder="Keyword 5"/>
 
-            <button className="karma_button" onClick={this.saveKeywords}>Save</button>
+            <button ref="saveButton" className="karma_button" onClick={this.saveKeywords}>Save</button>
       
       </div>
     )
