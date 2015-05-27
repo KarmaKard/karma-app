@@ -130,12 +130,13 @@ export default React.createClass({
             </select>
           </div>
           <div className="dollar_value">
-            <span className="deal_text-left">Dollar Value</span>
+            <span className="deal_text-left">Dollar Value of Single Usage  $</span>
             <input 
               ref="dollarValue" 
               onBlur={this.saveThisDeal} 
               onChange={this.props.changeMade} 
               defaultValue={dollarValue} 
+              placeholder="00.00"
               className="karma_input dollar_value-input"></input> 
           </div>
         </div>

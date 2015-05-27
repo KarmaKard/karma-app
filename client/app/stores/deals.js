@@ -14,9 +14,9 @@ export default class DealStore extends Store {
     this.handleAction('deals.updateDeals', this.replaceDeals)
   }
 
-  handleDealCreate(deal) {
+  handleDealCreate(deals) {
     this.setState({
-      deals: this.state.deals.concat(deal)
+      deals: this.state.deals.concat(deals)
     })
   }
 

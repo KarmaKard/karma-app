@@ -119,17 +119,17 @@ export function getManagedOrganizations () {
   })
 }
 
-export function postDeal(deal){
+export function postDeals(deals){
   return new Promise ((resolve, reject) => {
     request
       .post(DEALS_URL)
-      .send({deal})
+      .send({deals})
       .set('token', token)
       .end((err, res) => {
         if(err) {
           return reject(err)
         }
-        resolve(res.body.deal)
+        resolve(res.body.deals)
       })
   })
 }

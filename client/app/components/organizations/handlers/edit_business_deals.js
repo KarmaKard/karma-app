@@ -6,7 +6,7 @@ export default React.createClass({
 
   render() {
     return (
-      <DealBuilder organizationId={this.props.organization.id} deals={this.props.deals} saveDeals={this.props.saveDeals} />
+      <DealBuilder organizationId={this.props.organization.id} deals={this.props.deals} />
     )
   }
 })

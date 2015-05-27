@@ -4,9 +4,9 @@ export function index () {
   return r.table('deals').run()
 }
 
-export function insert (deal){
+export function insert (deals){
   return r.table('deals')
-    .insert(deal, {returnChanges: true})
+    .insert(deals, {returnChanges: true})
     .run()
     .then(results => {
       if (results.changes) {

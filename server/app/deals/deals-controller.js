@@ -15,11 +15,11 @@ export function list (req, res, next){
 
 router.post('/', auth.token, validateCreate, create)
 export function create(req, res, next){
-  var deal = req.body.deal
-  deal.userId = req.user.id
-  var queryPromise = dealsTable.insert(deal)
+  var deals = req.body.deals
+  deals.userId = req.user.id
+  var queryPromise = dealsTable.insert(deals)
   queryPromise.then(data => {
-    res.json({deal: data})
+    res.json({deals: data})
   }).catch(next)
 }
 

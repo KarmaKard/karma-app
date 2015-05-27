@@ -10,6 +10,7 @@ export default React.createClass({
 
   getInitialState() {
     return {
+      newDeals: [],
       changedDeals: [],
       newDealPlaceholder: null
     }
@@ -18,7 +19,16 @@ export default React.createClass({
   saveDeal(deal){
     if(!deal.id){
       deal.organizationId = this.props.organizationId
-      flux.actions.deals.create(deal)
+      var newDeals = this.state.changedDeals
+      for (let i in newDeals) {
+        if (newDeals[i].id === deal.id) {
+          newDeals.splice(i, 1, deal)
+          this.setState({newDeals})
+          return
+        }
+      }
+      newDeals = this.state.newDeals.concat(deal)
+      this.setState({newDeals})
     }
     else{
       var changedDeals = this.state.changedDeals
@@ -65,8 +75,19 @@ export default React.createClass({
   },
 
   saveClicked(){
-    React.findDOMNode(this.refs.saveButton).style.border="3px solid rgb(75, 187, 44)"
-    this.props.saveDeals(this.state.changedDeals)
+    if(this.state.newDeals.length > 0){
+      this.setState({newDealPlaceholder:null})
+      flux.actions.deals.create(this.state.newDeals)
+      this.setState({newDeals: []})
+      React.findDOMNode(this.refs.dealTypeSelect).value = "add"
+      React.findDOMNode(this.refs.saveButton).style.border="3px solid rgb(75, 187, 44)"
+    }
+    if(this.state.changedDeals.length > 0){
+      flux.actions.deals.updateDeals(this.state.changedDeals)
+      this.setState({changedDeals: []})
+      React.findDOMNode(this.refs.saveButton).style.border="3px solid rgb(75, 187, 44)"
+    }
+
   },
 
   render() {
@@ -84,8 +105,12 @@ export default React.createClass({
         </div>
         One free deal and one or more paid deal(s) are required
         {dealsComponents}
-        <select ref="dealTypeSelect" onChange={this.newDeal} className="karma_select">
-          <option>Add Another Deal</option>
+        <select 
+          ref="dealTypeSelect" 
+          onChange={this.newDeal} 
+          defaultValue="add" 
+          className="karma_select">
+          <option value="add">Add Another Deal</option>
           <option value="Free">Free</option>
           <option value="BXX">Buy X get X Free</option>
           <option value="BXY">Buy X get Y Free</option>
