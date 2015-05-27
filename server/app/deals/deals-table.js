@@ -18,26 +18,13 @@ export function insert (deal){
 
 export function update (deal) {
   return r.table('deals')
-    get(deal.id)
-    .update(deal)
+    .get(deal.id)
+    .update(deal, {returnChanges: true})
     .run()
     .then(results => {
       if (results.changes) {
         return results.changes[0]['new_val']
       }
       return deal
-    })
-}
-
-export function update (organization) {
-  return r.table('organizations')
-    .get(organization.id)
-    .update(organization)
-    .run()
-    .then(results => {
-      if (results.changes) {
-        return results.changes[0]['new_val']
-      }
-      return organization
     })
 }

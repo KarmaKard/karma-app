@@ -2,7 +2,41 @@ import React from 'react'
 import { flux } from '../../main'
 
 export default React.createClass({
+   saveThisDeal(){
+    var primaryProductName = React.findDOMNode(this.refs.primaryProductName).value
+    var limit = React.findDOMNode(this.refs.limit).value
+    var percentageOff = React.findDOMNode(this.refs.percentageOff).value
+    var dollarValue = React.findDOMNode(this.refs.dollarValue).value
+
+    if (!primaryProductName || !limit || !dollarValue || !percentageOff) {
+      return null
+    }
+
+    var deal = {
+      primaryProductName: primaryProductName,
+      limit: limit,
+      percentageOff: percentageOff,
+      dollarValue: dollarValue,
+      type: "POX"
+    } 
+    
+    if(this.props.deal){
+      deal.id = this.props.deal.id
+    }    
+    console.log(deal)
+    this.props.saveDeal(deal)
+  },
+
   render() {
+    if (!this.props.deal){
+      return <span />
+    }
+
+    var primaryProductName = this.props.deal.primaryProductName
+    var limit = this.props.deal.limit
+    var dollarValue = this.props.deal.dollarValue
+    var percentageOff = this.props.deal.percentageOff
+
     return(
       <div className="bxx_deal">
         <div className="deal_header">
@@ -12,7 +46,11 @@ export default React.createClass({
           <div className="deal-row">
             <div className="required_amount">
               <span className="deal_text-left">Get</span> 
-              <select className="deal-select">
+              <select
+                ref="percentageOff" 
+                className="deal-select"
+                onBlur={this.saveThisDeal} 
+                defaultValue={percentageOff} >
                 <option>25%</option>
                 <option>30%</option>
                 <option>40%</option>
@@ -21,18 +59,29 @@ export default React.createClass({
                 <option>70%</option>
                 <option>75%</option>
                 <option>80%</option>
-                <option selected>90%</option>
+                <option>90%</option>
               </select>
             </div>
             <span className="deal_text-right">Off</span>
           </div>
           <div className="deal-row">
             <span className="deal_text2-left">Purchase of: </span> 
-            <input className="deal-input" placeholder="Purchase Item Requirement "></input> 
+            <input 
+              ref="primaryProductName" 
+              className="deal-input" 
+              placeholder="Purchase Item Requirement"
+              onBlur={this.saveThisDeal} 
+              onChange={this.props.changeMade} 
+              defaultValue={primaryProductName} /> 
           </div>
           <div className="deal_limit">
             <span className="deal_text-left">Limit</span> 
-            <select className="karma_select">
+            <select 
+              ref="limit" 
+              className="karma_select"
+              onBlur={this.saveThisDeal}
+              onChange={this.props.changeMade}  
+              defaultValue={limit}>
               <option>unlimited</option>
               <option>1</option>
               <option>2</option>
@@ -48,7 +97,13 @@ export default React.createClass({
           </div>
           <div className="dollar_value">
             <span className="deal_text-left">Dollar Value</span>
-            <input className="karma_input dollar_value-input" placeholder="Value"></input> 
+            <input 
+              ref="dollarValue" 
+              className="karma_input dollar_value-input" 
+              placeholder="Value"
+              onBlur={this.saveThisDeal}
+              onChange={this.props.changeMade} 
+              defaultValue={dollarValue} />
           </div>
         </div>
         <hr />

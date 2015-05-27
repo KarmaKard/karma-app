@@ -12,9 +12,16 @@ export default React.createClass({
     flux.actions.organizations.updateOrganization(organization)
   },
 
+  saveDeals(deals){
+    if (deals.length !== 0) {
+      flux.actions.deals.updateDeals(deals)
+    }
+  },
+
   render() {
     var orgId = this.context.router.getCurrentParams().organizationId
     var organization = this.props.organizations.filter(org => org.id === orgId)[0]
+    var deals = this.props.deals.filter(deals => deals.organizationId === orgId)
 
     if (!organization) {
       return <p>Organization Not Found</p>
@@ -33,7 +40,7 @@ export default React.createClass({
             </Link>
           </div>
         </div>
-        <RouteHandler organization={organization} user={this.props.user} updateOrganization={this.updateOrganization}/>
+        <RouteHandler organization={organization} user={this.props.user} deals={deals} updateOrganization={this.updateOrganization} saveDeals={this.saveDeals}/>
       </div>
     )
   }

@@ -18,10 +18,10 @@ export default React.createClass({
       type: "Free"
     } 
     
-    if(this.props.freeDeal){
-      deal.id = this.props.freeDeal.id
+    if(this.props.deal){
+      deal.id = this.props.deal.id
     }    
-
+    console.log(deal)
     this.props.saveDeal(deal)
   },
 
@@ -43,6 +43,7 @@ export default React.createClass({
             ref="primary" 
             type="text"
             onBlur={this.saveThisDeal} 
+            onChange={this.props.changeMade} 
             defaultValue={primaryProduct} 
             className="deal-input"
             placeholder="Type Item Here" />
@@ -50,23 +51,33 @@ export default React.createClass({
         </div>
         <div className="deal_limit">
           <span className="deal_text-left">Limit</span> 
-          <select onBlur={this.saveThisDeal} defaultValue={limit} ref="limit" className="karma_select">
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
-            <option>6</option>
-            <option>7</option>
-            <option>8</option>
-            <option>9</option>
-            <option>10</option>
-            <option>unlimited</option>
+          <select 
+            onBlur={this.saveThisDeal} 
+            onChange={this.props.changeMade} 
+            defaultValue={limit} 
+            ref="limit" 
+            className="karma_select">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="unlimited">unlimited</option>
           </select>
         </div>
         <div className="dollar_value">
           <span className="deal_text-left">Dollar Value</span>
-          <input onBlur={this.saveThisDeal} defaultValue={dollarValue} ref="dollarValue" className="karma_input dollar_value-input"></input> 
+          <input 
+            onBlur={this.saveThisDeal} 
+            onChange={this.props.changeMade} 
+            defaultValue={dollarValue} 
+            ref="dollarValue" 
+            className="karma_input dollar_value-input"/>
         </div>
         <hr/>
       </div>

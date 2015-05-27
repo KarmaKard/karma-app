@@ -24,13 +24,15 @@ export function create(req, res, next){
 }
 
 router.put('/', auth.token, update)
-  export function update(req, res, next){
-  console.log(req.body.deals)
+export function update(req, res, next){
   var pDeals = req.body.deals.map(
     deal => dealsTable.update(deal)
   )
   Promise.all(pDeals).then(data => { 
+    console.log(data)
     res.json({deals: data}) 
+  }, error => {
+    res.status(500).json(error)
   })
 }
 
