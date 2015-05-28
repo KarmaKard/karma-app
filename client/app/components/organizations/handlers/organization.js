@@ -34,7 +34,7 @@ export default React.createClass({
             </Link>
           </div>
         </div>
-        <RouteHandler organization={organization} user={this.props.user} deals={deals} updateOrganization={this.updateOrganization} />
+        <RouteHandler organization={organization} user={this.props.user} deals={deals} locations={this.props.locations} updateOrganization={this.updateOrganization} />
       </div>
     )
   }

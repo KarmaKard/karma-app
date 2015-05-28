@@ -11,6 +11,7 @@ export default React.createClass({
     var storeState = this.getStoreState()
     if (storeState.organizationsStoreState.organizations.length === 0){
       flux.actions.organizations.getOrganizations()
+      flux.actions.organizations.getLocations()
     }
     if (storeState.dealsStoreState.deals.length === 0){
       flux.actions.deals.getDeals()
@@ -44,10 +45,11 @@ export default React.createClass({
     var organizations = this.state.organizationsStoreState.organizations
     var currentUser = this.state.usersStoreState.currentUser
     var deals = this.state.dealsStoreState.deals
+    var locations = this.state.organizationsStoreState.locations
 
     return (
       <div>
-        <RouteHandler organizations={organizations} user={currentUser} deals={deals} />
+        <RouteHandler organizations={organizations} user={currentUser} locations={locations} deals={deals} />
       </div>
     )
   }

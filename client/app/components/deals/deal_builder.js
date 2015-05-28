@@ -121,7 +121,7 @@ export default React.createClass({
         <button ref="saveButton" className="karma_button" onClick={this.saveClicked}>
           Save
         </button>
-      </div>
+      </div>  
     )
   }
 })

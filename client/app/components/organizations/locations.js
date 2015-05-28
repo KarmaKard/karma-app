@@ -3,11 +3,18 @@ import { flux } from '../../main'
 
 export default React.createClass({
   getInitialState(){
+    console.log(this.props.initialLocations)
     return {
+      newLocations: [],
+      locations: [],
       newStreet: '',
-      newZip: '',
-      locations: []
+      newZip: ''
     }
+  },
+  componentWillReceiveProps() {
+    this.setState({
+      locations: this.props.initialLocations
+    })
   },
 
   updateNewStreet(e){
@@ -25,16 +32,28 @@ export default React.createClass({
   handleAddNew(){
     var newLocation = {
       street: this.state.newStreet,
-      zip: this.state.newZip
+      zip: this.state.newZip,
+      organizationId: this.props.organization.id
     }
     this.setState({
       newStreet: '',
       newZip: '',
+      newLocations: this.state.newLocations.concat([newLocation]),
       locations: this.state.locations.concat([newLocation])
     })
     React.findDOMNode(this.refs.locationInput).focus()
   },
+
+  saveLocations(){
+    if(this.state.locations.length > 0){ 
+      flux.actions.organizations.saveLocations(this.state.newLocations)
+    }     
+  },
+
   render() {
+    if(this.state.locations.length === 0){
+      return <span>No Locations</span>
+    }
     var listItems = this.state.locations.map((location, index) => {
       return (
         <li key={index}>
@@ -52,8 +71,8 @@ export default React.createClass({
         </div>
         <div>
           <input type="text" className="karma_input street_address_input" placeholder="Full Street Address" ref="locationInput" value={this.state.newStreet} onChange={this.updateNewStreet} />
-          <input type="text" className="zip_input karma_input " placeholder="Zip" value={this.state.newZip} onChange={this.updateNewZip} />
-          <button className="karma_button" onClick={this.handleAddNew}> Add location</button>
+          <input type="text" className="zip_input karma_input " placeholder="Zip" value={this.state.newZip} onChange={this.updateNewZip} onBlur={this.handleAddNew}/>
+          <button className="karma_button" onClick={this.saveLocations}> Save</button>
         </div>
       </div>
     )

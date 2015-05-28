@@ -44,6 +44,24 @@ export default class OrganizationsActions extends Actions {
     console.warn(error)
   }
 
+  saveLocations(locations) {
+    var p = KarmaAPI.saveLocations(locations)
+    p.then(locations => {
+      if(locations) {
+        this.dispatch('saveLocations', locations)
+      }
+    }).catch(this.createError)
+  }
+
+  getLocations() {
+    var p = KarmaAPI.getLocations()
+    p.then(locations => {
+      if (locations) {
+        this.dispatch('getLocations', locations)
+      }
+    }).catch(this.getLocationsError)
+  }
+  
   createError(error) {
     console.warn(error)
     this.dispatch('createError', error)
