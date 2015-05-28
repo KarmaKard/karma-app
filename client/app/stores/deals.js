@@ -25,15 +25,11 @@ export default class DealStore extends Store {
   }
   
   replaceDeals(deals){
-    console.log(deals)
     var allDeals = this.state.deals
-    for (let i in deals) {
-      for(let t in allDeals) {
-        if (deals[i].id === allDeals[t].id) {
-          allDeals.splice(t, 1, deals[i])
-          this.setState({deals: allDeals})
-        }
-      }
+    for(var i in deals) {
+      if(allDeals.indexOf(deals[i]) > -1){
+        allDeals[allDeals.indexOf(deals[i])] = deals[i]  
+      }    
     }
   }
 

@@ -15,11 +15,13 @@ export function list (req, res, next){
 
 router.post('/', auth.token, validateCreate, create)
 export function create(req, res, next){
-  var deals = req.body.deals
-  deals.userId = req.user.id
+  var deals = req.body.deals.map(deal => {
+    deal.userId = req.user.id
+    return deal
+  })
   var queryPromise = dealsTable.insert(deals)
-  queryPromise.then(data => {
-    res.json({deals: data})
+  queryPromise.then(deals => {
+    res.json({deals})
   }).catch(next)
 }
 
@@ -28,12 +30,11 @@ export function update(req, res, next){
   var pDeals = req.body.deals.map(
     deal => dealsTable.update(deal)
   )
-  Promise.all(pDeals).then(data => { 
-    console.log(data)
-    res.json({deals: data}) 
+  Promise.all(pDeals).then(deals => { 
+    res.json({deals}) 
   }, error => {
     res.status(500).json(error)
-  })
+  }).catch(next)
 }
 
 

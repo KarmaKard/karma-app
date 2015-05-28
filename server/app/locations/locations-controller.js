@@ -18,7 +18,7 @@ export function create(req, res, next){
   var locations = req.body.locations
   locations.userId = req.user.id
   var queryPromise = locationsTable.insert(locations)
-  queryPromise.then(data => {
-    res.json({locations: data})
+  queryPromise.then(locations => {
+    res.json({locations})
   }).catch(next)
 }

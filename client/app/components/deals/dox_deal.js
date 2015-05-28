@@ -12,16 +12,15 @@ export default React.createClass({
     }
 
     var deal = {
-      primaryProductName: primaryProductName,
-      limit: limit,
-      dollarValue: dollarValue,
+      primaryProductName,
+      limit,
+      dollarValue,
       type: "DOX"
     } 
     
     if(this.props.deal){
       deal.id = this.props.deal.id
     }    
-    console.log(deal)
     this.props.saveDeal(deal)
   },
 
@@ -44,12 +43,12 @@ export default React.createClass({
             <div className="required_amount">
               <span className="deal_text-left">Get</span> 
               <input 
-              ref="dollarValue" 
-              className="deal-input dollar_value-input" 
-              placeholder="Value"
-              onBlur={this.saveThisDeal} 
-              onChange={this.props.changeMade} 
-              defaultValue={dollarValue} />
+                ref="dollarValue" 
+                className="deal-input dollar_value-input" 
+                placeholder="Value"
+                onBlur={this.saveThisDeal} 
+                onChange={this.props.changeMade} 
+                defaultValue={dollarValue} />
             </div>
             <span className="deal_text-right">Dollars Off</span>
           </div>

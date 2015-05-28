@@ -13,17 +13,16 @@ export default React.createClass({
     }
 
     var deal = {
-      primaryProductName: primaryProductName,
-      limit: limit,
-      percentageOff: percentageOff,
-      dollarValue: dollarValue,
+      primaryProductName,
+      limit,
+      percentageOff,
+      dollarValue,
       type: "POX"
     } 
     
     if(this.props.deal){
       deal.id = this.props.deal.id
     }    
-    console.log(deal)
     this.props.saveDeal(deal)
   },
 

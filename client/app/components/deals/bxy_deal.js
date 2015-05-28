@@ -15,19 +15,17 @@ export default React.createClass({
     }
 
     var deal = {
-      primaryProductName: primaryProductName,
-      primaryUsageLimit: primaryUsageLimit,
-      secondaryProductName: secondaryProductName,
-      secondaryUsageLimit: secondaryUsageLimit,
-      limit: limit,
-      dollarValue: dollarValue,
+      primaryProductName,
+      primaryUsageLimit,
+      secondaryProductName,
+      secondaryUsageLimit,
+      limit,
+      dollarValue,
       type: "BXY"
     } 
-    console.log(deal)
     if(this.props.deal){
       deal.id = this.props.deal.id
     }    
-    console.log(deal)
     this.props.saveDeal(deal)
   },
 
@@ -100,12 +98,12 @@ export default React.createClass({
               </select>
             </div>
             <input 
-            className="deal-input" 
-            ref="secondaryProductName" 
-            onBlur={this.saveThisDeal} 
-            onChange={this.props.changeMade} 
-            defaultValue={secondaryProductName} 
-            placeholder="Free Item Y "/>
+              className="deal-input" 
+              ref="secondaryProductName" 
+              onBlur={this.saveThisDeal} 
+              onChange={this.props.changeMade} 
+              defaultValue={secondaryProductName} 
+              placeholder="Free Item Y "/>
             <span className="deal_text-right">Free</span>
           </div>
           <div className="deal_limit">

@@ -3,7 +3,6 @@ import { flux } from '../../main'
 
 export default React.createClass({
   getInitialState(){
-    console.log(this.props.initialLocations)
     return {
       newLocations: [],
       locations: [],
@@ -11,7 +10,14 @@ export default React.createClass({
       newZip: ''
     }
   },
+  
   componentWillReceiveProps() {
+    this.setState({
+      locations: this.props.initialLocations
+    })
+  },
+  
+  componentWillMount(){
     this.setState({
       locations: this.props.initialLocations
     })

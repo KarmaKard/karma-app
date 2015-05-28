@@ -10,7 +10,6 @@ export default React.createClass({
   },
 
   changeMade(){
-    console.log("make this red!")
     React.findDOMNode(this.refs.saveButton).style.border="3px solid rgb(242, 29, 29)"
   },
 

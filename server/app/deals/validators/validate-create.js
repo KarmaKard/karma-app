@@ -8,7 +8,7 @@ export default function validateCreate (req, res, next) {
   }
 
   if (!Array.isArray(req.body.deals)){
-    errors.addtoReq(req, 'deals', 'Locations must be an array')
+    errors.addtoReq(req, 'deals', 'Deals must be an array')
     return next(new ValidationError(req))
   }
 

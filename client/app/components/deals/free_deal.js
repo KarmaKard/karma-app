@@ -12,16 +12,15 @@ export default React.createClass({
     }
 
     var deal = {
-      primaryProductName: primaryProductName,
-      limit: limit,
-      dollarValue: dollarValue,
+      primaryProductName,
+      limit,
+      dollarValue,
       type: "Free"
     } 
     
     if(this.props.deal){
       deal.id = this.props.deal.id
     }    
-    console.log(deal)
     this.props.saveDeal(deal)
   },
 
