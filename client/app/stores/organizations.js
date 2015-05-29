@@ -13,8 +13,8 @@ export default class OrganizationStore extends Store {
     this.handleAction('organizations.create',  this.saveOrganization)
     this.handleAction('organizations.getOrganization', this.saveOrganization)
     this.handleAction('organizations.getOrganizations', this.saveOrganizations)
-    this.handleAction('organizations.saveLocations', this.saveLocations)
-    this.handleAction('organizations.getLocations', this.getLocations)
+    this.handleAction('organizations.saveLocations', this.saveNewLocations)
+    this.handleAction('organizations.getLocations', this.saveLocations)
   }
 
   saveOrganizations(organizations){
@@ -31,11 +31,11 @@ export default class OrganizationStore extends Store {
     return this.state.organizations.filter(org => org.id === id)[0]
   }
 
-  saveLocations(locations) {
+  saveNewLocations(locations) {
     locations: this.state.locations.concat(locations)
   }
 
-  getLocations(locations){
+  saveLocations(locations){
     this.setState({locations})
   }
 

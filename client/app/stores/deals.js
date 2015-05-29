@@ -10,7 +10,7 @@ export default class DealStore extends Store {
 
     this.handleAction('deals.create',  this.handleDealCreate)
     this.handleAction('deals.createError', this.saveCreateError)
-    this.handleAction('deals.getDeals', this.getDeals)
+    this.handleAction('deals.getDeals', this.saveDeals)
     this.handleAction('deals.updateDeals', this.replaceDeals)
   }
 
@@ -20,17 +20,20 @@ export default class DealStore extends Store {
     })
   }
 
-  getDeals(deals){
+  saveDeals(deals){
     this.setState({deals})
   }
   
   replaceDeals(deals){
+
     var allDeals = this.state.deals
-    for(var i in deals) {
-      if(allDeals.indexOf(deals[i]) > -1){
-        allDeals[allDeals.indexOf(deals[i])] = deals[i]  
-      }    
-    }
+    var allDealsMap = allDeals.concat(deals).reduce((m,v) => {
+      m.set(v.id, v)
+      return m
+    }, new Map())
+
+    allDeals = [... allDealsMap.values()]
+    
   }
 
   saveCreateError(error) {

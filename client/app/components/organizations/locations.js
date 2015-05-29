@@ -10,7 +10,7 @@ export default React.createClass({
       newZip: ''
     }
   },
-  
+
   componentWillReceiveProps() {
     this.setState({
       locations: this.props.initialLocations
@@ -41,12 +41,14 @@ export default React.createClass({
       zip: this.state.newZip,
       organizationId: this.props.organization.id
     }
+
     this.setState({
       newStreet: '',
       newZip: '',
-      newLocations: this.state.newLocations.concat([newLocation]),
-      locations: this.state.locations.concat([newLocation])
+      newLocations: this.state.newLocations.concat(newLocation),
+      locations: this.state.locations.concat(newLocation)
     })
+
     React.findDOMNode(this.refs.locationInput).focus()
   },
 
@@ -57,9 +59,6 @@ export default React.createClass({
   },
 
   render() {
-    if(this.state.locations.length === 0){
-      return <span>No Locations</span>
-    }
     var listItems = this.state.locations.map((location, index) => {
       return (
         <li key={index}>
