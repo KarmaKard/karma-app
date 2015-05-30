@@ -12,6 +12,7 @@ export default class DealStore extends Store {
     this.handleAction('deals.createError', this.saveCreateError)
     this.handleAction('deals.getDeals', this.saveDeals)
     this.handleAction('deals.updateDeals', this.replaceDeals)
+    this.handleAction('deals.deleteDeal', this.deleteDeal)
   }
 
   handleDealCreate(deals) {
@@ -25,7 +26,6 @@ export default class DealStore extends Store {
   }
   
   replaceDeals(deals){
-
     var allDeals = this.state.deals
     var allDealsMap = allDeals.concat(deals).reduce((m,v) => {
       m.set(v.id, v)
@@ -34,6 +34,12 @@ export default class DealStore extends Store {
 
     allDeals = [... allDealsMap.values()]
     
+  }
+
+  deleteDeal(deal){
+    var allDeals = this.state.deals
+    allDeals.splice(allDeals.map(function(x) {return x.id }).indexOf(deal.id), 1)
+    this.setState({deal: allDeals})
   }
 
   saveCreateError(error) {

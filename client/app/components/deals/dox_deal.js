@@ -24,6 +24,10 @@ export default React.createClass({
     this.props.saveDeal(deal)
   },
 
+  deleteClicked() {
+    flux.actions.deals.deleteDeal(this.props.deal)
+  },
+
   render() {
     if (!this.props.deal){
       return <span />
@@ -37,6 +41,7 @@ export default React.createClass({
       <div className="bxx_deal">
         <div className="deal_header">
           Dollars Off
+          <button className="deal-delete" onClick={this.deleteClicked}>Delete</button>
         </div>
         <div className="deal_contents">
           <div className="deal-row">

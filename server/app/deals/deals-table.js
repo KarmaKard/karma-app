@@ -28,3 +28,16 @@ export function update (deal) {
       return deal
     })
 }
+
+export function dealDelete (deal) {
+  return r.table('deals')
+    .get(deal.id)
+    .delete({returnChanges: true})
+    .run()
+    .then(results => {
+      if (results.changes) {
+        return results.changes[0]['old_val']
+      }
+      return deal
+    })
+}

@@ -37,4 +37,10 @@ export function update(req, res, next){
   }).catch(next)
 }
 
-
+router.delete('/', auth.token, dealDelete)
+export function dealDelete(req, res, next){
+  var pDeal = dealsTable.dealDelete(req.body.deal) 
+   pDeal.then(deal => {
+    res.json({deal})
+  }).catch(next)
+}

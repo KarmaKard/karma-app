@@ -194,3 +194,19 @@ export function getLocations () {
       })
   })
 }
+
+export function deleteDeal(deal) {
+  return new Promise((resolve, reject) => {
+    request
+      .del(DEALS_URL)
+      .send({deal})
+      .set('token', token)
+      .end((err, res) => {
+        if(err) {
+          return reject(err)
+        }
+        resolve(res.body.deal)
+      })
+
+  })
+}

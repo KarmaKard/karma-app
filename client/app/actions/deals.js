@@ -39,9 +39,25 @@ export default class DealActions extends Actions {
     }).catch(this.createError)
   }
 
+  deleteDeal(deal) {
+    var p = KarmaAPI.deleteDeal(deal)
+    p.then(deal => {
+      if (deal) {
+        this.dispatch('deleteDeal', deal)
+      }
+      else{
+        console.warn('Delete was not successful')
+      }
+    }).catch(this.deleteError)
+  }
 
   createError(error) {
     console.warn(error)
     this.dispatch('createError', error)
+  }
+
+  deleteError(error) {
+    console.warn(error)
+    this.dispatch('deleteError', error)
   }
 }
