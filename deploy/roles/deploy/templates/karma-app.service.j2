@@ -1,0 +1,13 @@
+[Service]
+ExecStart=/usr/bin/node {{ server_path }}/app/app.js
+WorkingDirectory=/app/karma-app/server
+Restart=always
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=karma-app
+User=karma
+Group=karma
+Environment=NODE_ENV=production
+
+[Install]
+WantedBy=multi-user.target

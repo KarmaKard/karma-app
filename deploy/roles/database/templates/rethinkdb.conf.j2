@@ -1,0 +1,61 @@
+#
+# RethinkDB instance configuration sample
+#
+# - See http://www.rethinkdb.com/docs/guides/startup/ for the complete
+#   documentation
+#
+
+###############################
+## RethinkDB configuration
+###############################
+
+### Process options
+
+runuser=rethink
+rungroup=rethink
+
+## Stash the pid in this file when the process is running
+pid-file=/var/lib/rethinkdb/rethinkdb.pid
+
+### File path options
+
+## Directory to store data and metadata
+directory=/var/lib/rethinkdb/default
+
+## Log file options
+log-file=/var/log/rethinkdb/db.log
+
+### Network options
+
+## Address of local interfaces to listen on when accepting connections
+## May be 'all' or an IP address, loopback addresses are enabled by default
+## Default: all local addresses
+bind=127.0.0.1
+
+### Web options
+
+## Port for the http admin console
+## Default: 8080 + port-offset
+http-port=8080
+
+### CPU options
+
+## The number of cores to use
+## Default: total number of cores of the CPU
+# cores=2
+
+### Memory options
+
+## Size of the cache in MB
+## Default: Half of the available RAM on startup
+# cache-size=1024
+
+### Disk
+
+## How many simultaneous I/O operations can happen at the same time
+# io-threads=64
+
+### Meta
+
+## The name for this server (as will appear in the metadata).
+server-name=karmadb

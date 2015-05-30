@@ -1,0 +1,39 @@
+---
+- name: Install RethinkDB RPM
+  yum: name=http://download.rethinkdb.com/centos/6/x86_64/rethinkdb-2.0.2.x86_64.rpm
+       state=present
+
+- name: Build RethinkDB config file
+  template: src=rethinkdb.conf.j2
+            dest=/etc/rethinkdb/instances.d/rethinkdb.conf
+            owner=rethink
+            group=rethink
+  notify: restart rethinkdb
+
+- name: Create data directory if missing
+  command: rethinkdb create -d /var/lib/rethinkdb/default
+           creates=/var/lib/rethinkdb/default
+
+- name: Set permissions of data directory to rethink user and group
+  file: path=/var/lib/rethinkdb
+        state=directory
+        recurse=yes
+        mode=0744
+        owner=rethink
+        group=rethink
+
+- name: Set permissions of log directory to rethink user and group
+  file: path=/var/log/rethinkdb
+        state=directory
+        recurse=yes
+        mode=0744
+        owner=rethink
+        group=rethink
+
+- name: Build RethinkDB Systemd service config file
+  template: src=rethinkdb.service.j2
+            dest=/etc/systemd/system/rethinkdb.service
+  notify: restart rethinkdb
+
+- name: Ensure rethinkdb is started and enabled on boot
+  service: name=rethinkdb state=started enabled=yes

@@ -1,0 +1,26 @@
+---
+- name: Install Vim
+  yum: name=vim state=latest
+
+- name: Install IPTables Service
+  yum: name=iptables-services state=latest
+
+- name: Build iptables configuration
+  copy: src=iptables
+        dest=/etc/sysconfig/iptables
+  notify: restart iptables
+
+- name: Ensure iptables is started and enabled on boot
+  service: name=iptables state=started enabled=yes
+
+- name: Add karma group
+  group: name=karma
+
+- name: Add rethink group
+  group: name=rethink
+
+- name: Add karma user for running the app
+  user: name=karma group=karma
+
+- name: Add RethinkDB user for running the DB
+  user: name=rethink group=rethink

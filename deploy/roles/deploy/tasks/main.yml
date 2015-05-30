@@ -1,0 +1,33 @@
+---
+- name: Make App Directory
+  file: path=/app state=directory mode=0744 owner=karma group=karma
+  
+- name: Checkout latest release branch from github
+  git: repo=https://github.com/KarmaKard/karma-app.git
+       dest={{ repo_path }}
+       version=release
+  notify: restart karma-app
+
+- name: Set app dir permissions to allow karma and nginx in
+  file: path=/app state=directory recurse=yes mode=0774 owner=karma group=nginx
+
+- name: Install NPM packages for server
+  npm: path={{ server_path }}
+       state=latest
+       production=yes
+  register: npm_server_install
+  until: npm_server_install|success
+  retries: 10
+  delay: 30
+
+- name: Run Database Migrations
+  command: npm run migrate
+           chdir={{ server_path }}
+
+- name: Build Karma-App Systemd configuration file
+  template: src=karma-app.service.j2
+            dest=/etc/systemd/system/karma-app.service
+  notify: restart karma-app
+
+- name: Ensure karma-app is started and enabled on boot
+  service: name=karma-app state=started enabled=yes

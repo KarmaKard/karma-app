@@ -1,0 +1,29 @@
+---
+- name: Install Latest Nginx
+  yum: name=nginx state=latest
+
+- name: Install 'Development tools' for building native extensions
+  yum: name="@Development tools" state=present
+
+- name: Install EPEL repo
+  yum: name=http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm
+       state=present
+
+- name: Install Node.js
+  yum: name=nodejs
+       state=present
+       enablerepo=epel
+
+- name: Install Git
+  yum: name=git state=latest
+
+- name: Build nginx configuration file
+  template: src=nginx.conf.j2
+            dest=/etc/nginx/conf.d/karma.conf
+  notify: restart nginx
+
+- name: Do not have SELinux manage nginx for now
+  command: semanage permissive -a httpd_t
+
+- name: Ensure nginx is started and enabled on boot
+  service: name=nginx state=started enabled=yes

@@ -1,0 +1,8 @@
+---
+- hosts: all
+  remote_user: tgroshon
+
+  tasks:
+    - name: touch a file
+      command: touch /home/tgroshon/ansible_was_here
+

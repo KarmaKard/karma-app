@@ -1,0 +1,7 @@
+---
+- hosts: all
+  remote_user: tgroshon
+  sudo: yes
+
+  roles:
+    - { role: webserver, tags: ["nginx"] }

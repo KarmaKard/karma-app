@@ -1,3 +1,6 @@
+require('dotenv').load()
+var webpack = require('webpack')
+
 module.exports = {
   entry: {
     main: [
@@ -16,7 +19,6 @@ module.exports = {
       { test: /\.(svg|png|gif|jpg)$/, loaders: [ 'url?limit=10000', 'img?minimize' ] },
       { test: /\.css$/, loaders: [ 'file?name=[name].css', 'cssnext' ] },
       { test: /\.js$/, exclude: /node_modules/, loader: 'babel?stage=0' },
-      { test: /\.js$/, loader: 'envify-loader' }
     ]
   },
   cssnext: {
@@ -33,6 +35,12 @@ module.exports = {
     contentBase: 'dist/',
     host: 'localhost',
     inline: true
-  }
+  },
+
+  plugins: [
+    new webpack.EnvironmentPlugin([
+      "NODE_ENV", "API_HOST"
+    ])
+  ]
 }
   
