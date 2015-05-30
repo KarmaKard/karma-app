@@ -15,7 +15,7 @@ exports.up = function (next) {
 exports.down = function (next) {
   r.tableList().run().then(tables => {
     if (tables.find(t => t === tableName)) {
-      return r.tableCreate(tableName).run()
+      return r.tableDrop(tableName).run()
     }
   }).then(() => {
     next()
