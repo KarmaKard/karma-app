@@ -23,6 +23,9 @@ export default React.createClass({
       dollarValue,
       type: "BXY"
     } 
+
+    deal.dealText = "Buy " + primaryUsageLimit + " "+ primaryProductName + ", get " + secondaryUsageLimit + " " + secondaryProductName + " Free!"
+    
     if(this.props.deal){
       deal.id = this.props.deal.id
     }    

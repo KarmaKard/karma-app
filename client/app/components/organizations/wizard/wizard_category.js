@@ -16,13 +16,13 @@ export default React.createClass({
       <div>
         <div className="content_box-header">Business Category</div>
         <select ref="category" className="karma_input">
-            <option value="Ice Cream and Treats">Ice Cream and Treats</option>
-            <option value="Pizza">Pizza</option>
-            <option value="Sandwiches and Burgers">Sandwiches and Burgers</option>
-            <option value="Restaurants">Restaurants</option>
-            <option value="Entertainment">Entertainment</option>
-            <option value="Retail">Retail</option>
-            <option value="Services">Services</option>
+          <option value="dining">Dining</option>
+          <option value="entertainment"> Entertainment</option>
+          <option value="health&fitness">Health & Fitness</option>
+          <option value="home&garden">Home & Garden</option>
+          <option value="professional">Professional</option>
+          <option value="services">Services</option>
+          <option value="shopping">Shopping</option>
         </select>
         <form>
           <input type="submit" ref="button" onClick={this.nextClicked} className="karma_button" value="Next" />

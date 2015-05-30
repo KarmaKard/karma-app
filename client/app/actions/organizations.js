@@ -7,7 +7,7 @@ export default class OrganizationsActions extends Actions {
     p.then(organization => {
       if (organization) {
         this.dispatch('create', organization)
-        return router.transitionTo('organization', {organizationId: organization.id})
+        return router.transitionTo('organization_user_manages', {organizationId: organization.id})
       }
       console.warn('No Organization returned from create')
     }).catch(this.createError)

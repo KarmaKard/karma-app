@@ -17,10 +17,13 @@ export default React.createClass({
       dollarValue,
       type: "Free"
     } 
+
+    deal.dealText = "Get " + primaryProductName + " Free"
     
     if(this.props.deal){
       deal.id = this.props.deal.id
     }    
+    
     this.props.saveDeal(deal)
   },
 

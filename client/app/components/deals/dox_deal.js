@@ -17,6 +17,8 @@ export default React.createClass({
       dollarValue,
       type: "DOX"
     } 
+
+    deal.dealText = "Get " + dollarValue + " off purchase of "+ primaryProductName 
     
     if(this.props.deal){
       deal.id = this.props.deal.id

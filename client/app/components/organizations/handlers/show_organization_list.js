@@ -4,11 +4,15 @@ import { Link } from 'react-router'
 
 export default React.createClass({
 
+  contextTypes: {
+    router: React.PropTypes.func
+  },
+
   render(){
     var organizations = this.props.organizations.map((organization, index) => {
       return (
         <li className="organization_list-item" key={index}>
-          <Link to="organization" params={{organizationId :organization.id}}>
+          <Link to="organization" params={{organizationId : organization.id}}>
             {organization.name}
           </Link>
         </li>

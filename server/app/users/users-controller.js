@@ -26,7 +26,7 @@ export function create (req, res, next) {
     return usersTable.insert(user)
   }).then(data => {
     res.status(201).json({
-      token: encodeToken(user)
+      token: encodeToken(data)
     })
   }).catch(next)
 }

@@ -20,6 +20,8 @@ export default React.createClass({
       type: "POX"
     } 
     
+    deal.dealText = "Get " + percentageOff + "% off purchase of "+ primaryProductName 
+    
     if(this.props.deal){
       deal.id = this.props.deal.id
     }    
