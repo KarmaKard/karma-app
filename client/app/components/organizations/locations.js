@@ -10,16 +10,10 @@ export default React.createClass({
     }
   },
 
-  componentWillReceiveProps() {
-    this.setState({
-      locations: this.props.initialLocations
-    })
-  },
-  
-  componentWillMount(){
-    this.setState({
-      locations: this.props.initialLocations
-    })
+  componentWillMount() {
+    if(this.props.initialLocations.length > 0){
+      this.setState({locations: this.props.initialLocations})
+    }
   },
 
   updateNewStreet(e){
@@ -50,13 +44,23 @@ export default React.createClass({
     })
 
     flux.actions.organizations.saveLocation(newLocation)
+    flux.actions.organizations.getLocations()
     React.findDOMNode(this.refs.saveButton).style.border="3px solid rgb(75, 187, 44)"
 
     React.findDOMNode(this.refs.locationInput).focus()
   },
 
   render() {
-    var listItems = this.state.locations.map((location, index) => {
+    var locationArray
+        console.log(this.props.initialLocations)
+    if(this.state.locations.length === 0) {
+      locationArray = this.props.initialLocations
+    }
+    else{
+      locationArray = this.state.locations
+    }
+
+    var listItems = locationArray.map((location, index) => {
       return (
         <li key={index}>
           {location.street} {location.zip}

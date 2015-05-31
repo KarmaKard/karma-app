@@ -17,25 +17,12 @@ export default React.createClass({
     var organization = this.props.organizations.filter(org => org.id === orgId)[0]
     var deals = this.props.deals.filter(deals => deals.organizationId === orgId)
     var locations = this.props.locations.filter(locations => locations.organizationId === orgId)
-
     if (!organization) {
       return <p>Organization Not Found</p>
     }
     return (
       <div>
-        <div className="page_header">
-          <div className="page_header_title">
-            <Link to="organization_user_manages" params={{organizationId: organization.id}}>
-              {organization.name}
-            </Link>
-          </div>
-          <div className="page_header_link">
-            <Link to="account">
-              {this.props.user.firstName}
-            </Link>
-          </div>
-        </div>
-        <RouteHandler organization={organization} user={this.props.user} deals={deals} locations={locations} updateOrganization={this.updateOrganization} />
+        <RouteHandler organization={organization} organizations={this.props.organizations} user={this.props.user} deals={deals} locations={locations} updateOrganization={this.updateOrganization} />
       </div>
     )
   }

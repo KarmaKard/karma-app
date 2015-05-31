@@ -14,6 +14,26 @@ export default React.createClass({
 
     var user = this.props.user
     var organizations = this.props.organizations
+    var distinctCategories = []
+    var unique = {}
+
+    for( var i in organizations ){
+       if( typeof(unique[organizations[i].category]) == "undefined" && organizations[i].category !== undefined){
+        distinctCategories.push(organizations[i].category);
+       }
+       unique[organizations[i].category] = 0;
+    }
+
+    var existingCategories = distinctCategories.map((category, index) => {
+      return (
+        <li className="category_list-item" key={index}>
+          <Link to="categorical_organizations" params={{category : category}}>
+            {category}
+          </Link>
+        </li>
+      )
+    })
+
     var userManagerCheck = organizations.find(function(organization){
       if (organization.userId === user.id){
           return true
@@ -57,41 +77,7 @@ export default React.createClass({
               Deal Categories
             </div>
             <ul>
-            <li className="category_list-item">
-              <Link to="categorical_organizations" params={{category : "Dining"}}>
-                Dining
-              </Link>
-            </li>
-            <li className="category_list-item">
-              <Link to="categorical_organizations" params={{category : "Entertainment"}}>
-                Entertainment
-              </Link>
-            </li>
-            <li className="category_list-item">
-              <Link to="categorical_organizations" params={{category : "Health & Fitness"}}>
-                Health & Fitness
-              </Link>
-            </li>
-            <li className="category_list-item">
-              <Link to="categorical_organizations" params={{category : "Home & Garden"}}>
-                Home & Garden
-              </Link>
-            </li>
-            <li className="category_list-item">
-              <Link to="categorical_organizations" params={{category : "Professional"}}>
-                Professional
-              </Link>
-            </li>
-            <li className="category_list-item">
-              <Link to="categorical_organizations" params={{category : "Services"}}>
-                Services
-              </Link>
-            </li>
-            <li className="category_list-item">
-              <Link to="categorical_organizations" params={{category : "Shopping"}}>
-                Shopping
-              </Link>
-            </li>
+              {existingCategories}
             </ul>
             {addNewLink}
           </div>

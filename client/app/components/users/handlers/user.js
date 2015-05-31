@@ -10,8 +10,10 @@ export default React.createClass({
 
   getInitialState() {
     var storeState = this.getStoreState()
-    if(storeState.organizations.organizations.length === 0){
+    if (storeState.organizations.organizations.length === 0){
       flux.actions.organizations.getOrganizations()
+      flux.actions.organizations.getLocations()
+      flux.actions.deals.getDeals()
     }
     return storeState
   },
