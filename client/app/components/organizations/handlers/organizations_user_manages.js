@@ -15,7 +15,6 @@ export default React.createClass({
 
   render () {
     var userId = this.props.user.id
-    (this.props.user.id)
     var organizationLinks = this.props.organizations
       .filter(org => org.userId === userId)
       .map(this.renderOrganizationLink)

@@ -39,16 +39,12 @@ export default React.createClass({
     var currentUser = this.state.user.currentUser
     var organizations = this.state.organizations.organizations
 
-
-    if (!currentUser || organizations.length === 0 ){
-      return <p>Wait!</p>
+    if (!currentUser){
+      return <p>Authenticating...</p>
     }
-    var manageLink
-    this.state.organizations.organizations.map(function(organization){ 
-       if (organization.userId === currentUser.id){
-          return manageLink = <li><Link to="categories">Manage</Link></li>
-       }
-    })
+
+    var isManager = !!organizations.find(org => org.userId === currentUser.id)
+
     return (
       <div>
         <div className="page_header">
@@ -63,7 +59,7 @@ export default React.createClass({
           <ul className="side_bar_navigation_level1">
             <li><Link to="account">Account</Link></li>
             <li><Link to="categories">Deals</Link></li>
-            {manageLink}
+            {isManager ? <li><Link to="categories">Manage</Link></li> : null}
           </ul>
         </div>
         <div className="content_box">

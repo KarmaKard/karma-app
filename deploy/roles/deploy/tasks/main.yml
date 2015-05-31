@@ -9,7 +9,12 @@
   notify: restart karma-app
 
 - name: Set app dir permissions to allow karma and nginx in
-  file: path=/app state=directory recurse=yes mode=0774 owner=karma group=nginx
+  file: path=/app
+        state=directory
+        recurse=yes
+        mode=0774
+        owner=karma
+        group=nginx
 
 - name: Install NPM packages for server
   npm: path={{ server_path }}

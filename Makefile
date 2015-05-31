@@ -18,9 +18,12 @@ build: $(CLIENT_DEPS)
 migrate: $(SERVER_DEPS)
 		@cd server && npm run migrate
 
+deploy:
+		ansible-playbook -v -i inventories/beta deploy.yml --ask-sudo-pass
+
 clean-deps:
-	  @rm -rf $(CLIENT_DEPS)
-	  @rm -rf $(SERVER_DEPS)
+		@rm -rf $(CLIENT_DEPS)
+		@rm -rf $(SERVER_DEPS)
 
 clean-data:
 		@rm -rf $(FAKES3_ROOT)
