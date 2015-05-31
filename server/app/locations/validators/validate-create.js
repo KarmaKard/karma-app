@@ -2,21 +2,12 @@ import errors, {serialize as serializeErrors } from 'express-validator-errors'
 import {ValidationError} from '../../common/errors'
 
 export default function validateCreate (req, res, next) {
-  if (!req.body.locations){
-    errors.addToReq(req, 'locations', 'Root "location" parameter is required')
+  if (!req.body.location){
+    errors.addToReq(req, 'location', 'Root "location" parameter is required')
     return next(new ValidationError(req))
   }
-
-  if (!Array.isArray(req.body.locations)){
-    errors.addtoReq(req, 'locations', 'Locations must be an array')
-    return next(new ValidationError(req))
-  }
-
-  req.body.locations.forEach((location, index) => {
-    req.checkBody(['locations', index, 'organizationId'], 'Organization ID is required').notEmpty()
-    req.checkBody(['locations', index, 'street'], 'Street is required').notEmpty()
-    req.checkBody(['locations', index, 'zip'], 'Zip is required').notEmpty()
-  })
-  
+  req.checkBody(['location', 'organizationId'], 'Organization ID is required').notEmpty()
+  req.checkBody(['location', 'street'], 'Street is required').notEmpty()
+  req.checkBody(['location', 'zip'], 'Zip is required').notEmpty()
   next(req.validationErrors() ? new ValidationError(req) : null)
 }

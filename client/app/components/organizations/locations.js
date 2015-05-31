@@ -4,7 +4,6 @@ import { flux } from '../../main'
 export default React.createClass({
   getInitialState(){
     return {
-      newLocations: [],
       locations: [],
       newStreet: '',
       newZip: ''
@@ -27,12 +26,14 @@ export default React.createClass({
     this.setState({
       newStreet: e.target.value
     })
+    React.findDOMNode(this.refs.saveButton).style.border="3px solid rgb(242, 29, 29)"
   },
 
   updateNewZip(e){
     this.setState({
       newZip: e.target.value
     })
+    React.findDOMNode(this.refs.saveButton).style.border="3px solid rgb(242, 29, 29)"
   },
 
   handleAddNew(){
@@ -45,17 +46,13 @@ export default React.createClass({
     this.setState({
       newStreet: '',
       newZip: '',
-      newLocations: this.state.newLocations.concat(newLocation),
       locations: this.state.locations.concat(newLocation)
     })
 
-    React.findDOMNode(this.refs.locationInput).focus()
-  },
+    flux.actions.organizations.saveLocation(newLocation)
+    React.findDOMNode(this.refs.saveButton).style.border="3px solid rgb(75, 187, 44)"
 
-  saveLocations(){
-    if(this.state.locations.length > 0){ 
-      flux.actions.organizations.saveLocations(this.state.newLocations)
-    }     
+    React.findDOMNode(this.refs.locationInput).focus()
   },
 
   render() {
@@ -76,8 +73,8 @@ export default React.createClass({
         </div>
         <div>
           <input type="text" className="karma_input street_address_input" placeholder="Full Street Address" ref="locationInput" value={this.state.newStreet} onChange={this.updateNewStreet} />
-          <input type="text" className="zip_input karma_input " placeholder="Zip" value={this.state.newZip} onChange={this.updateNewZip} onBlur={this.handleAddNew}/>
-          <button className="karma_button" onClick={this.saveLocations}> Save</button>
+          <input type="text" className="zip_input karma_input " placeholder="Zip" value={this.state.newZip} onChange={this.updateNewZip} />
+          <button ref="saveButton" className="karma_button" onClick={this.handleAddNew}>Save</button>
         </div>
       </div>
     )

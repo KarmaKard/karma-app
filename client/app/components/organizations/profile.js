@@ -37,13 +37,13 @@ export default React.createClass({
 
           <span className="label-span">Category</span>
           <select ref="category" onChange={this.changeMade} className="karma_input" defaultValue={this.props.organization.category}>
-            <option value="dining">Dining</option>
-            <option value="entertainment"> Entertainment</option>
-            <option value="health&fitness">Health & Fitness</option>
-            <option value="home&garden">Home & Garden</option>
-            <option value="professional">Professional</option>
-            <option value="services">Services</option>
-            <option value="shopping">Shopping</option>
+            <option value="Dining">Dining</option>
+            <option value="Entertainment"> Entertainment</option>
+            <option value="Health & Fitness">Health & Fitness</option>
+            <option value="Home & Garden">Home & Garden</option>
+            <option value="Professional">Professional</option>
+            <option value="Services">Services</option>
+            <option value="Shopping">Shopping</option>
           </select>
           <span className="label-span">Business Description</span>
           <textarea

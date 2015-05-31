@@ -25,7 +25,7 @@ export default React.createClass({
       <div>
         <div className="page_header">
           <div className="page_header_title">
-            <Link to="organization" params={{organizationId: organization.id}}>
+            <Link to="organization_user_manages" params={{organizationId: organization.id}}>
               {organization.name}
             </Link>
           </div>
