@@ -50,7 +50,7 @@ export default React.createClass({
     return (
       <div>
         <div className="page_header">
-          <div className="page_header_title">{currentUser.firstName}</div>
+          <div className="page_header_title">{currentUser.first_name}</div>
           <div className="page_header_link">
             <Link to="root">
               Log Out
