@@ -12,17 +12,23 @@ export default React.createClass({
     }
 
     var deal = {
-      primaryProductName: primaryProductName,
-      limit: limit,
-      dollarValue: dollarValue,
+      primaryProductName,
+      limit,
+      dollarValue,
       type: "Free"
     } 
-    
-    if(this.props.freeDeal){
-      deal.id = this.props.freeDeal.id
-    }    
 
+    deal.dealText = "Get " + primaryProductName + " Free"
+    
+    if(this.props.deal){
+      deal.id = this.props.deal.id
+    }    
+    
     this.props.saveDeal(deal)
+  },
+
+  deleteClicked() {
+    flux.actions.deals.deleteDeal(this.props.deal)
   },
 
   render() {
@@ -36,13 +42,17 @@ export default React.createClass({
 
     return(
       <div className="free_deal">
-        <div className="deal_header">Free Deal</div>
+        <div className="deal_header">Free Deal
+          <button className="deal-delete" onClick={this.deleteClicked}>Delete</button>
+        </div>
+
           <div className="deal_contents">
           <span className="deal_text-left">Get</span> 
           <input 
             ref="primary" 
             type="text"
             onBlur={this.saveThisDeal} 
+            onChange={this.props.changeMade} 
             defaultValue={primaryProduct} 
             className="deal-input"
             placeholder="Type Item Here" />
@@ -50,23 +60,34 @@ export default React.createClass({
         </div>
         <div className="deal_limit">
           <span className="deal_text-left">Limit</span> 
-          <select onBlur={this.saveThisDeal} defaultValue={limit} ref="limit" className="karma_select">
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
-            <option>6</option>
-            <option>7</option>
-            <option>8</option>
-            <option>9</option>
-            <option>10</option>
-            <option>unlimited</option>
+          <select 
+            onBlur={this.saveThisDeal} 
+            onChange={this.props.changeMade} 
+            defaultValue={limit} 
+            ref="limit" 
+            className="karma_select">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="unlimited">unlimited</option>
           </select>
         </div>
         <div className="dollar_value">
-          <span className="deal_text-left">Dollar Value</span>
-          <input onBlur={this.saveThisDeal} defaultValue={dollarValue} ref="dollarValue" className="karma_input dollar_value-input"></input> 
+          <span className="deal_text-left">Dollar Value of Single Usage  $</span>
+          <input 
+            onBlur={this.saveThisDeal} 
+            onChange={this.props.changeMade} 
+            defaultValue={dollarValue} 
+            ref="dollarValue" 
+            placeholder="00.00"
+            className="karma_input dollar_value-input"/>
         </div>
         <hr/>
       </div>

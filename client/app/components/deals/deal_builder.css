@@ -37,8 +37,7 @@
 }
 
 .dollar_value-input {
-  width: 150px !important;
-  margin-left: 30px !important;
+  width: 75px !important;
 }
 
 .deal_text-left{
@@ -85,3 +84,21 @@
   margin: 0 5px;
   background-color: white;
 }
+
+.deal-delete{
+  font-family: Quicksand,sans-serif;
+  font-size: 18pt;
+  text-decoration: none;
+  font: black;
+  float: right;
+  margin: 5px 10px;
+  background: white;
+  border: 1px solid black;
+  padding: 2px 3px;
+}
+
+.deal-delete:hover {
+  background-color: black;
+  color: white;
+}  
+

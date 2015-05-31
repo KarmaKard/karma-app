@@ -7,6 +7,8 @@ import User from './components/users/handlers/user'
 
 import Organizations from './components/organizations/handlers/organizations'
 import ShowOrganizationList from './components/organizations/handlers/show_organization_list'
+import ShowCategories from './components/organizations/handlers/show_categories'
+import ShowCategoricalOrganizations from './components/organizations/handlers/show_categorical_organizations'
 import OrganizationsUserManages from './components/organizations/handlers/organizations_user_manages'
 import NewOrganization from './components/organizations/handlers/new_organization'
 import Organization from './components/organizations/handlers/organization'
@@ -38,12 +40,13 @@ export default (
       <DefaultRoute handler={ShowOrganizationList} />
       <Route name="organizations_user_manages" handler={OrganizationsUserManages} path="manage" />
       <Route name="new_organization" handler={NewOrganization} path="new" />
-
+      <Route name="categories" handler={ShowCategories} path="categories" />
+      <Route name="categorical_organizations" handler={ShowCategoricalOrganizations} path="category/:category" />
       <Route name="organization" handler={Organization} path=":organizationId" >
         <DefaultRoute handler={ShowOrganizationProfile} />
 
         <Route name="organization_user_manages" handler={OrganizationUserManages} path="manage">
-          <DefaultRoute handler={ShowOrganizationDashboard} />
+          <DefaultRoute handler={ShowOrganizationDashboard} /> 
           <Route name="edit_profile" handler={EditOrganizationProfile} path="profile" />
           <Route name="edit_locations" handler={EditOrganizationLocations} path="locations" />
           <Route name="edit_keywords" handler={EditOrganizationKeywords} path="keywords" />

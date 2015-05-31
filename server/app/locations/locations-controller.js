@@ -5,7 +5,7 @@ import * as auth from '../common/middleware/authentication'
 
 export var router = express.Router()
 
-router.get('/', auth.token, auth.admin, list)
+router.get('/', auth.token, list)
 export function list (req, res, next){
   var queryPromise = locationsTable.index()
   queryPromise.then(locations => {
@@ -15,8 +15,10 @@ export function list (req, res, next){
 
 router.post('/', auth.token, validateCreate, create)
 export function create(req, res, next){
-  var queryPromise = locationsTable.insert(req.body.locations)
-  queryPromise.then(data => {
-    res.json(req.body)
+  var locations = req.body.locations
+  locations.userId = req.user.id
+  var queryPromise = locationsTable.insert(locations)
+  queryPromise.then(locations => {
+    res.json({locations})
   }).catch(next)
 }

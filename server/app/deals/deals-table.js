@@ -4,9 +4,9 @@ export function index () {
   return r.table('deals').run()
 }
 
-export function insert (deal){
+export function insert (deals){
   return r.table('deals')
-    .insert(deal, {returnChanges: true})
+    .insert(deals, {returnChanges: true})
     .run()
     .then(results => {
       if (results.changes) {
@@ -18,8 +18,8 @@ export function insert (deal){
 
 export function update (deal) {
   return r.table('deals')
-    get(deal.id)
-    .update(deal)
+    .get(deal.id)
+    .update(deal, {returnChanges: true})
     .run()
     .then(results => {
       if (results.changes) {
@@ -29,15 +29,15 @@ export function update (deal) {
     })
 }
 
-export function update (organization) {
-  return r.table('organizations')
-    .get(organization.id)
-    .update(organization)
+export function dealDelete (deal) {
+  return r.table('deals')
+    .get(deal.id)
+    .delete({returnChanges: true})
     .run()
     .then(results => {
       if (results.changes) {
-        return results.changes[0]['new_val']
+        return results.changes[0]['old_val']
       }
-      return organization
+      return deal
     })
 }

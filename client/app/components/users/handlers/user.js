@@ -10,7 +10,7 @@ export default React.createClass({
 
   getInitialState() {
     var storeState = this.getStoreState()
-    if(storeState.organizations.length === 0){
+    if(storeState.organizations.organizations.length === 0){
       flux.actions.organizations.getOrganizations()
     }
     return storeState
@@ -37,10 +37,18 @@ export default React.createClass({
 
   render() {
     var currentUser = this.state.user.currentUser
-    if (!currentUser){
+    var organizations = this.state.organizations.organizations
+
+
+    if (!currentUser || organizations.length === 0 ){
       return <p>Wait!</p>
     }
-
+    var manageLink
+    this.state.organizations.organizations.map(function(organization){ 
+       if (organization.userId === currentUser.id){
+          return manageLink = <li><Link to="categories">Manage</Link></li>
+       }
+    })
     return (
       <div>
         <div className="page_header">
@@ -54,7 +62,8 @@ export default React.createClass({
         <div className="side_bar_navigation">
           <ul className="side_bar_navigation_level1">
             <li><Link to="account">Account</Link></li>
-            <li><Link to="organizations">Organizations</Link></li>
+            <li><Link to="categories">Deals</Link></li>
+            {manageLink}
           </ul>
         </div>
         <div className="content_box">

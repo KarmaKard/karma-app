@@ -7,6 +7,7 @@ const LOGIN_URL = BASE_URL + '/api/v1/users/login'
 const ORGANIZATIONS_URL = BASE_URL + '/api/v1/organizations'
 const MANAGE_ORGANIZATIONS_URL = ORGANIZATIONS_URL + '/manage'
 const DEALS_URL = BASE_URL + '/api/v1/deals'
+const LOCATIONS_URL = BASE_URL + '/api/v1/locations' 
 
 
 var token = window.localStorage.getItem('karma-token')
@@ -119,18 +120,17 @@ export function getManagedOrganizations () {
   })
 }
 
-export function postDeal(deal){
-  console.log(deal)
+export function postDeals(deals){
   return new Promise ((resolve, reject) => {
     request
       .post(DEALS_URL)
-      .send({deal})
+      .send({deals})
       .set('token', token)
       .end((err, res) => {
         if(err) {
           return reject(err)
         }
-        resolve(res.body.deal)
+        resolve(res.body.deals)
       })
   })
 }
@@ -145,6 +145,7 @@ export function updateDeals(deals){
         if (err) {
           return reject(err)
         }
+
         resolve(res.body.deals)
       })
 
@@ -165,3 +166,47 @@ export function getDeals () {
   })
 }
 
+export function saveLocations (locations) {
+  return new Promise (( resolve, reject) => {
+    request
+      .post(LOCATIONS_URL)
+      .send({locations})
+      .set('token', token)
+      .end((err, res) => {
+        if (err) {
+          return reject(err)
+        }
+        resolve(res.body.locations)
+      })
+  })
+}
+
+export function getLocations () {
+  return new Promise((resolve, reject) => {
+    request
+      .get(LOCATIONS_URL)
+      .set('token', token)
+      .end((err, res) => {
+        if (err) {
+          return reject(err)
+        }
+        resolve(res.body.locations)
+      })
+  })
+}
+
+export function deleteDeal(deal) {
+  return new Promise((resolve, reject) => {
+    request
+      .del(DEALS_URL)
+      .send({deal})
+      .set('token', token)
+      .end((err, res) => {
+        if(err) {
+          return reject(err)
+        }
+        resolve(res.body.deal)
+      })
+
+  })
+}

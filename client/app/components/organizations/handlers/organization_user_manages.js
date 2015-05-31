@@ -20,7 +20,7 @@ export default React.createClass({
       <div>
         {sidebar}
         <div className="content_box">
-          <RouteHandler organization={this.props.organization} user={this.props.user} updateOrganization={this.props.updateOrganization} />
+          <RouteHandler organization={this.props.organization} user={this.props.user} deals={this.props.deals} initialLocations={this.props.locations} updateOrganization={this.props.updateOrganization} saveDeals={this.props.saveDeals}/>
         </div>
       </div>
     )
