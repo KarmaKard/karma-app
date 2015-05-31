@@ -52,7 +52,6 @@ export default React.createClass({
 
   render() {
     var locationArray
-        console.log(this.props.initialLocations)
     if(this.state.locations.length === 0) {
       locationArray = this.props.initialLocations
     }

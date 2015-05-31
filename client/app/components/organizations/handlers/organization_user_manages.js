@@ -8,12 +8,13 @@ import { Link } from 'react-router'
 export default React.createClass({
 
   render() {
-    console.log(this.props)
+
     var organization = this.props.organization
     var deals = this.props.deals
     var locations = this.props.locations
+    var user = this.props.user
 
-    if (organization.userId !== this.props.user.id) {
+    if (organization.userId !== user.id) {
       return <p>You are not permitted to view this page</p>
     }
 
@@ -36,13 +37,13 @@ export default React.createClass({
           </div>
           <div className="page_header_link">
             <Link to="account">
-              {this.props.user.firstName}
+              {user.first_name}
             </Link>
           </div>
         </div>
         {sidebar}
         <div className="content_box">
-          <RouteHandler organization={this.props.organization} user={this.props.user} deals={this.props.deals} initialLocations={this.props.locations} updateOrganization={this.props.updateOrganization} saveDeals={this.props.saveDeals}/>
+          <RouteHandler organization={this.props.organization} user={user} deals={this.props.deals} initialLocations={this.props.locations} updateOrganization={this.props.updateOrganization} saveDeals={this.props.saveDeals}/>
         </div>
       </div>
     )
