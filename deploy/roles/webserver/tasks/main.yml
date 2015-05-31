@@ -22,8 +22,5 @@
             dest=/etc/nginx/conf.d/karma.conf
   notify: restart nginx
 
-- name: Do not have SELinux manage nginx for now
-  command: semanage permissive -a httpd_t
-
 - name: Ensure nginx is started and enabled on boot
   service: name=nginx state=started enabled=yes
