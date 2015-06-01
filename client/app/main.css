@@ -5,7 +5,7 @@
 @import './components/deals/deal_builder';
 @import './components/organizations/wizard/index';
 @import './components/organizations/dashboard';
-@import 'http://fonts.googleapis.com/css?family=Quicksand';
+@import 'https://fonts.googleapis.com/css?family=Quicksand';
 
 body {
   padding: 0 5%;
