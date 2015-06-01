@@ -44,7 +44,8 @@ export default React.createClass({
             ref="keywordInput1"
             defaultValue={keyword1}
             onChange={this.changeMade}
-            placeholder="Keyword 1"/>
+            placeholder="Keyword 1"
+            disabled={this.props.editDisabled} />
 
           <input
             type="text"
@@ -52,7 +53,8 @@ export default React.createClass({
             ref="keywordInput2"
             defaultValue={keyword2}
             onChange={this.changeMade}
-            placeholder="Keyword 2"/>
+            placeholder="Keyword 2"
+            disabled={this.props.editDisabled} />
 
           <input
             type="text"
@@ -60,7 +62,8 @@ export default React.createClass({
             ref="keywordInput3"
             defaultValue={keyword3}
             onChange={this.changeMade}
-            placeholder="Keyword 3"/>
+            placeholder="Keyword 3"
+            disabled={this.props.editDisabled} />
 
           <input
             type="text"
@@ -68,7 +71,8 @@ export default React.createClass({
             ref="keywordInput4"
             defaultValue={keyword4}
             onChange={this.changeMade}
-            placeholder="Keyword 4"/>
+            placeholder="Keyword 4"
+            disabled={this.props.editDisabled} />
 
           <input
             type="text"
@@ -76,9 +80,16 @@ export default React.createClass({
             ref="keywordInput5"
             defaultValue={keyword5}
             onChange={this.changeMade}
-            placeholder="Keyword 5"/>
+            placeholder="Keyword 5"
+            disabled={this.props.editDisabled} />
 
-            <button ref="saveButton" className="karma_button" onClick={this.saveKeywords}>Save</button>
+          <button 
+            ref="saveButton" 
+            className="karma_button" 
+            onClick={this.saveKeywords} 
+            disabled={this.props.editDisabled}>
+              Save
+          </button>
       
       </div>
     )

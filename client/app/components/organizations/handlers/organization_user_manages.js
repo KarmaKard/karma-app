@@ -13,7 +13,11 @@ export default React.createClass({
     var deals = this.props.deals
     var locations = this.props.locations
     var user = this.props.user
-
+    var editDisabled = false
+    if(organization.organizationStatus === "review") {
+      editDisabled = true
+    }
+    
     if (organization.userId !== user.id) {
       return <p>You are not permitted to view this page</p>
     }
@@ -37,13 +41,13 @@ export default React.createClass({
           </div>
           <div className="page_header_link">
             <Link to="account">
-              {user.first_name}
+              {user.firstName}
             </Link>
           </div>
         </div>
         {sidebar}
         <div className="content_box">
-          <RouteHandler organization={this.props.organization} user={user} deals={this.props.deals} initialLocations={this.props.locations} updateOrganization={this.props.updateOrganization} saveDeals={this.props.saveDeals}/>
+          <RouteHandler organization={this.props.organization} editDisabled={editDisabled} user={user} deals={this.props.deals} initialLocations={this.props.locations} updateOrganization={this.props.updateOrganization} saveDeals={this.props.saveDeals}/>
         </div>
       </div>
     )

@@ -43,7 +43,7 @@ export default React.createClass({
       <div className="bxx_deal">
         <div className="deal_header">
           Dollars Off
-          <button className="deal-delete" onClick={this.deleteClicked}>Delete</button>
+          <button className="deal-delete" onClick={this.deleteClicked} disabled={this.props.editDisabled}>Delete</button>
         </div>
         <div className="deal_contents">
           <div className="deal-row">
@@ -55,7 +55,8 @@ export default React.createClass({
                 placeholder="Value"
                 onBlur={this.saveThisDeal} 
                 onChange={this.props.changeMade} 
-                defaultValue={dollarValue} />
+                defaultValue={dollarValue} 
+                disabled={this.props.editDisabled}/>
             </div>
             <span className="deal_text-right">Dollars Off</span>
           </div>
@@ -67,7 +68,8 @@ export default React.createClass({
               placeholder="Purchase Item Requirement"
               onBlur={this.saveThisDeal} 
               onChange={this.props.changeMade} 
-              defaultValue={primaryProductName} /> 
+              defaultValue={primaryProductName} 
+              disabled={this.props.editDisabled}/> 
           </div>
           <div className="deal_limit">
             <span className="deal_text-left">Limit</span> 
@@ -76,7 +78,8 @@ export default React.createClass({
               className="karma_select"
               onBlur={this.saveThisDeal}
               onChange={this.props.changeMade}  
-              defaultValue={limit}>
+              defaultValue={limit}
+              disabled={this.props.editDisabled}>
               <option>unlimited</option>
               <option>1</option>
               <option>2</option>

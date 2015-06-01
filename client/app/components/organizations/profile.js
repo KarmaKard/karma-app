@@ -33,10 +33,15 @@ export default React.createClass({
             className="karma_input"
             onChange={this.changeMade}
             defaultValue={this.props.organization.name}
-          />
+            disabled={this.props.editDisabled} />
 
           <span className="label-span">Category</span>
-          <select ref="category" onChange={this.changeMade} className="karma_input" defaultValue={this.props.organization.category}>
+          <select 
+            ref="category" 
+            onChange={this.changeMade} 
+            className="karma_input" 
+            defaultValue={this.props.organization.category}
+            disabled={this.props.editDisabled}>
             <option value="Dining">Dining</option>
             <option value="Entertainment"> Entertainment</option>
             <option value="Health & Fitness">Health & Fitness</option>
@@ -51,10 +56,11 @@ export default React.createClass({
             className="karma_input"
             placeholder="Write business description here."
             onChange={this.changeMade}
-            defaultValue={this.props.organization.description} />
+            defaultValue={this.props.organization.description} 
+            disabled={this.props.editDisabled}/>
           <span ref="logo" className="label-span"> Business Logo</span>
           <img className="organization_profile-logo" src="http://chic-chester.co.uk/wp-content/uploads/2014/08/20140806_LogoSupporterPlaceholder.png" alt="logo" height="100" width="100" />
-          <button ref="saveButton" className="karma_button" onClick={this.saveProfile}>Save</button>
+          <button ref="saveButton" className="karma_button" onClick={this.saveProfile} disabled={this.props.editDisabled}>Save</button>
       </div>
     )
   }

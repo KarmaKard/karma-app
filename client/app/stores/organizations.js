@@ -15,6 +15,7 @@ export default class OrganizationStore extends Store {
     this.handleAction('organizations.getOrganizations', this.saveOrganizations)
     this.handleAction('organizations.saveLocation', this.saveNewLocation)
     this.handleAction('organizations.getLocations', this.saveLocations)
+    this.handleAction('organizations.updateOrganization', this.replaceOrganization)
   }
 
   saveOrganizations(organizations){
@@ -37,6 +38,12 @@ export default class OrganizationStore extends Store {
 
   saveLocations(locations){
     this.setState({locations})
+  }
+
+  replaceOrganization(organization){
+    var allOrganizations = this.state.organizations
+    allOrganizations.splice(allOrganizations.map(function(x) {return x.id }).indexOf(organization.id), 1, organization)
+    this.setState({organization: allOrganizations})
   }
 
   saveCreateError(error) {
