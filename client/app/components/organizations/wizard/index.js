@@ -34,7 +34,14 @@ export default React.createClass({
   },
 
   setCategory(category){
-    this.setState({category, step: this.state.step + 1})
+    var { router } = this.context
+    this.setState({category, step: this.state.step + 1}, () => {
+      //This is temporary skip of Logo Upoad portion and assumes
+      //that we will have logo upload complete before fundraisers 
+      //begin signing up. Remove once Logo Upload is complete
+      flux.actions.organizations.create(router, this.state) 
+    })
+
   },
 
   setLogo(logoURL){
