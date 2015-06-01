@@ -30,3 +30,4 @@ rethinkdb_data
 .migrated.json
 .env*
 tmp
+.vault_pass
