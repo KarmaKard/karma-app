@@ -6,3 +6,13 @@
 .Dashboard_form {
   width: 80%;
 }
+
+.user_account-change_password_button {
+  font-family: Quicksand,sans-serif;
+  font-size: 16pt;
+  text-decoration: none;
+  font: black;
+  float: left;
+  background: white;
+  border: 1px solid white;
+}

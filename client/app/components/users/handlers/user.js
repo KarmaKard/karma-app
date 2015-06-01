@@ -10,8 +10,10 @@ export default React.createClass({
 
   getInitialState() {
     var storeState = this.getStoreState()
-    if(storeState.organizations.organizations.length === 0){
+    if (storeState.organizations.organizations.length === 0){
       flux.actions.organizations.getOrganizations()
+      flux.actions.organizations.getLocations()
+      flux.actions.deals.getDeals()
     }
     return storeState
   },
@@ -59,7 +61,7 @@ export default React.createClass({
           <ul className="side_bar_navigation_level1">
             <li><Link to="account">Account</Link></li>
             <li><Link to="categories">Deals</Link></li>
-            {isManager ? <li><Link to="categories">Manage</Link></li> : null}
+            {isManager ? <li><Link to="organizations_user_manages">Manage</Link></li> : null}
           </ul>
         </div>
         <div className="content_box">

@@ -166,17 +166,17 @@ export function getDeals () {
   })
 }
 
-export function saveLocations (locations) {
+export function saveLocation (location) {
   return new Promise (( resolve, reject) => {
     request
       .post(LOCATIONS_URL)
-      .send({locations})
+      .send({location})
       .set('token', token)
       .end((err, res) => {
         if (err) {
           return reject(err)
         }
-        resolve(res.body.locations)
+        resolve(res.body.location)
       })
   })
 }

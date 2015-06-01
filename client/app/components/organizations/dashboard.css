@@ -35,3 +35,25 @@
 .label-span{
   float: left;
 }
+
+.create_organization-link {
+  font-family: Quicksand,sans-serif;
+  font-size: 16pt;
+  text-decoration: none;
+  font: black;
+  float: left;
+  background: white;
+  border: 1px solid white;
+}
+.create_organization-link_span {
+  color: white;
+  background: black;
+  border: 1px solid black;
+  padding: 2px 3px;
+  margin-left: 5px;
+  float:right;
+}
+.create_organization-link_span:hover {
+  color: black;
+  background: white;
+}

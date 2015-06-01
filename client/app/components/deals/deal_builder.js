@@ -47,19 +47,19 @@ export default React.createClass({
   lookupDeal(deal, i) {
     switch(deal.type) {
       case "Free":
-        return <FreeDeal key={i} saveDeal={this.saveDeal} deal={deal} changeMade={this.changeMade}/>
+        return <FreeDeal key={i} saveDeal={this.saveDeal} deal={deal} editDisabled={this.props.editDisabled} changeMade={this.changeMade}/>
         break
       case "BXX":
-        return <BXXDeal key={i} saveDeal={this.saveDeal} deal={deal} changeMade={this.changeMade}/>
+        return <BXXDeal key={i} saveDeal={this.saveDeal} deal={deal} editDisabled={this.props.editDisabled} changeMade={this.changeMade}/>
         break
       case "BXY":
-        return <BXYDeal key={i} saveDeal={this.saveDeal} deal={deal} changeMade={this.changeMade}/>
+        return <BXYDeal key={i} saveDeal={this.saveDeal} deal={deal} editDisabled={this.props.editDisabled} changeMade={this.changeMade}/>
         break
       case "DOX":
-        return <DOXDeal key={i} saveDeal={this.saveDeal} deal={deal} changeMade={this.changeMade}/>
+        return <DOXDeal key={i} saveDeal={this.saveDeal} deal={deal} editDisabled={this.props.editDisabled} changeMade={this.changeMade}/>
         break
       case "POX":
-        return <POXDeal key={i} saveDeal={this.saveDeal} deal={deal} changeMade={this.changeMade}/>
+        return <POXDeal key={i} saveDeal={this.saveDeal} deal={deal} editDisabled={this.props.editDisabled} changeMade={this.changeMade}/>
         break
     }
   },
@@ -109,7 +109,8 @@ export default React.createClass({
           ref="dealTypeSelect" 
           onChange={this.newDeal} 
           defaultValue="add" 
-          className="karma_select">
+          className="karma_select"
+          disabled={this.props.editDisabled}>
           <option value="add">Add Another Deal</option>
           <option value="Free">Free</option>
           <option value="BXX">Buy X get X Free</option>
@@ -118,8 +119,12 @@ export default React.createClass({
           <option value="POX">Percentage off X</option>
         </select>
         <div ref="addDealPlaceholder">{this.state.newDealPlaceholder}</div>
-        <button ref="saveButton" className="karma_button" onClick={this.saveClicked}>
-          Save
+        <button 
+          ref="saveButton" 
+          className="karma_button" 
+          disabled={this.props.editDisabled} 
+          onClick={this.saveClicked}>
+            Save
         </button>
       </div>  
     )

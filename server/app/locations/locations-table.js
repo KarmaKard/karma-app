@@ -4,9 +4,9 @@ export function index() {
   return r.table('locations').run()
 }
 
-export function insert (locations){
+export function insert (location){
   return r.table('locations')
-    .insert(locations, {returnChanges: true})
+    .insert(location, {returnChanges: true})
     .run()
     .then(results => {
       if (results.changes) {

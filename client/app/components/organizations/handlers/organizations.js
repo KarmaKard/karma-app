@@ -41,11 +41,15 @@ export default React.createClass({
     flux.stores.deals.removeListener('change', this.storeChange)
   },
 
+
   render() {
     var organizations = this.state.organizationsStoreState.organizations
     var currentUser = this.state.usersStoreState.currentUser
     var deals = this.state.dealsStoreState.deals
     var locations = this.state.organizationsStoreState.locations
+    if(organizations.length === 0 || !currentUser || deals.length === 0 || locations.length === 0 ){
+      return <span/>
+    }
 
     return (
       <div>

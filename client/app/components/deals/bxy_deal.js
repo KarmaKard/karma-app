@@ -52,7 +52,7 @@ export default React.createClass({
       <div className="bxx_deal">
         <div className="deal_header">
           Buy X Get Y
-          <button className="deal-delete" onClick={this.deleteClicked}>Delete</button>
+          <button className="deal-delete" onClick={this.deleteClicked} disabled={this.props.editDisabled}>Delete</button>
         </div>
         <div className="deal_contents">
           <div className="deal-row">
@@ -63,7 +63,8 @@ export default React.createClass({
                 onBlur={this.saveThisDeal}
                 onChange={this.props.changeMade}  
                 defaultValue={primaryUsageLimit} 
-                className="karma_select">
+                className="karma_select"
+                disabled={this.props.editDisabled}>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -82,7 +83,8 @@ export default React.createClass({
               onBlur={this.saveThisDeal} 
               onChange={this.props.changeMade} 
               defaultValue={primaryProductName}
-              placeholder="Purchase Requirement Item X" />
+              placeholder="Purchase Requirement Item X" 
+              disabled={this.props.editDisabled}/>
           </div>
           <div className="deal-row">
             <div className="required_amount">
@@ -92,7 +94,8 @@ export default React.createClass({
                 onBlur={this.saveThisDeal}
                 onChange={this.props.changeMade}  
                 defaultValue={secondaryUsageLimit} 
-                className="karma_select">
+                className="karma_select"
+                disabled={this.props.editDisabled}>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -111,7 +114,8 @@ export default React.createClass({
               onBlur={this.saveThisDeal} 
               onChange={this.props.changeMade} 
               defaultValue={secondaryProductName} 
-              placeholder="Free Item Y "/>
+              placeholder="Free Item Y "
+              disabled={this.props.editDisabled}/>
             <span className="deal_text-right">Free</span>
           </div>
           <div className="deal_limit">
@@ -121,7 +125,8 @@ export default React.createClass({
               onBlur={this.saveThisDeal} 
               onChange={this.props.changeMade} 
               defaultValue={limit} 
-              className="karma_select">
+              className="karma_select"
+              disabled={this.props.editDisabled}>
               <option>1</option>
               <option>2</option>
               <option>3</option>
@@ -143,7 +148,8 @@ export default React.createClass({
               onChange={this.props.changeMade} 
               defaultValue={dollarValue} 
               placeholder="00.00"
-              className="karma_input dollar_value-input"></input> 
+              className="karma_input dollar_value-input"
+              disabled={this.props.editDisabled}></input> 
           </div>
         </div>
         <hr/>
