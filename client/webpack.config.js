@@ -1,7 +1,7 @@
 require('dotenv').load()
 var webpack = require('webpack')
 
-module.exports = {
+var configuration = {
   entry: {
     main: [
       'babel/polyfill',
@@ -43,4 +43,10 @@ module.exports = {
     ])
   ]
 }
-  
+
+if (process.env.NODE_ENV === 'production') {
+  delete configuration.devtool
+  delete configuration.devServer
+}
+
+module.exports = configuration
