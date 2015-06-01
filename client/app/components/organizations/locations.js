@@ -4,35 +4,30 @@ import { flux } from '../../main'
 export default React.createClass({
   getInitialState(){
     return {
-      newLocations: [],
       locations: [],
       newStreet: '',
       newZip: ''
     }
   },
 
-  componentWillReceiveProps() {
-    this.setState({
-      locations: this.props.initialLocations
-    })
-  },
-  
-  componentWillMount(){
-    this.setState({
-      locations: this.props.initialLocations
-    })
+  componentWillMount() {
+    if(this.props.initialLocations.length > 0){
+      this.setState({locations: this.props.initialLocations})
+    }
   },
 
   updateNewStreet(e){
     this.setState({
       newStreet: e.target.value
     })
+    React.findDOMNode(this.refs.saveButton).style.border="3px solid rgb(242, 29, 29)"
   },
 
   updateNewZip(e){
     this.setState({
       newZip: e.target.value
     })
+    React.findDOMNode(this.refs.saveButton).style.border="3px solid rgb(242, 29, 29)"
   },
 
   handleAddNew(){
@@ -45,21 +40,26 @@ export default React.createClass({
     this.setState({
       newStreet: '',
       newZip: '',
-      newLocations: this.state.newLocations.concat(newLocation),
       locations: this.state.locations.concat(newLocation)
     })
+
+    flux.actions.organizations.saveLocation(newLocation)
+    flux.actions.organizations.getLocations()
+    React.findDOMNode(this.refs.saveButton).style.border="3px solid rgb(75, 187, 44)"
 
     React.findDOMNode(this.refs.locationInput).focus()
   },
 
-  saveLocations(){
-    if(this.state.locations.length > 0){ 
-      flux.actions.organizations.saveLocations(this.state.newLocations)
-    }     
-  },
-
   render() {
-    var listItems = this.state.locations.map((location, index) => {
+    var locationArray
+    if(this.state.locations.length === 0) {
+      locationArray = this.props.initialLocations
+    }
+    else{
+      locationArray = this.state.locations
+    }
+
+    var listItems = locationArray.map((location, index) => {
       return (
         <li key={index}>
           {location.street} {location.zip}
@@ -75,9 +75,28 @@ export default React.createClass({
           </ul>
         </div>
         <div>
-          <input type="text" className="karma_input street_address_input" placeholder="Full Street Address" ref="locationInput" value={this.state.newStreet} onChange={this.updateNewStreet} />
-          <input type="text" className="zip_input karma_input " placeholder="Zip" value={this.state.newZip} onChange={this.updateNewZip} onBlur={this.handleAddNew}/>
-          <button className="karma_button" onClick={this.saveLocations}> Save</button>
+          <input 
+            type="text" 
+            className="karma_input street_address_input" 
+            placeholder="Full Street Address" 
+            ref="locationInput" 
+            value={this.state.newStreet} 
+            onChange={this.updateNewStreet} 
+            disabled={this.props.editDisabled}/>
+          <input 
+            type="text" 
+            className="zip_input karma_input " 
+            placeholder="Zip" 
+            value={this.state.newZip} 
+            onChange={this.updateNewZip} 
+            disabled={this.props.editDisabled} />
+          <button 
+            ref="saveButton" 
+            className="karma_button" 
+            onClick={this.handleAddNew} 
+            disabled={this.props.editDisabled}>
+              Save
+          </button>
         </div>
       </div>
     )

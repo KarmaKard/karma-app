@@ -18,7 +18,7 @@ export default React.createClass({
               value={this.props.user.email}
             />
           </label>
-          <button>Change Your Password</button>
+          <button className="user_account-change_password_button">Change Your Password</button>
         </div>
       </div>
     )

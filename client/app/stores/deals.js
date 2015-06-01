@@ -33,7 +33,6 @@ export default class DealStore extends Store {
     }, new Map())
 
     allDeals = [... allDealsMap.values()]
-    
   }
 
   deleteDeal(deal){

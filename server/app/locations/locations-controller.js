@@ -15,10 +15,10 @@ export function list (req, res, next){
 
 router.post('/', auth.token, validateCreate, create)
 export function create(req, res, next){
-  var locations = req.body.locations
-  locations.userId = req.user.id
-  var queryPromise = locationsTable.insert(locations)
-  queryPromise.then(locations => {
-    res.json({locations})
+  var location = req.body.location
+  location.userId = req.user.id
+  var queryPromise = locationsTable.insert(location)
+  queryPromise.then(location => {
+    res.json({location})
   }).catch(next)
 }
