@@ -59,7 +59,7 @@ export default React.createClass({
             defaultValue={this.props.organization.description} 
             disabled={this.props.editDisabled}/>
           <span ref="logo" className="label-span"> Business Logo</span>
-          <img className="organization_profile-logo" src="http://chic-chester.co.uk/wp-content/uploads/2014/08/20140806_LogoSupporterPlaceholder.png" alt="logo" height="100" width="100" />
+          <img className="organization_profile-logo" src="/img/logo-placeholder.png" alt="logo" height="100" width="100" />
           <button ref="saveButton" className="karma_button" onClick={this.saveProfile} disabled={this.props.editDisabled}>Save</button>
       </div>
     )

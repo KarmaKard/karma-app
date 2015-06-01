@@ -19,7 +19,7 @@ migrate: $(SERVER_DEPS)
 		@cd server && npm run migrate
 
 deploy:
-		ansible-playbook -v -i inventories/beta deploy.yml --ask-sudo-pass
+		@ansible-playbook -v -i inventories/beta deploy.yml --ask-sudo-pass --vault-password-file ../.vault_pass
 
 clean-deps:
 		@rm -rf $(CLIENT_DEPS)

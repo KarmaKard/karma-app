@@ -47,8 +47,9 @@ export default React.createClass({
     var currentUser = this.state.usersStoreState.currentUser
     var deals = this.state.dealsStoreState.deals
     var locations = this.state.organizationsStoreState.locations
-    if(organizations.length === 0 || !currentUser || deals.length === 0 || locations.length === 0 ){
-      return <span/>
+
+    if (!currentUser) {
+      return <span>Authenticating...</span>
     }
 
     return (
