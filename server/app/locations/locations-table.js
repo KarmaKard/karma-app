@@ -1,17 +1,13 @@
 import r from '../database'
 
-export function index() {
+export async function index() {
   return r.table('locations').run()
 }
 
-export function insert (location){
-  return r.table('locations')
-    .insert(location, {returnChanges: true})
-    .run()
-    .then(results => {
-      if (results.changes) {
-        return results.changes.map(c => c['new_val'])
-      }
-      return locations
-    })
+export async function insert (location){
+  var results = await r.table('locations').insert(location, {returnChanges: true}).run()
+  if (results.changes) {
+    return results.changes.map(c => c['new_val'])
+  }
+  return locations
 }

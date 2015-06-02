@@ -32,7 +32,7 @@ export default class OrganizationsActions extends Actions {
   }
 
   getOrganization(id){
-    var p = KarmaAPI.getOrganizations(id)
+    var p = KarmaAPI.getOrganization(id)
     p.then(organization => {
       if (organization) {
         this.dispatch('getOrganization', organization)

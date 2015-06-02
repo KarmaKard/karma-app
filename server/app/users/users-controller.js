@@ -8,27 +8,31 @@ import { encode as encodeToken } from '../common/services/token'
 export var router = express.Router()
 
 router.get('/', auth.token, auth.admin, list)
-export function list (req, res, next){
-  var queryPromise = usersTable.index()
-  queryPromise.then(users => {
+export async function list (req, res, next){
+  try {
+    var users = await usersTable.index()
     res.json({users})
-  }).catch(next)
+  } catch (e) {
+    next(e)
+  }
 }
 
 router.post('/', validateCreate, create)
-export function create (req, res, next) {
-  var user = req.body.user
-  hashPassword(user.password).then(hash => {
+export async function create (req, res, next) {
+  try {
+    var user = req.body.user
+    var hash = await hashPassword(user.password)
     delete user.isSuperAdmin
     delete user.password
     user.hash = hash
     user.created_at = Date.now()
-    return usersTable.insert(user)
-  }).then(data => {
+    var data = await usersTable.insert(user)
     res.status(201).json({
       token: encodeToken(data)
     })
-  }).catch(next)
+  } catch (e) {
+    next(e)
+  }
 }
 
 router.post('/login', auth.password, login)

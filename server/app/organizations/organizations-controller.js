@@ -7,43 +7,53 @@ import * as auth from '../common/middleware/authentication'
 export var router = express.Router()
 
 router.get('/', auth.token, list)
-export function list (req, res, next) {
-  var queryPromise = organizationsTable.index()
-  queryPromise.then(organizations => {
+export async function list (req, res, next) {
+  try {
+    var organizations = await organizationsTable.index()
     res.json({organizations})
-  }).catch(next)
+  } catch (e) {
+    next(e)
+  }
 }
 
 router.post('/', auth.token, validateCreate, create)
-export function create (req, res, next) {
-  var org = req.body.organization
-  org.userId = req.user.id
-  var queryPromise = organizationsTable.insert(org)
-  queryPromise.then(data => {
+export async function create (req, res, next) {
+  try {
+    var organizationToSave = req.body.organization
+    organizationToSave.userId = req.user.id
+    var organization = await organizationsTable.insert(organizationToSave)
     res.json({organization: data})
-  }).catch(next)
+  } catch (e) {
+    next(e)
+  }
 }
 
 router.put('/:orgId', auth.token, validateUpdate, update)
-export function update (req, res, next) {
-  var pOrganization = organizationsTable.update(req.body.organization)
-  pOrganization.then(organization => {
+export async function update (req, res, next) {
+  try {
+    var organization = await organizationsTable.update(req.body.organization)
     res.json({organization})
-  }).catch(next)
+  } catch (e) {
+    next(e)
+  }
 }
 
 router.get('/:orgId', auth.token, find)
-export function find (req, res, next) {
-  var pOrganization = organizationsTable.getById(req.params.orgId)
-  pOrganization.then(organization => {
+export async function find (req, res, next) {
+  try {
+    var organization = await organizationsTable.getById(req.params.orgId)
     res.json({organization})
-  }).catch(next)
+  } catch (e) {
+    next(e)
+  }
 }
 
 router.get('/manage', auth.token, auth.admin, listManagedOrganizations)
-export function listManagedOrganizations (req, res, next){
-  var queryPromise = organizationsTable.getOrganizationsByUserId(req.user.id)
-  queryPromise.then(organizations => {
+export async function listManagedOrganizations (req, res, next){
+  try {
+    var organizations = await organizationsTable.getOrganizationsByUserId(req.user.id)
     res.json({organizations})
-  }).catch(next)
+  } catch (e) {
+    next(e)
+  }
 }
