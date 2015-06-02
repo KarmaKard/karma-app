@@ -14,7 +14,7 @@ export default React.createClass({
     var locations = this.props.locations
     var user = this.props.user
     var editDisabled = false
-    if(organization.organizationStatus === "review") {
+    if(organization.status === "review") {
       editDisabled = true
     }
     

@@ -22,7 +22,7 @@ export async function create (req, res, next) {
   try {
     var user = req.body.user
     var hash = await hashPassword(user.password)
-    delete user.isSuperAdmin
+    user.status = "customer"
     delete user.password
     user.hash = hash
     user.created_at = Date.now()
@@ -33,6 +33,14 @@ export async function create (req, res, next) {
   } catch (e) {
     next(e)
   }
+}
+
+router.put('/:userId', auth.token, validateUpdate, update)
+export function update (req, res, next) {
+  var pUser = usersTable.update(req.body.user)
+  pUser.then(user => {
+    res.json({user})
+  }).catch(next)
 }
 
 router.post('/login', auth.password, login)

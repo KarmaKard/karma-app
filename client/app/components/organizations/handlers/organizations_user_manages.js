@@ -1,37 +1,15 @@
 import React from 'react'
 import { flux } from '../../../main'
+import SuperAdminView from '../superadmin_organizations_manager'
+import NonAdminView from '../nonadmin_organizations_manager'
 import { Link } from 'react-router'
 
 export default React.createClass({
-  renderOrganizationLink (organization, i) {
-    return (
-      <li key={i}>
-        <Link to="organization_user_manages" params={{organizationId: organization.id}}>
-          {organization.name}
-        </Link>
-      </li>
-    )
-  },
-
   render () {
     var user = this.props.user
-    var fundraiserHeader, businessHeader
-
-    var businessLinks = this.props.organizations
-      .filter(org => org.userId === user.id && org.type === "business")
-      .map(this.renderOrganizationLink)
-
-    if (businessLinks.length > 0) {
-      businessHeader = "Business"
-    }
-
-    var fundraiserLinks = this.props.organizations
-      .filter(org => org.userId === user.id && org.type === "fundraiser")
-      .map(this.renderOrganizationLink)
-
-    if (fundraiserLinks.length > 0) {
-      fundraiserHeader = "Fundraiser"
-    }
+    var isSuperAdmin = user.isSuperAdmin
+        ? <SuperAdminView user={this.props.user} organizations={this.props.organizations} />
+        : <NonAdminView user={this.props.user} organizations={this.props.organizations} />
 
     return (
       <div>
@@ -51,24 +29,7 @@ export default React.createClass({
           </ul>
         </div>
         <div className="content_box">
-          <div className="content_box-header">
-             Your Organizations
-          </div>
-          <h2>{businessHeader}</h2>
-          <ul>
-            {businessLinks}
-          </ul>
-          
-          <h2>{fundraiserHeader}</h2>
-          <ul>
-            {fundraiserLinks}
-          </ul>
-          <div>
-            <hr />
-            <Link to="new_organization" className="create_organization-link">
-              <span className="create_organization-link_span">Add New Organization</span>
-            </Link>
-          </div>
+          {isSuperAdmin}
         </div>
       </div>
     )

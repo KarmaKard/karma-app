@@ -6,7 +6,7 @@ export default React.createClass({
 
   submitToReview(){
     var organization = this.props.organization
-    organization.organizationStatus = "review"
+    organization.status = "review"
     this.props.updateOrganization(organization)
   },
 
