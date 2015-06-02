@@ -46,6 +46,7 @@ export default React.createClass({
     }
 
     var isManager = !!organizations.find(org => org.userId === currentUser.id)
+    var isSuperAdmin = currentUser.isSuperAdmin
 
     return (
       <div>
@@ -61,7 +62,7 @@ export default React.createClass({
           <ul className="side_bar_navigation_level1">
             <li><Link to="account">Account</Link></li>
             <li><Link to="categories">Deals</Link></li>
-            {isManager ? <li><Link to="organizations_user_manages">Manage</Link></li> : null}
+            {isManager || isSuperAdmin ? <li><Link to="organizations_user_manages">Manage</Link></li> : null}
           </ul>
         </div>
         <div className="content_box">

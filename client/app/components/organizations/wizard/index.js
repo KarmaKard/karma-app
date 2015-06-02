@@ -17,7 +17,8 @@ export default React.createClass({
       name: null,
       category: null,
       logoURL: null,
-      step: 1
+      step: 1,
+      status: "created"
     }
   },
 

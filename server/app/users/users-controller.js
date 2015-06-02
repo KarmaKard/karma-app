@@ -19,7 +19,7 @@ router.post('/', validateCreate, create)
 export function create (req, res, next) {
   var user = req.body.user
   hashPassword(user.password).then(hash => {
-    delete user.isSuperAdmin
+    user.status = "customer"
     delete user.password
     user.hash = hash
     user.created_at = Date.now()
@@ -28,6 +28,14 @@ export function create (req, res, next) {
     res.status(201).json({
       token: encodeToken(data)
     })
+  }).catch(next)
+}
+
+router.put('/:userId', auth.token, validateUpdate, update)
+export function update (req, res, next) {
+  var pUser = usersTable.update(req.body.user)
+  pUser.then(user => {
+    res.json({user})
   }).catch(next)
 }
 

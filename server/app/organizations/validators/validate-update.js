@@ -8,7 +8,6 @@ export default function validateUpdate (req, res, next) {
   }
 
   if (!req.user.isSuperAdmin) {
-    delete req.body.organization.status
     if (req.body.organization.userId !== req.user.id) {
       return next(new UnauthorizedError('User not authorized to update organization'))
     }

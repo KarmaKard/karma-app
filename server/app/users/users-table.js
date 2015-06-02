@@ -16,6 +16,19 @@ export function insert (user) {
   })
 }
 
+export function update (organization) {
+  return r.table('organizations')
+    .get(organization.id)
+    .update(organization)
+    .run()
+    .then(results => {
+      if (results.changes) {
+        return results.changes[0]['new_val']
+      }
+      return organization
+    })
+}
+
 export function getByEmail (email) {
   return r.table('users').getAll(email, {index: 'email'}).run()
 }

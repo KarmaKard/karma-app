@@ -1,5 +1,6 @@
 import React from 'react'
 import { flux } from '../../../main'
+import UserSideBar from '../../users/user_sidebar'
 import { Link } from 'react-router'
 
 export default React.createClass({
@@ -19,24 +20,17 @@ export default React.createClass({
   },
 
   render () {
-    var category = this.context.router.getCurrentParams().category
-    var organizationLinks = this.props.organizations
-      .filter(org => org.category === category)
-      .map(this.renderOrganizationLink)
-
     var currentUser = this.props.user
     var organizations = this.props.organizations
+    var category = this.context.router.getCurrentParams().category
 
+    var organizationLinks = organizations
+      .filter(org => org.category === category)
+      .map(this.renderOrganizationLink)
 
     if (!currentUser || organizations.length === 0 ){
       return <p>Wait!</p>
     }
-    var manageLink
-    this.props.organizations.map(function(organization){ 
-       if (organization.userId === currentUser.id){
-          return manageLink = <li><Link to="organizations_user_manages">Manage</Link></li>
-       }
-    })
 
     return (
       <div>
@@ -48,13 +42,7 @@ export default React.createClass({
             </Link>
           </div>
         </div>
-        <div className="side_bar_navigation">
-          <ul className="side_bar_navigation_level1">
-            <li><Link to="account">Account</Link></li>
-            <li><Link to="categories">Deals</Link></li>
-            {manageLink}
-          </ul>
-        </div>
+        <UserSideBar organizations={organizations} user={currentUser} />
         <div className="content_box">
           <div className="content_box-header">{category + " "} Businesses </div>
           <ul>
