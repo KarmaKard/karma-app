@@ -27,14 +27,14 @@ export default React.createClass({
     this.setState({
       newZip: e.target.value
     })
-    if( /(^\d{5}$)|(^\d{5}-\d{4}$)/.test(e.target.value)){
+    if(this.validateZip(e.target.value)){
       React.findDOMNode(this.refs.zip).style.border=""
     }
     React.findDOMNode(this.refs.saveButton).style.border="3px solid rgb(242, 29, 29)"
   },
 
   handleAddNew(){
-    if( !/(^\d{5}$)|(^\d{5}-\d{4}$)/.test(this.state.newZip)){
+    if( !this.validateZip(this.state.newZip)){
       React.findDOMNode(this.refs.zip).style.border="3px solid rgb(242, 29, 29)"
       return
     }
@@ -55,6 +55,10 @@ export default React.createClass({
     React.findDOMNode(this.refs.saveButton).style.border="3px solid rgb(75, 187, 44)"
 
     React.findDOMNode(this.refs.locationInput).focus()
+  },
+
+  validateZip(zipString){
+    return /(^\d{5}$)|(^\d{5}-\d{4}$)/.test(zipString)
   },
 
   render() {
