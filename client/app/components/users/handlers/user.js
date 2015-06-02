@@ -39,7 +39,7 @@ export default React.createClass({
 
   render() {
     var currentUser = this.state.user.currentUser
-    var organizations = this.state.organizations.organizations
+    var organizations = this.state.organizations.organizations || []
 
     if (!currentUser){
       return <p>Authenticating...</p>

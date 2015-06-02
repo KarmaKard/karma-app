@@ -4,6 +4,10 @@ import { Link } from 'react-router'
 
 export default React.createClass({
 
+  defaultProps: {
+    organizations: []
+  },
+
   contextTypes: {
     router: React.PropTypes.func
   },
@@ -34,11 +38,7 @@ export default React.createClass({
       )
     })
 
-    var userManagerCheck = organizations.find(function(organization){
-      if (organization.userId === user.id){
-          return true
-       }
-    })
+    var userManagerCheck = organizations.find(organization => organization.userId === user.id)
     
     if(!userManagerCheck){
       addNewLink = (

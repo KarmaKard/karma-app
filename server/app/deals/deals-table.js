@@ -1,43 +1,29 @@
 import r from '../database'
 
-export function index () {
+export async function index () {
   return r.table('deals').run()
 }
 
-export function insert (deals){
-  return r.table('deals')
-    .insert(deals, {returnChanges: true})
-    .run()
-    .then(results => {
-      if (results.changes) {
-        return results.changes[0]['new_val']
-      }
-      return deal
-    })
+export async function insert (deals) {
+  var results = await r.table('deals').insert(deals, {returnChanges: true}).run()
+  if (results.changes) {
+    return results.changes[0]['new_val']
+  }
+  return deal
 }
 
-export function update (deal) {
-  return r.table('deals')
-    .get(deal.id)
-    .update(deal, {returnChanges: true})
-    .run()
-    .then(results => {
-      if (results.changes) {
-        return results.changes[0]['new_val']
-      }
-      return deal
-    })
+export async function update (deal) {
+  var results = await r.table('deals').get(deal.id).update(deal, {returnChanges: true}).run()
+  if (results.changes) {
+    return results.changes[0]['new_val']
+  }
+  return deal
 }
 
-export function dealDelete (deal) {
-  return r.table('deals')
-    .get(deal.id)
-    .delete({returnChanges: true})
-    .run()
-    .then(results => {
-      if (results.changes) {
-        return results.changes[0]['old_val']
-      }
-      return deal
-    })
+export async function del (deal) {
+  var results = await r.table('deals').get(deal.id).delete({returnChanges: true}).run()
+  if (results.changes) {
+    return results.changes[0]['old_val']
+  }
+  return deal
 }
