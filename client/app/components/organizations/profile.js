@@ -7,6 +7,11 @@ export default React.createClass({
   },
 
   saveProfile(){
+
+    if(React.findDOMNode(this.refs.description).value.length > 150){
+      React.findDOMNode(this.refs.descriptionCharacterCount).style.color="rgb(242, 29, 29)"
+      return
+    }
     var name = React.findDOMNode(this.refs.name).value
     var category = React.findDOMNode(this.refs.category).value
     var description = React.findDOMNode(this.refs.description).value
@@ -21,8 +26,21 @@ export default React.createClass({
     React.findDOMNode(this.refs.saveButton).style.border="3px solid rgb(75, 187, 44)"
   },
 
+  textCounter(){
+    var description = React.findDOMNode(this.refs.description).value
+    React.findDOMNode(this.refs.descriptionCharacterCount).innerHTML = 150 - description.length
+  },
+
   render() {
-  
+    var descriptionCharactersLeft
+    if(this.props.organization){
+      descriptionCharactersLeft = 150 - this.props.organization.description.length
+    }
+    else{
+      descriptionCharactersLeft = 150
+    }
+
+    
     return (
       <div>
         <div className="content_box-header">Profile</div>
@@ -51,11 +69,13 @@ export default React.createClass({
             <option value="Shopping">Shopping</option>
           </select>
           <span className="label-span">Business Description</span>
+          <span ref="descriptionCharacterCount" className="profile_description-counter">{descriptionCharactersLeft}</span>
           <textarea
             ref="description"
             className="karma_input"
             placeholder="Write business description here."
             onChange={this.changeMade}
+            onKeyUp={this.textCounter}
             defaultValue={this.props.organization.description} 
             disabled={this.props.editDisabled}/>
           <span ref="logo" className="label-span"> Business Logo</span>

@@ -8,7 +8,8 @@ export default React.createClass({
 
   getInitialState() {
     return {
-      mismatchPasswords: false
+      mismatchPasswords: false,
+      incorrectEmail: false
     }
   },
 
@@ -28,6 +29,12 @@ export default React.createClass({
         mismatchPasswords: true
       })
     }
+    var emailValidator = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/
+    if(!emailValidator.test(email)){
+      return this.setState({
+        incorrectEmail: true
+      })
+    }
 
     var user = { email, firstName, lastName, password }
     flux.actions.users.create(router, user)
@@ -39,10 +46,15 @@ export default React.createClass({
       ? <div className="error-message">Mismatched Passwords</div>
       : null
 
+    var incorrectEmail = this.state.incorrectEmail
+      ? <div className="error-message">Not An Email Format</div>
+      : null
+
     return (
       <div className="register" >
         <div className="content_box-header">Register</div>
         {mismatchPasswords}
+        {incorrectEmail}
         <form>
           <input type="text" ref="registerFirstName" className="karma_input" placeholder="First Name" />
           <input type="text" ref="registerLastName" className="karma_input" placeholder="Last Name" />

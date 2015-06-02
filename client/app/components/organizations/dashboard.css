@@ -57,3 +57,8 @@
   color: black;
   background: white;
 }
+
+.profile_description-counter {
+  float: right;
+  margin: 0;
+}

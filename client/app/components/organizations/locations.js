@@ -27,10 +27,17 @@ export default React.createClass({
     this.setState({
       newZip: e.target.value
     })
+    if( /(^\d{5}$)|(^\d{5}-\d{4}$)/.test(e.target.value)){
+      React.findDOMNode(this.refs.zip).style.border=""
+    }
     React.findDOMNode(this.refs.saveButton).style.border="3px solid rgb(242, 29, 29)"
   },
 
   handleAddNew(){
+    if( !/(^\d{5}$)|(^\d{5}-\d{4}$)/.test(this.state.newZip)){
+      React.findDOMNode(this.refs.zip).style.border="3px solid rgb(242, 29, 29)"
+      return
+    }
     var newLocation = {
       street: this.state.newStreet,
       zip: this.state.newZip,
@@ -85,6 +92,7 @@ export default React.createClass({
             disabled={this.props.editDisabled}/>
           <input 
             type="text" 
+            ref="zip" 
             className="zip_input karma_input " 
             placeholder="Zip" 
             value={this.state.newZip} 
