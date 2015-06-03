@@ -33,7 +33,7 @@ export default React.createClass({
 
   render() {
     var descriptionCharactersLeft
-    if(this.props.organization){
+    if(this.props.organization.description){
       descriptionCharactersLeft = 150 - this.props.organization.description.length
     }
     else{

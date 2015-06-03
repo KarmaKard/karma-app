@@ -32,6 +32,14 @@ export default class UserActions extends Actions {
     }).catch(this.createError)
   }
 
+  update(user) {
+    KarmaAPI.updateUser(user).then(user => {
+      if (user) {
+        this.dispatch('update', user)
+      }
+    })
+  }
+
   createError(error) {
     console.warn(error)
     this.dispatch('createError', error)

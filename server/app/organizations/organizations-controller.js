@@ -22,7 +22,7 @@ export async function create (req, res, next) {
     var organizationToSave = req.body.organization
     organizationToSave.userId = req.user.id
     var organization = await organizationsTable.insert(organizationToSave)
-    res.json({organization: data})
+    res.json({organization: organization})
   } catch (e) {
     next(e)
   }

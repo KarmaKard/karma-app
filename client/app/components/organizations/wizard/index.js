@@ -18,7 +18,14 @@ export default React.createClass({
       category: null,
       logoURL: null,
       step: 1,
-      status: "created"
+      status: "inactive",
+      user: {}
+    }
+  },
+
+  componentWillMount() {
+    if(this.props.user){
+      this.setState({user: this.props.user})
     }
   },
 
@@ -36,11 +43,26 @@ export default React.createClass({
 
   setCategory(category){
     var { router } = this.context
-    this.setState({category, step: this.state.step + 1}, () => {
+    var user = this.state.user
+    if(user.role === "customer"){
+      user.role = "manager"
+    }
+
+    this.setState({category, step: this.state.step + 1, user}, () => {
       //This is temporary skip of Logo Upoad portion and assumes
       //that we will have logo upload complete before fundraisers 
       //begin signing up. Remove once Logo Upload is complete
-      flux.actions.organizations.create(router, this.state) 
+      flux.actions.users.update(user)
+
+      var organization = {
+        type: this.state.type,
+        name: this.state.name,
+        category: this.state.category,
+        logoURL: this.state.logoURL,
+        status: this.state.status
+      }
+
+      flux.actions.organizations.create(router, organization)
     })
 
   },

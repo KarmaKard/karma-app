@@ -47,6 +47,23 @@ export function postNewUser (user) {
   })
 }
 
+export function updateUser (user) {
+  return new Promise((resolve, reject) =>{
+    request
+      .put(REGISTER_URL + "/" + user.id)
+      .send({user})
+      .set('token', token)
+      .end((err, res) => {
+        if(err) {
+          return reject(err)
+        }
+        resolve(res.body.user)
+      })
+  })
+}
+
+
+
 export function postNewOrganization (organization) {
   return new Promise((resolve, reject) => {
     request

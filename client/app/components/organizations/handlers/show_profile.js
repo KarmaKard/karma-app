@@ -1,7 +1,7 @@
 import React from 'react'
 import { flux } from '../../../main'
 import { Link } from 'react-router'
-
+import UserSideBar from '../../users/user_sidebar'
 export default React.createClass({
 
   render() {
@@ -13,16 +13,16 @@ export default React.createClass({
       return <li className="dealButton">{location.street + " " + location.zip}</li>
     })
 
-    var currentUser = this.props.user
+    var user = this.props.user
     var organizations = this.props.organizations
 
 
-    if (!currentUser || organizations.length === 0 ){
+    if (!user || organizations.length === 0 ){
       return <p>Wait!</p>
     }
     var manageLink
     this.props.organizations.map(function(organization){ 
-       if (organization.userId === currentUser.id){
+       if (organization.userId === user.id){
           return manageLink = <li><Link to="organizations_user_manages">Manage</Link></li>
        }
     })
@@ -30,20 +30,14 @@ export default React.createClass({
     return (
       <div>
           <div className="page_header">
-          <div className="page_header_title">{currentUser.firstName} </div>
+          <div className="page_header_title">{user.firstName} </div>
           <div className="page_header_link">
             <Link to="root">
               Log Out
             </Link>
           </div>
         </div>
-        <div className="side_bar_navigation">
-          <ul className="side_bar_navigation_level1">
-            <li><Link to="account">Account</Link></li>
-            <li><Link to="categories">Deals</Link></li>
-            {manageLink}
-          </ul>
-        </div>
+        <UserSideBar organizations={organizations} user={user} />
         <div className="content_box">
           <div className="organization_information" >
             <h1>{this.props.organization.name}</h1>

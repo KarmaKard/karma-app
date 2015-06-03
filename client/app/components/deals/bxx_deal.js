@@ -52,7 +52,7 @@ export default React.createClass({
       <div className="bxx_deal">
         <div className="deal_header">
           Buy X Get X
-          <button className="deal-delete" onClick={this.deleteClicked} disabled={this.props.editDisabled}>Delete</button>
+          <button className="deal-delete" onClick={this.deleteClicked} hidden={this.props.editDisabled}>Delete</button>
         </div>
         <div className="deal_contents">
           <div className="deal-row">

@@ -10,7 +10,7 @@ export default React.createClass({
           <div className="page_header_title">KarmaKard</div>
         </div>
         <div className="content_box">
-          <Wizard />
+          <Wizard user={this.props.user}/>
         </div>
       </div>
     )     

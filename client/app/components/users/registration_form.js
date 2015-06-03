@@ -23,6 +23,7 @@ export default React.createClass({
     var lastName = React.findDOMNode(this.refs.registerLastName).value
     var password = React.findDOMNode(this.refs.registerPassword).value
     var passwordConfirm = React.findDOMNode(this.refs.registerPasswordConfirm).value
+    var role = "customer"
 
     if (password !== passwordConfirm) {
       return this.setState({
@@ -36,7 +37,7 @@ export default React.createClass({
       })
     }
 
-    var user = { email, firstName, lastName, password }
+    var user = { email, firstName, lastName, password, role }
     flux.actions.users.create(router, user)
     React.findDOMNode(this.refs.button).disabled = false
   },

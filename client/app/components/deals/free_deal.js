@@ -43,7 +43,7 @@ export default React.createClass({
     return(
       <div className="free_deal">
         <div className="deal_header">Free Deal
-          <button className="deal-delete" onClick={this.deleteClicked} disabled={this.props.editDisabled}>Delete</button>
+          <button className="deal-delete" onClick={this.deleteClicked} hidden={this.props.editDisabled}>Delete</button>
         </div>
 
           <div className="deal_contents">

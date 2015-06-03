@@ -4,7 +4,6 @@ import { Link } from 'react-router'
 
 export default React.createClass({
     renderOrganizationLink (organization, i) {
-      console.log(organization)
     return (
       <li key={i}>
         <Link to="organization_user_manages" params={{organizationId: organization.id}}>
