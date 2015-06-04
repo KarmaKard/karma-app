@@ -34,24 +34,46 @@ export default React.createClass({
   },
 
   setName(name){
-    var newState = { name, step: this.state.step + 1 }
     if(this.state.type === 'fundraiser'){
-      newState.category = 'fundraiser'
+      var { router } = this.context
+      var user = this.state.user
+      
+      if(user.role === "customer"){
+        user.role = "manager"
+      }
+
+      flux.actions.users.update(user)
+
+      var organization = {
+        type: 'fundraiser',
+        name,
+        category: 'fundraiser',
+        logoURL: this.state.logoURL,
+        status: this.state.status,
+        teamMembers: []
+      }
+
+      flux.actions.organizations.create(router, organization)
     }
-    this.setState(newState)
+    else{
+      var newState = { name, step: this.state.step + 1 }
+      this.setState(newState)
+    }
+    
   },
 
   setCategory(category){
     var { router } = this.context
     var user = this.state.user
-    if(user.role === "customer"){
-      user.role = "manager"
-    }
 
     this.setState({category, step: this.state.step + 1, user}, () => {
       //This is temporary skip of Logo Upoad portion and assumes
       //that we will have logo upload complete before fundraisers 
       //begin signing up. Remove once Logo Upload is complete
+      if(user.role === "customer"){
+        user.role = "manager"
+      }
+
       flux.actions.users.update(user)
 
       var organization = {

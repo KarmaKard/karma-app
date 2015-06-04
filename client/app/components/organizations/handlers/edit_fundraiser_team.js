@@ -3,6 +3,6 @@ import Team from '../fundraiser_team'
 
 export default React.createClass({
   render() {
-    return <Team />
+    return <Team {... this.props}/>
   }
 })
