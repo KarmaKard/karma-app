@@ -23,7 +23,7 @@ export default React.createClass({
 
   confirmOrganization(){
     var organization = this.state.organization
-    organization.status = "confirmactive"
+    organization.status = "active"
 
     this.props.updateOrganization(organization)
   },

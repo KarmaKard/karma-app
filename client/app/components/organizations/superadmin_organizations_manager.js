@@ -13,10 +13,9 @@ export default React.createClass({
     )
   },
   render() {
-
     var user = this.props.user
 
-     var inactiveLinks = this.props.organizations
+    var inactiveLinks = this.props.organizations
     .filter(org => org.status === "inactive")
     .map(this.renderOrganizationLink)
 

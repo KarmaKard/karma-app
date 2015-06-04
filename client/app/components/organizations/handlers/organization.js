@@ -9,12 +9,6 @@ export default React.createClass({
   },
 
   updateOrganization(organization) {
-    if(organization.status === "active"){
-      organization.status = "inactive"
-    }
-    else if(organization.status === "confirmactive"){
-      organization.status ="active"
-    }
     flux.actions.organizations.updateOrganization(organization)
   },
 

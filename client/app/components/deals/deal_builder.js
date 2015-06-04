@@ -21,7 +21,13 @@ export default React.createClass({
     if(this.props.editDisabled === null){
       return null
     }
-    var editDisabled  = this.props.organization.status === "active" || this.props.user.role === "superadmin" ? true : false
+    var editDisabled  = 
+      this.props.organization.status === "active" || 
+      this.props.organization.status === "pending" || 
+      this.props.user.role === "superadmin" 
+      ? true 
+      : false
+
     this.setState({editDisabled})
   },
 
@@ -54,10 +60,6 @@ export default React.createClass({
   },
 
   lookupDeal(deal, i) {
-    var editDisabled  = this.props.organization.status === "active"
-                        ? true
-                        : false
-
     switch(deal.type) {
       case "Free":
         return <FreeDeal key={i} saveDeal={this.saveDeal} deal={deal} editDisabled={this.state.editDisabled} changeMade={this.changeMade}/>
