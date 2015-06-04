@@ -3,4 +3,4 @@
   remote_user: root
 
   roles:
-    - { role: provision, tags: ["provision"] }
+    - { role: lock_ssh, tags: ["ssh"] }

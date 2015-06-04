@@ -1,11 +1,14 @@
 ---
+- name: Load the Secrets
+  include_vars: machine_secrets.yml
+
 - name: Install Vim
   yum: name=vim state=latest
 
 - name: Install IPTables Service
   yum: name=iptables-services state=latest
 
-- name: Build iptables configuration
+- name: Set iptables configuration
   copy: src=iptables
         dest=/etc/sysconfig/iptables
   notify: restart iptables
@@ -13,11 +16,20 @@
 - name: Ensure iptables is started and enabled on boot
   service: name=iptables state=started enabled=yes
 
+- name: Set Timezone to US Mountain
+  file: src=/usr/share/zoneinfo/US/Mountain
+        dest=/etc/localtime
+        state=link
+        force=true
+
 - name: Add karma group
   group: name=karma
 
 - name: Add rethink group
   group: name=rethink
+
+- name: Add user tgroshon
+  user: name=tgroshon group=wheel password={{ tgroshon_pass }}
 
 - name: Add karma user for running the app
   user: name=karma group=karma
