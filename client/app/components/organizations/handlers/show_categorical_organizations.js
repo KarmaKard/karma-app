@@ -10,6 +10,7 @@ export default React.createClass({
   },
 
   renderOrganizationLink (organization, i) {
+    if(organization.status !== "active"){ return }
     return (
       <li className="organization_list-item" key={i}>
         <Link to="organization" params={{organizationId: organization.id}}>

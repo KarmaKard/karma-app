@@ -62,3 +62,25 @@
   float: right;
   margin: 0;
 }
+
+.deal-button {
+  padding: 20px 5px 20px 0;
+}
+
+.deal_list {
+  padding: 20px 0;
+}
+
+.deals_header {
+  width: 100%;
+}
+
+.deals_description {
+  float:left;
+  width: 80%
+}
+.deals_limit {
+  float:right;
+  width: 20%;
+  text-align: center;
+}

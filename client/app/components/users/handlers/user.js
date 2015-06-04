@@ -13,6 +13,7 @@ export default React.createClass({
     if (storeState.organizations.organizations.length === 0){
       flux.actions.organizations.getOrganizations()
       flux.actions.organizations.getLocations()
+      flux.actions.deals.getRedemptions()
       flux.actions.deals.getDeals()
     }
     return storeState
@@ -25,7 +26,8 @@ export default React.createClass({
   getStoreState() {
     return {
       organizations: flux.stores.organizations.getState(),
-      user: flux.stores.users.getState()
+      user: flux.stores.users.getState(),
+      deals: flux.stores.deals.getState()
     }
   },
 
@@ -40,6 +42,13 @@ export default React.createClass({
   render() {
     var currentUser = this.state.user.currentUser
     var organizations = this.state.organizations.organizations || []
+    var redemptions = this.state.deals.redemptions
+    var totalSaved = redemptions.reduce( function(a, b){
+      if (b["userId"] === currentUser.id){
+          return a + parseFloat(b["amountSaved"])
+      }
+      return a
+    }, 0)
 
     if (!currentUser){
       return <p>Authenticating...</p>
@@ -66,7 +75,7 @@ export default React.createClass({
           </ul>
         </div>
         <div className="content_box">
-          <RouteHandler user={currentUser} />
+          <RouteHandler user={currentUser} totalSaved={totalSaved}/>
         </div>
       </div>
     )

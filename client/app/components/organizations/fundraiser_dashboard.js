@@ -29,27 +29,35 @@ export default React.createClass({
   },
 
   render() {
-    var addLocations, addDeals, addKeywords, submitButton
+
+    var addTeamMembers, organizationDescription, organizationPurpose, submitButton
     var message = "You have some task(s) remaining before your business can be reviewed:"
-    if(this.props.initialLocations.length === 0){addLocations = <li><Link to="edit_locations" params={{organizationId: this.props.organization.id}}>Add location(s)</Link></li>}
-    if(this.props.deals.length >= 2){
-      var freeDealExists
-      this.props.deals.forEach(function(deal){
-        if(deal.type === "Free"){
-          freeDealExists = true
-        }
-      })
-      if(freeDealExists !== true){
-        addDeals = <li><Link to="edit_deals" params={{organizationId: this.props.organization.id}}>Add deal(s)</Link></li>
-      }
+    if(!this.props.organization.teamMembers || this.props.organization.teamMembers.length === 0){
+      addTeamMembers = 
+        <li>
+          <Link to="edit_fundraiser_team" params={{organizationId: this.props.organization.id}}>
+            Add team member(s)
+          </Link>
+        </li>
     }
-    else{
-      addDeals = <li><Link to="edit_deals" params={{organizationId: this.props.organization.id}}>Add deal(s)</Link></li>
+    if(!this.props.organization.description){
+      organizationDescription = 
+        <li>
+          <Link to="edit_profile" params={{organizationId: this.props.organization.id}}>
+            Add profile description
+          </Link>
+        </li>
+    }
+    if(!this.props.organization.purpose){
+      organizationPurpose = 
+        <li>
+          <Link to="edit_profile" params={{organizationId: this.props.organization.id}}>
+            Add profile purpose
+          </Link>
+        </li>
     }
 
-    if(!this.props.organization.keywords){addKeywords = <li><Link to="edit_keywords" params={{organizationId: this.props.organization.id}}>Add keyword(s)</Link></li>}
-
-    if(!addDeals && !addKeywords && !addLocations){
+    if(!organizationDescription && !organizationPurpose && !addTeamMembers){
       message = "All required information has been completed. Please thoroughly review your information before you submit this business to be reviewed."
       submitButton = <button onClick={this.submitToReview} className="karma_button">Submit for Review</button>
     }
@@ -68,7 +76,6 @@ export default React.createClass({
       submitButton = null
     }
 
-    
     return (
       <div>
         <div className="content_box-header">
@@ -78,9 +85,9 @@ export default React.createClass({
           {message}
         </p>
         <ul className="toDoList">
-          {addLocations}
-          {addDeals}
-          {addKeywords}
+          {addTeamMembers}
+          {organizationDescription}
+          {organizationPurpose}
         </ul>
         {submitButton}
       </div>

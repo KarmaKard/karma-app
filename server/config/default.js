@@ -15,6 +15,9 @@ module.exports = {
   token: {
     secret: process.env.TOKEN_SECRET || 'asdo98hf2p23iupavgaw4r9ahwefo813bcp9'
   },
+  stripe: {
+    token: process.env.STRIPE_TOKEN
+  },
   cors: {
     whitelist: [
       'http://localhost:4200'

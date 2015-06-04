@@ -34,12 +34,11 @@ export default React.createClass({
         name,
         category: 'fundraiser',
         logoURL: this.state.logoURL,
-        status: this.state.status
+        status: this.state.status,
+        teamMembers: []
       }
 
-      var { router } = this.context
       flux.actions.organizations.create(router, organization)
-
     }
     else{
       var newState = { name, step: this.state.step + 1 }

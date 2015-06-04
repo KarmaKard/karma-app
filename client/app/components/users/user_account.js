@@ -9,6 +9,8 @@ export default React.createClass({
           Account
         </div>
         <div>
+        <h3>You have saved ${this.props.totalSaved}!</h3>
+        <br/>
           <label>
             Email
             <input

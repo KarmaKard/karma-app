@@ -4,6 +4,7 @@ import validateCreate from './validators/validate-create'
 import validateUpdate from './validators/validate-update'
 import * as usersTable from './../users/users-table'
 import * as auth from '../common/middleware/authentication'
+import * as stripe from '../common/services/stripe'
 
 export var router = express.Router()
 
@@ -25,7 +26,8 @@ export async function create (req, res, next) {
       user.role = "manager"
       user = await usersTable.update(user)
     }
-    
+
+    var stripeAccount = stripe.createAccount()
     var organizationToSave = req.body.organization
     organizationToSave.userId = req.user.id
     var organization = await organizationsTable.insert(organizationToSave)

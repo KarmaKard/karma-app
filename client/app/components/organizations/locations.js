@@ -62,13 +62,7 @@ export default React.createClass({
   },
 
   render() {
-    var locationArray
-    if(this.state.locations.length === 0) {
-      locationArray = this.props.initialLocations
-    }
-    else{
-      locationArray = this.state.locations
-    }
+    var locationArray = this.state.locations.length === 0 ? this.props.initialLocations : this.state.locations
 
     var listItems = locationArray.map((location, index) => {
       return (

@@ -17,12 +17,13 @@ export default React.createClass({
     var organization = this.props.organizations.filter(org => org.id === orgId)[0]
     var deals = this.props.deals.filter(deals => deals.organizationId === orgId)
     var locations = this.props.locations.filter(locations => locations.organizationId === orgId)
+    var redemptions = this.props.redemptions.filter(redemptions => redemptions.organizationId === orgId)
     if (!organization) {
       return <p>Organization Not Found</p>
     }
     return (
       <div>
-        <RouteHandler organization={organization} organizations={this.props.organizations} user={this.props.user} deals={deals} locations={locations} updateOrganization={this.updateOrganization} />
+        <RouteHandler organization={organization} organizations={this.props.organizations} user={this.props.user} deals={deals} locations={locations} redemptions={redemptions} updateOrganization={this.updateOrganization} />
       </div>
     )
   }

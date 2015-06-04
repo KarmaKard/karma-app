@@ -1,9 +1,12 @@
 import React from 'react'
-import Dashboard from '../dashboard'
+import BusinessDashboard from '../business_dashboard'
+import FundraiserDashboard from '../fundraiser_dashboard'
 
 export default React.createClass({
-
   render() {
-    return <Dashboard {...this.props} />
+    var dashboardType = this.props.organization.type === "business"
+    ? <BusinessDashboard {...this.props} />
+    : <FundraiserDashboard {...this.props} />
+    return dashboardType
   }
 })

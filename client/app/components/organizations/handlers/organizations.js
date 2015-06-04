@@ -15,6 +15,7 @@ export default React.createClass({
     }
     if (storeState.dealsStoreState.deals.length === 0){
       flux.actions.deals.getDeals()
+      flux.actions.deals.getRedemptions()
     }
     return storeState
   },
@@ -47,6 +48,7 @@ export default React.createClass({
     var currentUser = this.state.usersStoreState.currentUser
     var deals = this.state.dealsStoreState.deals
     var locations = this.state.organizationsStoreState.locations
+    var redemptions = this.state.dealsStoreState.redemptions
 
     if (!currentUser) {
       return <span>Authenticating...</span>
@@ -54,7 +56,7 @@ export default React.createClass({
 
     return (
       <div>
-        <RouteHandler organizations={organizations} user={currentUser} locations={locations} deals={deals} />
+        <RouteHandler organizations={organizations} user={currentUser} locations={locations} deals={deals} redemptions={redemptions} />
       </div>
     )
   }
