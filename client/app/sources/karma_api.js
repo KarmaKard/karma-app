@@ -74,7 +74,7 @@ export function postNewOrganization (organization) {
         if(err) {
           return reject(err)
         }
-        resolve(res.body.organization)
+        resolve(res.body)
       })
   })
 }

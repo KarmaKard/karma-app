@@ -6,13 +6,9 @@ export default React.createClass({
   render(){
     var currentUser = this.props.user
     var organizations = this.props.organizations
-    var manageLink
-
-    organizations.map(function(organization){ 
-       if (currentUser.role === "manager" || currentUser.role === "superadmin"){
-          return manageLink = <li><Link to="organizations_user_manages">Manage</Link></li>
-       }
-    })
+    var manageLink = currentUser.role === "manager" || currentUser.role === "superadmin" 
+      ? <li><Link to="organizations_user_manages">Manage</Link></li>
+      : null
     
     return(
      <div className="side_bar_navigation">
