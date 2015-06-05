@@ -20,7 +20,7 @@ export default React.createClass({
   },
 
   render () {
-    var currentUser = this.props.user
+    var user = this.props.user
     var organizations = this.props.organizations
     var category = this.context.router.getCurrentParams().category
 
@@ -28,21 +28,21 @@ export default React.createClass({
       .filter(org => org.category === category)
       .map(this.renderOrganizationLink)
 
-    if (!currentUser || organizations.length === 0 ){
+    if (!user || organizations.length === 0 ){
       return <p>Wait!</p>
     }
 
     return (
       <div>
         <div className="page_header">
-          <div className="page_header_title">{currentUser.firstName} </div>
+          <div className="page_header_title">{user.firstName} </div>
           <div className="page_header_link">
             <Link to="root">
               Log Out
             </Link>
           </div>
         </div>
-        <UserSideBar organizations={organizations} user={currentUser} />
+        <UserSideBar organizations={organizations} user={user} />
         <div className="content_box">
           <div className="content_box-header">{category + " "} Businesses </div>
           <ul>

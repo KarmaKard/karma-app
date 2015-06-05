@@ -1,6 +1,7 @@
 import React from 'react'
 import { flux } from '../../../main'
 import { Link } from 'react-router'
+import UserSideBar from '../../users/user_sidebar'
 
 export default React.createClass({
 
@@ -13,9 +14,6 @@ export default React.createClass({
   },
   
   render(){
-    var addNewLink=null
-    var manageLink=null
-
     var user = this.props.user
     var organizations = this.props.organizations
     var distinctCategories = []
@@ -38,9 +36,9 @@ export default React.createClass({
       )
     })
 
-    var userManagerCheck = organizations.find(organization => organization.userId === user.id)
-    
-    if(!userManagerCheck){
+    var addNewLink=null
+
+    if(user.role !== "manager" && user.role !== "superadmin"){
       addNewLink = (
         <div>
           <hr />
@@ -50,9 +48,6 @@ export default React.createClass({
           </Link>
         </div>
       )
-    }
-    else{
-      manageLink = <li><Link to="organizations_user_manages">Manage</Link></li>
     }
 
     return (
@@ -65,13 +60,7 @@ export default React.createClass({
               </Link>
             </div>
           </div>
-          <div className="side_bar_navigation">
-            <ul className="side_bar_navigation_level1">
-              <li><Link to="account">Account</Link></li>
-              <li><Link to="categories">Deals</Link></li>
-              {manageLink}
-            </ul>
-          </div>
+          <UserSideBar organizations={organizations} user={user} />
           <div className="content_box">
             <div className="content_box-header">
               Deal Categories

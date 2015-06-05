@@ -13,37 +13,38 @@ export default React.createClass({
     )
   },
   render() {
-
     var user = this.props.user
 
-     var createdLinks = this.props.organizations
-    .filter(org => org.status === "created")
+    var inactiveLinks = this.props.organizations
+    .filter(org => org.status === "inactive")
     .map(this.renderOrganizationLink)
 
     var reviewLinks = this.props.organizations
-      .filter(org => org.status === "review")
+      .filter(org => org.status === "pending")
+      .map(this.renderOrganizationLink)
+
+    var activeLinks = this.props.organizations
+      .filter(org => org.status === "active")
       .map(this.renderOrganizationLink)
 
     return(
       <div>
           <div className="content_box-header">
-             Your Organizations
+            Organizations By Status
           </div>
 
-          <h2>Created</h2>
+          <h2>Inactive</h2>
           <ul>
-            {createdLinks}
+            {inactiveLinks}
           </ul>
-          <h2>In Review</h2>
+          <h2>Review</h2>
           <ul>
             {reviewLinks}
           </ul>
-          <div>
-            <hr />
-            <Link to="new_organization" className="create_organization-link">
-              <span className="create_organization-link_span">Add New Organization</span>
-            </Link>
-          </div>
+          <h2>Active</h2>
+          <ul>
+            {activeLinks}
+          </ul>
       </div>
     )
   }

@@ -1,6 +1,7 @@
 import express from 'express'
 import * as usersTable from './users-table'
 import validateCreate from './validators/validate-create'
+import validateUpdate from './validators/validate-update'
 import * as auth from '../common/middleware/authentication'
 import { hash as hashPassword } from '../common/services/passwords'
 import { encode as encodeToken } from '../common/services/token'
@@ -22,7 +23,7 @@ export async function create (req, res, next) {
   try {
     var user = req.body.user
     var hash = await hashPassword(user.password)
-    user.status = "customer"
+    user.role = "customer"
     delete user.password
     user.hash = hash
     user.created_at = Date.now()
@@ -35,7 +36,7 @@ export async function create (req, res, next) {
   }
 }
 
-router.put('/:userId', auth.token, validateUpdate, update)
+router.put('/:userId', validateUpdate, update)
 export function update (req, res, next) {
   var pUser = usersTable.update(req.body.user)
   pUser.then(user => {

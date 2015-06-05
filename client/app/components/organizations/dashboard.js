@@ -3,10 +3,28 @@ import { flux } from '../../main'
 import { Link } from 'react-router'
 
 export default React.createClass({
+  getInitialState() {
+    return {
+      organization: {}
+    }
+  },
+
+  componentWillMount() {
+    if(this.props.organization){
+      this.setState({organization: this.props.organization})
+    }
+  },
 
   submitToReview(){
-    var organization = this.props.organization
-    organization.status = "review"
+    var organization = this.state.organization
+    organization.status = "pending"
+    this.props.updateOrganization(organization)
+  },
+
+  confirmOrganization(){
+    var organization = this.state.organization
+    organization.status = "active"
+
     this.props.updateOrganization(organization)
   },
 
@@ -36,10 +54,20 @@ export default React.createClass({
       submitButton = <button onClick={this.submitToReview} className="karma_button">Submit for Review</button>
     }
 
-    if(this.props.editDisabled){
+    if(this.props.organization.status === "pending" && this.props.user.role === "superadmin"){
+      message = "Please Review this organization and Click the button to authorize their deals on our app."
+      submitButton = <button onClick={this.confirmOrganization} className="karma_button">Confirm This Business</button>
+    }
+    else if(this.props.organization.status === "pending"){
       message = "Your Organization is now being reviewed. Do not change any of the information you have already submitted."
       submitButton = null
     }
+
+    if(this.props.organization.status === "active"){
+      message = "Your Organization is now active! Any changes you make to your information will require another review."
+      submitButton = null
+    }
+
     
     return (
       <div>

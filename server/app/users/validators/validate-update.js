@@ -10,8 +10,7 @@ export default function validateUpdate (req, res, next) {
   req.checkBody(['user', 'firstName'], 'User firstName is required').notEmpty()
   req.checkBody(['user', 'lastName'], 'User lastName is required').notEmpty()
   req.checkBody(['user', 'email'], 'User email is required').notEmpty()
-  req.checkBody(['user', 'password'], 'User password is required').notEmpty()
-  req.checkBody(['user', 'status'], 'User status is required').notEmpty()
+  req.checkBody(['user', 'role'], 'User role is required').notEmpty()
 
 
   next(req.validationErrors() ? new ValidationError(req) : null)

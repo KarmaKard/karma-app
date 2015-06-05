@@ -17,9 +17,15 @@ export default class UserStore extends Store {
     this.handleAction('users.createError', this.storeCreateError)
     this.handleAction('users.loginError', this.storeLoginError)
     this.handleAction('users.clearLoginErrors', this.clearLoginErrors)
+    this.handleAction('users.update', this.handleAuth)
+    this.handleAction('organizations.create', this.createdOrganization)
   }
 
   handleAuth(user) {
+    this.setState({ currentUser: user, authenticated: true })
+  }
+
+  createdOrganization(organization, user){
     this.setState({ currentUser: user, authenticated: true })
   }
 

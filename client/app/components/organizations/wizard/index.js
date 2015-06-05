@@ -16,9 +16,9 @@ export default React.createClass({
       type: null,
       name: null,
       category: null,
-      logoURL: null,
+      logoURL: "http://fake-logo.png",
       step: 1,
-      status: "created"
+      status: "inactive"
     }
   },
 
@@ -27,20 +27,42 @@ export default React.createClass({
   },
 
   setName(name){
-    var newState = { name, step: this.state.step + 1 }
     if(this.state.type === 'fundraiser'){
-      newState.category = 'fundraiser'
+
+      var organization = {
+        type: 'fundraiser',
+        name,
+        category: 'fundraiser',
+        logoURL: this.state.logoURL,
+        status: this.state.status
+      }
+
+      var { router } = this.context
+      flux.actions.organizations.create(router, organization)
+
     }
-    this.setState(newState)
+    else{
+      var newState = { name, step: this.state.step + 1 }
+      this.setState(newState)
+    }
   },
 
   setCategory(category){
     var { router } = this.context
-    this.setState({category, step: this.state.step + 1}, () => {
+
+    this.setState({category}, () => {
       //This is temporary skip of Logo Upoad portion and assumes
       //that we will have logo upload complete before fundraisers 
       //begin signing up. Remove once Logo Upload is complete
-      flux.actions.organizations.create(router, this.state) 
+      var organization = {
+        type: this.state.type,
+        name: this.state.name,
+        category: this.state.category,
+        logoURL: this.state.logoURL,
+        status: this.state.status
+      }
+
+      flux.actions.organizations.create(router, organization)
     })
 
   },
