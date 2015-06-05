@@ -2,11 +2,19 @@ import React from 'react'
 import { flux } from '../../../main'
 import { Link } from 'react-router'
 import UserSideBar from '../../users/user_sidebar'
+
 export default React.createClass({
 
   render() {
-    var deals = this.props.deals.map(function(deal) {
-      return <li className="dealButton">{deal.dealText}</li>
+    var organization = this.props.organization 
+    var deals = this.props.deals.map(function(deal, i) {
+      return ( 
+        <li className="dealButton" key={i}>
+          <Link to="redeem_deal" params={{organizationId: organization.id, dealId: deal.id}}>
+            {deal.dealText}
+          </Link>
+        </li>
+      )
     })
 
     var locations = this.props.locations.map(function(location) {

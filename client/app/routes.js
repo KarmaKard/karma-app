@@ -21,6 +21,8 @@ import EditOrganizationKeywords from './components/organizations/handlers/edit_k
 import EditBusinessDeals from './components/organizations/handlers/edit_business_deals'
 import EditFundraiserTeam from './components/organizations/handlers/edit_fundraiser_team'
 import EditFundraiserBank from './components/organizations/handlers/edit_fundraiser_bank'
+import DealRedemption from './components/organizations/handlers/redeem_deal'
+import RedemptionScreen from './components/organizations/handlers/show_redemption'
 
 var App = React.createClass({
   render() {
@@ -44,6 +46,9 @@ export default (
       <Route name="categorical_organizations" handler={ShowCategoricalOrganizations} path="category/:category" />
       <Route name="organization" handler={Organization} path=":organizationId" >
         <DefaultRoute handler={ShowOrganizationProfile} />
+        <Route name="redeem_deal" handler={DealRedemption} path=":dealId" >
+          <DefaultRoute handler={RedemptionScreen} />
+        </Route>
 
         <Route name="organization_user_manages" handler={OrganizationUserManages} path="manage">
           <DefaultRoute handler={ShowOrganizationDashboard} /> 
