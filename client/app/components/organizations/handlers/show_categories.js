@@ -20,9 +20,9 @@ export default React.createClass({
     var unique = {}
 
     for( var i in organizations ){
-       if( typeof(unique[organizations[i].category]) == "undefined" && organizations[i].category !== undefined){
-        distinctCategories.push(organizations[i].category);
-       }
+      if( (typeof(unique[organizations[i].category]) == "undefined" && organizations[i].category !== undefined && organizations[i].status === "active") ){
+        distinctCategories.push(organizations[i].category)
+      }
        unique[organizations[i].category] = 0;
     }
 

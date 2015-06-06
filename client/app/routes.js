@@ -48,7 +48,7 @@ export default (
       <Route name="categorical_organizations" handler={ShowCategoricalOrganizations} path="category/:category" />
       <Route name="organization" handler={Organization} path=":organizationId" >
         <DefaultRoute handler={ShowOrganizationProfile} />
-        <Route name="redeem_deal" handler={DealRedemption} path=":dealId" >
+        <Route name="redeem_deal" handler={DealRedemption} path="deal/:dealId" >
           <DefaultRoute handler={RedemptionScreen} />
           <Route name="redeem_success" handler={RedemptionSuccess} path="redeemed" />
           <Route name="add_redemptions" handler={AddRedemptions} path="add" />
