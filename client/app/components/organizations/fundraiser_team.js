@@ -13,7 +13,13 @@ export default React.createClass({
 
   componentWillMount() {
     if(this.props.organization){
-      this.setState({teamMembers: this.props.organization.teamMembers, organization: this.props.organization})
+      if(!this.props.organization.teamMembers){
+        this.setState({organization: this.props.organization})
+      }
+      else{
+        console.log(this.props)
+        this.setState({organization: this.props.organization, teamMembers: this.props.organization.teamMembers})
+      }
     }
   },
 
@@ -35,6 +41,7 @@ export default React.createClass({
   },
 
   handleAddNew(){
+
     if( !this.validateEmail(this.state.newEmail)){
       React.findDOMNode(this.refs.email).style.border="3px solid rgb(242, 29, 29)"
       return
@@ -47,7 +54,7 @@ export default React.createClass({
 
     var teamMembers = this.state.teamMembers.concat(newMember)
     var organization = this.state.organization
-    organization.teamMembers = teamMembers 
+    organization.teamMembers = teamMembers
 
     this.setState({
       newName: '',
@@ -67,13 +74,9 @@ export default React.createClass({
   },
 
   render() {
-    var memberArray
-    if(this.state.teamMembers.length === 0) {
-      memberArray = this.props.organization.teamMembers
-    }
-    else{
-      memberArray = this.state.teamMembers
-    }
+    var memberArray = this.state.teamMembers.length === 0
+      ? this.state.teamMembers
+      : this.state.teamMembers
 
     var listItems = memberArray.map((member, index) => {
       return (
