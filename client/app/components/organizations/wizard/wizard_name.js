@@ -10,7 +10,7 @@ export default React.createClass({
 
   render() {
     var orgType = this.props.orgType
-    var capitalizedType = orgType.charAt(0).toUpperCase() + orgType.slice(1)
+    var capitalizedType = orgType === "business" ? "Business" : "Fundraiser"
     return (
       <div>
         <div className="content_box-header">{capitalizedType} Name</div>

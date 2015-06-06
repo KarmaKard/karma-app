@@ -6,12 +6,23 @@ import UserSideBar from '../../users/user_sidebar'
 export default React.createClass({
 
   render() {
+    var redemptions = this.props.redemptions
     var organization = this.props.organization 
     var deals = this.props.deals.map(function(deal, i) {
+      var amountRedeemed = redemptions.filter(function(redemption){
+        return redemption.dealId === deal.id ? redemption : null
+      })
+
+      var redemptionsLeft = deal.limit !== "unlimited" ? deal.limit - amountRedeemed.length : deal.limit
+      var redeemLink = redemptionsLeft === 0 ? "add_redemptions" : "redeem_deal"
+      
       return ( 
-        <li className="dealButton" key={i}>
-          <Link to="redeem_deal" params={{organizationId: organization.id, dealId: deal.id}}>
-            {deal.dealText}
+        <li className="deal-button" key={i}>
+          <Link to={redeemLink} params={{organizationId: organization.id, dealId: deal.id}}>
+            <div>
+              <div className="deals_description">{deal.dealText}</div>
+              <div className="deals_limit">{redemptionsLeft}</div>
+            </div>
           </Link>
         </li>
       )
@@ -23,7 +34,6 @@ export default React.createClass({
 
     var user = this.props.user
     var organizations = this.props.organizations
-
 
     if (!user || organizations.length === 0 ){
       return <p>Wait!</p>
@@ -52,8 +62,11 @@ export default React.createClass({
             <p>{this.props.organization.category}</p>
           </div>
           <div className="business_deals" >
-          <h2>Deals</h2>
-            <ul>
+            <div className="deals_header" >
+              <h2 className="deals_description">Deals</h2> 
+              <h2 className="deals_limit">Limit</h2>
+            </div>
+            <ul className="deal_list">
               {deals}
             </ul>
           </div>
