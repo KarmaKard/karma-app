@@ -51,6 +51,28 @@ export default class DealActions extends Actions {
     }).catch(this.deleteError)
   }
 
+  createRedemption(router, redemptionData) {
+    KarmaAPI.postNewRedemption(redemptionData).then(redemption => {
+      if (redemption) {
+        this.dispatch('createRedemption', redemption)
+        return router.transitionTo('redeem_success', {organizationId: redemption.organizationId, dealId: redemption.dealId})
+      }
+      console.warn('Redemption was not returned from createRedemption')
+    }).catch(this.createError)
+  }
+
+  getRedemptions(){
+    var p = KarmaAPI.getRedemptions()
+      p.then(redemptions => {
+        if (redemptions) {
+          this.dispatch('getRedemptions', redemptions)
+        }
+        else{
+          console.warn('No Redemptions Returned')
+        }
+      }).catch(this.createError)
+  }
+
   createError(error) {
     console.warn(error)
     this.dispatch('createError', error)

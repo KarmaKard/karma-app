@@ -1,5 +1,5 @@
 import React from 'react'
-import Redemption from '../redemption'
+import AddRedemptions from '../add_redemptions'
 import UserSideBar from '../../users/user_sidebar'
 import Router, { Link } from 'react-router'
 
@@ -18,10 +18,9 @@ export default React.createClass({
           <Link to="organization" params={{organizationId: organization.id, dealId: dealId}}>
             <button className="back_button">Go Back</button>
           </Link>
-        <div className="content_box-header">Redemption</div>
-        <Redemption {... this.props} />
+          <div className="content_box-header">Add Redemptions</div>
+            <AddRedemptions {... this.props} />
       </div>
     )
-    
   }
 })

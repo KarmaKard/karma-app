@@ -8,7 +8,8 @@ export default function validateCreate (req, res, next) {
   }
   req.checkBody(['redemption', 'userId'], 'userId is required').notEmpty()
   req.checkBody(['redemption', 'dealId'], 'dealId is required').notEmpty()
-  req.checkBody(['redemption', 'code'], 'code is required').notEmpty()
+  req.checkBody(['redemption', 'organizationId'], 'organizationId is required').notEmpty()
+  req.checkBody(['redemption', 'amountSaved'], 'amountSaved is required').notEmpty()
   
   next(req.validationErrors() ? new ValidationError(req) : null)
 }

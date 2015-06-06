@@ -8,6 +8,7 @@ const ORGANIZATIONS_URL = BASE_URL + '/api/v1/organizations'
 const MANAGE_ORGANIZATIONS_URL = ORGANIZATIONS_URL + '/manage'
 const DEALS_URL = BASE_URL + '/api/v1/deals'
 const LOCATIONS_URL = BASE_URL + '/api/v1/locations' 
+const REDEMPTIONS_URL = BASE_URL + '/api/v1/redemptions' 
 
 
 var token = window.localStorage.getItem('karma-token')
@@ -225,5 +226,34 @@ export function deleteDeal(deal) {
         resolve(res.body.deal)
       })
 
+  })
+}
+
+export function postNewRedemption(redemption) {
+  return new Promise ((resolve, reject) =>
+    request
+      .post(REDEMPTIONS_URL)
+      .send({redemption})
+      .set('token', token)
+      .end((err, res) => {
+        if(err) {
+          return reject(err)
+        }
+        resolve(res.body.redemption)
+      })
+  )
+}
+
+export function getRedemptions () {
+  return new Promise((resolve, reject) => {
+    request
+      .get(REDEMPTIONS_URL)
+      .set('token', token)
+      .end((err, res) => {
+        if(err) {
+          return reject(err)
+        }
+        resolve(res.body.redemptions)
+      })
   })
 }

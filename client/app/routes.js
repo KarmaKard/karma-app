@@ -23,6 +23,8 @@ import EditFundraiserTeam from './components/organizations/handlers/edit_fundrai
 import EditFundraiserBank from './components/organizations/handlers/edit_fundraiser_bank'
 import DealRedemption from './components/organizations/handlers/redeem_deal'
 import RedemptionScreen from './components/organizations/handlers/show_redemption'
+import RedemptionSuccess from './components/organizations/handlers/show_redemption_success'
+import AddRedemptions from './components/organizations/handlers/add_redemptions'
 
 var App = React.createClass({
   render() {
@@ -48,6 +50,8 @@ export default (
         <DefaultRoute handler={ShowOrganizationProfile} />
         <Route name="redeem_deal" handler={DealRedemption} path=":dealId" >
           <DefaultRoute handler={RedemptionScreen} />
+          <Route name="redeem_success" handler={RedemptionSuccess} path="redeemed" />
+          <Route name="add_redemptions" handler={AddRedemptions} path="add" />
         </Route>
 
         <Route name="organization_user_manages" handler={OrganizationUserManages} path="manage">

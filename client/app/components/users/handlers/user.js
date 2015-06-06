@@ -13,6 +13,7 @@ export default React.createClass({
     if (storeState.organizations.organizations.length === 0){
       flux.actions.organizations.getOrganizations()
       flux.actions.organizations.getLocations()
+      flux.actions.deals.getRedemptions()
       flux.actions.deals.getDeals()
     }
     return storeState

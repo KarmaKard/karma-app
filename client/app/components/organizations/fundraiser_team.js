@@ -67,7 +67,6 @@ export default React.createClass({
   },
 
   render() {
-    console.log(this.props.organization)
     var memberArray
     if(this.state.teamMembers.length === 0) {
       memberArray = this.props.organization.teamMembers
