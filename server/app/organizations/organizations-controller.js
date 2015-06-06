@@ -22,6 +22,7 @@ router.post('/', auth.token, validateCreate, create)
 export async function create (req, res, next) {
   try {
     var user = req.user
+    
     if(user.role === "customer"){
       user.role = "manager"
       user = await usersTable.update(user)
