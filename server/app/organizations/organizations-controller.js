@@ -22,6 +22,7 @@ router.post('/', auth.token, validateCreate, create)
 export async function create (req, res, next) {
   try {
     var user = req.user
+    
     if(user.role === "customer"){
       user.role = "manager"
       user = await usersTable.update(user)
@@ -40,7 +41,11 @@ export async function create (req, res, next) {
 router.put('/:orgId', auth.token, validateUpdate, update)
 export async function update (req, res, next) {
   try {
-    var organization = await organizationsTable.update(req.body.organization)
+    var organization = req.body.organization
+    if(organization.status === "active" && organization.type === "fundraiser" && !organization.stripeData){
+      organization.stripeData = await stripe.createAccount()
+    }
+    var organization = await organizationsTable.update(organization)
     res.json({organization})
   } catch (e) {
     next(e)

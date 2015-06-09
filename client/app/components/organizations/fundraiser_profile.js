@@ -58,7 +58,6 @@ export default React.createClass({
   },
 
   render() {
-    
     return (
       <div>
         <div className="content_box-header">Profile</div>

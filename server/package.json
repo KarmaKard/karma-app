@@ -39,6 +39,7 @@
     "multer": "0.1.8",
     "path-to-url": "0.1.0",
     "rethinkdbdash": "2.0.9",
+    "stripe": "^3.3.4",
     "superagent": "1.2.0"
   },
   "devDependencies": {
