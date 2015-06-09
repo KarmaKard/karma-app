@@ -5,34 +5,40 @@ import UserSideBar from '../../users/user_sidebar'
 
 export default React.createClass({
 
-  render() {
+  renderDealLink(deal, i) {
+    var user = this.props.user
     var redemptions = this.props.redemptions
     var organization = this.props.organization 
-    var deals = this.props.deals.map(function(deal, i) {
-      var amountRedeemed = redemptions.filter(function(redemption){
-        return redemption.dealId === deal.id ? redemption : null
-      })
-
-      var redemptionsLeft = deal.limit !== "unlimited" ? deal.limit - amountRedeemed.length : deal.limit
-      var redeemLink = redemptionsLeft === 0 ? "add_redemptions" : "redeem_deal"
-      
-      return ( 
-        <li className="deal-button" key={i}>
-          <Link to={redeemLink} params={{organizationId: organization.id, dealId: deal.id}}>
-            <div>
-              <div className="deals_description">{deal.dealText}</div>
-              <div className="deals_limit">{redemptionsLeft}</div>
-            </div>
-          </Link>
-        </li>
-      )
+   
+    var amountRedeemed = this.props.redemptions.filter(function(redemption){
+      return redemption.dealId === deal.id && redemption.userId === user.id ? redemption : null
     })
+
+    var redemptionsLeft = deal.limit !== "unlimited" ? deal.limit - amountRedeemed.length : deal.limit
+    var redeemLink = redemptionsLeft === 0 ? "add_redemptions" : "redeem_deal"
+    
+    return ( 
+      <li className="deal-button" key={i}>
+        <Link to={redeemLink} params={{organizationId: this.props.organization.id, dealId: deal.id}}>
+          <div>
+            <div className="deals_description">{deal.dealText}</div>
+            <div className="deals_limit">{redemptionsLeft}</div>
+          </div>
+        </Link>
+      </li>
+    )
+  },
+
+  render() {
+    var user = this.props.user
+    var redemptions = this.props.redemptions
+    var organization = this.props.organization 
+    var deals = this.props.deals.map(this.renderDealLink)
 
     var locations = this.props.locations.map(function(location) {
       return <li className="dealButton">{location.street + " " + location.zip}</li>
     })
 
-    var user = this.props.user
     var organizations = this.props.organizations
 
     if (!user || organizations.length === 0 ){

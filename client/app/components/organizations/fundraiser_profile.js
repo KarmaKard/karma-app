@@ -2,6 +2,29 @@ import React from 'react'
 import { flux } from '../../main'
 
 export default React.createClass({
+  getInitialState() {
+    return {
+      descriptionCounter: 150,
+      purposeCounter: 150
+    }
+  },
+
+  componentWillMount(){
+    var descriptionCharactersLeft, purposeCharactersLeft
+    if(this.props.organization.description || this.props.organization.purpose){
+      this.setState({
+        descriptionCounter: 150 - this.props.organization.description.length,
+        purposeCounter: 150 - this.props.organization.purpose.length
+      })
+    }
+    else{
+      this.setState({
+          descriptionCounter: 150,
+          purposeCounter: 150
+      })
+    }
+  },
+
   changeMade(){
     React.findDOMNode(this.refs.saveButton).style.border="3px solid rgb(242, 29, 29)"
   },
@@ -27,24 +50,14 @@ export default React.createClass({
   },
 
   descriptionCounter(e){
-    React.findDOMNode(this.refs.descriptionCharacterCount).innerHTML= 150 - e.target.textLength
+    this.setState({descriptionCounter: 150 - e.target.textLength})
   },
 
   purposeCounter(e){
-    React.findDOMNode(this.refs.purposeCharacterCount).innerHTML= 150 - e.target.textLength
+    this.setState({purposeCounter: 150 - e.target.textLength})
   },
 
   render() {
-    var descriptionCharactersLeft, purposeCharactersLeft
-    if(this.props.organization.description || this.props.organization.purpose){
-      descriptionCharactersLeft = 150 - this.props.organization.description.length
-      purposeCharactersLeft = 150 - this.props.organization.purpose.length
-    }
-    else{
-      descriptionCharactersLeft = 150
-      purposeCharactersLeft = 150
-    }
-
     
     return (
       <div>
@@ -59,7 +72,7 @@ export default React.createClass({
             disabled={this.props.editDisabled} />
 
           <span className="label-span">Fundraiser Description</span>
-          <span ref="descriptionCharacterCount" className="profile_description-counter">{descriptionCharactersLeft}</span>
+          <span ref="descriptionCharacterCount" className="profile_description-counter">{this.state.descriptionCounter}</span>
           <textarea
             ref="description"
             className="karma_input"
@@ -69,7 +82,7 @@ export default React.createClass({
             defaultValue={this.props.organization.description} 
             disabled={this.props.editDisabled}/>
           <span className="label-span">Fundraiser Purpose</span>
-          <span ref="purposeCharacterCount" className="profile_description-counter">{purposeCharactersLeft}</span>
+          <span ref="purposeCharacterCount" className="profile_description-counter">{this.state.purposeCounter}</span>
           <textarea
             ref="purpose"
             className="karma_input"

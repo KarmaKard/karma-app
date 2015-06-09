@@ -28,7 +28,7 @@ export default React.createClass({
 
   setName(name){
     if(this.state.type === 'fundraiser'){
-
+      var { router } = this.context
       var organization = {
         type: 'fundraiser',
         name,

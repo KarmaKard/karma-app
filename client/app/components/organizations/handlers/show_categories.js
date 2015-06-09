@@ -16,21 +16,24 @@ export default React.createClass({
   render(){
     var user = this.props.user
     var organizations = this.props.organizations
-    var distinctCategories = []
-    var unique = {}
+    var isActive = []
+    var uniqueCategory = {}
 
     for( var i in organizations ){
-      if( (typeof(unique[organizations[i].category]) == "undefined" && organizations[i].category !== undefined && organizations[i].status === "active") ){
-        distinctCategories.push(organizations[i].category)
+      if(typeof(uniqueCategory[organizations[i].category]) == "undefined" 
+      && organizations[i].category !== "undefined" 
+      && organizations[i].category !== "fundraiser" 
+      && organizations[i].status === "active" ){
+        isActive.push(organizations[i].category)
+        uniqueCategory[organizations[i].category] = 0
       }
-       unique[organizations[i].category] = 0;
     }
 
-    var existingCategories = distinctCategories.map((category, index) => {
+    var activeCategories = isActive.map((category, index) => {
       return (
         <li className="category_list-item" key={index}>
           <Link to="categorical_organizations" params={{category : category}}>
-            {category}
+            {category} 
           </Link>
         </li>
       )
@@ -66,7 +69,7 @@ export default React.createClass({
               Deal Categories
             </div>
             <ul>
-              {existingCategories}
+              {activeCategories}
             </ul>
             {addNewLink}
           </div>

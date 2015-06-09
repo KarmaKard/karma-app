@@ -5,12 +5,10 @@ var stripe = stripePackage(config.stripe.token)
 
 export async function createAccount (){
   try {
-    return stripe.accounts.create(
-      {
+    return stripe.accounts.create({
         country: "US",
         managed: true
-      }
-    )
+      })
   } catch (e) {
     console.warn("stripe api call: Create did not work")
   }
