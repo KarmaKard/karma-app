@@ -28,7 +28,6 @@ export async function create (req, res, next) {
       user = await usersTable.update(user)
     }
 
-    var stripeAccount = stripe.createAccount()
     var organizationToSave = req.body.organization
     organizationToSave.userId = req.user.id
     var organization = await organizationsTable.insert(organizationToSave)
@@ -41,7 +40,11 @@ export async function create (req, res, next) {
 router.put('/:orgId', auth.token, validateUpdate, update)
 export async function update (req, res, next) {
   try {
-    var organization = await organizationsTable.update(req.body.organization)
+    var organization = req.body.organization
+    if(organization.status === "active" && organization.type === "fundraiser" && !organization.stripeData){
+      organization.stripeData = await stripe.createAccount()
+    }
+    var organization = await organizationsTable.update(organization)
     res.json({organization})
   } catch (e) {
     next(e)

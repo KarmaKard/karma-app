@@ -1,4 +1,4 @@
-var stripe = require('stripe')('sk_test_Y1s7AIm1iosOXbf9SDrhkZPh');
+var stripe = require("stripe")("sk_test_Y1s7AIm1iosOXbf9SDrhkZPh")
 
 export async function createAccount (){
   try {

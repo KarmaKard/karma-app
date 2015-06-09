@@ -28,9 +28,32 @@ export default React.createClass({
     this.props.updateOrganization(organization)
   },
 
+  checkBankInfo () {
+    if(!this.props.organization.bankInfo){
+      return  (  
+        <li>
+          <Link to="edit_fundraiser_bank" params={{organizationId: this.props.organization.id}}>
+            Complete bank information
+          </Link>
+        </li>
+      )         
+    }
+    for (var field in this.props.organization.bankInfo) {
+      if (this.props.organization.bankInfo[field] == null){
+        return  (
+          <li>
+            <Link to="edit_fundraiser_bank" params={{organizationId: this.props.organization.id}}>
+              Complete Bank Information
+            </Link>
+          </li>
+        )
+      }
+    }
+  },
+
   render() {
 
-    var addTeamMembers, organizationDescription, organizationPurpose, submitButton
+    var addTeamMembers, organizationDescription, organizationPurpose, organizationBankInfo, submitButton
     var message = "You have some task(s) remaining before your business can be reviewed:"
     if(!this.props.organization.teamMembers || this.props.organization.teamMembers.length === 0){
       addTeamMembers = 
@@ -56,6 +79,8 @@ export default React.createClass({
           </Link>
         </li>
     }
+
+    organizationBankInfo = this.checkBankInfo()
 
     if(!organizationDescription && !organizationPurpose && !addTeamMembers){
       message = "All required information has been completed. Please thoroughly review your information before you submit this business to be reviewed."
@@ -88,6 +113,7 @@ export default React.createClass({
           {addTeamMembers}
           {organizationDescription}
           {organizationPurpose}
+          {organizationBankInfo}
         </ul>
         {submitButton}
       </div>
