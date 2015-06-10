@@ -28,7 +28,6 @@ export default React.createClass({
     var accountNumber = React.findDOMNode(this.refs.accountNumber).value
     var routingNumber = React.findDOMNode(this.refs.routingNumber).value
     var tosChecked = React.findDOMNode(this.refs.tosCheck).checked ? 1 : 0
-    console.log(tosChecked)
     var bankInfo = {
       firstName, 
       lastName,
@@ -60,9 +59,9 @@ export default React.createClass({
 
     var yearOption = []
     var dayOption = []
-    var thisYear = new Date().getFullYear()
+    var eligibleYear = new Date().getFullYear() - 18
 
-    for (var i = thisYear; i > 1900 + 1; i--) {
+    for (var i = eligibleYear; i > 1900 + 1; i--) {
       yearOption = yearOption.concat(
         <option value={i}>{i}</option>
         )

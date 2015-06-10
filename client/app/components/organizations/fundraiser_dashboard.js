@@ -21,6 +21,13 @@ export default React.createClass({
     this.props.updateOrganization(organization)
   },
 
+  rejectOrganization(){
+    var organization = this.state.organization
+    organization.status = "inactive"
+
+    this.props.updateOrganization(organization)
+  },
+
   confirmOrganization(){
     var organization = this.state.organization
     organization.status = "active"
@@ -89,7 +96,12 @@ export default React.createClass({
 
     if(this.props.organization.status === "pending" && this.props.user.role === "superadmin"){
       message = "Please Review this organization and Click the button to authorize their deals on our app."
-      submitButton = <button onClick={this.confirmOrganization} className="karma_button">Confirm This Business</button>
+      submitButton = (
+        <div>
+          <button onClick={this.confirmOrganization} className="karma_button">Confirm This Business</button> 
+          <button onClick={this.rejectOrganization} className="karma_button">Reject This Business</button>
+        </div>
+      )
     }
     else if(this.props.organization.status === "pending"){
       message = "Your Organization is now being reviewed. Do not change any of the information you have already submitted."
