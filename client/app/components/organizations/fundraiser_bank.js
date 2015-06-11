@@ -1,5 +1,5 @@
 import React from 'react'
-import {flux} from '../../main'
+import { flux } from '../../main'
 
 export default React.createClass({
   getInitialState(){
@@ -75,8 +75,92 @@ export default React.createClass({
 
     return (
       <div>
-        <div className="content_box-header">Bank Information</div>
-        This is Bank stuff!
+        <div className="content_box-header">Bank Details</div>
+        <div>
+          First Name
+          <input 
+            type="text" 
+            className="karma_input" 
+            placeholder="First Name" 
+            onChange={this.changeMade}
+            ref="firstName" 
+            defaultValue={firstName}
+            disabled={this.props.editDisabled}/>
+          Last Name
+          <input 
+            type="text" 
+            onChange={this.changeMade}
+            ref="lastName" 
+            className="karma_input " 
+            placeholder="Last Name" 
+            defaultValue={lastName}
+            disabled={this.props.editDisabled} />
+          Date of Birth
+          <div className="bank_data-dob">
+            <select
+              className="karma_select bank_data-dob_month"
+              defaultValue={dobMonth}
+              ref="dobMonth">
+              <option value="1">January</option>
+              <option value="2">February</option>
+              <option value="3">March</option>
+              <option value="4">April</option>
+              <option value="5">May</option>
+              <option value="6">June</option>
+              <option value="7">July</option>
+              <option value="8">August</option>
+              <option value="9">September</option>
+              <option value="10">October</option>
+              <option value="11">November</option>
+              <option value="12">December</option>
+            </select>
+            <select
+              className="karma_select bank_data-dob_day"
+              defaultValue={dobDate}
+              ref="dobDate">
+              {dayOption}
+            </select>
+            <select
+              className="karma_select bank_data-dob_year"  
+              defaultValue={dobYear}
+              ref="dobYear">
+              {yearOption}
+            </select>
+          </div>
+          Bank Account No.
+          <input 
+            type="text" 
+            onChange={this.changeMade}
+            ref="accountNumber" 
+            className="karma_input" 
+            placeholder="Account No." 
+            defaultValue={accountNumber}
+            disabled={this.props.editDisabled} />
+          Routing No.
+          <input 
+            type="text" 
+            onChange={this.changeMade}
+            ref="routingNumber" 
+            className="karma_input" 
+            placeholder="Routing No." 
+            defaultValue={routingNumber}
+            disabled={this.props.editDisabled} />
+
+          <div className="terms_of_service">
+            "I have read and agree to the terms and conditions listed here."
+            <input 
+              type="checkbox" 
+              defaultChecked={tosChecked} 
+              ref="tosCheck"/>
+          </div>
+          <button 
+            onClick={this.saveBankData}
+            ref="saveButton" 
+            className="karma_button"  
+            hidden={this.props.editDisabled}>
+              Save
+          </button>
+        </div>
       </div>
     )
   }
