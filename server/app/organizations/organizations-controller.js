@@ -44,7 +44,7 @@ export async function update (req, res, next) {
     if(organization.status === "active" && organization.type === "fundraiser" && !organization.publicStripeKey){
       //Needs to be reactivated once we have actual fundraisers signing up!
       //var stripe = {}
-      //stripe.data = await stripeService.createAccount(req, organization)
+      //stripe.data = await stripeService.createAccount(req.connection.remoteAddress, organization)
       //stripe.id = organization.id
       //var stripeReturn = await organizationStripeTable.insert(stripe)
       //organization.publicStripeKey = stripeReturn.data.keys.publishable
