@@ -84,3 +84,22 @@
   width: 20%;
   text-align: center;
 }
+
+.bank_data-dob_month {
+  float:left;
+  margin-right: 5px;
+}
+
+.bank_data-dob_day {
+  float: left;
+  margin-right: 5px;
+}
+
+.bank_data-dob_month {
+  float: left;
+  margin-right: 5px;
+}
+
+.bank_data-dob {
+  margin: 5px 0 10px 0;
+}

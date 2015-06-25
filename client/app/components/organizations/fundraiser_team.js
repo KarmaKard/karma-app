@@ -17,7 +17,6 @@ export default React.createClass({
         this.setState({organization: this.props.organization})
       }
       else{
-        console.log(this.props)
         this.setState({organization: this.props.organization, teamMembers: this.props.organization.teamMembers})
       }
     }

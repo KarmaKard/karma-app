@@ -21,6 +21,13 @@ export default React.createClass({
     this.props.updateOrganization(organization)
   },
 
+  rejectOrganization(){
+    var organization = this.state.organization
+    organization.status = "inactive"
+
+    this.props.updateOrganization(organization)
+  },
+
   confirmOrganization(){
     var organization = this.state.organization
     organization.status = "active"
@@ -28,9 +35,32 @@ export default React.createClass({
     this.props.updateOrganization(organization)
   },
 
+  checkBankInfo () {
+    if(!this.props.organization.bankInfo){
+      return  (  
+        <li>
+          <Link to="edit_fundraiser_bank" params={{organizationId: this.props.organization.id}}>
+            Complete bank information
+          </Link>
+        </li>
+      )         
+    }
+    for (var field in this.props.organization.bankInfo) {
+      if (this.props.organization.bankInfo[field] == null){
+        return  (
+          <li>
+            <Link to="edit_fundraiser_bank" params={{organizationId: this.props.organization.id}}>
+              Complete Bank Information
+            </Link>
+          </li>
+        )
+      }
+    }
+  },
+
   render() {
 
-    var addTeamMembers, organizationDescription, organizationPurpose, submitButton
+    var addTeamMembers, organizationDescription, organizationPurpose, organizationBankInfo, submitButton
     var message = "You have some task(s) remaining before your business can be reviewed:"
     if(!this.props.organization.teamMembers || this.props.organization.teamMembers.length === 0){
       addTeamMembers = 
@@ -57,6 +87,8 @@ export default React.createClass({
         </li>
     }
 
+    organizationBankInfo = this.checkBankInfo()
+
     if(!organizationDescription && !organizationPurpose && !addTeamMembers){
       message = "All required information has been completed. Please thoroughly review your information before you submit this business to be reviewed."
       submitButton = <button onClick={this.submitToReview} className="karma_button">Submit for Review</button>
@@ -64,7 +96,12 @@ export default React.createClass({
 
     if(this.props.organization.status === "pending" && this.props.user.role === "superadmin"){
       message = "Please Review this organization and Click the button to authorize their deals on our app."
-      submitButton = <button onClick={this.confirmOrganization} className="karma_button">Confirm This Business</button>
+      submitButton = (
+        <div>
+          <button onClick={this.confirmOrganization} className="karma_button">Confirm This Business</button> 
+          <button onClick={this.rejectOrganization} className="karma_button">Reject This Business</button>
+        </div>
+      )
     }
     else if(this.props.organization.status === "pending"){
       message = "Your Organization is now being reviewed. Do not change any of the information you have already submitted."
@@ -88,6 +125,7 @@ export default React.createClass({
           {addTeamMembers}
           {organizationDescription}
           {organizationPurpose}
+          {organizationBankInfo}
         </ul>
         {submitButton}
       </div>
