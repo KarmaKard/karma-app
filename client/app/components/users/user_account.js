@@ -1,5 +1,6 @@
 import React from 'react'
 import {flux} from '../../main'
+import { Link } from 'react-router'
 
 export default React.createClass({
   render(){
@@ -10,6 +11,7 @@ export default React.createClass({
         </div>
         <div>
         <h3>You have saved ${this.props.totalSaved}!</h3>
+        <p>Thank you for being an awesome donor!</p>
         <br/>
           <label>
             Email

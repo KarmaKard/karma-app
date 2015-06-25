@@ -15,11 +15,11 @@ export default React.createClass({
     var user = this.props.user
     var editDisabled = false
 
-    if(organization.status === "pending" || user.role === "superadmin") {
+    if(organization.status === "pending" || user.roles.superadmin) {
       editDisabled = true
     }
     
-    if (organization.userId !== user.id && user.role !== "superadmin") {
+    if (organization.userId !== user.id && user.roles.superadmin) {
       return <p>You are not permitted to view this page</p>
     }
 

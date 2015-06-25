@@ -8,7 +8,7 @@ import * as stripe from '../common/services/stripe'
 
 export var router = express.Router()
 
-router.get('/', auth.token, list)
+router.get('/', list)
 export async function list (req, res, next) {
   try {
     var organizations = await organizationsTable.index()
@@ -22,8 +22,8 @@ router.post('/', auth.token, validateCreate, create)
 export async function create (req, res, next) {
   try {
     var user = req.user
-    if(user.role === "customer"){
-      user.role = "manager"
+    if(!user.roles.manager){
+      user.roles.manager = "manager"
       user = await usersTable.update(user)
     }
 

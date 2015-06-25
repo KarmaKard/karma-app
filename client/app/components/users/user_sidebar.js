@@ -6,7 +6,7 @@ export default React.createClass({
   render(){
     var currentUser = this.props.user
     var organizations = this.props.organizations
-    var manageLink = currentUser.role === "manager" || currentUser.role === "superadmin" 
+    var manageLink = currentUser.roles.manager || currentUser.roles.superadmin
       ? <li><Link to="organizations_user_manages">Manage</Link></li>
       : null
     
@@ -14,7 +14,7 @@ export default React.createClass({
      <div className="side_bar_navigation">
         <ul className="side_bar_navigation_level1">
           <li><Link to="account">Account</Link></li>
-          <li><Link to="categories">Deals</Link></li>
+          <li><Link to="organizations">Deals</Link></li>
           {manageLink}
         </ul>
       </div>

@@ -84,3 +84,53 @@
   width: 20%;
   text-align: center;
 }
+
+.dialpad-display {
+    border: 1px solid #AAA;
+    padding: 20px;
+    font-size: 20px;
+    width: 295px;
+    text-align: right;
+    height: 25px;
+}
+
+.dialpad {
+    margin: 0; 
+    padding:0;
+    overflow: hidden;
+    border: 1px solid #CCC;
+    width: 100%;
+}
+
+.dialpad-element {
+    float: left;
+    border: 1px solid #CCC;
+    background-color: #555;
+    color: White;
+    padding: 20px;
+    width: 33%;
+    height: 60px;
+    text-align: center;
+}
+
+.redeem_success-happy_button {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 24pt;
+  text-decoration: none;
+  font:black;
+  float:left;
+  margin: 5px 10px;
+  background: white;
+  border: 1px solid white;
+}
+
+.redeem_success-unhappy_button {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 24pt;
+  text-decoration: none;
+  font:black;
+  clear:right;
+  margin: 5px 10px;
+  background: white;
+  border: 1px solid white;
+}

@@ -6,18 +6,21 @@ export default class UserStore extends Store {
   constructor() {
     super()
     var token = window.localStorage.getItem('karma-token')
+
     this.state = {
       currentUser: token ? tokenToUser(token) : null,
       authenticated: token ? true : false,
       createErrors: [],
       loginErrors: []
     }
+
     this.handleAction('users.login', this.handleAuth)
+    this.handleAction('users.logout', this.logout)
     this.handleAction('users.create', this.handleAuth)
     this.handleAction('users.createError', this.storeCreateError)
     this.handleAction('users.loginError', this.storeLoginError)
     this.handleAction('users.clearLoginErrors', this.clearLoginErrors)
-    this.handleAction('users.update', this.handleAuth)
+    this.handleAction('users.update', this.updateUser)
     this.handleAction('organizations.create', this.createdOrganization)
   }
 
@@ -27,6 +30,18 @@ export default class UserStore extends Store {
 
   createdOrganization(organization, user){
     this.setState({ currentUser: user, authenticated: true })
+  }
+
+  updateUser(user) {
+    this.setState({ currentUser: user, authenticated: true })
+  } 
+
+  logout(){
+    this.setState({
+      currentUser: null,
+      authenticated: false
+    })
+    window.localStorage.clear()
   }
 
   storeCreateError(error) {
