@@ -4,6 +4,14 @@ import { Link } from 'react-router'
 import UserSideBar from '../../users/user_sidebar'
 
 export default React.createClass({
+  contextTypes: {
+    router: React.PropTypes.func
+  },
+
+  logOut(){
+    var { router } = this.context
+    flux.actions.users.logout(router)
+  },
 
   renderDealLink(deal, i) {
     var user = this.props.user
@@ -15,7 +23,7 @@ export default React.createClass({
     })
 
     var redemptionsLeft = deal.limit !== "unlimited" ? deal.limit - amountRedeemed.length : deal.limit
-    var redeemLink = redemptionsLeft === 0 ? "add_redemptions" : "redeem_deal"
+    var redeemLink = redemptionsLeft === 0 ? "add_redemptions" : "survey"
     
     return ( 
       <li className="deal-button" key={i}>
@@ -55,10 +63,8 @@ export default React.createClass({
       <div>
           <div className="page_header">
           <div className="page_header_title">{user.firstName} </div>
-          <div className="page_header_link">
-            <Link to="root">
-              Log Out
-            </Link>
+          <div className="page_header_link" onClick={this.logOut} >
+            Log Out
           </div>
         </div>
         <UserSideBar organizations={organizations} user={user} />

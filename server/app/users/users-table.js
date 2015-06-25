@@ -21,5 +21,4 @@ export async function update (user) {
   if (results.changes) {
     return results.changes[0]['new_val']
   }
-  return user
-}
+  return user}

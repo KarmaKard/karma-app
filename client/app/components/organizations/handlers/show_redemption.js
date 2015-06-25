@@ -15,9 +15,6 @@ export default React.createClass({
 
     return (
       <div>
-          <Link to="organization" params={{organizationId: organization.id, dealId: dealId}}>
-            <button className="back_button">Go Back</button>
-          </Link>
         <div className="content_box-header">Redemption</div>
         <Redemption {... this.props} />
       </div>

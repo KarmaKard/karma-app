@@ -9,6 +9,8 @@ const MANAGE_ORGANIZATIONS_URL = ORGANIZATIONS_URL + '/manage'
 const DEALS_URL = BASE_URL + '/api/v1/deals'
 const LOCATIONS_URL = BASE_URL + '/api/v1/locations' 
 const REDEMPTIONS_URL = BASE_URL + '/api/v1/redemptions' 
+const SURVEY_QUESTIONS_URL = BASE_URL + '/api/v1/questions'
+const SURVEY_RESPONSES_URL = BASE_URL + '/api/v1/survey_responses' 
 
 
 var token = window.localStorage.getItem('karma-token')
@@ -58,7 +60,8 @@ export function updateUser (user) {
         if(err) {
           return reject(err)
         }
-        resolve(res.body.user)
+        storeToken(res.body.token)
+        resolve(tokenToUser(token))
       })
   })
 }
@@ -174,7 +177,6 @@ export function getDeals () {
   return new Promise((resolve, reject) => {
     request
       .get(DEALS_URL)
-      .set('token', token)
       .end((err, res) => {
         if(err) {
           return reject(err)
@@ -254,6 +256,50 @@ export function getRedemptions () {
           return reject(err)
         }
         resolve(res.body.redemptions)
+      })
+  })
+}
+
+export function getSurveyQuestions () {
+  return new Promise((resolve, reject) => {
+    request
+      .get(SURVEY_QUESTIONS_URL)
+      .set('token', token)
+      .end((err, res) => {
+        if(err) {
+          return reject(err)
+        }
+        resolve(res.body.questions)
+      })
+  })
+}
+
+export function postNewSurveyResponse (surveyResponse) {
+  return new Promise((resolve, reject) => {
+    request
+      .post(SURVEY_RESPONSES_URL)
+      .send({surveyResponse})
+      .set('token', token)
+      .end((err, res) => {
+        if(err) {
+          return reject(err)
+        }
+        resolve(res.body.surveyResponse)
+      })
+  })
+}
+
+
+export function getSurveyResponses () {
+  return new Promise((resolve, reject) => {
+    request
+      .get(SURVEY_RESPONSES_URL)
+      .set('token', token)
+      .end((err, res) => {
+        if(err) {
+          return reject(err)
+        }
+        resolve(res.body.surveyResponses)
       })
   })
 }

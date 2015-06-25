@@ -1,6 +1,6 @@
 import React from 'react'
 import BusinessProfile from '../business_profile'
-import FundraiserProfile from '../fundraiser_profile'
+import EditFundraiserProfile from '../edit_fundraiser_profile'
 
 export default React.createClass({
 
@@ -11,7 +11,7 @@ export default React.createClass({
           organization={this.props.organization} 
           updateOrganization={this.props.updateOrganization} 
           editDisabled={this.props.editDisabled} />
-      : <FundraiserProfile 
+      : <EditFundraiserProfile 
           organization={this.props.organization} 
           updateOrganization={this.props.updateOrganization} 
           editDisabled={this.props.editDisabled} />

@@ -94,7 +94,7 @@ export default React.createClass({
       submitButton = <button onClick={this.submitToReview} className="karma_button">Submit for Review</button>
     }
 
-    if(this.props.organization.status === "pending" && this.props.user.role === "superadmin"){
+    if(this.props.organization.status === "pending" && this.props.user.roles.superadmin){
       message = "Please Review this organization and Click the button to authorize their deals on our app."
       submitButton = (
         <div>

@@ -7,7 +7,7 @@ export default function validateUpdate (req, res, next) {
     return next(new ValidationError(req))
   }
 
-  if (!req.user.isSuperAdmin) {
+  if (!req.user.roles.superadmin) {
     if (req.body.organization.userId !== req.user.id) {
       return next(new UnauthorizedError('User not authorized to update organization'))
     }

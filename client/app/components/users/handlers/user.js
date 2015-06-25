@@ -8,6 +8,11 @@ export default React.createClass({
     router: React.PropTypes.func
   },
 
+  logOut(){
+    var { router } = this.context
+    flux.actions.users.logout(router)
+  },
+
   getInitialState() {
     var storeState = this.getStoreState()
     if (storeState.organizations.organizations.length === 0){
@@ -19,8 +24,16 @@ export default React.createClass({
     return storeState
   },
 
+  componentDidMount(){
+    var currentUser = this.state.user.currentUser
+    if (!currentUser){
+      var router = this.context.router
+      router.transitionTo('login')
+    }
+  },
+
   storeChange() {
-    this.setState(this.getStoreState())
+    this.setState(this.getStoreState)
   },
 
   getStoreState() {
@@ -33,10 +46,12 @@ export default React.createClass({
 
   componentWillMount() {
     flux.stores.organizations.addListener('change', this.storeChange)
+    flux.stores.users.addListener('change', this.storeChange)
   },
 
   componentWillUnmount() {
     flux.stores.organizations.removeListener('change', this.storeChange)
+    flux.stores.users.removeListener('change', this.storeChange)
   },
 
   render() {
@@ -55,22 +70,20 @@ export default React.createClass({
     }
 
     var isManager = !!organizations.find(org => org.userId === currentUser.id)
-    var isSuperAdmin = currentUser.isSuperAdmin
+    var isSuperAdmin = currentUser.roles.superadmin
 
     return (
       <div>
         <div className="page_header">
           <div className="page_header_title">{currentUser.firstName}</div>
-          <div className="page_header_link">
-            <Link to="root">
-              Log Out
-            </Link>
+          <div className="page_header_link" onClick={this.logOut}>
+            Log Out
           </div>
         </div>
         <div className="side_bar_navigation">
           <ul className="side_bar_navigation_level1">
             <li><Link to="account">Account</Link></li>
-            <li><Link to="categories">Deals</Link></li>
+            <li><Link to="organizations">Deals</Link></li>
             {isManager || isSuperAdmin ? <li><Link to="organizations_user_manages">Manage</Link></li> : null}
           </ul>
         </div>

@@ -5,6 +5,7 @@ import validateUpdate from './validators/validate-update'
 import * as auth from '../common/middleware/authentication'
 import { hash as hashPassword } from '../common/services/passwords'
 import { encode as encodeToken } from '../common/services/token'
+import * as stripe from '../common/services/stripe'
 
 export var router = express.Router()
 
@@ -23,8 +24,16 @@ export async function create (req, res, next) {
   try {
     var user = req.body.user
     var hash = await hashPassword(user.password)
-    user.role = "customer"
+
+    if(!user.stripeToken){return}
+
+    var charge = await stripe.chargeCustomer(user)
+    user.roles = {customer: "paid"}
+    user.stripeCustomerId = charge.customer
+
     delete user.password
+    delete user.stripeToken
+
     user.hash = hash
     user.created_at = Date.now()
     var data = await usersTable.insert(user)
@@ -37,11 +46,17 @@ export async function create (req, res, next) {
 }
 
 router.put('/:userId', validateUpdate, update)
-export function update (req, res, next) {
-  var pUser = usersTable.update(req.body.user)
-  pUser.then(user => {
-    res.json({user})
-  }).catch(next)
+export async function update (req, res, next) {
+  try {
+    var currentUser = req.body.user
+    var user = await usersTable.update(currentUser)
+    res.status(201).json({
+      token: encodeToken(user)
+    })
+  }
+  catch (e) {
+    next(e)
+  }
 }
 
 router.post('/login', auth.password, login)

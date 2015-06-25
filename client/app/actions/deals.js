@@ -63,14 +63,50 @@ export default class DealActions extends Actions {
 
   getRedemptions(){
     var p = KarmaAPI.getRedemptions()
-      p.then(redemptions => {
-        if (redemptions) {
-          this.dispatch('getRedemptions', redemptions)
-        }
-        else{
-          console.warn('No Redemptions Returned')
-        }
-      }).catch(this.createError)
+    p.then(redemptions => {
+      if (redemptions) {
+        this.dispatch('getRedemptions', redemptions)
+      }
+      else{
+        console.warn('No Redemptions Returned')
+      }
+    }).catch(this.createError)
+  }
+
+  getSurveyQuestions(){
+    var p = KarmaAPI.getSurveyQuestions()
+    p.then(questions => {
+      if (questions) {
+        this.dispatch('getSurveyQuestions', questions)
+      }
+      else {
+        console.warn('No Questions Returned')
+      }
+    }).catch(this.createError)
+  }
+
+  createSurveyResponse(newSurveyResponse){
+    var p = KarmaAPI.postNewSurveyResponse(newSurveyResponse)
+    p.then(surveyResponse => {
+      if(surveyResponse) {
+        this.dispatch('createSurveyResponse', surveyResponse)
+      }
+      else {
+        console.warn('No Responses Returned')
+      }
+    }).catch(this.createError)
+  }
+
+  getSurveyResponses(){
+    var p = KarmaAPI.getSurveyResponses()
+    p.then(surveyResponses => {
+      if (surveyResponses) {
+        this.dispatch('getSurveyResponses', surveyResponses)
+      }
+      else {
+        console.warn('No survey responses Returned')
+      }
+    }).catch(this.createError)
   }
 
   createError(error) {

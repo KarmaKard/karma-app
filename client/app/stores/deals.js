@@ -6,6 +6,8 @@ export default class DealStore extends Store {
     this.state = {
       deals: [], 
       redemptions: [],
+      surveyQuestions: [],
+      surveyResponses: [],
       createErrors: []
     }
 
@@ -16,6 +18,9 @@ export default class DealStore extends Store {
     this.handleAction('deals.deleteDeal', this.deleteDeal)
     this.handleAction('deals.createRedemption', this.handleRedemptionCreate)
     this.handleAction('deals.getRedemptions', this.saveRedemptions)
+    this.handleAction('deals.getSurveyQuestions', this.saveQuestions)
+    this.handleAction('deals.createSurveyResponse', this.handleSurveyResponseCreate)
+    this.handleAction('deals.getSurveyResponses', this.saveResponses)
   }
 
   handleDealCreate(deals) {
@@ -52,6 +57,20 @@ export default class DealStore extends Store {
 
   saveRedemptions(redemptions){
     this.setState({redemptions})
+  }
+
+  saveQuestions(surveyQuestions){
+    this.setState({surveyQuestions})
+  }
+
+  handleSurveyResponseCreate(surveyResponse) {
+    this.setState({
+      surveyResponses: this.state.surveyResponses.concat(surveyResponse)
+    })
+  }
+
+  saveResponses(surveyResponses){
+    this.setState({surveyResponses})
   }
 
   saveCreateError(error) {

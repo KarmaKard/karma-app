@@ -29,3 +29,27 @@ export async function createAccount (requestIP, organization){
       }
     })
 }
+
+export async function chargeCustomer (user){
+  try {
+    var customer = {}
+    if(!user.stripeCustomerId){
+      customer = await stripe.customers.create({
+        source: user.stripeToken,
+        description: "Purchase of KarmaKard in support of fundraiser"
+      })
+    }
+    else{customer.id = user.stripeCustomerId}
+    var charge = await stripe.charges.create({
+      amount: 3000, // amount in cents, again
+      currency: "usd",
+      customer: customer.id,
+      description: "Example charge"
+    })
+    return charge
+
+  } catch (e) {
+    console.warn("stripe api call: Charge did not work")
+  }
+}
+

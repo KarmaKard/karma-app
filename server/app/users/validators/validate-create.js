@@ -10,6 +10,5 @@ export default function validateCreate (req, res, next) {
   req.checkBody(['user', 'lastName'], 'User lastName is required').notEmpty()
   req.checkBody(['user', 'email'], 'User email is required').notEmpty()
   req.checkBody(['user', 'password'], 'User password is required').notEmpty()
-  req.checkBody(['user', 'role'], 'User role is required').notEmpty()
   next(req.validationErrors() ? new ValidationError(req) : null)
 }

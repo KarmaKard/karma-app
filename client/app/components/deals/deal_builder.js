@@ -24,7 +24,7 @@ export default React.createClass({
     var editDisabled  = 
       this.props.organization.status === "active" || 
       this.props.organization.status === "pending" || 
-      this.props.user.role === "superadmin" 
+      this.props.user.roles.superadmin
       ? true 
       : false
 

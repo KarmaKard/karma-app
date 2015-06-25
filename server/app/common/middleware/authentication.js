@@ -39,7 +39,7 @@ export function token (req, res, next) {
 }
 
 export function admin (req, res, next) {
-  if (!req.user || !req.user.isSuperAdmin) {
+  if (!req.user || !req.user.roles.superadmin) {
     return next(new UnauthorizedError())
   }
   req.log.trace({

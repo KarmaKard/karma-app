@@ -18,12 +18,23 @@ export default React.createClass({
     var deals = this.props.deals.filter(deals => deals.organizationId === orgId)
     var locations = this.props.locations.filter(locations => locations.organizationId === orgId)
     var redemptions = this.props.redemptions.filter(redemptions => redemptions.organizationId === orgId)
+    var surveyResponses = this.props.surveyResponses.filter(response => response.organizationId === orgId)
+    var surveyQuestions = this.props.surveyQuestions
+    
     if (!organization) {
       return <p>Organization Not Found</p>
     }
     return (
       <div>
-        <RouteHandler organization={organization} organizations={this.props.organizations} user={this.props.user} deals={deals} locations={locations} redemptions={redemptions} updateOrganization={this.updateOrganization} />
+        <RouteHandler 
+          organization={organization} 
+          organizations={this.props.organizations} 
+          user={this.props.user} deals={deals} 
+          locations={locations} 
+          redemptions={redemptions} 
+          updateOrganization={this.updateOrganization} 
+          surveyResponses={surveyResponses}
+          surveyQuestions={surveyQuestions} />
       </div>
     )
   }

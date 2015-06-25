@@ -1,7 +1,7 @@
 import React from 'react'
 import { flux } from '../../../main'
 import LoginForm from '../login_form'
-import RegistrationForm from '../registration_form'
+import NewUser from '../new_user'
 
 export default React.createClass({
   getInitialState() {
@@ -39,7 +39,7 @@ export default React.createClass({
   render() {
     var form = !!this.state.isExistingUser
       ? <LoginForm loginErrors={this.state.users.loginErrors}/>
-      : <RegistrationForm />
+      : <NewUser/>
 
     var toggleButtonText = !!this.state.isExistingUser ? 'New User?' : 'Existing User?'
 
