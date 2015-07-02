@@ -13,12 +13,14 @@ export default React.createClass({
     }
   },
 
-  setUserInfo(){
+  didClick(){
+
     var email = React.findDOMNode(this.refs.registerEmail).value
     var firstName = React.findDOMNode(this.refs.registerFirstName).value
     var lastName = React.findDOMNode(this.refs.registerLastName).value
     var password = React.findDOMNode(this.refs.registerPassword).value
     var passwordConfirm = React.findDOMNode(this.refs.registerPasswordConfirm).value
+    var roles= {}
 
     if (password && passwordConfirm && password !== passwordConfirm) {
       return this.setState({
@@ -35,8 +37,10 @@ export default React.createClass({
       }
     }
 
-    var user = { email, firstName, lastName, password}
-    this.props.setRegistrationInfo(user)
+    var user = { email, firstName, lastName, password, roles}
+    
+    flux.actions.users.create(user)
+    React.findDOMNode(this.refs.button).disabled = false
   },
 
   render() {
@@ -51,7 +55,7 @@ export default React.createClass({
       <div>
         {mismatchPasswords}
         {incorrectEmail}
-          <h2>Account Creation</h2>
+          <div className="content_box-header">Register</div>
           <div className="form-row">
             <label>
               <span>First Name</span>
@@ -82,7 +86,7 @@ export default React.createClass({
               <input type="password" onBlur={this.setUserInfo} ref="registerPasswordConfirm" className="karma_input" placeholder="Confirm Password" />
             </label>
           </div>
-
+           <input type="submit" ref="button" onClick={this.didClick} className="karma_button" value="Create Account"/>
       </div>
 
     )

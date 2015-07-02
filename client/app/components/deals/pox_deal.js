@@ -2,13 +2,21 @@ import React from 'react'
 import { flux } from '../../main'
 
 export default React.createClass({
-   saveThisDeal(){
+  getInitialState(){
+    return {
+      endDate: this.props.endDate
+    }
+  },
+
+  saveThisDeal(){
     var primaryProductName = React.findDOMNode(this.refs.primaryProductName).value
     var limit = React.findDOMNode(this.refs.limit).value
     var percentageOff = React.findDOMNode(this.refs.percentageOff).value
     var dollarValue = React.findDOMNode(this.refs.dollarValue).value
+    var beginDate = new Date(parseInt(React.findDOMNode(this.refs.beginDate).value))
+    var endDate = new Date(beginDate.getFullYear()+2, beginDate.getMonth())
 
-    if (!primaryProductName || !limit || !dollarValue || !percentageOff) {
+    if (!primaryProductName || !limit || !dollarValue || !percentageOff || isNaN(beginDate) || isNaN(endDate)) {
       return null
     }
 
@@ -17,6 +25,8 @@ export default React.createClass({
       limit,
       percentageOff,
       dollarValue,
+      beginDate: beginDate.getTime(),
+      endDate: endDate.getTime(),
       type: "POX"
     } 
     
@@ -32,6 +42,14 @@ export default React.createClass({
     flux.actions.deals.deleteDeal(this.props.deal)
   },
 
+  changeDates(e){
+    var beginDate = new Date(parseInt(e.target.value))
+    var endDate = new Date(beginDate.getFullYear()+2, beginDate.getMonth())
+    endDate = endDate.toDateString()
+    this.setState({endDate})
+    this.props.changeMade()
+  },
+
   render() {
     if (!this.props.deal){
       return <span />
@@ -41,6 +59,12 @@ export default React.createClass({
     var limit = this.props.deal.limit
     var dollarValue = this.props.deal.dollarValue
     var percentageOff = this.props.deal.percentageOff
+    var beginDate = this.props.deal.beginDate
+    var endDate = new Date(this.props.deal.endDate)
+    var endDateText
+    if (this.state.endDate){endDateText = this.state.endDate}
+    else if (endDate) {endDateText = endDate.toDateString()}
+    else {endDateText = "End Date"}
 
     return(
       <div className="bxx_deal">
@@ -115,9 +139,26 @@ export default React.createClass({
               defaultValue={dollarValue} 
               disabled={this.props.editDisabled}/>
           </div>
+
+          <div className="deal_begin_date">
+            <span className="deal_text-left">Period: From</span> 
+            <select 
+            onBlur={this.saveThisDeal} 
+            onChange={this.changeDates} 
+            defaultValue={beginDate} 
+            ref="beginDate" 
+            className="karma_select begin_date-select"
+            disabled={this.props.editDisabled}>
+              <option>Select Begin Date</option>
+              <option value={this.props.activePeriod.beginDate1.getTime()}>{this.props.activePeriod.beginDate1.toDateString()}</option>
+              <option value={this.props.activePeriod.beginDate2.getTime()}>{this.props.activePeriod.beginDate2.toDateString()}</option>
+            </select>
+            <span className="deal-to_date" ref="endDate" defaultValue={endDate}>To</span> 
+            {endDateText}
+          </div>
+          </div>
+          <hr />
         </div>
-        <hr />
-      </div>
     )
   }
 })

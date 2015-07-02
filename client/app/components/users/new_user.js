@@ -15,6 +15,10 @@ export default React.createClass({
         <div className="content_box-header">Not Convinced?</div>
         <p>We have built special relationships with local businesses to provide quality deals in which we handpick only quality deals that you will love. Dont beleive us? </p>
         <Link to="list_deals"><button className="karma_button">Check out the ever growing list of local deals</button></Link>
+        <hr/>
+        <div className="content_box-header">Have an Organization?</div>
+        <p>If you have a business or a fundraiser, you can signup and apply for your organization to be a part of Karmakard!</p>
+        <Link to="create_organization"><button className="karma_button">Register your Organization</button></Link>
       </div>
     )
   }

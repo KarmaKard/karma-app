@@ -19,21 +19,28 @@ export default React.createClass({
   },
   
   render(){
-    if(!this.props.user || !this.props.payment){return <span>Hello</span>}
+    var payments = this.props.payments
     var user = this.props.user
-    var paymentId = this.context.router.getCurrentParams().paymentId
-    var payment = this.props.payment
-    var deals = this.props.deals
     var organizations = this.props.organizations
-
-    var activeCategories = this.props.categories.map((category, index) => {
-      return (
-        <li className="category_list-item" key={index}>
-          <Link to="categorical_organizations" params={{paymentId: payment.id, category : category}}>
-            {category} 
-          </Link>
-        </li>
-      )
+    var isActive = []
+    var uniqueCategory = {}
+    var now = Date.now()
+    var paymentDate, expirationDate
+    var dealCardLinks = payments.map(function(payment){
+      paymentDate = new Date(payment.createdAt)
+      expirationDate = new Date(payment.createdAt)
+      expirationDate = expirationDate.setFullYear(expirationDate.getFullYear() + 1)
+      expirationDate = new Date(expirationDate)
+      if(now < expirationDate && now > paymentDate){
+        return (
+          <li>
+            <Link to="deal_card" params={{paymentId : payment.id}}>
+              {paymentDate.toDateString() + " - " + expirationDate.toDateString()} 
+            </Link>
+          </li>
+        )
+      }
+      return null
     })
 
     var addNewLink=null
@@ -61,10 +68,10 @@ export default React.createClass({
           <UserSideBar organizations={organizations} user={user} />
           <div className="content_box">
             <div className="content_box-header">
-              Deal Categories
+              Your Deal Cards
             </div>
             <ul>
-              {activeCategories}
+              {dealCardLinks}
             </ul>
             {addNewLink}
           </div>

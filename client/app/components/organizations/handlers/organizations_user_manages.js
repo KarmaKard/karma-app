@@ -2,6 +2,7 @@ import React from 'react'
 import { flux } from '../../../main'
 import SuperAdminView from '../superadmin_organizations_manager'
 import NonAdminView from '../nonadmin_organizations_manager'
+import SideBar from '../../users/user_sidebar'
 import { Link } from 'react-router'
 
 export default React.createClass({
@@ -28,13 +29,7 @@ export default React.createClass({
             Log Out
           </div>
         </div>
-        <div className="side_bar_navigation">
-          <ul className="side_bar_navigation_level1">
-            <li><Link to="account">Account</Link></li>
-            <li><Link to="organizations">Deals</Link></li>
-            <li><Link to="organizations_user_manages">Manage</Link></li>
-          </ul>
-        </div>
+        <SideBar organizations={this.props.organizations} user={user} />
         <div className="content_box">
           {isSuperAdmin}
         </div>

@@ -12,6 +12,10 @@ import Fundraisers from './components/organizations/handlers/fundraisers'
 import FundraiserList from './components/organizations/handlers/fundraiser_list'
 import FundraiserProfile from './components/organizations/handlers/fundraiser_profile'
 
+import Deals from './components/deals/handlers/deals'
+import DealCards from './components/deals/handlers/deal_cards'
+import DealCard from './components/deals/handlers/deal_card'
+
 import RedirectToDeals from './components/organizations/handlers/redirect_to_deals'
 import Organizations from './components/organizations/handlers/organizations'
 import ShowOrganizationList from './components/organizations/handlers/show_organization_list'
@@ -50,6 +54,7 @@ export default (
     <DefaultRoute handler={RedirectToDeals} onEnter={RedirectToDeals.willTransitionTo} />
     <Route name="login" handler={Login} path="login" />
     <Route name="register" handler={Register} path="register" />
+    <Route name="create_organization" handler={NewOrganization} path="organization" />
     <Route name="list_deals" handler={DealList} path="deals" />
 
     <Route name="fundraisers" handler={Fundraisers} path="fundraisers" >
@@ -59,20 +64,28 @@ export default (
 
     <Route name="donate" handler={Donate} path="donate/:organizationStripePubKey" />
 
+    <Route name="deals" handler={Deals} path="dealcards" >
+      <DefaultRoute handler={DealCards} />
+      <Route name="deal_card" handler={DealCard} path=":paymentId" >
+        <DefaultRoute handler={ShowCategories} />
+        <Route name="categorical_organizations" handler={ShowCategoricalOrganizations} path="category/:category" />
+        <Route name="business" handler={Organization} path=":organizationId" >
+          <DefaultRoute handler={ShowOrganizationProfile} />
+          <Route name="redeem_deal" handler={DealRedemption} path=":dealId" >
+            <DefaultRoute handler={RedemptionScreen} />
+            <Route name="survey" handler={Survey} path="question" />
+            <Route name="redeem_success" handler={RedemptionSuccess} path="redeemed" />
+            <Route name="add_redemptions" handler={AddRedemptions} path="add" />
+          </Route>
+        </Route>
+      </Route>
+    </Route>
+
     <Route name="organizations" handler={Organizations} path="organizations">
-      <DefaultRoute handler={ShowCategories} />
-      <Route name="organizations_user_manages" handler={OrganizationsUserManages} path="manage" />
+      <DefaultRoute handler={OrganizationsUserManages} />
       <Route name="new_organization" handler={NewOrganization} path="new" />
-      <Route name="categorical_organizations" handler={ShowCategoricalOrganizations} path="category/:category" />
       <Route name="organization" handler={Organization} path=":organizationId" >
         <DefaultRoute handler={ShowOrganizationProfile} />
-        <Route name="redeem_deal" handler={DealRedemption} path="deal/:dealId" >
-          <DefaultRoute handler={RedemptionScreen} />
-          <Route name="survey" handler={Survey} path="question" />
-          <Route name="redeem_success" handler={RedemptionSuccess} path="redeemed" />
-          <Route name="add_redemptions" handler={AddRedemptions} path="add" />
-        </Route>
-
         <Route name="organization_user_manages" handler={OrganizationUserManages} path="manage">
           <DefaultRoute handler={ShowOrganizationDashboard} /> 
           <Route name="edit_profile" handler={EditOrganizationProfile} path="profile" />

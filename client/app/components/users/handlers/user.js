@@ -1,6 +1,7 @@
 import React from 'react'
 import { flux } from '../../../main'
 import { RouteHandler, Link } from 'react-router'
+import UserSideBar from '../user_sidebar'
 
 export default React.createClass({
 
@@ -69,9 +70,6 @@ export default React.createClass({
       return <p>Authenticating...</p>
     }
 
-    var isManager = !!organizations.find(org => org.userId === currentUser.id)
-    var isSuperAdmin = currentUser.roles.superadmin
-
     return (
       <div>
         <div className="page_header">
@@ -80,13 +78,7 @@ export default React.createClass({
             Log Out
           </div>
         </div>
-        <div className="side_bar_navigation">
-          <ul className="side_bar_navigation_level1">
-            <li><Link to="account">Account</Link></li>
-            <li><Link to="organizations">Deals</Link></li>
-            {isManager || isSuperAdmin ? <li><Link to="organizations_user_manages">Manage</Link></li> : null}
-          </ul>
-        </div>
+        <UserSideBar organizations={organizations} user={currentUser} />
         <div className="content_box">
           <RouteHandler user={currentUser} totalSaved={totalSaved}/>
         </div>

@@ -5,6 +5,7 @@ import validateUpdate from './validators/validate-update'
 import * as usersTable from './../users/users-table'
 import * as auth from '../common/middleware/authentication'
 import * as stripe from '../common/services/stripe'
+import { encode as encodeToken } from '../common/services/token'
 
 export var router = express.Router()
 
@@ -31,7 +32,7 @@ export async function create (req, res, next) {
     var organizationToSave = req.body.organization
     organizationToSave.userId = req.user.id
     var organization = await organizationsTable.insert(organizationToSave)
-    res.json({organization: organization, user: user})
+    res.status(201).json({organization: organization, token: encodeToken(user)})
   } catch (e) {
     next(e)
   }

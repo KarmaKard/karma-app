@@ -2,6 +2,12 @@ import React from 'react'
 import { flux } from '../../main'
 
 export default React.createClass({
+  getInitialState(){
+    return {
+      endDate: this.props.endDate
+    }
+  },
+
   saveThisDeal(){
     var primaryProductName = React.findDOMNode(this.refs.primaryProductName).value
     var primaryUsageLimit = React.findDOMNode(this.refs.primaryUsageLimit).value
@@ -9,8 +15,10 @@ export default React.createClass({
     var secondaryUsageLimit = React.findDOMNode(this.refs.secondaryUsageLimit).value
     var limit = React.findDOMNode(this.refs.limit).value
     var dollarValue = React.findDOMNode(this.refs.dollarValue).value
+    var beginDate = new Date(parseInt(React.findDOMNode(this.refs.beginDate).value))
+    var endDate = new Date(beginDate.getFullYear()+2, beginDate.getMonth())
 
-    if (!primaryProductName || !primaryUsageLimit || !secondaryProductName || !secondaryUsageLimit || !limit || !dollarValue ) {
+    if (!primaryProductName || !primaryUsageLimit || !secondaryProductName || !secondaryUsageLimit || !limit || !dollarValue || isNaN(beginDate) || isNaN(endDate)) {
       return null
     }
 
@@ -21,6 +29,8 @@ export default React.createClass({
       secondaryUsageLimit,
       limit,
       dollarValue,
+      beginDate: beginDate.getTime(),
+      endDate: endDate.getTime(),
       type: "BXY"
     } 
 
@@ -35,6 +45,14 @@ export default React.createClass({
   deleteClicked() {
     flux.actions.deals.deleteDeal(this.props.deal)
   },
+
+  changeDates(e){
+    var beginDate = new Date(parseInt(e.target.value))
+    var endDate = new Date(beginDate.getFullYear()+2, beginDate.getMonth())
+    endDate = endDate.toDateString()
+    this.setState({endDate})
+    this.props.changeMade()
+  },
   
   render() {
     if (!this.props.deal){
@@ -46,6 +64,13 @@ export default React.createClass({
     var secondaryUsageLimit = this.props.deal.secondaryUsageLimit
     var limit = this.props.deal.limit
     var dollarValue = this.props.deal.dollarValue
+    var beginDate = this.props.deal.beginDate
+    var endDate = new Date(this.props.deal.endDate)
+    var endDateText
+    if (this.state.endDate){endDateText = this.state.endDate}
+    else if (endDate) {endDateText = endDate.toDateString()}
+    else {endDateText = "End Date"}
+  
 
 
     return(
@@ -150,6 +175,22 @@ export default React.createClass({
               placeholder="00.00"
               className="karma_input dollar_value-input"
               disabled={this.props.editDisabled}></input> 
+          </div>
+          <div className="deal_begin_date">
+            <span className="deal_text-left">Period: From</span> 
+            <select 
+            onBlur={this.saveThisDeal} 
+            onChange={this.changeDates} 
+            defaultValue={beginDate} 
+            ref="beginDate" 
+            className="karma_select begin_date-select"
+            disabled={this.props.editDisabled}>
+              <option>Select Begin Date</option>
+              <option value={this.props.activePeriod.beginDate1.getTime()}>{this.props.activePeriod.beginDate1.toDateString()}</option>
+              <option value={this.props.activePeriod.beginDate2.getTime()}>{this.props.activePeriod.beginDate2.toDateString()}</option>
+            </select>
+            <span className="deal-to_date" ref="endDate" defaultValue={endDate}>To</span> 
+            {endDateText}
           </div>
         </div>
         <hr/>

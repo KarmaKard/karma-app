@@ -17,6 +17,7 @@ export default React.createClass({
     var amountSaved = this.state.amountSaved/100
     var redemption = {
       dealId: this.context.router.getCurrentParams().dealId,
+      paymentId: this.context.router.getCurrentParams().paymentId,
       organizationId: this.props.organization.id,
       userId: this.props.user.id,
       amountSaved

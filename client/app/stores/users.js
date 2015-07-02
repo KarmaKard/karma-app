@@ -10,6 +10,7 @@ export default class UserStore extends Store {
     this.state = {
       currentUser: token ? tokenToUser(token) : null,
       authenticated: token ? true : false,
+      payments: [],
       createErrors: [],
       loginErrors: []
     }
@@ -21,7 +22,9 @@ export default class UserStore extends Store {
     this.handleAction('users.loginError', this.storeLoginError)
     this.handleAction('users.clearLoginErrors', this.clearLoginErrors)
     this.handleAction('users.update', this.updateUser)
+    this.handleAction('users.createPayment', this.createPayment)
     this.handleAction('organizations.create', this.createdOrganization)
+    this.handleAction('users.getPayments', this.savePayments)
   }
 
   handleAuth(user) {
@@ -35,6 +38,17 @@ export default class UserStore extends Store {
   updateUser(user) {
     this.setState({ currentUser: user, authenticated: true })
   } 
+
+  createPayment(payment, user){
+    this.setState({
+      user,
+      payments: this.state.payments.concat(payment)
+    })
+  }
+
+  savePayments(payments){
+    this.setState({payments})
+  }
 
   logout(){
     this.setState({

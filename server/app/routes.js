@@ -6,6 +6,7 @@ import * as LocationsController from './locations/locations-controller'
 import * as RedemptionsController from './redemptions/redemptions-controller'
 import * as QuestionsController from './questions/questions-controller'
 import * as SurveyResponsesController from './survey_responses/survey_responses-controller'
+import * as PaymentsController from './payments/payments-controller'
 var appRouter = express.Router()
 
 export default appRouter
@@ -17,3 +18,4 @@ appRouter.use('/api/v1/locations', LocationsController.router)
 appRouter.use('/api/v1/redemptions', RedemptionsController.router)
 appRouter.use('/api/v1/questions', QuestionsController.router)
 appRouter.use('/api/v1/survey_responses', SurveyResponsesController.router)
+appRouter.use('/api/v1/payments', PaymentsController.router)

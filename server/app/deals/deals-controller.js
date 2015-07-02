@@ -43,8 +43,8 @@ export async function update(req, res, next){
 router.delete('/', auth.token, dealDelete)
 export async function dealDelete(req, res, next){
   try {
-    await dealsTable.del(req.body.deal) 
-    res.status(204).send()
+    var deal = await dealsTable.del(req.body.deal) 
+    res.json({deal})
   } catch (e) {
     next(e)
   }
