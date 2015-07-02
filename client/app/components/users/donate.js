@@ -7,24 +7,29 @@ export default React.createClass({
     router: React.PropTypes.func
   },
 
-  getInitialState() {
+    getInitialState() {
+    var storeState = this.getStoreState()
+    return storeState
+  },
+
+  storeChange() {
+    this.setState(this.getStoreState())
+  },
+
+  getStoreState() {
     return {
-      email: null,
-      firstName: null,
-      lastName: null,
-      password: null
+      usersStoreState: flux.stores.users.getState()
     }
   },
 
-  setRegistrationInfo(user){
-    this.setState({
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      password: user.password
-
-    })
+  componentWillMount() {
+    flux.stores.users.addListener('change', this.storeChange)
   },
+
+  componentWillUnmount() {
+    flux.stores.users.removeListener('change', this.storeChange)
+  },
+
 
   didClick(e) {
     e.preventDefault()
@@ -49,79 +54,70 @@ export default React.createClass({
       React.findDOMNode(this.refs.button).disabled = false
     } 
     else {
-      var token = response.id
+      var stripeToken = response.id
       var { router } = this.context
-      var currentUser = this.props.currentUser
-      console.log(response)
+      var currentUser = this.state.usersStoreState.currentUser
       if(currentUser){
-        currentUser.stripeToken = token
-        flux.actions.users.update(currentUser)
+        flux.actions.users.createPayment(stripeToken, currentUser)
         React.findDOMNode(this.refs.button).disabled = false
         return router.transitionTo('account')
       }
 
-      var user = { 
-        email : this.state.email, 
-        firstName : this.state.firstName, 
-        lastName : this.state.lastName, 
-        password : this.state.password, 
-        stripeToken : token 
-      }
-
-      console.log(user)
-      flux.actions.users.create(router, user)
       React.findDOMNode(this.refs.button).disabled = false
     }
   },
 
   render() {
     Stripe.setPublishableKey("pk_test_lRFVtD3iTz0LL58rsz3LiDb9")
-
-    var showRegistration = this.props.currentUser
+    var showRegistration = this.state.usersStoreState.currentUser
       ?  null
-      :  <Registration setRegistrationInfo={this.setRegistrationInfo} />
+      :  <Registration />
+
+    var formToShow = showRegistration 
+      ? showRegistration
+      : ( <div>
+            <div className="content_box-header">Donation</div>
+            <form action="" method="POST" id="payment-form">
+              <h2>Card Information</h2>
+              <div className="form-row">
+                <label>
+                  <span>Card Number</span>
+                  <input type="text" ref="cardNumber" className="karma_input" placeholder="Credit Card Number" />
+                </label>
+              </div>
+
+              <div className="form-row">
+                <label>
+                  <span>CVC</span>
+                  <input type="text" ref="cvc" className="karma_input" placeholder="CVC" />
+                </label>
+              </div>
+
+              <div className="form-row">
+                <label>
+                  <span>Exp Month</span>
+                  <input type="text" ref="expirationMonth" className="karma_input" size="2" placeholder="MM" />
+                </label>
+              </div>
+
+              <div className="form-row">
+                <label>
+                  <span>Exp Year</span>
+                  <input type="text" ref="expirationYear" className="karma_input" size="4" placeholder="YYYY" />
+                </label>
+              </div>
+
+              <span ref="errors" className="payment-errors"></span>
+
+            
+              <input type="submit" ref="button" onClick={this.didClick} className="karma_button" value="Submit"/>
+            </form>
+          </div>)
+
 
     return (
       <div className="register" >
-        <div className="content_box-header">Donation</div>
-        {showRegistration}
-        <form action="" method="POST" id="payment-form">
-          
-          <hr/>
-          <h2>Card Information</h2>
-          <div className="form-row">
-            <label>
-              <span>Card Number</span>
-              <input type="text" ref="cardNumber" className="karma_input" placeholder="Credit Card Number" />
-            </label>
-          </div>
-
-          <div className="form-row">
-            <label>
-              <span>CVC</span>
-              <input type="text" ref="cvc" className="karma_input" placeholder="CVC" />
-            </label>
-          </div>
-
-          <div className="form-row">
-            <label>
-              <span>Exp Month</span>
-              <input type="text" ref="expirationMonth" className="karma_input" size="2" placeholder="MM" />
-            </label>
-          </div>
-
-          <div className="form-row">
-            <label>
-              <span>Exp Year</span>
-              <input type="text" ref="expirationYear" className="karma_input" size="4" placeholder="YYYY" />
-            </label>
-          </div>
-
-          <span ref="errors" className="payment-errors"></span>
-
-        
-          <input type="submit" ref="button" onClick={this.didClick} className="karma_button" value="Submit"/>
-        </form>
+        {formToShow}
       </div>
     )
   }

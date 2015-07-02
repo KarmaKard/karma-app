@@ -30,12 +30,12 @@ export async function createAccount (requestIP, organization){
     })
 }
 
-export async function chargeCustomer (user){
+export async function chargeCustomer (user, stripeToken){
   try {
     var customer = {}
     if(!user.stripeCustomerId){
       customer = await stripe.customers.create({
-        source: user.stripeToken,
+        source: stripeToken,
         description: "Purchase of KarmaKard in support of fundraiser"
       })
     }

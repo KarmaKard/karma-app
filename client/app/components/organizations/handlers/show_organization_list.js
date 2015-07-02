@@ -28,7 +28,7 @@ export default React.createClass({
           {organizations}
         </ul>
         <hr />
-        <Link to="organizations_user_manages">Manage Your Organizations</Link>
+        <Link to="organizations">Manage Your Organizations</Link>
       </div>
     )
   }

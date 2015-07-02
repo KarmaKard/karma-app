@@ -31,11 +31,15 @@ export default React.createClass({
     var category = React.findDOMNode(this.refs.category).value
     var description = React.findDOMNode(this.refs.description).value
     var logo = React.findDOMNode(this.refs.logo).src
+    var beginDate = new Date(parseInt(React.findDOMNode(this.refs.beginDate).value))
+    var endDate = new Date(beginDate.getFullYear()+2, beginDate.getMonth())
 
     this.props.organization.name = name
     this.props.organization.category = category
     this.props.organization.description = description
     this.props.organization.logoURL = logo
+    this.props.organization.beginDate = beginDate
+    this.props.organization.endDate = endDate
 
     this.props.updateOrganization(this.props.organization)
     React.findDOMNode(this.refs.saveButton).style.border="3px solid rgb(75, 187, 44)"
@@ -45,10 +49,75 @@ export default React.createClass({
     this.setState({descriptionCounter: 150 - e.target.textLength})
   },
 
+  getActivePeriod(){
+    var date = new Date()
+    var thisMonth = date.getMonth()
+    var thisYear = date.getFullYear()
+    var nextYear = thisYear + 1
+
+
+    var beginDate1, beginDate2, beginDate1Text, beginDate2Text, endDate1Text, endDate2Text
+    
+    if(thisMonth < 3){
+      beginDate1 = new Date(thisYear, 3)
+      beginDate2 = new Date(thisYear, 6)
+    }
+    else if(thisMonth < 6){
+      beginDate1 = new Date(thisYear, 6)
+      beginDate2 = new Date(thisYear, 9)
+    }
+    else if(thisMonth < 9){
+      beginDate1 = new Date(thisYear, 9)
+      beginDate2 = new Date(nextYear, 0)
+    }
+    else {
+      beginDate1 = new Date(thisYear, 0)
+      beginDate2 = new Date(nextYear, 3)
+    }
+
+    var activePeriod = {
+      beginDate1,
+      beginDate2,
+    }
+
+    return activePeriod
+  },
+
+  changeDates(e){
+    var beginDate = new Date(parseInt(e.target.value))
+    var endDate = new Date(beginDate.getFullYear()+2, beginDate.getMonth())
+    endDate = endDate.toDateString()
+    this.setState({endDate})
+    this.changeMade()
+  },
+
   render() {
+    var beginDateOptions = this.getActivePeriod()
+    var beginDate = new Date(this.props.organization.beginDate)
+    var endDate = new Date(this.props.organization.endDate)
+    var endDateText
+    if (this.state.endDate){endDateText = this.state.endDate}
+    else if (endDate) {endDateText = endDate.toDateString()}
+    else {endDateText = "End Date"}
     return (
       <div>
         <div className="content_box-header">Profile</div>
+          <div className="deal_begin_date">
+            <span className="deal_text-left">Period: From</span> 
+            <select 
+            onBlur={this.saveThisDeal} 
+            onChange={this.changeDates} 
+            defaultValue={beginDate.getTime()} 
+            ref="beginDate" 
+            className="karma_select begin_date-select"
+            disabled={this.props.editDisabled}>
+              <option>Select Begin Date</option>
+              <option value={beginDateOptions.beginDate1.getTime()}>{beginDateOptions.beginDate1.toDateString()}</option>
+              <option value={beginDateOptions.beginDate2.getTime()}>{beginDateOptions.beginDate2.toDateString()}</option>
+            </select>
+            <span className="deal-to_date" ref="endDate" defaultValue={endDate}>To</span> 
+            {endDateText}
+          </div>
           <span className="label-span">Name</span>
           <input
             type="text"

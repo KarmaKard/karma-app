@@ -18,7 +18,7 @@ export default React.createClass({
     if(organization.status !== "active"){ return }
     return (
       <li className="organization_list-item" key={i}>
-        <Link to="organization" params={{organizationId: organization.id}}>
+        <Link to="business" params={{paymentId: this.context.router.getCurrentParams().paymentId, organizationId: organization.id}}>
           {organization.name}
         </Link>
       </li>
@@ -26,12 +26,18 @@ export default React.createClass({
   },
 
   render () {
+    if(!this.props.user || !this.props.payment){return <span>Wait</span>}
     var user = this.props.user
+    var paymentId = this.context.router.getCurrentParams().paymentId
+    
+    var payment = this.props.payment
+    var deals = this.props.deals
     var organizations = this.props.organizations
     var category = this.context.router.getCurrentParams().category
 
-    var organizationLinks = organizations
-      .filter(org => org.category === category)
+    var organizationLinks = this.props.organizations
+      .filter(organization => 
+      organization.category === category)
       .map(this.renderOrganizationLink)
 
     if (!user || organizations.length === 0 ){

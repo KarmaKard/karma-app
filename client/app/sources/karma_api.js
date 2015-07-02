@@ -10,7 +10,8 @@ const DEALS_URL = BASE_URL + '/api/v1/deals'
 const LOCATIONS_URL = BASE_URL + '/api/v1/locations' 
 const REDEMPTIONS_URL = BASE_URL + '/api/v1/redemptions' 
 const SURVEY_QUESTIONS_URL = BASE_URL + '/api/v1/questions'
-const SURVEY_RESPONSES_URL = BASE_URL + '/api/v1/survey_responses' 
+const SURVEY_RESPONSES_URL = BASE_URL + '/api/v1/survey_responses'
+const PAYMENT_URL = BASE_URL + '/api/v1/payments' 
 
 
 var token = window.localStorage.getItem('karma-token')
@@ -66,7 +67,34 @@ export function updateUser (user) {
   })
 }
 
+export function createPayment (stripeToken, user) {
+  return new Promise((resolve, reject) =>{
+    request
+      .post(PAYMENT_URL)
+      .send({stripeToken, user})
+      .set('token', token)
+      .end((err, res) => {
+        if(err) {
+          return reject(err)
+        }
+        resolve(res.body)
+      })
+  }) 
+}
 
+export function getPayments () {
+  return new Promise((resolve, reject) => {
+    request
+      .get(PAYMENT_URL)
+      .set('token', token)
+      .end((err, res) => {
+        if(err) {
+          return reject(err)
+        }
+      resolve(res.body.payments)
+      })
+  })
+}
 
 export function postNewOrganization (organization) {
   return new Promise((resolve, reject) => {
@@ -78,7 +106,12 @@ export function postNewOrganization (organization) {
         if(err) {
           return reject(err)
         }
-        resolve(res.body)
+        storeToken(res.body.token)
+        var response = {
+          organization: res.body.organization,
+          user: tokenToUser(token)
+        }
+        resolve(response)
       })
   })
 }

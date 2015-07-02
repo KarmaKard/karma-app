@@ -29,7 +29,7 @@ export default React.createClass({
         </div>
         <div className="content_box">
           <div className="content_box-header">
-            Fundraisers
+            Select A Fundraiser
           </div>
           <ul>
             {fundraiserLinks}

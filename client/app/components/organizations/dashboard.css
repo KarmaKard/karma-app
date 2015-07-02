@@ -36,6 +36,10 @@
   float: left;
 }
 
+.deal_begin_date {
+  margin: 10px 0 20px 0;
+}
+
 .create_organization-link {
   font-family: Quicksand,sans-serif;
   font-size: 16pt;

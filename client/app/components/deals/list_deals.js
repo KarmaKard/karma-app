@@ -58,7 +58,7 @@ export default React.createClass({
         <hr/>
         <div className="content_box-header">Get On Board!</div>
         <p>Give good, Get good. In order to have full access to KarmaKard, we ask that you give to a local fundraising organization. A $30 dollar donation will give you instant access to thousands of dollars in exclusive deals.</p>
-        <button className="karma_button">Donate to a local Fundraiser</button>
+        <Link to="fundraisers"><button className="karma_button">Donate to a local Fundraiser</button></Link>
       </div>
     )
   }

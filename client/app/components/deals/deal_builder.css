@@ -102,3 +102,10 @@
   color: white;
 }  
 
+.begin_date-select {
+  float:left;
+}
+
+.deal-to_date {
+  margin: auto 10px;
+}

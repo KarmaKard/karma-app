@@ -12,14 +12,14 @@ export default React.createClass({
   render() {
     var organization = this.props.organization
     var dealId = this.context.router.getCurrentParams().dealId
+    var paymentId = this.context.router.getCurrentParams().paymentId
 
     return (
       <div>
-          <Link to="organization" params={{organizationId: organization.id, dealId: dealId}}>
+          <Link to="business" params={{paymentId: paymentId, organizationId: organization.id, dealId: dealId}}>
             <button className="back_button">Go Back</button>
           </Link>
-          <div className="content_box-header">Add Redemptions</div>
-            <AddRedemptions {... this.props} />
+          <AddRedemptions {... this.props} />
       </div>
     )
   }

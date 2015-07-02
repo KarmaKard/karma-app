@@ -23,7 +23,7 @@ export default React.createClass({
       if(response.userId === userId){return response}
     })
     var surveyQuestion = this.findNewQuestion(surveyResponses)
-
+    
     this.setState({
       userId,
       surveyResponses,
@@ -45,7 +45,7 @@ export default React.createClass({
     flux.actions.deals.createSurveyResponse(surveyResponse)
 
     var { router } = this.context
-    router.transitionTo('redeem_deal', {organizationId: surveyResponse.organizationId, dealId: surveyResponse.dealId})
+    router.transitionTo('redeem_deal', {paymentId: this.context.router.getCurrentParams().paymentId, organizationId: surveyResponse.organizationId, dealId: surveyResponse.dealId})
   },
 
   renderAnswerLink (option, i) {
@@ -65,19 +65,25 @@ export default React.createClass({
   },
 
   render() {
-    if(this.props.surveyQuestions.length === 0){return <span>Wait</span>}
+    if(this.props.surveyQuestions.length === 0 ){return <span>Wait</span>}
 
-    var options = this.state.surveyQuestion.options.map(this.renderAnswerLink)
+    var options, questionText
+    if(this.state.surveyQuestion){
+      options = this.state.surveyQuestion.options.map(this.renderAnswerLink)
+      questionText = this.state.surveyQuestion.questionText
+    }
+    
     var organization = this.props.organization
     var dealId = this.context.router.getCurrentParams().dealId
+    var paymentId = this.context.router.getCurrentParams().paymentId
 
     return(
       <div className="surveyQuestion" >
-        <Link to="organization" params={{organizationId: organization.id, dealId: dealId}}>
+        <Link to="business" params={{paymentId: paymentId, organizationId: organization.id, dealId: dealId}}>
           <button className="back_button">Go Back</button>
         </Link>
 
-        <h1>{this.state.surveyQuestion.questionText}</h1>
+        <h1>{questionText}</h1>
         <ul>
           {options}
         </ul>

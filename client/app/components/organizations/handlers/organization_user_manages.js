@@ -19,7 +19,7 @@ export default React.createClass({
       editDisabled = true
     }
     
-    if (organization.userId !== user.id && user.roles.superadmin) {
+    if (organization.userId !== user.id && !user.roles.superadmin) {
       return <p>You are not permitted to view this page</p>
     }
 

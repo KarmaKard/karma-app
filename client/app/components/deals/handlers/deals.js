@@ -61,7 +61,7 @@ export default React.createClass({
   render() {
     var organizations = this.state.organizationsStoreState.organizations
     var currentUser = this.state.usersStoreState.currentUser
-    var payments = this.state.usersStoreState.payments
+    var payments = this.state.usersStoreState.payments.filter(payment => payment.userId === currentUser.id)
     var deals = this.state.dealsStoreState.deals
     var locations = this.state.organizationsStoreState.locations
     var redemptions = this.state.dealsStoreState.redemptions
@@ -70,16 +70,19 @@ export default React.createClass({
     if (!currentUser) {
       return <span>Authenticating...</span>
     }
-    
+
     return (
+      <div>
         <RouteHandler 
           organizations={organizations} 
           user={currentUser} 
+          payments={payments}
           locations={locations} 
           deals={deals} 
           redemptions={redemptions} 
           surveyQuestions={surveyQuestions} 
           surveyResponses={surveyResponses}/>
+      </div>
     )
   }
 })

@@ -17,7 +17,7 @@ export default React.createClass({
     var user = this.props.user
     var redemptions = this.props.redemptions
     var organization = this.props.organization 
-   
+    var paymentId = this.context.router.getCurrentParams().paymentId
     var amountRedeemed = this.props.redemptions.filter(function(redemption){
       return redemption.dealId === deal.id && redemption.userId === user.id ? redemption : null
     })
@@ -27,7 +27,7 @@ export default React.createClass({
     
     return ( 
       <li className="deal-button" key={i}>
-        <Link to={redeemLink} params={{organizationId: this.props.organization.id, dealId: deal.id}}>
+        <Link to={redeemLink} params={{paymentId: paymentId, organizationId: this.props.organization.id, dealId: deal.id}}>
           <div>
             <div className="deals_description">{deal.dealText}</div>
             <div className="deals_limit">{redemptionsLeft}</div>
@@ -55,7 +55,7 @@ export default React.createClass({
     var manageLink
     this.props.organizations.map(function(organization){ 
        if (organization.userId === user.id){
-          return manageLink = <li><Link to="organizations_user_manages">Manage</Link></li>
+          return manageLink = <li><Link to="organizations">Manage</Link></li>
        }
     })
 

@@ -5,6 +5,7 @@ import WizardType from './wizard_type'
 import WizardName from './wizard_name'
 import WizardCategory from './wizard_category'
 import WizardLogo from './wizard_logo'
+import Registration from '../../users/register'
 
 export default React.createClass({
   contextTypes: {
@@ -13,6 +14,7 @@ export default React.createClass({
 
   getInitialState() {
     return {
+      usersStoreState: flux.stores.users.getState(),
       type: null,
       name: null,
       category: null,
@@ -21,6 +23,25 @@ export default React.createClass({
       status: "inactive"
     }
   },
+
+  storeChange() {
+    this.setState(this.getStoreState())
+  },
+
+  getStoreState() {
+    return {
+      usersStoreState: flux.stores.users.getState()
+    }
+  },
+
+  componentWillMount() {
+    flux.stores.users.addListener('change', this.storeChange)
+  },
+
+  componentWillUnmount() {
+    flux.stores.users.removeListener('change', this.storeChange)
+  },
+
 
   setType(type){
     this.setState({type, step: this.state.step + 1})
@@ -74,6 +95,11 @@ export default React.createClass({
   },
 
   getWizardComponent() {
+    
+    if(!this.state.usersStoreState.currentUser){
+      return <Registration />
+    }
+
     switch(this.state.step) {
       case 1:
         return <WizardType 
