@@ -17,11 +17,11 @@ export default React.createClass({
   renderOrganizationLink (organization, i) {
     if(organization.status !== "active"){ return }
     return (
-      <li className="organization_list-item" key={i}>
-        <Link to="business" params={{paymentId: this.context.router.getCurrentParams().paymentId, organizationId: organization.id}}>
+      <Link to="business" params={{paymentId: this.context.router.getCurrentParams().paymentId, organizationId: organization.id}}>
+        <li className="organization_list-item" key={i}>
           {organization.name}
-        </Link>
-      </li>
+        </li>
+      </Link>
     )
   },
 

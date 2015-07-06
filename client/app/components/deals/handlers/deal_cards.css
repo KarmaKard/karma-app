@@ -1,0 +1,13 @@
+.dealCardBox {
+  width: 40%;
+  height: 175px;
+  background-color: rgba(0,0,0,1);
+  color: white;
+  margin: 5%;
+  padding: 70px 8%;
+  float: left;
+}
+
+.deal_card-list {
+  padding: 0;
+}

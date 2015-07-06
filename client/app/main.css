@@ -6,6 +6,7 @@
 @import './components/organizations/wizard/index';
 @import './components/organizations/dashboard';
 @import './components/deals/list_deals';
+@import './components/deals/handlers/deal_cards';
 @import 'https://fonts.googleapis.com/css?family=Quicksand';
 
 body {
