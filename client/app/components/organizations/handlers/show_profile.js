@@ -26,14 +26,12 @@ export default React.createClass({
     var redeemLink = redemptionsLeft === 0 ? "add_redemptions" : "survey"
     
     return ( 
-      <li className="deal-button" key={i}>
-        <Link to={redeemLink} params={{paymentId: paymentId, organizationId: this.props.organization.id, dealId: deal.id}}>
-          <div>
+      <Link to={redeemLink} params={{paymentId: paymentId, organizationId: this.props.organization.id, dealId: deal.id}}>
+        <li className="deal-button" key={i}>
             <div className="deals_description">{deal.dealText}</div>
             <div className="deals_limit">{redemptionsLeft}</div>
-          </div>
-        </Link>
-      </li>
+        </li>
+      </Link>
     )
   },
 

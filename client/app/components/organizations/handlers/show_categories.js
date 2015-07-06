@@ -17,6 +17,17 @@ export default React.createClass({
     var { router } = this.context
     flux.actions.users.logout(router)
   },
+
+  renderOrganizationLink (organization, i) {
+    if(organization.status !== "active"){ return }
+    return (
+      <Link to="business" params={{paymentId: this.context.router.getCurrentParams().paymentId, organizationId: organization.id}}>
+        <li className="organization_list-item" key={i}>
+          {organization.name}
+        </li>
+      </Link>
+    )
+  },
   
   render(){
     if(!this.props.user || !this.props.payment){return <span>Hello</span>}
@@ -27,12 +38,20 @@ export default React.createClass({
     var organizations = this.props.organizations
 
     var activeCategories = this.props.categories.map((category, index) => {
+      var organizationLinks = organizations
+        .filter(organization => 
+        organization.category === category)
+        .map(this.renderOrganizationLink)
+
       return (
-        <li className="category_list-item" key={index}>
-          <Link to="categorical_organizations" params={{paymentId: payment.id, category : category}}>
-            {category} 
-          </Link>
-        </li>
+        <div>
+        <Link to="categorical_organizations" params={{paymentId: payment.id, category : category}}>
+          <li className="category_list-item" key={index}>
+            {category}
+          </li>
+        </Link>
+        {organizationLinks}
+        </div>
       )
     })
 
