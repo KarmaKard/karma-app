@@ -79,10 +79,6 @@ export default React.createClass({
 
     return(
       <div className="surveyQuestion" >
-        <Link to="business" params={{paymentId: paymentId, organizationId: organization.id, dealId: dealId}}>
-          <button className="back_button">Go Back</button>
-        </Link>
-
         <h1>{questionText}</h1>
         <ul>
           {options}

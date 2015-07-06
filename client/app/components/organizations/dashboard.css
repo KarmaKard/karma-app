@@ -16,6 +16,27 @@
   list-style-type: none;
 }
 
+.category_list-item {
+  border-bottom: 1px solid black;
+  padding: 10px 0 5px 0;
+  font-weight: bold;
+}
+
+.organization_list-item {
+  border-top: 1px solid black;
+  padding: 10px 0 10px 20px;
+}
+
+.category_list-item:hover {
+  color: white;
+  background: black;
+}
+
+.organization_list-item:hover {
+  color: white;
+  background: black;
+}
+
 .street_address_input{
   width: 70% !important;
   float:left;
@@ -68,7 +89,15 @@
 }
 
 .deal-button {
-  padding: 20px 5px 20px 0;
+  padding: 15px 0 15px 15px;
+  margin-top: 15px;
+  border: black 1px solid;
+  overflow: auto;
+}
+
+.deal-button:hover {
+  background-color: black;
+  color: white;
 }
 
 .deal_list {
@@ -115,6 +144,12 @@
     width: 33%;
     height: 60px;
     text-align: center;
+}
+
+.dialpad-element:hover {
+    cursor: hand;
+    cursor: pointer;
+    opacity: .9;
 }
 
 .redeem_success-happy_button {
