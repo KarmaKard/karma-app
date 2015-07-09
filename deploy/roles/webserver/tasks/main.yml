@@ -14,6 +14,11 @@
        state=present
        enablerepo=epel
 
+- name: Install NPM
+  yum: name=npm
+       state=present
+       enablerepo=epel
+
 - name: Install Git
   yum: name=git state=latest
 
