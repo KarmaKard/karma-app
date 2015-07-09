@@ -13,7 +13,13 @@
         state=absent
   with_items:
     - "{{ client_path }}/dist"
-    
+
 - name: Build client assets
   command: npm run build
            chdir={{ client_path }}
+
+- name: Set SELinux file type
+  file: path="{{ client_path }}/dist"
+        state=directory
+        recurse=yes
+        setype=httpd_sys_content_t
