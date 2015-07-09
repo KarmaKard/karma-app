@@ -45,27 +45,30 @@ export default React.createClass({
   },
 
   render() {
-    var {
-      firstName,
-      lastName,
-      dobYear,
-      dobMonth,
-      dobDate,
-      accountNumber,
-      tosChecked
-    } = this.props.organization.bankInfo
+    var firstName, lastName, dobYear, dobMonth, dobDate, accountNumber, tosChecked, routingNumber
+    if (this.props.organization.bankInfo){
+      var {
+        firstName,
+        lastName,
+        dobYear,
+        dobMonth,
+        dobDate,
+        accountNumber,
+        routingNumber,
+        tosChecked
+      } = this.props.organization.bankInfo
+    }
 
     var yearOption = []
     var dayOption = []
     var eligibleYear = new Date().getFullYear() - 18
 
     for (var i = eligibleYear; i > 1900 + 1; i--) {
-      yearOption = yearOption.push(<option value={i}>{i}</option>)
-
+      yearOption.push(<option value={i}>{i}</option>)
     }
 
     for (var i = 1; i < 32; i++) {
-      dayOption = dayOption.push(<option value={i}>{i}</option>)
+      dayOption.push(<option value={i}>{i}</option>)
     }
 
     return (
