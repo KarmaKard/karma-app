@@ -2,3 +2,4 @@
 dependencies:
   - { role: database }
   - { role: webserver }
+  - { role: remote-build-client }
