@@ -61,6 +61,12 @@ export default class UserActions extends Actions {
     this.dispatch('logout')
     return router.transitionTo('login')
   }
+  
+  emailPasswordReset(email) {
+    console.log("in actions")
+    KarmaAPI.emailPasswordReset(email)
+
+  }
 
   createError(error) {
     console.warn(error)

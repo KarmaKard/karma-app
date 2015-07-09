@@ -2,19 +2,23 @@ import React from 'react'
 import { flux } from '../../main'
 
 export default React.createClass({
-  getInitialState(){
+  propTypes: {
+    endDate: React.PropTypes.string
+  },
+
+  getInitialState () {
     return {
       endDate: this.props.endDate
     }
   },
 
-  saveThisDeal(){
+  saveThisDeal () {
     var primaryProductName = React.findDOMNode(this.refs.primaryProductName).value
     var limit = React.findDOMNode(this.refs.limit).value
     var percentageOff = React.findDOMNode(this.refs.percentageOff).value
     var dollarValue = React.findDOMNode(this.refs.dollarValue).value
-    var beginDate = new Date(parseInt(React.findDOMNode(this.refs.beginDate).value))
-    var endDate = new Date(beginDate.getFullYear()+2, beginDate.getMonth())
+    var beginDate = new Date(parseInt(React.findDOMNode(this.refs.beginDate).value, 10))
+    var endDate = new Date(beginDate.getFullYear() + 2, beginDate.getMonth())
 
     if (!primaryProductName || !limit || !dollarValue || !percentageOff || isNaN(beginDate) || isNaN(endDate)) {
       return null
@@ -27,14 +31,14 @@ export default React.createClass({
       dollarValue,
       beginDate: beginDate.getTime(),
       endDate: endDate.getTime(),
-      type: "POX"
-    } 
-    
-    deal.dealText = "Get " + percentageOff + "% off purchase of "+ primaryProductName 
-    
-    if(this.props.deal){
+      type: 'POX'
+    }
+
+    deal.dealText = "Get " + percentageOff + "% off purchase of " + primaryProductName
+
+    if (this.props.deal) {
       deal.id = this.props.deal.id
-    }    
+    }
     this.props.saveDeal(deal)
   },
 
