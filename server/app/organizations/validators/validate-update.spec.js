@@ -57,7 +57,7 @@ describe('Organizations: Validate Update', function () {
   })
 
   it('ignores status if not superAdmin', () => {
-    data.organization.organizationStatus = 'illegal'
+    data.organization.status = 'illegal'
     req.body = data
     req.user = {id: '1'}
     validateUpdate(req, res, next)
@@ -65,11 +65,11 @@ describe('Organizations: Validate Update', function () {
   })
 
   it('accepts status if superAdmin', () => {
-    data.organization.organizationStatus = 'legal'
+    data.organization.status = 'legal'
     req.body = data
     req.user = {id: '2', isSuperAdmin: true}
     validateUpdate(req, res, next)
-    req.body.organization.should.have.property('status', data.organization.organizationStatus)
+    req.body.organization.should.have.property('status', data.organization.status)
   })
 
   it('succeeds if organization object is valid', () => {

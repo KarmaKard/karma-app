@@ -12,16 +12,32 @@ export default React.createClass({
     return {
       newDeals: [],
       changedDeals: [],
-      newDealPlaceholder: null
+      activePeriod: this.getActivePeriod(),
+      newDealPlaceholder: null,
+      editDisabled: false
     }
+  },
+
+  componentWillMount() {
+    if(this.props.editDisabled === null){
+      return null
+    }
+    var editDisabled  = 
+      this.props.organization.status === "active" || 
+      this.props.organization.status === "pending" || 
+      this.props.user.roles.superadmin
+      ? true 
+      : false
+
+    this.setState({editDisabled})
   },
 
   saveDeal(deal){
     if(!deal.id){
-      deal.organizationId = this.props.organizationId
-      var newDeals = this.state.changedDeals
+      deal.organizationId = this.props.organization.id
+      var newDeals = this.state.newDeals
       for (let i in newDeals) {
-        if (newDeals[i].id === deal.id) {
+        if (newDeals[i].dealText === deal.dealText) {
           newDeals.splice(i, 1, deal)
           this.setState({newDeals})
           return
@@ -47,19 +63,19 @@ export default React.createClass({
   lookupDeal(deal, i) {
     switch(deal.type) {
       case "Free":
-        return <FreeDeal key={i} saveDeal={this.saveDeal} deal={deal} editDisabled={this.props.editDisabled} changeMade={this.changeMade}/>
+        return <FreeDeal key={i} saveDeal={this.saveDeal} activePeriod={this.state.activePeriod} deal={deal} editDisabled={this.state.editDisabled} changeMade={this.changeMade}/>
         break
       case "BXX":
-        return <BXXDeal key={i} saveDeal={this.saveDeal} deal={deal} editDisabled={this.props.editDisabled} changeMade={this.changeMade}/>
+        return <BXXDeal key={i} saveDeal={this.saveDeal} activePeriod={this.state.activePeriod} deal={deal} editDisabled={this.state.editDisabled} changeMade={this.changeMade}/>
         break
       case "BXY":
-        return <BXYDeal key={i} saveDeal={this.saveDeal} deal={deal} editDisabled={this.props.editDisabled} changeMade={this.changeMade}/>
+        return <BXYDeal key={i} saveDeal={this.saveDeal} activePeriod={this.state.activePeriod} deal={deal} editDisabled={this.state.editDisabled} changeMade={this.changeMade}/>
         break
       case "DOX":
-        return <DOXDeal key={i} saveDeal={this.saveDeal} deal={deal} editDisabled={this.props.editDisabled} changeMade={this.changeMade}/>
+        return <DOXDeal key={i} saveDeal={this.saveDeal} activePeriod={this.state.activePeriod} deal={deal} editDisabled={this.state.editDisabled} changeMade={this.changeMade}/>
         break
       case "POX":
-        return <POXDeal key={i} saveDeal={this.saveDeal} deal={deal} editDisabled={this.props.editDisabled} changeMade={this.changeMade}/>
+        return <POXDeal key={i} saveDeal={this.saveDeal} activePeriod={this.state.activePeriod} deal={deal} editDisabled={this.state.editDisabled} changeMade={this.changeMade}/>
         break
     }
   },
@@ -90,6 +106,40 @@ export default React.createClass({
 
   },
 
+  getActivePeriod(){
+    var date = new Date()
+    var thisMonth = date.getMonth()
+    var thisYear = date.getFullYear()
+    var nextYear = thisYear + 1
+
+
+    var beginDate1, beginDate2, beginDate1Text, beginDate2Text, endDate1Text, endDate2Text
+    
+    if(thisMonth < 3){
+      beginDate1 = new Date(thisYear, 3)
+      beginDate2 = new Date(thisYear, 6)
+    }
+    else if(thisMonth < 6){
+      beginDate1 = new Date(thisYear, 6)
+      beginDate2 = new Date(thisYear, 9)
+    }
+    else if(thisMonth < 9){
+      beginDate1 = new Date(thisYear, 9)
+      beginDate2 = new Date(nextYear, 0)
+    }
+    else {
+      beginDate1 = new Date(thisYear, 0)
+      beginDate2 = new Date(nextYear, 3)
+    }
+
+    var activePeriod = {
+      beginDate1,
+      beginDate2,
+    }
+
+    return activePeriod
+  },
+
   render() {
     if(!this.props.deals){
       return <span>No Deals</span>
@@ -110,7 +160,7 @@ export default React.createClass({
           onChange={this.newDeal} 
           defaultValue="add" 
           className="karma_select"
-          disabled={this.props.editDisabled}>
+          disabled={this.state.editDisabled}>
           <option value="add">Add Another Deal</option>
           <option value="Free">Free</option>
           <option value="BXX">Buy X get X Free</option>
@@ -122,7 +172,7 @@ export default React.createClass({
         <button 
           ref="saveButton" 
           className="karma_button" 
-          disabled={this.props.editDisabled} 
+          hidden={this.state.editDisabled} 
           onClick={this.saveClicked}>
             Save
         </button>

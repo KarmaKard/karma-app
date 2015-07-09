@@ -16,6 +16,27 @@
   list-style-type: none;
 }
 
+.category_list-item {
+  border-bottom: 1px solid black;
+  padding: 10px 0 5px 0;
+  font-weight: bold;
+}
+
+.organization_list-item {
+  border-top: 1px solid black;
+  padding: 10px 0 10px 20px;
+}
+
+.category_list-item:hover {
+  color: white;
+  background: black;
+}
+
+.organization_list-item:hover {
+  color: white;
+  background: black;
+}
+
 .street_address_input{
   width: 70% !important;
   float:left;
@@ -34,6 +55,10 @@
 
 .label-span{
   float: left;
+}
+
+.deal_begin_date {
+  margin: 10px 0 20px 0;
 }
 
 .create_organization-link {
@@ -56,4 +81,114 @@
 .create_organization-link_span:hover {
   color: black;
   background: white;
+}
+
+.profile_description-counter {
+  float: right;
+  margin: 0;
+}
+
+.deal-button {
+  padding: 15px 0 15px 15px;
+  margin-top: 15px;
+  border: black 1px solid;
+  overflow: auto;
+}
+
+.deal-button:hover {
+  background-color: black;
+  color: white;
+}
+
+.deal_list {
+  padding: 20px 0;
+}
+
+.deals_header {
+  width: 100%;
+}
+
+.deals_description {
+  float:left;
+  width: 80%
+}
+.deals_limit {
+  float:right;
+  width: 20%;
+  text-align: center;
+}
+
+.bank_data-dob_month {
+  float:left;
+  margin-right: 5px;
+}
+
+.bank_data-dob_day {
+  float: left;
+  margin-right: 5px;
+}
+
+.bank_data-dob_month {
+  float: left;
+  margin-right: 5px;
+}
+
+.bank_data-dob {
+  margin: 5px 0 10px 0;
+} 
+
+.dialpad-display {
+    border: 1px solid #AAA;
+    padding: 20px;
+    font-size: 20px;
+    width: 295px;
+    text-align: right;
+    height: 25px;
+}
+
+.dialpad {
+    margin: 0; 
+    padding:0;
+    overflow: hidden;
+    border: 1px solid #CCC;
+    width: 100%;
+}
+
+.dialpad-element {
+    float: left;
+    border: 1px solid #CCC;
+    background-color: #555;
+    color: White;
+    padding: 20px;
+    width: 33%;
+    height: 60px;
+    text-align: center;
+}
+
+.dialpad-element:hover {
+    cursor: hand;
+    cursor: pointer;
+    opacity: .9;
+}
+
+.redeem_success-happy_button {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 24pt;
+  text-decoration: none;
+  font:black;
+  float:left;
+  margin: 5px 10px;
+  background: white;
+  border: 1px solid white;
+}
+
+.redeem_success-unhappy_button {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 24pt;
+  text-decoration: none;
+  font:black;
+  clear:right;
+  margin: 5px 10px;
+  background: white;
+  border: 1px solid white;
 }

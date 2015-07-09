@@ -29,3 +29,15 @@ export function tokenToUser (token) {
   // throws JSON Parse error if badly formed token
   return JSON.parse(window.atob(token.split('.')[1]))
 }
+
+/**
+ * Transform a date to mm/dd/yyyy
+ */
+export function formatDateString(date) {
+    var mm = date.getMonth() + 1
+    var dd = date.getDate()
+    var yyyy = date.getFullYear()
+    var yy = yyyy.toString().substr(2,2);
+    return mm + '/' + dd + '/' + yy
+}
+

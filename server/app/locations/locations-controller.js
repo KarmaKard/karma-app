@@ -6,19 +6,23 @@ import * as auth from '../common/middleware/authentication'
 export var router = express.Router()
 
 router.get('/', auth.token, list)
-export function list (req, res, next){
-  var queryPromise = locationsTable.index()
-  queryPromise.then(locations => {
+export async function list (req, res, next){
+  try {
+    var locations = await locationsTable.index()
     res.json({locations})
-  }).catch(next)
+  } catch (e) {
+    next(e)
+  }
 }
 
 router.post('/', auth.token, validateCreate, create)
-export function create(req, res, next){
-  var location = req.body.location
-  location.userId = req.user.id
-  var queryPromise = locationsTable.insert(location)
-  queryPromise.then(location => {
+export async function create (req, res, next) {
+  try {
+    var locationToSave = req.body.location
+    locationToSave.userId = req.user.id
+    var location = await locationsTable.insert(locationToSave)
     res.json({location})
-  }).catch(next)
+  } catch (e) {
+    next(e)
+  }
 }

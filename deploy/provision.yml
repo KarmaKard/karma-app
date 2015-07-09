@@ -1,7 +1,6 @@
 ---
 - hosts: all
-  remote_user: tgroshon
-  sudo: yes
+  remote_user: root
 
   roles:
     - { role: provision, tags: ["provision"] }

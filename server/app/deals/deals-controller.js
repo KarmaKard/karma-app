@@ -5,42 +5,47 @@ import * as auth from '../common/middleware/authentication'
 
 export var router = express.Router()
 
-router.get('/', auth.token, list)
-export function list (req, res, next){
-  var queryPromise = dealsTable.index()
-  queryPromise.then(deals => {
+router.get('/', list)
+export async function list (req, res, next){
+  try {
+    var deals = await dealsTable.index()
     res.json({deals})
-  }).catch(next)
+  } catch (e) {
+    next(e)
+  }
 }
 
 router.post('/', auth.token, validateCreate, create)
-export function create(req, res, next){
-  var deals = req.body.deals.map(deal => {
-    deal.userId = req.user.id
-    return deal
-  })
-  var queryPromise = dealsTable.insert(deals)
-  queryPromise.then(deals => {
+export async function create(req, res, next){
+  try {
+    var dealsToSave = req.body.deals.map(deal => {
+      deal.userId = req.user.id
+      return deal
+    })
+    var deals = await dealsTable.insert(dealsToSave)
     res.json({deals})
-  }).catch(next)
+  } catch (e) {
+    next(e)
+  }
 }
 
 router.put('/', auth.token, update)
-export function update(req, res, next){
-  var pDeals = req.body.deals.map(
-    deal => dealsTable.update(deal)
-  )
-  Promise.all(pDeals).then(deals => { 
+export async function update(req, res, next){
+  try {
+    var promises = req.body.deals.map(deal => dealsTable.update(deal))
+    var deals = await Promise.all(promises)
     res.json({deals}) 
-  }, error => {
-    res.status(500).json(error)
-  }).catch(next)
+  } catch (e) {
+    next(e)
+  }
 }
 
 router.delete('/', auth.token, dealDelete)
-export function dealDelete(req, res, next){
-  var pDeal = dealsTable.dealDelete(req.body.deal) 
-   pDeal.then(deal => {
+export async function dealDelete(req, res, next){
+  try {
+    var deal = await dealsTable.del(req.body.deal) 
     res.json({deal})
-  }).catch(next)
+  } catch (e) {
+    next(e)
+  }
 }

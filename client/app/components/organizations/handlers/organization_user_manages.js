@@ -14,11 +14,12 @@ export default React.createClass({
     var locations = this.props.locations
     var user = this.props.user
     var editDisabled = false
-    if(organization.organizationStatus === "review") {
+
+    if(organization.status === "pending" || user.roles.superadmin) {
       editDisabled = true
     }
     
-    if (organization.userId !== user.id) {
+    if (organization.userId !== user.id && !user.roles.superadmin) {
       return <p>You are not permitted to view this page</p>
     }
 

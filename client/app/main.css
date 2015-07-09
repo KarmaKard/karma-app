@@ -5,6 +5,8 @@
 @import './components/deals/deal_builder';
 @import './components/organizations/wizard/index';
 @import './components/organizations/dashboard';
+@import './components/deals/list_deals';
+@import './components/deals/handlers/deal_cards';
 @import 'https://fonts.googleapis.com/css?family=Quicksand';
 
 body {
@@ -119,6 +121,22 @@ a:active {color: black;}
   border: 1px solid white;
 }
 
+.back_button {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 16pt;
+  text-decoration: none;
+  font:black;
+  float:left;
+  margin: 12px 0 0 0;
+  background: white;
+  border: 1px solid black;
+}
+
+.back_button:hover {
+  background-color: black;
+  color: white;
+  cursor: pointer;
+}
 
 .karma_button:hover {
   border: 1px solid black;

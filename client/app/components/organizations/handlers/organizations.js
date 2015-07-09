@@ -15,8 +15,22 @@ export default React.createClass({
     }
     if (storeState.dealsStoreState.deals.length === 0){
       flux.actions.deals.getDeals()
+      flux.actions.deals.getRedemptions()
+      flux.actions.deals.getSurveyQuestions()
+      flux.actions.deals.getSurveyResponses()
+    }
+    if (storeState.usersStoreState.payments.length === 0){
+      flux.actions.users.getPayments()
     }
     return storeState
+  },
+
+  componentDidMount(){
+    var currentUser = this.state.usersStoreState.currentUser
+    if (!currentUser){
+      var router = this.context.router
+      router.transitionTo('login')
+    }
   },
 
   storeChange() {
@@ -34,28 +48,38 @@ export default React.createClass({
   componentWillMount() {
     flux.stores.organizations.addListener('change', this.storeChange)
     flux.stores.deals.addListener('change', this.storeChange)
+    flux.stores.users.addListener('change', this.storeChange)
   },
 
   componentWillUnmount() {
     flux.stores.organizations.removeListener('change', this.storeChange)
     flux.stores.deals.removeListener('change', this.storeChange)
+    flux.stores.users.removeListener('change', this.storeChange)
   },
 
 
   render() {
     var organizations = this.state.organizationsStoreState.organizations
     var currentUser = this.state.usersStoreState.currentUser
+    var payments = this.state.usersStoreState.payments
     var deals = this.state.dealsStoreState.deals
     var locations = this.state.organizationsStoreState.locations
-
+    var redemptions = this.state.dealsStoreState.redemptions
+    var surveyQuestions = this.state.dealsStoreState.surveyQuestions
+    var surveyResponses = this.state.dealsStoreState.surveyResponses
     if (!currentUser) {
       return <span>Authenticating...</span>
     }
-
+    
     return (
-      <div>
-        <RouteHandler organizations={organizations} user={currentUser} locations={locations} deals={deals} />
-      </div>
+        <RouteHandler 
+          organizations={organizations} 
+          user={currentUser} 
+          locations={locations} 
+          deals={deals} 
+          redemptions={redemptions} 
+          surveyQuestions={surveyQuestions} 
+          surveyResponses={surveyResponses}/>
     )
   }
 })

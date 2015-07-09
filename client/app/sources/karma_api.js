@@ -8,6 +8,10 @@ const ORGANIZATIONS_URL = BASE_URL + '/api/v1/organizations'
 const MANAGE_ORGANIZATIONS_URL = ORGANIZATIONS_URL + '/manage'
 const DEALS_URL = BASE_URL + '/api/v1/deals'
 const LOCATIONS_URL = BASE_URL + '/api/v1/locations' 
+const REDEMPTIONS_URL = BASE_URL + '/api/v1/redemptions' 
+const SURVEY_QUESTIONS_URL = BASE_URL + '/api/v1/questions'
+const SURVEY_RESPONSES_URL = BASE_URL + '/api/v1/survey_responses'
+const PAYMENT_URL = BASE_URL + '/api/v1/payments' 
 
 
 var token = window.localStorage.getItem('karma-token')
@@ -47,6 +51,51 @@ export function postNewUser (user) {
   })
 }
 
+export function updateUser (user) {
+  return new Promise((resolve, reject) =>{
+    request
+      .put(REGISTER_URL + "/" + user.id)
+      .send({user})
+      .set('token', token)
+      .end((err, res) => {
+        if(err) {
+          return reject(err)
+        }
+        storeToken(res.body.token)
+        resolve(tokenToUser(token))
+      })
+  })
+}
+
+export function createPayment (stripeToken, user) {
+  return new Promise((resolve, reject) =>{
+    request
+      .post(PAYMENT_URL)
+      .send({stripeToken, user})
+      .set('token', token)
+      .end((err, res) => {
+        if(err) {
+          return reject(err)
+        }
+        resolve(res.body)
+      })
+  }) 
+}
+
+export function getPayments () {
+  return new Promise((resolve, reject) => {
+    request
+      .get(PAYMENT_URL)
+      .set('token', token)
+      .end((err, res) => {
+        if(err) {
+          return reject(err)
+        }
+      resolve(res.body.payments)
+      })
+  })
+}
+
 export function postNewOrganization (organization) {
   return new Promise((resolve, reject) => {
     request
@@ -57,7 +106,12 @@ export function postNewOrganization (organization) {
         if(err) {
           return reject(err)
         }
-        resolve(res.body.organization)
+        storeToken(res.body.token)
+        var response = {
+          organization: res.body.organization,
+          user: tokenToUser(token)
+        }
+        resolve(response)
       })
   })
 }
@@ -156,7 +210,6 @@ export function getDeals () {
   return new Promise((resolve, reject) => {
     request
       .get(DEALS_URL)
-      .set('token', token)
       .end((err, res) => {
         if(err) {
           return reject(err)
@@ -208,5 +261,78 @@ export function deleteDeal(deal) {
         resolve(res.body.deal)
       })
 
+  })
+}
+
+export function postNewRedemption(redemption) {
+  return new Promise ((resolve, reject) =>
+    request
+      .post(REDEMPTIONS_URL)
+      .send({redemption})
+      .set('token', token)
+      .end((err, res) => {
+        if(err) {
+          return reject(err)
+        }
+        resolve(res.body.redemption)
+      })
+  )
+}
+
+export function getRedemptions () {
+  return new Promise((resolve, reject) => {
+    request
+      .get(REDEMPTIONS_URL)
+      .set('token', token)
+      .end((err, res) => {
+        if(err) {
+          return reject(err)
+        }
+        resolve(res.body.redemptions)
+      })
+  })
+}
+
+export function getSurveyQuestions () {
+  return new Promise((resolve, reject) => {
+    request
+      .get(SURVEY_QUESTIONS_URL)
+      .set('token', token)
+      .end((err, res) => {
+        if(err) {
+          return reject(err)
+        }
+        resolve(res.body.questions)
+      })
+  })
+}
+
+export function postNewSurveyResponse (surveyResponse) {
+  return new Promise((resolve, reject) => {
+    request
+      .post(SURVEY_RESPONSES_URL)
+      .send({surveyResponse})
+      .set('token', token)
+      .end((err, res) => {
+        if(err) {
+          return reject(err)
+        }
+        resolve(res.body.surveyResponse)
+      })
+  })
+}
+
+
+export function getSurveyResponses () {
+  return new Promise((resolve, reject) => {
+    request
+      .get(SURVEY_RESPONSES_URL)
+      .set('token', token)
+      .end((err, res) => {
+        if(err) {
+          return reject(err)
+        }
+        resolve(res.body.surveyResponses)
+      })
   })
 }

@@ -5,6 +5,9 @@ export default class DealStore extends Store {
     super()
     this.state = {
       deals: [], 
+      redemptions: [],
+      surveyQuestions: [],
+      surveyResponses: [],
       createErrors: []
     }
 
@@ -13,6 +16,11 @@ export default class DealStore extends Store {
     this.handleAction('deals.getDeals', this.saveDeals)
     this.handleAction('deals.updateDeals', this.replaceDeals)
     this.handleAction('deals.deleteDeal', this.deleteDeal)
+    this.handleAction('deals.createRedemption', this.handleRedemptionCreate)
+    this.handleAction('deals.getRedemptions', this.saveRedemptions)
+    this.handleAction('deals.getSurveyQuestions', this.saveQuestions)
+    this.handleAction('deals.createSurveyResponse', this.handleSurveyResponseCreate)
+    this.handleAction('deals.getSurveyResponses', this.saveResponses)
   }
 
   handleDealCreate(deals) {
@@ -39,6 +47,30 @@ export default class DealStore extends Store {
     var allDeals = this.state.deals
     allDeals.splice(allDeals.map(function(x) {return x.id }).indexOf(deal.id), 1)
     this.setState({deal: allDeals})
+  }
+
+  handleRedemptionCreate(redemption) {
+    this.setState({
+      redemptions: this.state.redemptions.concat(redemption)
+    })
+  }
+
+  saveRedemptions(redemptions){
+    this.setState({redemptions})
+  }
+
+  saveQuestions(surveyQuestions){
+    this.setState({surveyQuestions})
+  }
+
+  handleSurveyResponseCreate(surveyResponse) {
+    this.setState({
+      surveyResponses: this.state.surveyResponses.concat(surveyResponse)
+    })
+  }
+
+  saveResponses(surveyResponses){
+    this.setState({surveyResponses})
   }
 
   saveCreateError(error) {
