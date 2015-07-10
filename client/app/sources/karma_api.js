@@ -53,7 +53,7 @@ export function postNewUser (user) {
 export function updateUser (user) {
   return new Promise((resolve, reject) => {
     request
-      .put(REGISTER_URL + '/' + user.id)
+      .put(REGISTER_URL + '/update/' + user.id)
       .send({user})
       .set('token', token)
       .end((err, res) => {
@@ -82,14 +82,47 @@ export function createPayment (stripeToken, user) {
 }
 
 export function emailPasswordReset (email) {
-  console.log('in karmaapi', email)
   return new Promise((resolve, reject) => {
     request
       .post(REGISTER_URL + '/reset_password')
       .send({email})
       .end((err, res) => {
         if (err) {
+          resolve(res.status)
+        }
+        resolve(res.status)
+      })
+  })
+}
+
+export function checkPasswordResetExpiration (passwordResetId) {
+  return new Promise((resolve, reject) => {
+    request
+      .post(REGISTER_URL + '/reset_password/check_expiration')
+      .send({passwordResetId})
+      .end((err, res) => {
+        if (err) {
+          resolve(res.status)
+        }
+        resolve(res.status)
+      })
+  })
+}
+
+export function saveNewPassword (passwordResetObject) {
+  return new Promise((resolve, reject) => {
+    request
+      .put(REGISTER_URL + '/reset_password')
+      .send({passwordResetObject})
+      .end((err, res) => {
+        if (err) {
           return reject(err)
+        }
+        if (res.status === 401) {
+          resolve(res.status)
+        } else {
+          storeToken(res.body.token)
+          resolve(tokenToUser(token))
         }
       })
   })
@@ -187,7 +220,7 @@ export function getManagedOrganizations () {
 }
 
 export function postDeals (deals) {
-  return new Promise ((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     request
       .post(DEALS_URL)
       .send({deals})
@@ -202,7 +235,7 @@ export function postDeals (deals) {
 }
 
 export function updateDeals (deals) {
-  return new Promise ((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     request
       .put(DEALS_URL)
       .send({deals})
@@ -277,7 +310,7 @@ export function deleteDeal (deal) {
 }
 
 export function postNewRedemption (redemption) {
-  return new Promise ((resolve, reject) =>
+  return new Promise((resolve, reject) =>
     request
       .post(REDEMPTIONS_URL)
       .send({redemption})

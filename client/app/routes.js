@@ -6,6 +6,7 @@ import Register from './components/users/handlers/register'
 import Donate from './components/users/handlers/donate'
 import DealList from './components/deals/handlers/list_deals'
 import PasswordReset from './components/users/handlers/password_reset'
+import NewPassword from './components/users/handlers/new_password'
 import Account from './components/users/handlers/account'
 import User from './components/users/handlers/user'
 
@@ -55,6 +56,7 @@ export default (
     <Route name='login' handler={Login} path='login' />
     <Route name='register' handler={Register} path='register' />
     <Route name='password_reset' handler={PasswordReset} path='reset' />
+    <Route name='new_password' handler={NewPassword} path='new_password/:passwordResetId' />
     <Route name='create_organization' handler={NewOrganization} path='organization' />
     <Route name='list_deals' handler={DealList} path='deals' />
 

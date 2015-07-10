@@ -1,7 +1,5 @@
 import r from '../database'
 
-
-
 export async function index () {
   return r.table('password_reset').run()
 }
@@ -14,14 +12,22 @@ export async function insert (resetObject) {
   return resetObject
 }
 
-export async function getByToken (token) {
+export async function getById (token) {
   return r.table('password_reset').get(token).run()
 }
 
-export async function update (resetObject) {
-  var results = await r.table('password').get(resetObject.id).update(resetObject).run()
+export async function update (passwordResetId) {
+  var results = await r.table('password_reset').get(passwordResetId).update(
+    function (resetObject) {
+      return r.branch(
+        resetObject('expiration').toEpochTime().gt(r.now().toEpochTime()),
+        {status: 'used'},
+        {status: 'expired'}
+      )
+    }, {returnChanges: true}).run()
+
   if (results.changes) {
     return results.changes[0]['new_val']
   }
-  return resetObject
+  return await r.table('password_reset').get(passwordResetId)
 }

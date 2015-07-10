@@ -1,10 +1,14 @@
 import React from 'react'
+import NewPassword from '../new_password'
 import { flux } from '../../../main'
-import PasswordReset from '../password_reset'
-import {Link} from 'react-router'
 
 export default React.createClass({
+  contextTypes: {
+    router: React.PropTypes.func
+  },
+
   getInitialState () {
+    flux.actions.users.checkPasswordResetExpiration(this.context.router.getCurrentParams().passwordResetId)
     var storeState = this.getStoreState()
     return storeState
   },
@@ -32,10 +36,9 @@ export default React.createClass({
       <div>
         <div className='page_header'>
           <div className='page_header_title'>KarmaKard</div>
-          <Link to='root' ><div className='page_header_link'> Login </div></Link>
         </div>
         <div className='content_box'>
-          <PasswordReset emailReturnCode={this.state.user.emailReturnCode} />
+          <NewPassword passwordResetCode={this.state.user.passwordResetCode} />
         </div>
       </div>
     )

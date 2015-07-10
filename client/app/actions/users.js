@@ -3,7 +3,7 @@ import * as KarmaAPI from '../sources/karma_api'
 
 export default class UserActions extends Actions {
 
-  login(router, email, password) {
+  login (router, email, password) {
     KarmaAPI.postLoginCredentials(email, password).then(user => {
       if (user) {
         this.dispatch('login', user)
@@ -13,27 +13,26 @@ export default class UserActions extends Actions {
     }).catch(this.loginError)
   }
 
-  loginError(error) {
+  loginError (error) {
     console.warn(error)
     this.dispatch('loginError', error)
   }
 
-  clearLoginErrors() {
+  clearLoginErrors () {
     this.dispatch('clearLoginErrors')
   }
 
-  create(userData) {
+  create (userData) {
     KarmaAPI.postNewUser(userData).then(user => {
       if (user) {
         this.dispatch('create', user)
-      }
-      else{
+      }else {
         console.warn('No user returned from create')
       }
     }).catch(this.createError)
   }
 
-  update(user) {
+  update (user) {
     KarmaAPI.updateUser(user).then(user => {
       if (user) {
         this.dispatch('update', user)
@@ -41,7 +40,7 @@ export default class UserActions extends Actions {
     })
   }
 
-  createPayment(stripeToken, userData) {
+  createPayment (stripeToken, userData) {
     KarmaAPI.createPayment(stripeToken, userData).then(response => {
       if (response) {
         this.dispatch('createPayment', response.payment, response.user)
@@ -49,26 +48,45 @@ export default class UserActions extends Actions {
     })
   }
 
-  getPayments(){
+  getPayments () {
     KarmaAPI.getPayments().then(payments => {
-      if(payments) {
+      if (payments) {
         this.dispatch('getPayments', payments)
       }
     })
   }
 
-  logout(router) {
+  logout (router) {
     this.dispatch('logout')
     return router.transitionTo('login')
   }
-  
-  emailPasswordReset(email) {
-    console.log("in actions")
-    KarmaAPI.emailPasswordReset(email)
 
+  emailPasswordReset (email) {
+    KarmaAPI.emailPasswordReset(email).then(response => {
+      if (response) {
+        this.dispatch('emailPasswordReset', response)
+      }
+    })
   }
 
-  createError(error) {
+  checkPasswordResetExpiration (passwordResetId) {
+    KarmaAPI.checkPasswordResetExpiration(passwordResetId).then(response => {
+      if (response) {
+        this.dispatch('checkPasswordResetExpiration', response)
+      }
+    })
+  }
+
+  saveNewPassword (router, passwordResetObject) {
+    KarmaAPI.saveNewPassword(passwordResetObject).then(user => {
+      if (user) {
+        this.dispatch('saveNewPassword', user)
+        return router.transitionTo('organizations')
+      }
+    })
+  }
+
+  createError (error) {
     console.warn(error)
     this.dispatch('createError', error)
   }

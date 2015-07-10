@@ -21,4 +21,14 @@ export async function update (user) {
   if (results.changes) {
     return results.changes[0]['new_val']
   }
-  return user}
+  return user
+}
+
+export async function updatePassword (userId, hashedPassword) {
+  var result = await r.table('users').get(userId).update({hash: hashedPassword}, {returnChanges: true}).run()
+  if (result.changes) {
+    return result.changes[0]['new_val']
+  }
+  return userId
+}
+

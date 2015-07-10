@@ -42,7 +42,7 @@ export async function create (req, res, next) {
   }
 }
 
-router.put('/:userId', validateUpdate, update)
+router.put('/update/:userId', validateUpdate, update)
 export async function update (req, res, next) {
   try {
     var currentUser = req.body.user
@@ -94,9 +94,9 @@ export function login (req, res, next) {
 router.post('/reset_password', sendPasswordResetEmail)
 export async function sendPasswordResetEmail (req, res, next) {
   try {
-    console.log(req.body)
     var user = await usersTable.getByEmail(req.body.email)
     user = user[0]
+    if (!user) {res.status(401).send({error: 'email was not found'})}
     var now = new Date()
     var expiration = new Date()
     expiration.setHours(now.getHours() + 24)
@@ -106,22 +106,53 @@ export async function sendPasswordResetEmail (req, res, next) {
       expiration: expiration,
       status: 'active'
     }
-    console.log(passwordResetObject)
     var passwordReset = await resetPasswordTable.insert(passwordResetObject)
     var url = config.domain.base_url + '/new_password/' + passwordReset.id
-    console.log(url)
     var data = {
       from: 'Excited User <me@samples.mailgun.org>',
       to: passwordReset.email,
       subject: 'Change Your Password',
       text: url
     }
-    console.log(data)
 
-    var mailgunResponse = mailgun.send(data)
-    console.log(mailgunResponse)
+    var mailgunResponse = await mailgun.send(data)
+
+    mailgunResponse.id ? res.status(200).send('sent') : res.status(401).send({error: 'email was not found'})
 
   }catch (e) {
+    next(e)
+  }
+}
+
+router.put('/reset_password', saveNewPassword)
+export async function saveNewPassword (req, res, next) {
+  try {
+    var passwordResetObject = req.body.passwordResetObject
+    var passwordResetId = passwordResetObject.id
+    var password = passwordResetObject.password
+    var hash = await hashPassword(password)
+    var passwordReset = await resetPasswordTable.getById(passwordResetId)
+    var user = await usersTable.updatePassword(passwordReset.userId, hash)
+    res.status(201).json({
+      token: encodeToken(user)
+    })
+  }catch (e) {
+    next(e)
+  }
+}
+
+router.post('/reset_password/check_expiration', checkPasswordResetStatus)
+export async function checkPasswordResetStatus (req, res, next) {
+
+  try {
+    var passwordResetId = req.body.passwordResetId
+    var passwordResetObject = await resetPasswordTable.update(passwordResetId)
+    if (passwordResetObject.status === 'expired') {
+      res.status(401).send({error: 'Password Reset has expired.'})
+    } else {
+      res.status(200)
+    }
+  } catch (e) {
     next(e)
   }
 }
