@@ -38,7 +38,7 @@ export default React.createClass({
           <div className='page_header_title'>KarmaKard</div>
         </div>
         <div className='content_box'>
-          <NewPassword passwordResetCode={this.state.user.passwordResetCode} />
+          <NewPassword resetLinkActive={this.state.user.resetLinkActive} />
         </div>
       </div>
     )

@@ -35,7 +35,7 @@ export default React.createClass({
           <Link to='root' ><div className='page_header_link'> Login </div></Link>
         </div>
         <div className='content_box'>
-          <PasswordReset emailReturnCode={this.state.user.emailReturnCode} />
+          <PasswordReset resetEmailSent={this.state.user.resetEmailSent} />
         </div>
       </div>
     )

@@ -13,8 +13,8 @@ export default class UserStore extends Store {
       payments: [],
       createErrors: [],
       loginErrors: [],
-      emailReturnCode: null,
-      passwordResetCode: null
+      resetEmailSent: null,
+      expired: null
     }
 
     this.handleAction('users.login', this.handleAuth)
@@ -27,7 +27,6 @@ export default class UserStore extends Store {
     this.handleAction('users.createPayment', this.createPayment)
     this.handleAction('organizations.create', this.createdOrganization)
     this.handleAction('users.getPayments', this.savePayments)
-    this.handleAction('users.saveNewPassword', this.handleAuth)
     this.handleAction('users.emailPasswordReset', this.sendPasswordResetEmailCode)
     this.handleAction('users.checkPasswordResetExpiration', this.checkPasswordResetExpiration)
   }
@@ -75,15 +74,15 @@ export default class UserStore extends Store {
     })
   }
 
-  sendPasswordResetEmailCode (code) {
+  sendPasswordResetEmailCode (sentBoolean) {
     this.setState({
-      emailReturnCode: code
+      resetEmailSent: sentBoolean
     })
   }
 
-  checkPasswordResetExpiration (code) {
+  checkPasswordResetExpiration (linkActiveBoolean) {
     this.setState({
-      passwordResetCode: code
+      resetLinkActive: linkActiveBoolean
     })
   }
 

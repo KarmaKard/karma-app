@@ -63,10 +63,13 @@ export default class UserActions extends Actions {
 
   emailPasswordReset (email) {
     KarmaAPI.emailPasswordReset(email).then(response => {
+      console.log(response)
       if (response) {
         this.dispatch('emailPasswordReset', response)
       }
-    })
+    },
+    this.dispatch('emailPasswordReset', false)
+    )
   }
 
   checkPasswordResetExpiration (passwordResetId) {
@@ -74,16 +77,13 @@ export default class UserActions extends Actions {
       if (response) {
         this.dispatch('checkPasswordResetExpiration', response)
       }
-    })
+    },
+    this.dispatch('checkPasswordResetExpiration', false)
+    )
   }
 
   saveNewPassword (router, passwordResetObject) {
-    KarmaAPI.saveNewPassword(passwordResetObject).then(user => {
-      if (user) {
-        this.dispatch('saveNewPassword', user)
-        return router.transitionTo('organizations')
-      }
-    })
+    KarmaAPI.saveNewPassword(passwordResetObject).then(router.transitionTo('login'))
   }
 
   createError (error) {

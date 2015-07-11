@@ -3,7 +3,7 @@ import { flux } from '../../main'
 
 export default React.createClass({
   propTypes: {
-    passwordResetCode: React.PropTypes.number
+    resetLinkActive: React.PropTypes.boolean
   },
 
   contextTypes: {
@@ -41,7 +41,7 @@ export default React.createClass({
       ? <div className='error-message'>Mismatched Passwords</div>
       : null
 
-    var content = this.props.passwordResetCode === 401
+    var content = this.props.resetLinkActive === false
       ? <div className='reset' >
           <div className='content_box-header'>Password Expired</div>
           <p>This link to change your password has expired.</p>

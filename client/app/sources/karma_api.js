@@ -88,9 +88,9 @@ export function emailPasswordReset (email) {
       .send({email})
       .end((err, res) => {
         if (err) {
-          resolve(res.status)
+          reject(err)
         }
-        resolve(res.status)
+        resolve(res.status === 201)
       })
   })
 }
@@ -102,9 +102,9 @@ export function checkPasswordResetExpiration (passwordResetId) {
       .send({passwordResetId})
       .end((err, res) => {
         if (err) {
-          resolve(res.status)
+          reject(err)
         }
-        resolve(res.status)
+        resolve(res.status === 201)
       })
   })
 }
@@ -118,12 +118,7 @@ export function saveNewPassword (passwordResetObject) {
         if (err) {
           return reject(err)
         }
-        if (res.status === 401) {
-          resolve(res.status)
-        } else {
-          storeToken(res.body.token)
-          resolve(tokenToUser(token))
-        }
+        resolve(res.status)
       })
   })
 }
