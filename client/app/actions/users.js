@@ -63,7 +63,6 @@ export default class UserActions extends Actions {
 
   emailPasswordReset (email) {
     KarmaAPI.emailPasswordReset(email).then(response => {
-      console.log(response)
       if (response) {
         this.dispatch('emailPasswordReset', response)
       }

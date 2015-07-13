@@ -4,7 +4,7 @@ import { flux } from '../../main'
 export default React.createClass({
 
    propTypes: {
-    resetEmailSent: React.PropTypes.number
+    resetEmailSent: React.PropTypes.bool
   },
 
   contextTypes: {
@@ -19,7 +19,7 @@ export default React.createClass({
 
   render () {
     var emailError
-    if (this.props.resetEmailSent === 'false') {
+    if (this.props.resetEmailSent === false) {
       emailError = <p>We couldnt find your email in our system.</p>
     }
 
