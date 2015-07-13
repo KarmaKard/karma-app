@@ -109,7 +109,7 @@ export async function sendPasswordResetEmail (req, res, next) {
     var passwordReset = await resetPasswordTable.insert(passwordResetObject)
     var url = config.domain.base_url + '/new_password/' + passwordReset.id
     var data = {
-      from: 'Excited User <me@samples.mailgun.org>',
+      from: 'KarmaKard <password_reset@karmakard.org>',
       to: passwordReset.email,
       subject: 'Change Your Password',
       text: url

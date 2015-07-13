@@ -66,9 +66,11 @@ export default class UserActions extends Actions {
       if (response) {
         this.dispatch('emailPasswordReset', response)
       }
-    },
-    this.dispatch('emailPasswordReset', false)
-    )
+    }, function (err) {
+      if (err) {
+        this.dispatch('emailPasswordReset', false)
+      }
+    })
   }
 
   checkPasswordResetExpiration (passwordResetId) {

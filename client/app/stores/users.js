@@ -27,7 +27,7 @@ export default class UserStore extends Store {
     this.handleAction('users.createPayment', this.createPayment)
     this.handleAction('organizations.create', this.createdOrganization)
     this.handleAction('users.getPayments', this.savePayments)
-    this.handleAction('users.emailPasswordReset', this.sendPasswordResetEmailCode)
+    this.handleAction('users.emailPasswordReset', this.sendPasswordResetEmail)
     this.handleAction('users.checkPasswordResetExpiration', this.checkPasswordResetExpiration)
   }
 
@@ -74,7 +74,7 @@ export default class UserStore extends Store {
     })
   }
 
-  sendPasswordResetEmailCode (sentBoolean) {
+  sendPasswordResetEmail (sentBoolean) {
     this.setState({
       resetEmailSent: sentBoolean
     })

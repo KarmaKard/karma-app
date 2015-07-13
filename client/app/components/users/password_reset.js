@@ -18,11 +18,6 @@ export default React.createClass({
   },
 
   render () {
-    var emailError
-    if (this.props.resetEmailSent === false) {
-      emailError = <p>We couldnt find your email in our system.</p>
-    }
-
     var content = this.props.resetEmailSent
       ? <div className='reset' >
           <div className='content_box-header'>Email Sent</div>
@@ -35,6 +30,12 @@ export default React.createClass({
             <input type='submit' ref='button' onClick={this.reset} className='karma_button' value='Submit' />
           </form>
         </div>
+
+    var emailError
+    if (this.props.resetEmailSent === false) {
+      emailError = <p>We couldnt find your email in our system.</p>
+    }
+
     return (
       <div>
         {emailError}
