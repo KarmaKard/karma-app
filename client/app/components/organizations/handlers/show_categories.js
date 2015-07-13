@@ -5,6 +5,14 @@ import UserSideBar from '../../users/user_sidebar'
 
 export default React.createClass({
 
+  propTypes: {
+    user: React.PropTypes.object.isRequired,
+    payment: React.PropTypes.object.isRequired,
+    deals: React.PropTypes.array.isRequired,
+    organizations: React.PropTypes.array.isRequired,
+    categories: React.PropTypes.array.isRequired
+  },
+
   defaultProps: {
     organizations: []
   },
@@ -13,40 +21,37 @@ export default React.createClass({
     router: React.PropTypes.func
   },
 
-  logOut(){
+  logOut () {
     var { router } = this.context
     flux.actions.users.logout(router)
   },
 
   renderOrganizationLink (organization, i) {
-    if(organization.status !== "active"){ return }
+    if (organization.status !== 'active') { return }
     return (
-      <Link to="business" params={{paymentId: this.context.router.getCurrentParams().paymentId, organizationId: organization.id}}>
-        <li className="organization_list-item" key={i}>
+      <Link to='business' params={{paymentId: this.context.router.getCurrentParams().paymentId, organizationId: organization.id}}>
+        <li className='organization_list-item' key={i}>
           {organization.name}
         </li>
       </Link>
     )
   },
-  
-  render(){
-    if(!this.props.user || !this.props.payment){return <span>Hello</span>}
+
+  render () {
     var user = this.props.user
-    var paymentId = this.context.router.getCurrentParams().paymentId
     var payment = this.props.payment
-    var deals = this.props.deals
     var organizations = this.props.organizations
 
     var activeCategories = this.props.categories.map((category, index) => {
       var organizationLinks = organizations
-        .filter(organization => 
+        .filter(organization =>
         organization.category === category)
         .map(this.renderOrganizationLink)
 
       return (
         <div>
-        <Link to="categorical_organizations" params={{paymentId: payment.id, category : category}}>
-          <li className="category_list-item" key={index}>
+        <Link to='categorical_organizations' params={{paymentId: payment.id, category: category}}>
+          <li className='category_list-item' key={index}>
             {category}
           </li>
         </Link>
@@ -55,15 +60,36 @@ export default React.createClass({
       )
     })
 
-    var addNewLink=null
+    if (activeCategories.length === 0) {
+      return (
+        <div>
+          <div className='page_header'>
+              <div className='page_header_title'>{user.firstName}</div>
+              <div className='page_header_link' onClick={this.logOut}>
+                Log Out
+              </div>
+            </div>
+            <UserSideBar organizations={organizations} user={user} />
+          <div className='content_box'>
+            <div className='content_box-header'>
+              Wow! We Dont Have Any Businesses
+            </div>
+            <p>Have a business that to offer deal with us?</p>
+            <p><Link to='create_organization'>Sign Up Here!</Link></p>
+          </div>
+        </div>
+      )
+    }
 
-    if(!user.roles.manager && !user.roles.superadmin){
+    var addNewLink = null
+
+    if (!user.roles.manager && !user.roles.superadmin) {
       addNewLink = (
         <div>
           <hr />
-          <Link to="new_organization" className="create_organization-link">
-            Business? Fundraiser? 
-            <span className="create_organization-link_span">Offer deals with us!</span>
+          <Link to='new_organization' className='create_organization-link'>
+            Business? Fundraiser?
+            <span className='create_organization-link_span'>Offer deals with us!</span>
           </Link>
         </div>
       )
@@ -71,15 +97,15 @@ export default React.createClass({
 
     return (
       <div>
-         <div className="page_header">
-            <div className="page_header_title">{user.firstName}</div>
-            <div className="page_header_link" onClick={this.logOut}>
+         <div className='page_header'>
+            <div className='page_header_title'>{user.firstName}</div>
+            <div className='page_header_link' onClick={this.logOut}>
               Log Out
             </div>
           </div>
           <UserSideBar organizations={organizations} user={user} />
-          <div className="content_box">
-            <div className="content_box-header">
+          <div className='content_box'>
+            <div className='content_box-header'>
               Deal Categories
             </div>
             <ul>

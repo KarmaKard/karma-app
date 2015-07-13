@@ -40,7 +40,7 @@ import AddRedemptions from './components/organizations/handlers/add_redemptions'
 import Survey from './components/organizations/handlers/survey'
 
 var App = React.createClass({
-  render() {
+  render () {
     return (
       <div>
         <RouteHandler />
@@ -50,55 +50,55 @@ var App = React.createClass({
 })
 
 export default (
-  <Route name="root" handler={App} path="/">
+  <Route name='root' handler={App} path='/'>
     <DefaultRoute handler={RedirectToDeals} onEnter={RedirectToDeals.willTransitionTo} />
-    <Route name="login" handler={Login} path="login" />
-    <Route name="register" handler={Register} path="register" />
-    <Route name="create_organization" handler={NewOrganization} path="organization" />
-    <Route name="list_deals" handler={DealList} path="deals" />
+    <Route name='login' handler={Login} path='login' />
+    <Route name='register' handler={Register} path='register' />
+    <Route name='create_organization' handler={NewOrganization} path='organization' />
+    <Route name='list_deals' handler={DealList} path='deals' />
 
-    <Route name="fundraisers" handler={Fundraisers} path="fundraisers" >
+    <Route name='fundraisers' handler={Fundraisers} path='fundraisers' >
       <DefaultRoute handler={FundraiserList} />
-      <Route name="fundraiser_profile" handler={FundraiserProfile} path=":organizationId" />
+      <Route name='fundraiser_profile' handler={FundraiserProfile} path=':organizationId' />
     </Route>
 
-    <Route name="donate" handler={Donate} path="donate/:organizationStripePubKey" />
+    <Route name='donate' handler={Donate} path='donate/:organizationStripePubKey' />
 
-    <Route name="deals" handler={Deals} path="dealcards" >
+    <Route name='deals' handler={Deals} path='dealcards' >
       <DefaultRoute handler={DealCards} />
-      <Route name="deal_card" handler={DealCard} path=":paymentId" >
+      <Route name='deal_card' handler={DealCard} path=':paymentId' >
         <DefaultRoute handler={ShowCategories} />
-        <Route name="categorical_organizations" handler={ShowCategoricalOrganizations} path="category/:category" />
-        <Route name="business" handler={Organization} path=":organizationId" >
+        <Route name='categorical_organizations' handler={ShowCategoricalOrganizations} path='category/:category' />
+        <Route name='business' handler={Organization} path=':organizationId' >
           <DefaultRoute handler={ShowOrganizationProfile} />
-          <Route name="redeem_deal" handler={DealRedemption} path=":dealId" >
+          <Route name='redeem_deal' handler={DealRedemption} path=':dealId' >
             <DefaultRoute handler={RedemptionScreen} />
-            <Route name="survey" handler={Survey} path="question" />
-            <Route name="redeem_success" handler={RedemptionSuccess} path="redeemed" />
-            <Route name="add_redemptions" handler={AddRedemptions} path="add" />
+            <Route name='survey' handler={Survey} path='question' />
+            <Route name='redeem_success' handler={RedemptionSuccess} path='redeemed' />
+            <Route name='add_redemptions' handler={AddRedemptions} path='add' />
           </Route>
         </Route>
       </Route>
     </Route>
 
-    <Route name="organizations" handler={Organizations} path="organizations">
+    <Route name='organizations' handler={Organizations} path='organizations'>
       <DefaultRoute handler={OrganizationsUserManages} />
-      <Route name="new_organization" handler={NewOrganization} path="new" />
-      <Route name="organization" handler={Organization} path=":organizationId" >
+      <Route name='new_organization' handler={NewOrganization} path='new' />
+      <Route name='organization' handler={Organization} path=':organizationId' >
         <DefaultRoute handler={ShowOrganizationProfile} />
-        <Route name="organization_user_manages" handler={OrganizationUserManages} path="manage">
-          <DefaultRoute handler={ShowOrganizationDashboard} /> 
-          <Route name="edit_profile" handler={EditOrganizationProfile} path="profile" />
-          <Route name="edit_locations" handler={EditOrganizationLocations} path="locations" />
-          <Route name="edit_keywords" handler={EditOrganizationKeywords} path="keywords" />
-          <Route name="edit_deals" handler={EditBusinessDeals} path="deals" />
-          <Route name="edit_fundraiser_team" handler={EditFundraiserTeam} path="team" />
-          <Route name="edit_fundraiser_bank" handler={EditFundraiserBank} path="bank" />
+        <Route name='organization_user_manages' handler={OrganizationUserManages} path='manage'>
+          <DefaultRoute handler={ShowOrganizationDashboard} />
+          <Route name='edit_profile' handler={EditOrganizationProfile} path='profile' />
+          <Route name='edit_locations' handler={EditOrganizationLocations} path='locations' />
+          <Route name='edit_keywords' handler={EditOrganizationKeywords} path='keywords' />
+          <Route name='edit_deals' handler={EditBusinessDeals} path='deals' />
+          <Route name='edit_fundraiser_team' handler={EditFundraiserTeam} path='team' />
+          <Route name='edit_fundraiser_bank' handler={EditFundraiserBank} path='bank' />
         </Route>
       </Route>
     </Route>
 
-    <Route name="account" handler={User} path="/account" >
+    <Route name='account' handler={User} path='/account' >
       <DefaultRoute handler={Account} />
     </Route>
   </Route>
