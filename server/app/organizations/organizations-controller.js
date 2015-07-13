@@ -25,11 +25,11 @@ router.post('/', auth.token, validateCreate, create)
 export async function create (req, res, next) {
   try {
     var user = req.user
-    if(!user.roles.manager){
-      user.roles.manager = "manager"
+    if (!user.roles.manager) {
+      user.roles.manager = 'manager'
       user = await usersTable.update(user)
     }
-    
+
     var organizationToSave = req.body.organization
     organizationToSave.userId = req.user.id
     var organization = await organizationsTable.insert(organizationToSave)
@@ -43,15 +43,14 @@ router.put('/:orgId', auth.token, validateUpdate, update)
 export async function update (req, res, next) {
   try {
     var organization = req.body.organization
-    if(organization.status === "active" && organization.type === "fundraiser" && !organization.publicStripeKey){
-      //Needs to be reactivated once we have actual fundraisers signing up!
-      //var stripe = {}
-      //stripe.data = await stripeService.createAccount(req.connection.remoteAddress, organization)
-      //stripe.id = organization.id
-      //var stripeReturn = await organizationStripeTable.insert(stripe)
-      //organization.publicStripeKey = stripeReturn.data.keys.publishable
+    if (organization.status === 'active' && organization.type === 'fundraiser' && !organization.publicStripeKey) {
+      var stripe = {}
+      stripe.data = await stripeService.createAccount(req.connection.remoteAddress, organization)
+      stripe.id = organization.id
+      var stripeReturn = await organizationStripeTable.insert(stripe)
+      organization.publicStripeKey = stripeReturn.data.keys.publishable
     }
-    var organization = await organizationsTable.update(organization)
+    organization = await organizationsTable.update(organization)
     res.json({organization})
   } catch (e) {
     next(e)
@@ -69,7 +68,7 @@ export async function find (req, res, next) {
 }
 
 router.get('/manage', auth.token, auth.admin, listManagedOrganizations)
-export async function listManagedOrganizations (req, res, next){
+export async function listManagedOrganizations (req, res, next) {
   try {
     var organizations = await organizationsTable.getOrganizationsByUserId(req.user.id)
     res.json({organizations})

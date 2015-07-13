@@ -1,27 +1,30 @@
-import React from "react"
-import { flux } from '../../main'
+import React from 'react'
 import { Link } from 'react-router'
 
 export default React.createClass({
 
-  contextTypes: {
-    router:React.PropTypes.func
+  propTypes: {
+    fundraiser: React.PropTypes.object.isRequired
   },
 
-  render(){
+  contextTypes: {
+    router: React.PropTypes.func
+  },
+
+  render () {
     var fundraiser = this.props.fundraiser
     return (
       <div>
-        <div className="page_header">
-          <div className="page_header_title">KarmaKard</div>
+        <div className='page_header'>
+          <div className='page_header_title'>KarmaKard</div>
         </div>
-        <div className="content_box">
-          <div className="content_box-header">
+        <div className='content_box'>
+          <div className='content_box-header'>
             {fundraiser.name}
           </div>
           <p>Description: {fundraiser.description}</p>
           <p>Purpose: {fundraiser.purpose}</p>
-          <img src={"'" + fundraiser.logoURL + "'"} />
+          <img src={'"' + fundraiser.logoURL + '"'} />
           <hr/>
           <div>
             <h3>Why Karmakard</h3>
@@ -29,7 +32,7 @@ export default React.createClass({
           </div>
           <hr />
 
-          <Link to="donate" params={{organizationStripePubKey: fundraiser.publicStripeKey}}><button className="karma_button">Donate Now</button></Link>
+          <Link to='donate' params={{organizationStripePubKey: fundraiser.publicStripeKey}}><button className='karma_button'>Donate Now</button></Link>
         </div>
       </div>
     )

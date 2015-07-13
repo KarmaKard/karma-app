@@ -1,13 +1,13 @@
 import React from 'react'
-import { flux } from '../../../main'
 import FundraiserList from '../fundraiser_list'
 
 export default React.createClass({
-  render() {
+  propTypes: {
+    activeFundraisers: React.PropTypes.array.isRequired
+  },
 
-    if(this.props.activeFundraisers.length === 0){return <p>Waiting...</p>}
+  render () {
     var activeFundraisers = this.props.activeFundraisers
-
     return (<FundraiserList activeFundraisers={activeFundraisers} />)
   }
 })

@@ -1,44 +1,41 @@
 import React from 'react'
 import { flux } from '../../../main'
-import Router, {RouteHandler, Link} from 'react-router'
+import {RouteHandler} from 'react-router'
 
 export default React.createClass({
 
   contextTypes: {
     router: React.PropTypes.func
   },
-  
-  getInitialState() {
+
+  getInitialState () {
     var storeState = this.getStoreState()
-    if (storeState.organizationsStoreState.organizations.length === 0){
-      flux.actions.organizations.getOrganizations()
-    }
+    flux.actions.organizations.getOrganizations()
     return storeState
   },
 
-  storeChange() {
+  storeChange () {
     this.setState(this.getStoreState())
   },
 
-  getStoreState() {
+  getStoreState () {
     return {
-      organizationsStoreState: flux.stores.organizations.getState(),
+      organizationsStoreState: flux.stores.organizations.getState()
     }
   },
 
-  componentWillMount() {
+  componentWillMount () {
     flux.stores.organizations.addListener('change', this.storeChange)
   },
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     flux.stores.organizations.removeListener('change', this.storeChange)
   },
 
-
-  render() {
+  render () {
     var organizations = this.state.organizationsStoreState.organizations
     var activeFundraisers = organizations
-      .filter(organization => organization.type === "fundraiser" && organization.status === "active")
+      .filter(organization => organization.type === 'fundraiser' && organization.status === 'active')
 
     return (
       <RouteHandler activeFundraisers={activeFundraisers} />
