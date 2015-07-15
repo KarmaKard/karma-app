@@ -7,12 +7,11 @@ const LOGIN_URL = BASE_URL + '/api/v1/users/login'
 const ORGANIZATIONS_URL = BASE_URL + '/api/v1/organizations'
 const MANAGE_ORGANIZATIONS_URL = ORGANIZATIONS_URL + '/manage'
 const DEALS_URL = BASE_URL + '/api/v1/deals'
-const LOCATIONS_URL = BASE_URL + '/api/v1/locations' 
-const REDEMPTIONS_URL = BASE_URL + '/api/v1/redemptions' 
+const LOCATIONS_URL = BASE_URL + '/api/v1/locations'
+const REDEMPTIONS_URL = BASE_URL + '/api/v1/redemptions'
 const SURVEY_QUESTIONS_URL = BASE_URL + '/api/v1/questions'
 const SURVEY_RESPONSES_URL = BASE_URL + '/api/v1/survey_responses'
-const PAYMENT_URL = BASE_URL + '/api/v1/payments' 
-
+const PAYMENT_URL = BASE_URL + '/api/v1/payments'
 
 var token = window.localStorage.getItem('karma-token')
 
@@ -52,13 +51,13 @@ export function postNewUser (user) {
 }
 
 export function updateUser (user) {
-  return new Promise((resolve, reject) =>{
+  return new Promise((resolve, reject) => {
     request
-      .put(REGISTER_URL + "/" + user.id)
+      .put(REGISTER_URL + '/update/' + user.id)
       .send({user})
       .set('token', token)
       .end((err, res) => {
-        if(err) {
+        if (err) {
           return reject(err)
         }
         storeToken(res.body.token)
@@ -68,18 +67,60 @@ export function updateUser (user) {
 }
 
 export function createPayment (stripeToken, user) {
-  return new Promise((resolve, reject) =>{
+  return new Promise((resolve, reject) => {
     request
       .post(PAYMENT_URL)
       .send({stripeToken, user})
       .set('token', token)
       .end((err, res) => {
-        if(err) {
+        if (err) {
           return reject(err)
         }
         resolve(res.body)
       })
-  }) 
+  })
+}
+
+export function emailPasswordReset (email) {
+  return new Promise((resolve, reject) => {
+    request
+      .post(REGISTER_URL + '/reset_password')
+      .send({email})
+      .end((err, res) => {
+        if (err) {
+          reject(err)
+        }
+        resolve(res.status === 201)
+      })
+  })
+}
+
+export function checkPasswordResetExpiration (passwordResetId) {
+  return new Promise((resolve, reject) => {
+    request
+      .post(REGISTER_URL + '/reset_password/check_expiration')
+      .send({passwordResetId})
+      .end((err, res) => {
+        if (err) {
+          reject(err)
+        }
+        resolve(res.status === 201)
+      })
+  })
+}
+
+export function saveNewPassword (passwordResetObject) {
+  return new Promise((resolve, reject) => {
+    request
+      .put(REGISTER_URL + '/reset_password')
+      .send({passwordResetObject})
+      .end((err, res) => {
+        if (err) {
+          return reject(err)
+        }
+        resolve(res.status)
+      })
+  })
 }
 
 export function getPayments () {
@@ -88,10 +129,10 @@ export function getPayments () {
       .get(PAYMENT_URL)
       .set('token', token)
       .end((err, res) => {
-        if(err) {
+        if (err) {
           return reject(err)
         }
-      resolve(res.body.payments)
+        resolve(res.body.payments)
       })
   })
 }
@@ -103,7 +144,7 @@ export function postNewOrganization (organization) {
       .send({organization})
       .set('token', token)
       .end((err, res) => {
-        if(err) {
+        if (err) {
           return reject(err)
         }
         storeToken(res.body.token)
@@ -122,7 +163,7 @@ export function getOrganizations () {
       .get(ORGANIZATIONS_URL)
       .set('token', token)
       .end((err, res) => {
-        if(err) {
+        if (err) {
           return reject(err)
         }
         resolve(res.body.organizations)
@@ -136,7 +177,7 @@ export function getOrganization (id) {
       .get(ORGANIZATIONS_URL + '/' + id)
       .set('token', token)
       .end((err, res) => {
-        if(err) {
+        if (err) {
           return reject(err)
         }
         resolve(res.body.organization)
@@ -147,11 +188,11 @@ export function getOrganization (id) {
 export function updateOrganization (organization) {
   return new Promise((resolve, reject) => {
     request
-      .put(ORGANIZATIONS_URL + "/" + organization.id)
+      .put(ORGANIZATIONS_URL + '/' + organization.id)
       .send({organization})
       .set('token', token)
       .end((err, res) => {
-        if(err) {
+        if (err) {
           return reject(err)
         }
         resolve(res.body.organization)
@@ -159,14 +200,13 @@ export function updateOrganization (organization) {
   })
 }
 
-
 export function getManagedOrganizations () {
   return new Promise((resolve, reject) => {
     request
       .get(MANAGE_ORGANIZATIONS_URL)
       .set('token', token)
       .end((err, res) => {
-        if(err) {
+        if (err) {
           return reject(err)
         }
         resolve(res.body.organizations)
@@ -174,14 +214,14 @@ export function getManagedOrganizations () {
   })
 }
 
-export function postDeals(deals){
-  return new Promise ((resolve, reject) => {
+export function postDeals (deals) {
+  return new Promise((resolve, reject) => {
     request
       .post(DEALS_URL)
       .send({deals})
       .set('token', token)
       .end((err, res) => {
-        if(err) {
+        if (err) {
           return reject(err)
         }
         resolve(res.body.deals)
@@ -189,8 +229,8 @@ export function postDeals(deals){
   })
 }
 
-export function updateDeals(deals){
-  return new Promise ((resolve, reject) => {
+export function updateDeals (deals) {
+  return new Promise((resolve, reject) => {
     request
       .put(DEALS_URL)
       .send({deals})
@@ -211,7 +251,7 @@ export function getDeals () {
     request
       .get(DEALS_URL)
       .end((err, res) => {
-        if(err) {
+        if (err) {
           return reject(err)
         }
         resolve(res.body.deals)
@@ -220,7 +260,7 @@ export function getDeals () {
 }
 
 export function saveLocation (location) {
-  return new Promise (( resolve, reject) => {
+  return new Promise ((resolve, reject) => {
     request
       .post(LOCATIONS_URL)
       .send({location})
@@ -248,14 +288,14 @@ export function getLocations () {
   })
 }
 
-export function deleteDeal(deal) {
+export function deleteDeal (deal) {
   return new Promise((resolve, reject) => {
     request
       .del(DEALS_URL)
       .send({deal})
       .set('token', token)
       .end((err, res) => {
-        if(err) {
+        if (err) {
           return reject(err)
         }
         resolve(res.body.deal)
@@ -264,14 +304,14 @@ export function deleteDeal(deal) {
   })
 }
 
-export function postNewRedemption(redemption) {
-  return new Promise ((resolve, reject) =>
+export function postNewRedemption (redemption) {
+  return new Promise((resolve, reject) =>
     request
       .post(REDEMPTIONS_URL)
       .send({redemption})
       .set('token', token)
       .end((err, res) => {
-        if(err) {
+        if (err) {
           return reject(err)
         }
         resolve(res.body.redemption)
@@ -285,7 +325,7 @@ export function getRedemptions () {
       .get(REDEMPTIONS_URL)
       .set('token', token)
       .end((err, res) => {
-        if(err) {
+        if (err) {
           return reject(err)
         }
         resolve(res.body.redemptions)
@@ -299,7 +339,7 @@ export function getSurveyQuestions () {
       .get(SURVEY_QUESTIONS_URL)
       .set('token', token)
       .end((err, res) => {
-        if(err) {
+        if (err) {
           return reject(err)
         }
         resolve(res.body.questions)
@@ -314,7 +354,7 @@ export function postNewSurveyResponse (surveyResponse) {
       .send({surveyResponse})
       .set('token', token)
       .end((err, res) => {
-        if(err) {
+        if (err) {
           return reject(err)
         }
         resolve(res.body.surveyResponse)
@@ -322,14 +362,13 @@ export function postNewSurveyResponse (surveyResponse) {
   })
 }
 
-
 export function getSurveyResponses () {
   return new Promise((resolve, reject) => {
     request
       .get(SURVEY_RESPONSES_URL)
       .set('token', token)
       .end((err, res) => {
-        if(err) {
+        if (err) {
           return reject(err)
         }
         resolve(res.body.surveyResponses)

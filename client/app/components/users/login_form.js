@@ -1,5 +1,6 @@
 import React from 'react'
 import { flux } from '../../main'
+import {Link} from 'react-router'
 
 export default React.createClass({
   getDefaultProps() {
@@ -36,7 +37,7 @@ export default React.createClass({
         <form>
           <input type="text" ref="email" className="karma_input" placeholder="Email" />
           <input type="password" ref="password" className="karma_input" placeholder="Password" />
-          <a className="login_forgot">Forgot Password?</a>
+          <Link to="password_reset"><div className="login_forgot" >Forgot Password?</div></Link>
           <input type="submit" ref="button" onClick={this.didLogin} className="karma_button" value="Submit" />
         </form>
       </div>
