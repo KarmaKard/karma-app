@@ -7,9 +7,9 @@ import { formatDateString } from '../../../utils/transforms'
 export default React.createClass({
 
   propTypes: {
-    payments: React.PropTypes.array,
-    user: React.PropTypes.object,
-    organizations: React.PropTypes.array
+    payments: React.PropTypes.array.isRequired,
+    user: React.PropTypes.object.isRequired,
+    organizations: React.PropTypes.array.isRequired
   },
 
   defaultProps: {

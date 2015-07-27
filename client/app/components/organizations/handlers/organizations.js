@@ -7,37 +7,36 @@ export default React.createClass({
     router: React.PropTypes.func
   },
 
-  getInitialState() {
+  getInitialState () {
     var storeState = this.getStoreState()
-    if (storeState.organizationsStoreState.organizations.length === 0){
+    if (storeState.organizationsStoreState.organizations.length === 0) {
       flux.actions.organizations.getOrganizations()
       flux.actions.organizations.getLocations()
     }
-    if (storeState.dealsStoreState.deals.length === 0){
+    if (storeState.dealsStoreState.deals.length === 0) {
       flux.actions.deals.getDeals()
-      flux.actions.deals.getRedemptions()
-      flux.actions.deals.getSurveyQuestions()
+      flux.actions.deals.getRedemptions
       flux.actions.deals.getSurveyResponses()
     }
-    if (storeState.usersStoreState.payments.length === 0){
+    if (storeState.usersStoreState.payments.length === 0) {
       flux.actions.users.getPayments()
     }
     return storeState
   },
 
-  componentDidMount(){
+  componentDidMount () {
     var currentUser = this.state.usersStoreState.currentUser
-    if (!currentUser){
+    if (!currentUser) {
       var router = this.context.router
       router.transitionTo('login')
     }
   },
 
-  storeChange() {
+  storeChange () {
     this.setState(this.getStoreState())
   },
 
-  getStoreState() {
+  getStoreState () {
     return {
       organizationsStoreState: flux.stores.organizations.getState(),
       usersStoreState: flux.stores.users.getState(),
@@ -45,20 +44,19 @@ export default React.createClass({
     }
   },
 
-  componentWillMount() {
+  componentWillMount () {
     flux.stores.organizations.addListener('change', this.storeChange)
     flux.stores.deals.addListener('change', this.storeChange)
     flux.stores.users.addListener('change', this.storeChange)
   },
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     flux.stores.organizations.removeListener('change', this.storeChange)
     flux.stores.deals.removeListener('change', this.storeChange)
     flux.stores.users.removeListener('change', this.storeChange)
   },
 
-
-  render() {
+  render () {
     var organizations = this.state.organizationsStoreState.organizations
     var currentUser = this.state.usersStoreState.currentUser
     var payments = this.state.usersStoreState.payments
@@ -70,16 +68,17 @@ export default React.createClass({
     if (!currentUser) {
       return <span>Authenticating...</span>
     }
-    
+
     return (
-        <RouteHandler 
-          organizations={organizations} 
-          user={currentUser} 
-          locations={locations} 
-          deals={deals} 
-          redemptions={redemptions} 
-          surveyQuestions={surveyQuestions} 
-          surveyResponses={surveyResponses}/>
+        <RouteHandler
+          organizations={organizations}
+          user={currentUser}
+          locations={locations}
+          deals={deals}
+          redemptions={redemptions}
+          surveyQuestions={surveyQuestions}
+          surveyResponses={surveyResponses}
+          payments={payments} />
     )
   }
 })

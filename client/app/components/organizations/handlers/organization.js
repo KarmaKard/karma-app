@@ -1,18 +1,28 @@
 import React from 'react'
 import { flux } from '../../../main'
-import Router, {RouteHandler, Link} from 'react-router'
+import {RouteHandler, Link} from 'react-router'
 
 export default React.createClass({
+
+  propTypes: {
+    organizations: React.PropTypes.array.isRequired,
+    deals: React.PropTypes.array.isRequired,
+    locations: React.PropTypes.array.isRequired,
+    redemptions: React.PropTypes.array.isRequired,
+    surveyQuestions: React.PropTypes.array.isRequired,
+    surveyResponses: React.PropTypes.array.isRequired,
+    user: React.PropTypes.object.isRequired
+  },
 
   contextTypes: {
     router: React.PropTypes.func
   },
 
-  updateOrganization(organization) {
+  updateOrganization (organization) {
     flux.actions.organizations.updateOrganization(organization)
   },
 
-  render() {
+  render () {
     var orgId = this.context.router.getCurrentParams().organizationId
     var organization = this.props.organizations.filter(org => org.id === orgId)[0]
     var deals = this.props.deals.filter(deals => deals.organizationId === orgId)
@@ -21,18 +31,16 @@ export default React.createClass({
     var surveyResponses = this.props.surveyResponses.filter(response => response.organizationId === orgId)
     var surveyQuestions = this.props.surveyQuestions
     
-    if (!organization) {
-      return <p>Organization Not Found</p>
-    }
     return (
       <div>
-        <RouteHandler 
-          organization={organization} 
-          organizations={this.props.organizations} 
-          user={this.props.user} deals={deals} 
-          locations={locations} 
-          redemptions={redemptions} 
-          updateOrganization={this.updateOrganization} 
+        <RouteHandler
+          organization={organization}
+          organizations={this.props.organizations}
+          user={this.props.user}
+          deals={deals}
+          locations={locations}
+          redemptions={redemptions}
+          updateOrganization={this.updateOrganization}
           surveyResponses={surveyResponses}
           surveyQuestions={surveyQuestions} />
       </div>
