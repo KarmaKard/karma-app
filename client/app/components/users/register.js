@@ -6,21 +6,21 @@ export default React.createClass({
     router: React.PropTypes.func
   },
 
-  getInitialState() {
+  getInitialState () {
     return {
       mismatchPasswords: false,
       incorrectEmail: false
     }
   },
 
-  didClick(){
+  didClick () {
 
     var email = React.findDOMNode(this.refs.registerEmail).value
     var firstName = React.findDOMNode(this.refs.registerFirstName).value
     var lastName = React.findDOMNode(this.refs.registerLastName).value
     var password = React.findDOMNode(this.refs.registerPassword).value
     var passwordConfirm = React.findDOMNode(this.refs.registerPasswordConfirm).value
-    var roles= {}
+    var roles = {}
 
     if (password && passwordConfirm && password !== passwordConfirm) {
       return this.setState({
@@ -28,9 +28,9 @@ export default React.createClass({
       })
     }
 
-    if(email){
+    if (email) {
       var emailValidator = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/
-      if(!emailValidator.test(email)){
+      if (!emailValidator.test(email)) {
         return this.setState({
           incorrectEmail: true
         })
@@ -38,55 +38,54 @@ export default React.createClass({
     }
 
     var user = { email, firstName, lastName, password, roles}
-    
     flux.actions.users.create(user)
     React.findDOMNode(this.refs.button).disabled = false
   },
 
-  render() {
+  render () {
     var mismatchPasswords = this.state.mismatchPasswords
-      ? <div className="error-message">Mismatched Passwords</div>
+      ? <div className='error-message'>Mismatched Passwords</div>
       : null
 
     var incorrectEmail = this.state.incorrectEmail
-      ? <div className="error-message">Not An Email Format</div>
+      ? <div className='error-message'>Not An Email Format</div>
       : null
     return (
       <div>
         {mismatchPasswords}
         {incorrectEmail}
-          <div className="content_box-header">Register</div>
-          <div className="form-row">
+          <div className='content_box-header'>Register</div>
+          <div className='form-row'>
             <label>
               <span>First Name</span>
-              <input type="text" onBlur={this.setUserInfo} ref="registerFirstName" className="karma_input" placeholder="First Name" />
+              <input type='text' onBlur={this.setUserInfo} ref='registerFirstName' className='karma_input' placeholder='First Name' />
             </label>
           </div>
-          <div className="form-row">
+          <div className='form-row'>
             <label>
               <span>Last Name</span>
-              <input type="text" onBlur={this.setUserInfo} ref="registerLastName" className="karma_input" placeholder="Last Name" />
+              <input type='text' onBlur={this.setUserInfo} ref='registerLastName' className='karma_input' placeholder='Last Name' />
             </label>
           </div>
-          <div className="form-row">
+          <div className='form-row'>
             <label>
               <span>Email</span>
-              <input type="text" onBlur={this.setUserInfo} ref="registerEmail" className="karma_input" placeholder="Email"/>
+              <input type='text' onBlur={this.setUserInfo} ref='registerEmail' className='karma_input' placeholder='Email'/>
            </label>
           </div>
-          <div className="form-row">
+          <div className='form-row'>
             <label>
               <span>Password</span>
-              <input type="password" onBlur={this.setUserInfo} ref="registerPassword" className="karma_input" placeholder="Password" />
+              <input type='password' onBlur={this.setUserInfo} ref='registerPassword' className='karma_input' placeholder='Password' />
             </label>
           </div>
-          <div className="form-row">
+          <div className='form-row'>
             <label>
               <span>Confirm Password</span>
-              <input type="password" onBlur={this.setUserInfo} ref="registerPasswordConfirm" className="karma_input" placeholder="Confirm Password" />
+              <input type='password' onBlur={this.setUserInfo} ref='registerPasswordConfirm' className='karma_input' placeholder='Confirm Password' />
             </label>
           </div>
-           <input type="submit" ref="button" onClick={this.didClick} className="karma_button" value="Create Account"/>
+           <input type='submit' ref='button' onClick={this.didClick} className='karma_button' value='Create Account'/>
       </div>
 
     )

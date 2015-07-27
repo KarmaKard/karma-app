@@ -3,21 +3,23 @@
   include_vars: secrets.yml
 
 - name: Make App Directory
-  file: path=/app state=directory mode=0744 owner=karma group=karma
+  file: path=/app state=directory mode=0755 owner=karma group=nginx
   
 - name: Checkout latest release branch from github
   git: repo=https://github.com/KarmaKard/karma-app.git
        dest={{ repo_path }}
        version=release
+       force=yes
   notify: restart karma-app
 
-- name: Set app dir permissions to allow karma and nginx in
-  file: path=/app
-        state=directory
-        recurse=yes
-        mode=0774
-        owner=karma
-        group=nginx
+- name: Write Server ENV VARS to file
+  template: src=server_env_vars
+            dest={{ server_path}}/.env
+  notify: restart karma-app
+
+- name: Write Client ENV VARS to file
+  template: src=client_env_vars
+            dest={{ client_path}}/.env
 
 - name: Install NPM packages for server
   npm: path={{ server_path }}
@@ -28,19 +30,54 @@
   retries: 10
   delay: 30
 
+- name: Install NPM packages for the client before building assets
+  npm: path={{ client_path }}
+       state=latest
+       production=yes
+  register: npm_client_install
+  until: npm_client_install|success
+  retries: 10
+  delay: 30
+
+- name: Clean up client build directory in order to get a fresh build
+  file: path={{ item }}
+        state=absent
+  with_items:
+    - "{{ client_path }}/dist"
+
+- name: Build client assets
+  command: npm run build
+           chdir={{ client_path }}
+
+- name: Make Server executable
+  file: path={{ server_path }} state=directory mode=0755 owner=karma group=karma
+
 - name: Run Database Migrations
   command: npm run migrate
            chdir={{ server_path }}
+
+- name: Set app dir permissions and SEType to allow karma and nginx in
+  file: path={{ client_path }}
+        state=directory
+        recurse=yes
+        mode=0755
+        owner=karma
+        group=nginx
+
+- name: Set SEType to allow nginx to server client
+  file: path="{{ client_path }}/dist"
+        state=directory
+        recurse=yes
+        setype=httpd_sys_content_t
 
 - name: Build Karma-App Systemd configuration file
   template: src=karma-app.service.j2
             dest=/etc/systemd/system/karma-app.service
   notify: restart karma-app
 
-- name: Write ENV VARS to file
-  template: src=env_vars
-            dest={{ server_path}}/.env
-  notify: restart karma-app
+- name: Allow SELinux to proxy node
+  command: setsebool -P httpd_can_network_connect 1
 
 - name: Ensure karma-app is started and enabled on boot
   service: name=karma-app state=started enabled=yes
+

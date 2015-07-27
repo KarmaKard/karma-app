@@ -18,6 +18,12 @@ module.exports = {
   stripe: {
     token: process.env.STRIPE_TOKEN
   },
+  mailgun: {
+    key: process.env.MAILGUN_KEY
+  },
+  domain: {
+    base_url: process.env.BASE_URL
+  },
   cors: {
     whitelist: [
       'http://localhost:4200'
