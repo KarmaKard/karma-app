@@ -41,7 +41,7 @@ export default React.createClass({
       ? <LoginForm loginErrors={this.state.users.loginErrors}/>
       : <NewUser/>
 
-    var toggleButtonText = !this.state.isExistingUser ? 'New User?' : 'Existing User?'
+    var toggleButtonText = this.state.isExistingUser ? 'New User?' : 'Existing User?'
 
     return (
       <div>
@@ -50,7 +50,7 @@ export default React.createClass({
           <a href= '#' className= 'page_header_link' onClick={this.toggleForm}>{toggleButtonText}</a>
         </div>
         <div className= 'content_box'>
-            {form}
+          {form}
         </div>
       </div>
     )
