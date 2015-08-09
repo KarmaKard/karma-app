@@ -28,8 +28,8 @@
 - name: Add rethink group
   group: name=rethink
 
-- name: Add user tgroshon
-  user: name=tgroshon group=wheel password={{ tgroshon_pass }}
+- name: Add user deployer
+  user: name=deployer group=wheel password={{ deployer_pass }}
 
 - name: Add karma user for running the app
   user: name=karma group=karma

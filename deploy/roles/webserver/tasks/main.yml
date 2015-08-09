@@ -1,6 +1,6 @@
 ---
 - name: Install Latest Nginx
-  yum: name=nginx state=latest
+  yum: name=nginx state=present
 
 - name: Install 'Development tools' for building native extensions
   yum: name="@Development tools" state=present
