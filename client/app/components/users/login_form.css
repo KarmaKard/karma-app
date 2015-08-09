@@ -1,5 +1,5 @@
 .login_forgot{
-  font-family: 'Quicksand', sans-serif;
+  font-family: 'Fjalla One', sans-serif;
   font-size: 14pt;
   text-decoration: none;
   font:black;
@@ -9,4 +9,33 @@
 
 .login_forgot:hover{
   cursor: pointer;
+}
+
+.guest_box {
+  background-color: #fff;
+}
+
+.login_buttons .karma_button {
+  margin-bottom: 20px;
+}
+
+@media only screen and (max-width: 840px) {
+
+  .guest_box {
+    width: 100%;
+    padding: 10px 20px 55px;
+  }
+}
+
+ @media only screen and (min-width: 841px) {
+
+  .guest_box {
+    width: 500px;
+    margin: 20px 0 0 33%;
+    padding: 10px 20px 55px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: #000;
+    overflow: auto
+  }
 }

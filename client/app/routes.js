@@ -2,6 +2,7 @@ import {Route, RouteHandler, DefaultRoute} from 'react-router'
 import React from 'react'
 
 import Login from './components/users/handlers/login'
+import Logout from './components/users/handlers/logout'
 import Register from './components/users/handlers/register'
 import Donate from './components/users/handlers/donate'
 import DealList from './components/deals/handlers/list_deals'
@@ -54,6 +55,7 @@ export default (
   <Route name='root' handler={App} path='/'>
     <DefaultRoute handler={RedirectToDeals} onEnter={RedirectToDeals.willTransitionTo} />
     <Route name='login' handler={Login} path='login' />
+    <Route name='logout' handler={Logout} path='logout' />
     <Route name='register' handler={Register} path='register' />
     <Route name='password_reset' handler={PasswordReset} path='reset' />
     <Route name='new_password' handler={NewPassword} path='new_password/:passwordResetId' />
@@ -68,18 +70,15 @@ export default (
     <Route name='donate' handler={Donate} path='donate/:organizationStripePubKey' />
 
     <Route name='deals' handler={Deals} path='dealcards' >
-      <DefaultRoute handler={DealCards} />
-      <Route name='deal_card' handler={DealCard} path=':paymentId' >
-        <DefaultRoute handler={ShowCategories} />
-        <Route name='categorical_organizations' handler={ShowCategoricalOrganizations} path='category/:category' />
-        <Route name='business' handler={Organization} path=':organizationId' >
-          <DefaultRoute handler={ShowOrganizationProfile} />
-          <Route name='redeem_deal' handler={DealRedemption} path=':dealId' >
-            <DefaultRoute handler={RedemptionScreen} />
-            <Route name='survey' handler={Survey} path='question' />
-            <Route name='redeem_success' handler={RedemptionSuccess} path='redeemed' />
-            <Route name='add_redemptions' handler={AddRedemptions} path='add' />
-          </Route>
+      <DefaultRoute handler={ShowCategories} />
+      <Route name='categorical_organizations' handler={ShowCategoricalOrganizations} path='category/:category' />
+      <Route name='business' handler={Organization} path=':organizationId' >
+        <DefaultRoute handler={ShowOrganizationProfile} />
+        <Route name='redeem_deal' handler={DealRedemption} path=':dealId' >
+          <DefaultRoute handler={RedemptionScreen} />
+          <Route name='survey' handler={Survey} path='question' />
+          <Route name='redeem_success' handler={RedemptionSuccess} path='redeemed' />
+          <Route name='add_redemptions' handler={AddRedemptions} path='add' />
         </Route>
       </Route>
     </Route>

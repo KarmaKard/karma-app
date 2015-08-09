@@ -1,4 +1,5 @@
 @import './reset.css';
+@import './media.css';
 @import './typography.css';
 @import './components/users/handlers/account';
 @import './components/users/login_form';
@@ -8,12 +9,22 @@
 @import './components/deals/list_deals';
 @import './components/deals/handlers/deal_cards';
 @import 'https://fonts.googleapis.com/css?family=Quicksand';
+@import 'http://fonts.googleapis.com/css?family=Fjalla+One';
+@import 'https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css';
 
-body {
-  padding: 0 5%;
-  background:
-  url("/img/aseninelowercase.png") 
-  top center
+@font-face {
+    font-family: BebasNeue;
+    src: url("../assets/font/bebas/TTF's/BebasNeue Regular.ttf");
+}
+
+h2 {
+
+    font-family: 'Fjalla One', sans-serif;
+    color: #808080;
+    font-size: 30px;
+    text-transform: uppercase;
+    font-weight: 400;
+    margin-bottom: 10px;
 }
 
 a:link {color: black; text-decoration: none;}     
@@ -21,61 +32,79 @@ a:visited {color: black;}
 a:hover {color: black;}     
 a:active {color: black;}  
 
-.side_bar_navigation {
-  float: left;
-  clear: both;
-  font-family: 'Quicksand', sans-serif;
-  font-size: 24pt;
-  text-decoration: none;
-  font:black;
-  margin: 10px 0 0 80px;
+ul {
+  padding: 0;
+}
 
+.list-header {
+  border-bottom: 1px solid black;
+  padding: 10px 0 5px 0;
+  font-weight: bold;
+}
+
+.list-item {
+  border-top: 1px solid black;
+  padding: 10px 0 10px 20px;
+}
+
+.list-header:hover {
+  color: white;
+  background: black;
+}
+
+.list-item:hover {
+  color: white;
+  background: black;
 }
 
 .side_bar_navigation_level2{
-  padding-left: 20px;
+  text-align: left;
+  padding-left: 30px;
 }
 
 .content_box {
-  background-color: #FFFFFF;
-  background-image: none;
-  border-width: 2px;
-  border-style: solid;
-  border-color: #000000;
-  opacity: 0.88;
-  width: 500px;
-  margin-top: 200px;
-  margin: auto;
-  padding: 10px 20px 20px 20px;
-  position: absolute;
-  top: 70px;
-  left: 32%;
-
+  background-color: #fff;
 }
 
 .content_box-header {
-  text-align: center;
   text-decoration: none;
-  font-family: 'Quicksand', sans-serif;
+  font-family: 'Fjalla One', sans-serif;
+  text-transform: uppercase;
   font-size: 42px;
   margin-bottom: 10px;
+  color: #5D9DBD;
 
 }
 
-.page_header_title{
-  font-family: 'Quicksand', sans-serif;
-  font-size: 60px;
-  clear:both;
+.content_box-content {
+  overflow: auto;
+}
+
+.page_header{
+  background-color: #5D9DBD;
+  width: 100%;
+  font-family: 'Fjalla One', sans-serif;
+  text-transform: uppercase;
+  color: white;
+}
+
+.header_left{
   float:left;
 }
 
-.page_header_link{
-  font-family: 'Quicksand', sans-serif;
-  font-size: 24pt;
+.header_center{
+  float:left;
+}
+
+.header_right{
   text-decoration: none;
-  font:black;
   float:right;
-  margin: 10px 30px;
+  color: white;
+  font-size: 20pt;
+  text-decoration: none;
+  float:right;
+  color: white;
+
 }
 
 
@@ -111,37 +140,17 @@ a:active {color: black;}
 }
 
 .karma_button {
-  font-family: 'Quicksand', sans-serif;
+  font-family: 'Fjalla One', sans-serif;
+  text-transform: uppercase;
   font-size: 24pt;
   text-decoration: none;
-  font:black;
+  color:#828282;
   float:right;
   margin: 5px 10px;
   background: white;
   border: 1px solid white;
 }
 
-.back_button {
-  font-family: 'Quicksand', sans-serif;
-  font-size: 16pt;
-  text-decoration: none;
-  font:black;
-  float:left;
-  margin: 12px 0 0 0;
-  background: white;
-  border: 1px solid black;
-}
-
-.back_button:hover {
-  background-color: black;
-  color: white;
-  cursor: pointer;
-}
-
-.karma_button:hover {
-  border: 1px solid black;
-  cursor: pointer;
-}
 
 .preloader {
   background:
@@ -162,4 +171,26 @@ hr {
   margin-right: auto;
   border-style: inset;
   border-width: 1px;
+  width: 100%;
 } 
+
+.facebookButton {
+  width: 100%;
+  height: 50px;
+  margin-top: 20px;
+  background-color: #3A5795;
+  float:left;
+  font-family: 'Fjalla One', sans-serif;
+}
+
+.facebookButton i {
+  margin: 3px 10px 0 15px;
+  float:left;
+}
+
+.facebookButton span {
+  padding: 10px 20px;
+  float:right;
+  color: white;
+  font-size: 24px;
+}

@@ -1,15 +1,8 @@
 import React from 'react'
 import { flux } from '../../../main'
 import { RouteHandler } from 'react-router'
-import { Link } from 'react-router'
-import UserSideBar from '../../users/user_sidebar'
 
 export default React.createClass({
-
-  propTypes: {
-    user: React.PropTypes.object.isRequired,
-    organizations: React.PropTypes.array.isRequired
-  },
 
   getInitialState () {
     return {
@@ -31,21 +24,9 @@ export default React.createClass({
   },
 
   render () {
-
-    var user = this.props.user
-    var organizations = this.props.organizations
     return (
       <div>
-        <div className='page_header'>
-          <div className='page_header_title'>{user.firstName} </div>
-          <div className='page_header_link' onClick={this.logOut} >
-            Log Out
-          </div>
-        </div>
-        <UserSideBar organizations={organizations} user={user} />
-        <div className='content_box'>
-          <RouteHandler {... this.props} saveAmountSaved={this.saveAmountSaved} amountSaved={this.state.amountSaved}/>
-        </div>
+        <RouteHandler {... this.props} saveAmountSaved={this.saveAmountSaved} amountSaved={this.state.amountSaved}/>
       </div>
     )
   }

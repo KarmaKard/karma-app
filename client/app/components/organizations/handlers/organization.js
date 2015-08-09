@@ -11,7 +11,10 @@ export default React.createClass({
     redemptions: React.PropTypes.array.isRequired,
     surveyQuestions: React.PropTypes.array.isRequired,
     surveyResponses: React.PropTypes.array.isRequired,
-    user: React.PropTypes.object.isRequired
+    user: React.PropTypes.object.isRequired,
+    showBackLink: React.PropTypes.func.isRequired,
+    toggleMenu: React.PropTypes.func.isRequired,
+    toggleState: React.PropTypes.bool.isRequired
   },
 
   contextTypes: {
@@ -24,13 +27,12 @@ export default React.createClass({
 
   render () {
     var orgId = this.context.router.getCurrentParams().organizationId
-    var organization = this.props.organizations.filter(org => org.id === orgId)[0]
     var deals = this.props.deals.filter(deals => deals.organizationId === orgId)
+    var organization = this.props.organizations.filter(org => org.id === orgId)[0]
     var locations = this.props.locations.filter(locations => locations.organizationId === orgId)
     var redemptions = this.props.redemptions.filter(redemptions => redemptions.organizationId === orgId)
     var surveyResponses = this.props.surveyResponses.filter(response => response.organizationId === orgId)
     var surveyQuestions = this.props.surveyQuestions
-    
     return (
       <div>
         <RouteHandler
@@ -42,7 +44,10 @@ export default React.createClass({
           redemptions={redemptions}
           updateOrganization={this.updateOrganization}
           surveyResponses={surveyResponses}
-          surveyQuestions={surveyQuestions} />
+          surveyQuestions={surveyQuestions}
+          showBackLink={this.props.showBackLink}
+          toggleState={this.props.toggleState}
+          toggleMenu={this.props.toggleMenu}/>
       </div>
     )
   }

@@ -29,6 +29,7 @@ export default class UserStore extends Store {
     this.handleAction('users.getPayments', this.savePayments)
     this.handleAction('users.emailPasswordReset', this.sendPasswordResetEmail)
     this.handleAction('users.checkPasswordResetExpiration', this.checkPasswordResetExpiration)
+    this.handleAction('users.facebookLogin', this.handleAuth)
   }
 
   handleAuth (user) {

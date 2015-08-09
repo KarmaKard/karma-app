@@ -1,1 +1,4 @@
 TOKEN_SECRET={{ token_secret }}
+STRIPE_TOKEN={{ stripe_token }}
+MAILGUN_KEY={{ mailgun_key }}
+BASE_URL={{ server_name }}

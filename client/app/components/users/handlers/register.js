@@ -28,8 +28,8 @@ export default React.createClass({
   didClick(){
     var user = { 
       email : this.state.email, 
-      firstName : this.state.firstName, 
-      lastName : this.state.lastName, 
+      firstName : this.state.firstName.charAt(0).toUpperCase() + this.state.firstName.slice(1), 
+      lastName : this.state.lastName.charAt(0).toUpperCase() + this.state.lastName.slice(1), 
       password : this.state.password
     }
     
@@ -37,13 +37,20 @@ export default React.createClass({
     flux.actions.users.create(router, user)
   },
 
+  goBack () {
+    history.back()
+  },
+
   render(){
     return (
       <div>
         <div className="page_header">
-          <div className="page_header_title">KarmaKard</div>
+          <div>
+            <i onClick={this.goBack} className='fa fa-chevron-left fa-2x back_button'></i>
+            <div className='header_center karmatitle'>KarmaKard</div>
+          </div>
         </div>
-        <div className="content_box">
+        <div className="guest_box">
           <div className="content_box-header">Register</div>
           <Register setRegistrationInfo={this.setRegistrationInfo}/>
            <input type="submit" ref="button" onClick={this.didClick} className="karma_button" value="Submit"/>

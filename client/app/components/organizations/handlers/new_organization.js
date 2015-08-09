@@ -3,14 +3,15 @@ import Router, {RouteHandler, Link} from 'react-router'
 import Wizard from '../wizard'
 
 export default React.createClass({
+  componentWillMount () {
+    this.props.showBackLink(true)
+  },
+
   render(){
     return (
       <div>
-        <div className="page_header">
-          <div className="page_header_title">KarmaKard</div>
-        </div>
-        <div className="content_box">
-          <Wizard user={this.props.user}/>
+        <div className="guest_box">
+          <Wizard user={this.props.user} toggleMenu={this.props.toggleMenu} toggleState={this.props.toggleState} showBackLink={this.props.showBackLink} />
         </div>
       </div>
     )     

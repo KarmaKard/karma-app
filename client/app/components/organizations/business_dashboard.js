@@ -31,7 +31,7 @@ export default React.createClass({
   render() {
     var addLocations, addDeals, addKeywords, submitButton
     var message = "You have some task(s) remaining before your business can be reviewed:"
-    if(this.props.initialLocations.length === 0){addLocations = <li><Link to="edit_locations" params={{organizationId: this.props.organization.id}}>Add location(s)</Link></li>}
+    if(this.props.initialLocations.length === 0){addLocations = <Link to="edit_locations" params={{organizationId: this.props.organization.id}}><li className='list-item'>Add location(s)</li></Link>}
     if(this.props.deals.length >= 2){
       var freeDealExists
       this.props.deals.forEach(function(deal){
@@ -40,14 +40,14 @@ export default React.createClass({
         }
       })
       if(freeDealExists !== true){
-        addDeals = <li><Link to="edit_deals" params={{organizationId: this.props.organization.id}}>Add deal(s)</Link></li>
+        addDeals = <Link to="edit_deals" params={{organizationId: this.props.organization.id}}><li className='list-item'>Add deal(s)</li></Link>
       }
     }
     else{
-      addDeals = <li><Link to="edit_deals" params={{organizationId: this.props.organization.id}}>Add deal(s)</Link></li>
+      addDeals = <Link to="edit_deals" params={{organizationId: this.props.organization.id}}><li className='list-item'>Add deal(s)</li></Link>
     }
 
-    if(!this.props.organization.keywords){addKeywords = <li><Link to="edit_keywords" params={{organizationId: this.props.organization.id}}>Add keyword(s)</Link></li>}
+    if(!this.props.organization.keywords){addKeywords = <Link to="edit_keywords" params={{organizationId: this.props.organization.id}}><li className="list-item">Add keyword(s)</li></Link>}
 
     if(!addDeals && !addKeywords && !addLocations){
       message = "All required information has been completed. Please thoroughly review your information before you submit this business to be reviewed."

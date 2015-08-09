@@ -39,15 +39,15 @@ export default React.createClass({
       return (
       <div className='surveyQuestion' >
         <h1>Whoa</h1>
-        <ul>
+        <div>
           Looks like we dont have any new questions in our database!
-          <p><Link to='redeem_deal"' params={{paymentId: this.context.router.getCurrentParams().paymentId, organizationId: this.context.router.getCurrentParams().organizationId, dealId: this.context.router.getCurrentParams().dealId}}>Click Here to redeem anyways</Link></p>
-        </ul>
+          <p><Link to='redeem_deal' params={{paymentId: this.context.router.getCurrentParams().paymentId, organizationId: this.context.router.getCurrentParams().organizationId, dealId: this.context.router.getCurrentParams().dealId}}>Click Here to redeem anyways</Link></p>
+        </div>
       </div>
       )
     }
     var options = this.props.surveyQuestion.options.map(this.renderAnswerLink)
-    var questionText = this.props.surveyQuestion.questionText
+    var questionText = this.props.surveyQuestion.text
 
     return (
       <div className='surveyQuestion' >

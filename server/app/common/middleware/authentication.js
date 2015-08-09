@@ -5,7 +5,7 @@ import { UnauthorizedError } from '../errors'
 
 export async function password (req, res, next) {
   try {
-    var users = await getByEmail(req.body.email)
+    var users = await getByEmail(req.body.email.toLowerCase())
 
     if (users.length === 0) {
       throw new UnauthorizedError()

@@ -7,5 +7,5 @@ Use [ansible](http://www.ansible.com/get-started) to deploy and provision resour
 
 Found in `deploy.yml`.
 
-Run with `ansible-playbook -v -i inventories/beta deploy.yml --ask-sudo-pass --vault-password-file ../.vault_pass`
+Run with `ansible-playbook -v -i inventories/edge deploy.yml --ask-sudo-pass --vault-password-file ../.vault_pass`
 

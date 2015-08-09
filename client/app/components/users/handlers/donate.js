@@ -17,6 +17,11 @@ export default React.createClass({
       usersStoreState: flux.stores.users.getState()
     }
   },
+
+  goBack () {
+    history.back()
+  },
+  
   render() {
     if(!this.state.usersStoreState){return <p>Waiting...</p>}
     var user = this.state.usersStoreState.currentUser
@@ -24,9 +29,12 @@ export default React.createClass({
     return (
       <div>
         <div className="page_header">
-          <div className="page_header_title">KarmaKard</div>
+          <div>
+            <i onClick={this.goBack} className='fa fa-chevron-left fa-2x back_button'></i>
+            <div className='header_center karmatitle'>KarmaKard</div>
+          </div>
         </div>
-        <div className="content_box">
+        <div className="guest_box">
           <DonateForm organizationStripeKey={stripePubKey} currentUser={user} />
         </div>
       </div>

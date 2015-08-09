@@ -3,6 +3,9 @@ import BusinessProfile from '../business_profile'
 import EditFundraiserProfile from '../edit_fundraiser_profile'
 
 export default React.createClass({
+  componentWillMount () {
+    this.props.showBackLink(true)
+  },
 
   render() {
 

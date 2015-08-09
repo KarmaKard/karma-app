@@ -61,6 +61,10 @@ export default React.createClass({
     return [totalSavings, organizationArray]
   },
 
+  goBack () {
+    history.back()
+  },
+
   render () {
     var organizations = this.state.organizationsStoreState.organizations
       .filter(org => org.type === 'business' && org.status === 'active')
@@ -72,9 +76,12 @@ export default React.createClass({
     return (
       <div>
         <div className='page_header'>
-          <div className='page_header_title'>KarmaKard</div>
+          <div>
+            <i onClick={this.goBack} className='fa fa-chevron-left fa-2x back_button'></i>
+            <div className='header_center karmatitle'>KarmaKard</div>
+          </div>
         </div>
-        <div className='content_box'>
+        <div className='guest_box'>
           <div className='content_box-header'>Deals By Business</div>
           <DealList dealsByOrganization={dealsByOrganization} totalSavings={totalSavings} />
         </div>

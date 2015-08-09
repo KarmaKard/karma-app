@@ -1,11 +1,9 @@
 import React from 'react'
 import { flux } from '../../../main'
 import { Link } from 'react-router'
-import UserSideBar from '../../users/user_sidebar'
 import { formatDateString } from '../../../utils/transforms'
 
 export default React.createClass({
-
   propTypes: {
     payments: React.PropTypes.array.isRequired,
     user: React.PropTypes.object.isRequired,
@@ -28,7 +26,6 @@ export default React.createClass({
   render () {
     var payments = this.props.payments
     var user = this.props.user
-    var organizations = this.props.organizations
     var now = Date.now()
     var paymentDate, expirationDate, oneCardExistsID
     var dealCardLinks = payments.map(function (payment) {
@@ -65,40 +62,15 @@ export default React.createClass({
       var router = this.context.router
       router.transitionTo('deal_card', {paymentId: oneCardExistsID})
     }
-
-    var addNewLink = null
-
-    if (!user.roles.manager && !user.roles.superadmin) {
-      addNewLink = (
-        <div>
-          <hr />
-          <Link to='new_organization' className='create_organization-link'>
-            Business? Fundraiser?
-            <span className='create_organization-link_span'>Offer deals with us!</span>
-          </Link>
-        </div>
-      )
-    }
-
     return (
       <div>
-         <div className='page_header'>
-            <div className='page_header_title'>{user.firstName}</div>
-            <div className='page_header_link' onClick={this.logOut}>
-              Log Out
-            </div>
-          </div>
-          <UserSideBar organizations={organizations} user={user} />
-          <div className='content_box'>
-            <div className='content_box-header'>
-              Your Deal Cards
-            </div>
-            <ul className='deal_card-list'>
-              {dealCardLinks}
-            </ul>
-            {addNewLink}
-          </div>
+        <div className='content_box-header'>
+          Your Deal Cards
         </div>
+        <ul className='deal_card-list'>
+          {dealCardLinks}
+        </ul>
+      </div>
     )
   }
 })

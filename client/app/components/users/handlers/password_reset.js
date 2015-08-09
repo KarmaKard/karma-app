@@ -27,14 +27,19 @@ export default React.createClass({
     flux.stores.users.removeListener('change', this.storeChange)
   },
 
+  goBack () {
+    history.back()
+  },
+
   render () {
     return (
       <div>
         <div className='page_header'>
-          <div className='page_header_title'>KarmaKard</div>
-          <Link to='root' ><div className='page_header_link'> Login </div></Link>
-        </div>
-        <div className='content_box'>
+          <div>
+            <i onClick={this.goBack} className='fa fa-chevron-left fa-2x back_button'></i>
+            <div className='header_center karmatitle'>KarmaKard</div>
+          </div>        </div>
+        <div className='guest_box'>
           <PasswordReset resetEmailSent={this.state.user.resetEmailSent} />
         </div>
       </div>

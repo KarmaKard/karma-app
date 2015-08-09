@@ -40,7 +40,9 @@ export default React.createClass({
     return {
       organizationsStoreState: flux.stores.organizations.getState(),
       usersStoreState: flux.stores.users.getState(),
-      dealsStoreState: flux.stores.deals.getState()
+      dealsStoreState: flux.stores.deals.getState(),
+      showBackLink: false,
+      toggleState: false
     }
   },
 
@@ -56,6 +58,19 @@ export default React.createClass({
     flux.stores.users.removeListener('change', this.storeChange)
   },
 
+  toggleMenu () {
+    var toggleState = this.state.toggleState ? false : true
+    this.setState({toggleState})
+  },
+
+  showBackLink (showBackLink) {
+    this.setState({showBackLink})
+  },
+
+  goBack () {
+    history.back()
+  },
+
   render () {
     var organizations = this.state.organizationsStoreState.organizations
     var currentUser = this.state.usersStoreState.currentUser
@@ -69,16 +84,33 @@ export default React.createClass({
       return <span>Authenticating...</span>
     }
 
+    var backLink
+    if (this.state.showBackLink) {
+      backLink = (<div><i onClick={this.goBack} className='fa fa-chevron-left fa-2x back_button'></i><div className='header_center karmatitle'>KarmaKard</div></div>)
+    } else {
+      backLink = (<div className='header_left karmatitle'>KarmaKard</div>)
+    }
+
     return (
-        <RouteHandler
-          organizations={organizations}
-          user={currentUser}
-          locations={locations}
-          deals={deals}
-          redemptions={redemptions}
-          surveyQuestions={surveyQuestions}
-          surveyResponses={surveyResponses}
-          payments={payments} />
+      <div>
+        <div className='page_header'>
+          {backLink}
+          <div className='header_right disappear' onClick={this.toggleMenu}> ☰ </div>
+        </div>
+
+          <RouteHandler
+            organizations={organizations}
+            user={currentUser}
+            locations={locations}
+            deals={deals}
+            redemptions={redemptions}
+            surveyQuestions={surveyQuestions}
+            surveyResponses={surveyResponses}
+            payments={payments}
+            showBackLink={this.showBackLink}
+            toggleMenu={this.toggleMenu}
+            toggleState={this.state.toggleState}/>
+      </div>
     )
   }
 })

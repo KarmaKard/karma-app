@@ -14,12 +14,12 @@
 
 - name: Write Server ENV VARS to file
   template: src=server_env_vars
-            dest={{ server_path}}/.env
+            dest={{ server_path }}/.env
   notify: restart karma-app
 
 - name: Write Client ENV VARS to file
   template: src=client_env_vars
-            dest={{ client_path}}/.env
+            dest={{ client_path }}/.env
 
 - name: Install NPM packages for server
   npm: path={{ server_path }}

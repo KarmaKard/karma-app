@@ -16,27 +16,6 @@
   list-style-type: none;
 }
 
-.category_list-item {
-  border-bottom: 1px solid black;
-  padding: 10px 0 5px 0;
-  font-weight: bold;
-}
-
-.organization_list-item {
-  border-top: 1px solid black;
-  padding: 10px 0 10px 20px;
-}
-
-.category_list-item:hover {
-  color: white;
-  background: black;
-}
-
-.organization_list-item:hover {
-  color: white;
-  background: black;
-}
-
 .street_address_input{
   width: 70% !important;
   float:left;
@@ -171,24 +150,8 @@
     opacity: .9;
 }
 
-.redeem_success-happy_button {
-  font-family: 'Quicksand', sans-serif;
-  font-size: 24pt;
-  text-decoration: none;
-  font:black;
+.satisfaction_survey_item {
+  width: 50%;
+  padding: 0 15%;
   float:left;
-  margin: 5px 10px;
-  background: white;
-  border: 1px solid white;
-}
-
-.redeem_success-unhappy_button {
-  font-family: 'Quicksand', sans-serif;
-  font-size: 24pt;
-  text-decoration: none;
-  font:black;
-  clear:right;
-  margin: 5px 10px;
-  background: white;
-  border: 1px solid white;
 }

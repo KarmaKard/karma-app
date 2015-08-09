@@ -1,7 +1,6 @@
 import React from 'react'
 import { flux } from '../../../main'
 import { Link } from 'react-router'
-import UserSideBar from '../../users/user_sidebar'
 
 export default React.createClass({
 
@@ -11,7 +10,8 @@ export default React.createClass({
     user: React.PropTypes.object.isRequired,
     deals: React.PropTypes.array.isRequired,
     locations: React.PropTypes.array.isRequired,
-    organizations: React.PropTypes.array.isRequired
+    organizations: React.PropTypes.array.isRequired,
+    showBackLink: React.PropTypes.func.isRequired
   },
 
   contextTypes: {
@@ -23,20 +23,23 @@ export default React.createClass({
     flux.actions.users.logout(router)
   },
 
+  componentWillMount () {
+    this.props.showBackLink(true)
+  },
+
   renderDealLink (deal, i) {
     var user = this.props.user
     var redemptions = this.props.redemptions
     var organization = this.props.organization
-    var paymentId = this.context.router.getCurrentParams().paymentId
     var amountRedeemed = redemptions.filter(function (redemption) {
       return redemption.dealId === deal.id && redemption.userId === user.id ? redemption : null
     })
 
-    var redemptionsLeft = deal.limit !== 'unlimited' ? deal.limit - amountRedeemed.length : deal.limit
+    var redemptionsLeft = deal.limit !== 'unlimited' ? deal.totalLimit - amountRedeemed.length : deal.limit
     var redeemLink = redemptionsLeft === 0 ? 'add_redemptions' : 'survey'
 
     return (
-      <Link to={redeemLink} params={{paymentId: paymentId, organizationId: organization.id, dealId: deal.id}}>
+      <Link to={redeemLink} params={{organizationId: organization.id, dealId: deal.id}}>
         <li className='deal-button' key={i}>
             <div className='deals_description'>{deal.dealText}</div>
             <div className='deals_limit'>{redemptionsLeft}</div>
@@ -46,44 +49,41 @@ export default React.createClass({
   },
 
   render () {
-    var user = this.props.user
-    var deals = this.props.deals.map(this.renderDealLink)
+    var organization = this.props.organization
+    if (!organization) {
+      return (
+        <div>
+          <h1>This is embarrassing, but...</h1>
+          <p>We couldn&#39;t find this organization!</p>
+        </div>
+      )
+    }
 
+    var deals = this.props.deals.map(this.renderDealLink)
     var locations = this.props.locations.map(function (location) {
       return <li className='dealButton'>{location.street + ' ' + location.zip}</li>
     })
 
-    var organizations = this.props.organizations
-
     return (
       <div>
-          <div className='page_header'>
-          <div className='page_header_title'>{user.firstName} </div>
-          <div className='page_header_link' onClick={this.logOut} >
-            Log Out
-          </div>
+        <div className='organization_information' >
+          <div className="content_box-header">{organization.name}</div>
+          <p>{organization.category}</p>
         </div>
-        <UserSideBar organizations={organizations} user={user} />
-        <div className='content_box'>
-          <div className='organization_information' >
-            <h1>{this.props.organization.name}</h1>
-            <p>{this.props.organization.category}</p>
+        <div className='business_deals' >
+          <div className='deals_header' >
+            <h2 className='deals_description'>Deals</h2>
+            <h2 className='deals_limit'>Limit</h2>
           </div>
-          <div className='business_deals' >
-            <div className='deals_header' >
-              <h2 className='deals_description'>Deals</h2>
-              <h2 className='deals_limit'>Limit</h2>
-            </div>
-            <ul className='deal_list'>
-              {deals}
-            </ul>
-          </div>
-          <div className='business_locations' >
-          <h2>Locations</h2>
-            <ul>
-              {locations}
-            </ul>
-          </div>
+          <ul className='deal_list'>
+            {deals}
+          </ul>
+        </div>
+        <div className='business_locations' >
+        <h2>Locations</h2>
+          <ul>
+            {locations}
+          </ul>
         </div>
       </div>
     )
