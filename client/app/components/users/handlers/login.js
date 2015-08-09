@@ -46,10 +46,10 @@ export default React.createClass({
     return (
       <div>
         <div className= 'page_header'>
-          <div className= 'page_header_title'>KarmaKard</div>
-          <a href= '#' className= 'page_header_link' onClick={this.toggleForm}>{toggleButtonText}</a>
+          <div className= 'header_left karmatitle'>KarmaKard</div>
+          <div className='header_right' onClick={this.toggleForm}>{toggleButtonText}</div>
         </div>
-        <div className= 'content_box'>
+        <div className= 'guest_box'>
           {form}
         </div>
       </div>

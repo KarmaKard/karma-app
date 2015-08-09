@@ -21,21 +21,37 @@ export default React.createClass({
   render () {
     var organizations = this.props.organizations
     var user = this.props.user
-    var payments = this.props.payments
+    var orgWithQualifiedDeals = new Map()
+    var deals = this.props.deals.filter(deal => {
+      var dealLimitCounter = 0
+      this.props.payments.forEach(payment => {
+        var paymentExpDate = parseInt(payment.createdAt, 10) + 31557600000
+        // if payment hasn't expired
+        if (paymentExpDate > Date.now()) {
+
+          // if active payment period is within active deal period
+          if (paymentExpDate < parseInt(deal.endDate, 10) /* && parseInt(deal.beginDate, 10) < payment.createdAt*/) {
+            dealLimitCounter++
+            orgWithQualifiedDeals.set(deal.organizationId, deal.organizationId)
+          }
+          // another reduce something to build a map of all deals with a key of dealId that
+          // a beginning date less than the payment date and an expiration date greater than
+          // the 1 year after payment date
+        }
+      })
+      if (dealLimitCounter !== 0) {
+        if (deal.limit !== 'unlimited') {
+          deal.limit = deal.limit * dealLimitCounter
+        }
+        return deal
+      }
+    })
+    console.log(deals)
     var locations = this.props.locations
     var surveyQuestions = this.props.surveyQuestions
     var surveyResponses = this.props.surveyResponses
-    var paymentId = this.context.router.getCurrentParams().paymentId
-    var payment = payments.filter(payment => payment.id === paymentId)[0]
-    var redemptions = this.props.redemptions.filter(redemption => redemption.paymentId === paymentId)
-    var cardStartDate = payment ? parseInt(payment.createdAt, 10) : null
-    var cardExpirationDate = cardStartDate + 31557600000
-    var deals = this.props.deals.filter(deal => parseInt(deal.endDate, 10) > cardExpirationDate /*&& parseInt(deal.beginDate) < cardStartDate*/ ) //No organizations will show until Septermber with this
-    var orgWithQualifiedDeals = new Map()
-
-    for (var t in deals) {
-      orgWithQualifiedDeals.set(deals[t].organizationId, deals[t].organizationId)
-    }
+    console.log(this.props.redemptions)
+    var redemptions = this.props.redemptions.filter(redemption => redemption.userId === user.id)
 
     var activeCategories = []
     var activeOrganizations = []
@@ -60,7 +76,6 @@ export default React.createClass({
           organizations={activeOrganizations}
           categories={activeCategories}
           user={user}
-          payment={payment}
           locations={locations}
           deals={deals}
           redemptions={redemptions}

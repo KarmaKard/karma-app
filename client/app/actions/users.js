@@ -7,7 +7,18 @@ export default class UserActions extends Actions {
     KarmaAPI.postLoginCredentials(email, password).then(user => {
       if (user) {
         this.dispatch('login', user)
-        return router.transitionTo('organizations')
+        return router.transitionTo('deals')
+      }
+      console.warn('No user returned from login')
+    }).catch(this.loginError)
+  }
+
+  facebookLogin (router, user) {
+    KarmaAPI.postFacebookLoginCredentials(user).then(user => {
+      if (user) {
+        console.log("returned user!", user)
+        this.dispatch('facebookLogin', user)
+        return router.transitionTo('deals')
       }
       console.warn('No user returned from login')
     }).catch(this.loginError)
@@ -58,7 +69,7 @@ export default class UserActions extends Actions {
 
   logout (router) {
     this.dispatch('logout')
-    return router.transitionTo('login')
+    return router.transitionTo('logout')
   }
 
   emailPasswordReset (email) {

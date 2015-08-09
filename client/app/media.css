@@ -1,0 +1,157 @@
+@media only screen and (max-width: 840px) {
+
+  .page_header{
+    height: 45px;
+  }
+
+  .page_header a, .page_header_link{
+    font-size: 16pt;
+    margin: 10px 5%;
+  }
+
+  .content_box {
+    width: 100%;
+    padding: 10px 20px 55px;
+  }
+
+  .header_left {
+    float: left;
+    margin-left: 10px;
+  }
+
+  .header_center {
+    float:left;
+    margin:0 0 0 34%;
+  }
+
+  .header_right {
+    margin: 5px 5% 0 6%;
+    font-size: 20pt;
+  }
+
+  .back_button {
+    float: left;
+    margin: 8px 0 0 10px;
+  }
+
+  .karmatitle {
+    width: 44px; 
+    height: 45px;
+    float: left;
+    background: url("../assets/img/blackandwhitelogo45.png");
+    text-indent: 4999px;
+  }
+
+  .mobile_page_title {
+    margin: 5px 5% 0 6%;
+    font-size: 20pt;
+    float:left;
+  }
+
+  .side_bar_navigation {
+    /* Firefox */
+    height: -moz-calc(100% - 45px);
+    /* WebKit */
+    height: -webkit-calc(100% - 45px);
+    /* Opera */
+    height: -o-calc(100% - 45px);
+    /* Standard */
+    height: calc(100% - 45px);
+    z-index: 1;
+    position: absolute;
+    width: 250px;
+    background-color: white;
+    border-left: black 2px solid;
+    text-align: left;
+    padding-left: 5px;
+    text-decoration: none;
+    font-family: 'Fjalla One', sans-serif;
+    text-transform: uppercase;
+    font-size: 42px;
+    color: #828282;
+  }
+
+
+  .opened_navigation {
+      right: 0px;
+      transition: .5s;
+      padding-top: 20px;
+  }
+
+  .closed_navigation {
+    right: -250px;
+    transition: .5s;
+    padding-top: 20px;
+
+  }
+}
+
+
+
+
+ @media only screen and (min-width: 841px) {
+  .page_header{
+    height: 80px;
+  }
+  .header_left{
+    margin-left: 188px;
+  }
+
+  .karmatitle {
+    font-size: 60px;
+  }
+
+  .back_button {
+    float: left;
+    margin: 25px 0 0 75px;
+  }
+
+  .header_center {
+    margin-left: 90px;
+  }
+
+  .page_header a, .page_header_link{
+    font-size: 24pt;
+    margin: 20px 30px;
+  }
+
+  .content_box {
+    width: 500px;
+    margin: 20px 0;
+    padding: 10px 20px 55px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: #000;
+    overflow: auto
+  }
+
+  .disappear {
+    display: none;
+  }
+
+  .header_right {
+    margin: 25px 5% 0 6%;
+  }
+
+  .mobile_page_title {
+    margin: 25px 5% 0 6%;
+    float: right;
+    font-size: 20pt;
+  }
+
+  .mobile_header_logo{
+    display:none;
+  }
+
+  .side_bar_navigation {
+    float: left;
+    clear: both;
+    font-family: 'Fjalla One', sans-serif;
+    text-transform: uppercase;
+    font-size: 24pt;
+    text-decoration: none;
+    font:black;
+    margin: 0px 50px 0 150px;
+
+  }
+}

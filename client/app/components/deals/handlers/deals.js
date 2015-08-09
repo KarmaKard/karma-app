@@ -1,10 +1,17 @@
 import React from 'react'
 import { flux } from '../../../main'
+import UserSideBar from '../../users/user_sidebar'
 import { RouteHandler } from 'react-router'
+import { Link } from 'react-router'
 
 export default React.createClass({
   contextTypes: {
     router: React.PropTypes.func
+  },
+
+  logOut () {
+    var { router } = this.context
+    flux.actions.users.logout(router)
   },
 
   getInitialState () {
@@ -41,7 +48,9 @@ export default React.createClass({
     return {
       organizationsStoreState: flux.stores.organizations.getState(),
       usersStoreState: flux.stores.users.getState(),
-      dealsStoreState: flux.stores.deals.getState()
+      dealsStoreState: flux.stores.deals.getState(),
+      toggleState: false,
+      showBackLink: false,
     }
   },
 
@@ -57,30 +66,121 @@ export default React.createClass({
     flux.stores.users.removeListener('change', this.storeChange)
   },
 
+  toggleMenu () {
+    var toggleState = this.state.toggleState ? false : true
+    this.setState({toggleState})
+  },
+
+  showBackLink (showBackLink) {
+    this.setState({showBackLink})
+  },
+
+  goBack () {
+    history.back()
+  },
+
   render  () {
     var organizations = this.state.organizationsStoreState.organizations
-    var currentUser = this.state.usersStoreState.currentUser
-    var payments = this.state.usersStoreState.payments.filter(payment => payment.userId === currentUser.id)
-    var deals = this.state.dealsStoreState.deals
+    var user = this.state.usersStoreState.currentUser
+    var payments = this.state.usersStoreState.payments
     var locations = this.state.organizationsStoreState.locations
-    var redemptions = this.state.dealsStoreState.redemptions
     var surveyQuestions = this.state.dealsStoreState.surveyQuestions
     var surveyResponses = this.state.dealsStoreState.surveyResponses
-    if (!currentUser) {
-      return <span>Authenticating...</span>
+    var redemptions = this.state.dealsStoreState.redemptions.filter(redemption => redemption.userId === user.id)
+    var orgWithQualifiedDeals = new Map()
+
+    var cardCounter = 0
+    var deals = this.state.dealsStoreState.deals.filter(deal => {
+      var dealLimitCounter = 0
+      payments.forEach(payment => {
+        if (payment.userId === user.id) {
+          var paymentExpDate = parseInt(payment.createdAt, 10) + 31557600000
+          // if payment hasn't expired
+          if (paymentExpDate > Date.now()) {
+            cardCounter++
+            // if active payment period is within active deal period
+            if (paymentExpDate < parseInt(deal.endDate, 10) /* && parseInt(deal.beginDate, 10) < payment.createdAt*/) {
+              dealLimitCounter++
+              orgWithQualifiedDeals.set(deal.organizationId, deal.organizationId)
+            }
+            // another reduce something to build a map of all deals with a key of dealId that
+            // a beginning date less than the payment date and an expiration date greater than
+            // the 1 year after payment date
+          }
+        }
+      })
+      if (dealLimitCounter !== 0) {
+        if (deal.limit !== 'unlimited') {
+          deal.totalLimit = deal.limit * dealLimitCounter
+        }
+      }
+      return deal
+    })
+
+    var backLink
+    if (this.state.showBackLink) {
+      backLink = (<div><i onClick={this.goBack} className='fa fa-chevron-left fa-2x back_button'></i><div className='header_center karmatitle'>KarmaKard</div></div>)
+    } else {
+      backLink = (<div className='header_left karmatitle'>KarmaKard</div>)
+    }
+
+    if (cardCounter === 0) {
+      return (
+        <div>
+          <div className='page_header'>
+            {backLink}
+            <div className='header_right disappear' onClick={this.toggleMenu}> ☰ </div>
+          </div>
+          <div>
+            <UserSideBar toggleState={this.state.toggleState} toggleMenu={this.toggleMenu} organizations={organizations} user={user} />
+            <div className='content_box'>
+              <h2>Donate now to start saving money with our deals!</h2>
+              <Link to='list_deals'>
+                <div className='karma_button'>Add a Card!</div>
+              </Link>
+            </div>
+          </div>
+        </div>
+      )
+    }
+
+    var activeCategories = []
+    var activeOrganizations = []
+    var uniqueCategory = new Map()
+    for (var i in organizations) {
+      if (organizations[i].category !== 'undefined' &&
+        organizations[i].category !== 'fundraiser' &&
+        organizations[i].status === 'active' &&
+        orgWithQualifiedDeals.has(organizations[i].id)) {
+        activeOrganizations.push(organizations[i])
+        if (!uniqueCategory.has(organizations[i].category)) {
+          activeCategories.push(organizations[i].category)
+          uniqueCategory.set(organizations[i].category, organizations[i].category)
+        }
+      }
     }
 
     return (
       <div>
-        <RouteHandler
-          organizations={organizations}
-          user={currentUser}
-          payments={payments}
-          locations={locations}
-          deals={deals}
-          redemptions={redemptions}
-          surveyQuestions={surveyQuestions}
-          surveyResponses={surveyResponses}/>
+        <div className='page_header'>
+          {backLink}
+          <div className='header_right disappear' onClick={this.toggleMenu}> ☰ </div>
+        </div>
+        <div>
+          <UserSideBar toggleState={this.state.toggleState} toggleMenu={this.toggleMenu} organizations={organizations} user={user} />
+          <div className='content_box'>
+            <RouteHandler
+              organizations={activeOrganizations}
+              categories={activeCategories}
+              user={user}
+              locations={locations}
+              deals={deals}
+              redemptions={redemptions}
+              surveyQuestions={surveyQuestions}
+              surveyResponses={surveyResponses}
+              showBackLink={this.showBackLink}/>
+          </div>
+        </div>
       </div>
     )
   }
