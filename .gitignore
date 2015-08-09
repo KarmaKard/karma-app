@@ -31,3 +31,4 @@ rethinkdb_data
 .env*
 tmp
 .vault_pass
+client/dist
