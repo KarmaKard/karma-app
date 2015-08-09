@@ -91,6 +91,24 @@ export function login (req, res, next) {
   })
 }
 
+router.post('/facebook_login', facebookLogin)
+export async function facebookLogin (req, res, next) {
+  if (!req.body.user) {return}
+  var user = await usersTable.getByEmail(req.body.user.email)
+  user = user[0]
+
+  if (!user) {
+    user = req.body.user
+    user.roles = {customer: 'free'}
+    user.created_at = Date.now()
+    user = await usersTable.insert(user)
+  }
+
+  res.status(201).json({
+    token: encodeToken(user)
+  })
+}
+
 router.post('/reset_password', sendPasswordResetEmail)
 export async function sendPasswordResetEmail (req, res, next) {
   try {

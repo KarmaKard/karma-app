@@ -21,6 +21,7 @@ function storeToken (t) {
 }
 
 export function postLoginCredentials (email, password) {
+  email = email.toLowerCase()
   return new Promise((resolve, reject) => {
     request
       .post(LOGIN_URL)
@@ -35,7 +36,25 @@ export function postLoginCredentials (email, password) {
   })
 }
 
+export function postFacebookLoginCredentials (user) {
+  return new Promise((resolve, reject) => {
+    request
+      .post(REGISTER_URL + '/facebook_login')
+      .send({user})
+      .end((err, res) => {
+        if (err) {
+          return reject(err)
+        }
+        console.log("storeToken", res.body.token)
+        storeToken(res.body.token)
+        console.log("user", tokenToUser(token))
+        resolve(tokenToUser(token))
+      })
+  })
+}
+
 export function postNewUser (user) {
+  user.email = user.email.toLowerCase()
   return new Promise((resolve, reject) => {
     request
       .post(REGISTER_URL)

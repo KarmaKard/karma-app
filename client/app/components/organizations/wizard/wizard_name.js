@@ -2,13 +2,13 @@ import React from 'react'
 
 export default React.createClass({
 
-  nextClicked(e) {
+  nextClicked (e) {
     e.preventDefault()
     var name = React.findDOMNode(this.refs.name).value
-    this.props.setName(name)
+    this.props.setName(name.charAt(0).toUpperCase() + name.slice(1))
   },
 
-  render() {
+  render () {
     var orgType = this.props.orgType
     var capitalizedType = orgType === "business" ? "Business" : "Fundraiser"
     return (

@@ -9,12 +9,12 @@ export default React.createClass({
     router: React.PropTypes.func
   },
 
-  logOut(){
+  logOut () {
     var { router } = this.context
     flux.actions.users.logout(router)
   },
 
-  getInitialState() {
+  getInitialState () {
     var storeState = this.getStoreState()
     if (storeState.organizations.organizations.length === 0){
       flux.actions.organizations.getOrganizations()
@@ -25,62 +25,68 @@ export default React.createClass({
     return storeState
   },
 
-  componentDidMount(){
+  componentDidMount () {
     var currentUser = this.state.user.currentUser
-    if (!currentUser){
+    if (!currentUser) {
       var router = this.context.router
       router.transitionTo('login')
     }
   },
 
-  storeChange() {
+  storeChange () {
     this.setState(this.getStoreState)
   },
 
-  getStoreState() {
+  getStoreState () {
     return {
       organizations: flux.stores.organizations.getState(),
       user: flux.stores.users.getState(),
-      deals: flux.stores.deals.getState()
+      deals: flux.stores.deals.getState(),
+      toggleState: false
     }
   },
 
-  componentWillMount() {
+  componentWillMount () {
     flux.stores.organizations.addListener('change', this.storeChange)
     flux.stores.users.addListener('change', this.storeChange)
+    flux.stores.deals.addListener('change', this.storeChange)
   },
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     flux.stores.organizations.removeListener('change', this.storeChange)
     flux.stores.users.removeListener('change', this.storeChange)
+    flux.stores.deals.removeListener('change', this.storeChange)
   },
 
-  render() {
+  toggleMenu () {
+    var toggleState = this.state.toggleState ? false : true
+    this.setState({toggleState})
+  },
+
+  render () {
     var currentUser = this.state.user.currentUser
     var organizations = this.state.organizations.organizations || []
     var redemptions = this.state.deals.redemptions
-    var totalSaved = redemptions.reduce( function(a, b){
-      if (b["userId"] === currentUser.id){
-          return a + parseFloat(b["amountSaved"])
+    var totalSaved = redemptions.reduce ( function (a, b) {
+      if (b["userId"] === currentUser.id) {
+        return a + parseFloat(b["amountSaved"])
       }
       return a
     }, 0)
 
-    if (!currentUser){
-      return <p>Authenticating...</p>
-    }
+    console.log(organizations)
 
     return (
       <div>
         <div className="page_header">
-          <div className="page_header_title">{currentUser.firstName}</div>
-          <div className="page_header_link" onClick={this.logOut}>
-            Log Out
-          </div>
+          <div className="header_left karmatitle">KarmaKard</div>
+          <div className="header_right disappear" onClick={this.toggleMenu}> ☰ </div>
         </div>
-        <UserSideBar organizations={organizations} user={currentUser} />
-        <div className="content_box">
-          <RouteHandler user={currentUser} totalSaved={totalSaved}/>
+        <div>
+          <UserSideBar toggleState={this.state.toggleState} toggleMenu={this.toggleMenu} organizations={organizations} user={currentUser} />
+          <div className="content_box">
+            <RouteHandler user={currentUser} totalSaved={totalSaved}/>
+          </div>
         </div>
       </div>
     )

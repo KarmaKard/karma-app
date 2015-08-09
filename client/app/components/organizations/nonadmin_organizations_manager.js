@@ -5,11 +5,12 @@ import { Link } from 'react-router'
 export default React.createClass({
     renderOrganizationLink (organization, i) {
     return (
-      <li key={i}>
         <Link to="organization_user_manages" params={{organizationId: organization.id}}>
-          {organization.name}
+          <li className='list-item' key={i}>
+            {organization.name}
+          </li>
         </Link>
-      </li>
+      
     )
   },
 
@@ -38,15 +39,18 @@ export default React.createClass({
         <div className="content_box-header">
            Your Organizations
         </div>
-
-        <h2>{businessHeader}</h2>
-        <ul>
-          {businessLinks}
-        </ul>
-        <h2>{fundraiserHeader}</h2>
-        <ul>
-          {fundraiserLinks}
-        </ul>
+        <div>
+          <ul>
+            <li className='list-header'>Business</li>
+            {businessLinks}
+          </ul>
+        </div>
+        <div>
+          <ul>
+            <li className='list-header'>Fundraiser</li>
+            {fundraiserLinks}
+          </ul>
+        </div>
         <div>
           <hr />
           <Link to="new_organization" className="create_organization-link">

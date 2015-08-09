@@ -1,6 +1,5 @@
 import React from 'react'
 import { flux } from '../../../main'
-import UserSideBar from '../../users/user_sidebar'
 import { Link } from 'react-router'
 
 export default React.createClass({
@@ -41,19 +40,10 @@ export default React.createClass({
 
     return (
       <div>
-        <div className='page_header'>
-          <div className='page_header_title'>{user.firstName} </div>
-          <div className='page_header_link' onClick={this.logOut}>
-            Log Out
-          </div>
-        </div>
-        <UserSideBar organizations={organizations} user={user} />
-        <div className='content_box'>
-          <div className='content_box-header'>{category + ' '} Businesses </div>
-          <ul>
-            {organizationLinks}
-          </ul>
-        </div>
+        <div className='content_box-header'>{category + ' '} Businesses </div>
+        <ul>
+          {organizationLinks}
+        </ul>
       </div>
     )
   }

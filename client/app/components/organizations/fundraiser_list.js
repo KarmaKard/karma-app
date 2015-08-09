@@ -11,6 +11,10 @@ export default React.createClass({
     router: React.PropTypes.func
   },
 
+  goBack () {
+    history.back()
+  },
+
   render () {
     var activeFundraisers = this.props.activeFundraisers
     if (activeFundraisers.length === 0) {
@@ -31,20 +35,23 @@ export default React.createClass({
     }
     var fundraiserLinks = activeFundraisers.map((fundraiser, index) => {
       return (
-        <li key={index}>
-          <Link to='fundraiser_profile' params={{organizationId: fundraiser.id}}>
+        <Link to='fundraiser_profile' params={{organizationId: fundraiser.id}}>
+          <li className='list-item' key={index}>
             {fundraiser.name}
-          </Link>
-        </li>
+          </li>
+        </Link>
       )
     })
 
     return (
       <div>
         <div className='page_header'>
-          <div className='page_header_title'>KarmaKard</div>
+          <div>
+            <i onClick={this.goBack} className='fa fa-chevron-left fa-2x back_button'></i>
+            <div className='header_center karmatitle'>KarmaKard</div>
+          </div>
         </div>
-        <div className='content_box'>
+        <div className='guest_box'>
           <div className='content_box-header'>
             Select A Fundraiser
           </div>
