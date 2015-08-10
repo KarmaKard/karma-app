@@ -16,7 +16,6 @@ export default class UserActions extends Actions {
   facebookLogin (router, user) {
     KarmaAPI.postFacebookLoginCredentials(user).then(user => {
       if (user) {
-        console.log("returned user!", user)
         this.dispatch('facebookLogin', user)
         return router.transitionTo('deals')
       }

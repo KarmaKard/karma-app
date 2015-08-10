@@ -74,13 +74,11 @@ export default React.createClass({
       return a
     }, 0)
 
-    console.log(organizations)
-
     return (
       <div>
         <div className="page_header">
           <div className="header_left karmatitle">KarmaKard</div>
-          <div className="header_right disappear" onClick={this.toggleMenu}> ☰ </div>
+          <button className="header_right disappear" onClick={this.toggleMenu}> ☰ </button>
         </div>
         <div>
           <UserSideBar toggleState={this.state.toggleState} toggleMenu={this.toggleMenu} organizations={organizations} user={currentUser} />

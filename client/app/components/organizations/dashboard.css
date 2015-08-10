@@ -129,7 +129,6 @@
     margin: 0; 
     padding:0;
     overflow: hidden;
-    border: 1px solid #CCC;
     width: 100%;
 }
 
@@ -154,4 +153,9 @@
   width: 50%;
   padding: 0 15%;
   float:left;
+}
+
+.satisfaction_survey {
+  padding: 20px 0;
+  height: 100px;
 }

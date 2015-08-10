@@ -119,7 +119,7 @@ export default React.createClass({
 
     var backLink
     if (this.state.showBackLink) {
-      backLink = (<div><i onClick={this.goBack} className='fa fa-chevron-left fa-2x back_button'></i><div className='header_center karmatitle'>KarmaKard</div></div>)
+      backLink = (<div><button onClick={this.goBack} className='back_button'><i className='fa fa-chevron-left fa-2x'></i></button><div className='header_center karmatitle'>KarmaKard</div></div>)
     } else {
       backLink = (<div className='header_left karmatitle'>KarmaKard</div>)
     }
@@ -129,7 +129,7 @@ export default React.createClass({
         <div>
           <div className='page_header'>
             {backLink}
-            <div className='header_right disappear' onClick={this.toggleMenu}> ☰ </div>
+            <button className='header_right disappear' onClick={this.toggleMenu}> ☰ </button>
           </div>
           <div>
             <UserSideBar toggleState={this.state.toggleState} toggleMenu={this.toggleMenu} organizations={organizations} user={user} />
@@ -164,7 +164,7 @@ export default React.createClass({
       <div>
         <div className='page_header'>
           {backLink}
-          <div className='header_right disappear' onClick={this.toggleMenu}> ☰ </div>
+          <button className='header_right disappear' onClick={this.toggleMenu}> ☰ </button>
         </div>
         <div>
           <UserSideBar toggleState={this.state.toggleState} toggleMenu={this.toggleMenu} organizations={organizations} user={user} />

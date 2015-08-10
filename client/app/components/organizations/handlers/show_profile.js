@@ -36,7 +36,7 @@ export default React.createClass({
     })
 
     var redemptionsLeft = deal.limit !== 'unlimited' ? deal.totalLimit - amountRedeemed.length : deal.limit
-    var redeemLink = redemptionsLeft === 0 ? 'add_redemptions' : 'survey'
+    var redeemLink = redemptionsLeft > 0 ? 'survey' : 'add_redemptions'
 
     return (
       <Link to={redeemLink} params={{organizationId: organization.id, dealId: deal.id}}>

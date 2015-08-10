@@ -12,7 +12,6 @@ contextTypes: {
   },
 
   handleSessionResponse(response) {
-    console.log(response)
       //if we dont have a session (which means the user has been logged out, redirect the user)
       if (response.status !== 'connected') {
           var {router} = this.context

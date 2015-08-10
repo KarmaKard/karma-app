@@ -46,11 +46,9 @@ export default React.createClass({
         return deal
       }
     })
-    console.log(deals)
     var locations = this.props.locations
     var surveyQuestions = this.props.surveyQuestions
     var surveyResponses = this.props.surveyResponses
-    console.log(this.props.redemptions)
     var redemptions = this.props.redemptions.filter(redemption => redemption.userId === user.id)
 
     var activeCategories = []
