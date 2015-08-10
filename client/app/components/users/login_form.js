@@ -24,7 +24,6 @@ export default React.createClass({
   getInfo () {
     var {router} = this.context
     FB.api('/me', {fields: 'email, first_name, last_name'}, function (response) {
-      console.log(response)
       var user = {
         firstName: response.first_name,
         lastName: response.last_name,
@@ -37,8 +36,6 @@ export default React.createClass({
 
   // This is called with the results from from FB.getLoginStatus().
   statusChangeCallback (response) {
-    console.log('statusChangeCallback')
-    console.log(response)
     // The response object is returned with a status field that lets the
     // app know the current login status of the person.
     // Full docs on the response object can be found in the documentation
@@ -93,10 +90,10 @@ export default React.createClass({
         </form>
         <hr/>
 
-        <div href="#" className="facebookButton" onClick={this.handleClick}>
+        <button href="#" className="facebookButton" onClick={this.handleClick}>
           <i className="fa fa-facebook fa-3x fa-inverse"></i>
           <span>Login with Facebook</span>
-        </div>
+        </button>
       </div>
     )
   }

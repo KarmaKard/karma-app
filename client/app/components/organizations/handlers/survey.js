@@ -12,7 +12,6 @@ export default React.createClass({
   findNewQuestion (surveyResponses) {
     var responseObject = {}
     var surveyQuestions = this.props.surveyQuestions
-    console.log('input', surveyQuestions)
     surveyResponses.forEach(function (response) {
       responseObject[response.questionId] = response
     })
@@ -29,7 +28,6 @@ export default React.createClass({
       if (response.userId === userId) {return response}
     })
     var surveyQuestion = this.findNewQuestion(surveyResponses)
-    console.log('Output', surveyQuestion)
     return <Survey {... this.props} surveyQuestion={surveyQuestion} />
   }
 })

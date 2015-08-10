@@ -45,9 +45,7 @@ export function postFacebookLoginCredentials (user) {
         if (err) {
           return reject(err)
         }
-        console.log("storeToken", res.body.token)
         storeToken(res.body.token)
-        console.log("user", tokenToUser(token))
         resolve(tokenToUser(token))
       })
   })
