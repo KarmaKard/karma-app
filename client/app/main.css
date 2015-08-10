@@ -203,3 +203,7 @@ hr {
   color: white;
   font-size: 24px;
 }
+
+.back_button i {
+  color: white;
+}
