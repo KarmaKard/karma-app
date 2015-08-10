@@ -13,8 +13,8 @@ export default React.createClass({
       <div>
           <h3>Rate your experience </h3>
           <div className='satisfaction_survey'>
-            <li className='satisfaction_survey_item'><i onClick={this.recordExperience} value='satisfied' className='fa fa-smile-o fa-5x'></i></li>
-            <li className='satisfaction_survey_item'><i onClick={this.recordExperience} value='dissatisfied' className='fa fa-frown-o fa-5x'></i></li>
+            <button className='satisfaction_survey_item'><i onClick={this.recordExperience} value='satisfied' className='fa fa-smile-o fa-5x'></i></button>
+            <button className='satisfaction_survey_item'><i onClick={this.recordExperience} value='dissatisfied' className='fa fa-frown-o fa-5x'></i></button>
           </div>
       </div>
     )

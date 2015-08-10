@@ -30,7 +30,7 @@ export default React.createClass({
       <div>
         <div className="page_header">
           <div>
-            <i onClick={this.goBack} className='fa fa-chevron-left fa-2x back_button'></i>
+            <button onClick={this.goBack} className='back_button'><i className='fa fa-chevron-left fa-2x'></i></button>
             <div className='header_center karmatitle'>KarmaKard</div>
           </div>
         </div>

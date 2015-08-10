@@ -9,7 +9,7 @@
 @import './components/deals/list_deals';
 @import './components/deals/handlers/deal_cards';
 @import 'https://fonts.googleapis.com/css?family=Quicksand';
-@import 'http://fonts.googleapis.com/css?family=Fjalla+One';
+@import 'https://fonts.googleapis.com/css?family=Fjalla+One';
 @import 'https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css';
 
 @font-face {
@@ -34,6 +34,15 @@ a:active {color: black;}
 
 ul {
   padding: 0;
+}
+
+button {
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+    outline:none;
 }
 
 .list-header {
