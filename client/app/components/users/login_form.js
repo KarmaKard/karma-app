@@ -14,9 +14,26 @@ export default React.createClass({
   },
 
   componentDidMount () {
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId      : '549948578487024',
+        xfbml      : true,
+        version    : 'v2.4',
+        cookie     : true
+      });
+
     FB.getLoginStatus(function (response) {
-      this.statusChangeCallback(response)
-    }.bind(this))
+        this.statusChangeCallback(response)
+      }.bind(this)
+    )}.bind(this)
+    
+    (function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.4&appId=549948578487024";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
   },
 
   // Here we run a very simple test of the Graph API after login is
@@ -34,12 +51,7 @@ export default React.createClass({
     })
   },
 
-  // This is called with the results from from FB.getLoginStatus().
   statusChangeCallback (response) {
-    // The response object is returned with a status field that lets the
-    // app know the current login status of the person.
-    // Full docs on the response object can be found in the documentation
-    // for FB.getLoginStatus().
     if (response.status === 'connected') {
       this.getInfo()
     } else if (response.status === 'not_authorized') {
@@ -71,6 +83,14 @@ export default React.createClass({
     React.findDOMNode(this.refs.button).disabled = false
   },
 
+  onGoogleSignIn (googleUser) {
+    var profile = googleUser.getBasicProfile();
+    console.log('ID: ' + profile.getId()); 
+    console.log('Name: ' + profile.getName());
+    console.log('Image URL: ' + profile.getImageUrl());
+    console.log('Email: ' + profile.getEmail());
+  },
+
   render() {
     var loginErrorMessage = this.props.loginErrors.length !== 0
       ? <div className='karma_error'>Incorrect Credentials</div>
@@ -94,6 +114,7 @@ export default React.createClass({
           <i className="fa fa-facebook fa-3x fa-inverse"></i>
           <span>Login with Facebook</span>
         </button>
+        <div className="g-signin2" data-onsuccess="onGoogleSignIn"></div>
       </div>
     )
   }
