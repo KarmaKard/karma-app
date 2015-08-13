@@ -16,7 +16,7 @@ export default React.createClass({
   componentDidMount () {
     window.fbAsyncInit = function() {
       FB.init({
-        appId      : '549948578487024',
+        appId      : '550843868397495',
         xfbml      : true,
         version    : 'v2.4',
         cookie     : true
@@ -31,7 +31,7 @@ export default React.createClass({
       var js, fjs = d.getElementsByTagName(s)[0];
       if (d.getElementById(id)) return;
       js = d.createElement(s); js.id = id;
-      js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.4&appId=549948578487024";
+      js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.4&appId=550843868397495";
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
   },
