@@ -66,7 +66,7 @@ export default React.createClass({
     if ( navigator.userAgent.match('CriOS') ) {
       window.opener.fbCompleteLogin()
       window.close()
-      var response = window.open('https://www.facebook.com/dialog/oauth?client_id=549948578487024&redirect_uri=' + document.location.href + '&scope=email,public_profile', '', null)
+      var response = window.open('https://www.facebook.com/dialog/oauth?client_id=550843868397495&redirect_uri=' + document.location.href + '&scope=email,public_profile', '', null)
       alert(response)
       this.statusChangeCallback(response)
     } else {
