@@ -74,7 +74,7 @@ export default React.createClass({
       // fix iOS Chrome
     if ( navigator.userAgent.match('CriOS') ) {
       alert("May experience issues with chrome iOS FB Login")
-      window.open('https://www.facebook.com/dialog/oauth?client_id=550843868397495&redirect_uri=' + document.location.href + '&scope=email,public_profile', '', null)
+      window.open('https://www.facebook.com/dialog/oauth?client_id=550843868397495&redirect_uri=https://edge.karmakard.org/#/login&scope=email,public_profile', '', null)
       window.opener.fbChromeiOSLogin()
       window.close()
     } else {
