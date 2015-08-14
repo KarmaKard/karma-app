@@ -16,7 +16,16 @@ const PAYMENT_URL = BASE_URL + '/api/v1/payments'
 var token = window.localStorage.getItem('karma-token')
 
 function storeToken (t) {
-  window.localStorage.setItem('karma-token', t)
+  if (typeof localStorage === 'object') {
+      try {
+          window.localStorage.setItem('karma-token', t)
+      } catch (e) {
+          Storage.prototype._setItem = Storage.prototype.setItem;
+          Storage.prototype.setItem = function() {};
+          alert('Your web browser does not support storing settings locally. In Safari, the most common cause of this is using "Private Browsing Mode". Some settings may not save or some features may not work properly for you.');
+      }
+  }
+  
   token = t
 }
 

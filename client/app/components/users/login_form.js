@@ -26,7 +26,7 @@ export default React.createClass({
         this.statusChangeCallback(response)
       }.bind(this)
     )}.bind(this)
-    
+
     (function(d, s, id) {
       var js, fjs = d.getElementsByTagName(s)[0];
       if (d.getElementById(id)) return;
@@ -62,13 +62,22 @@ export default React.createClass({
   },
 
   handleClick () {
-    FB.login(function (response) {
+      // fix iOS Chrome
+    if ( navigator.userAgent.match('CriOS') ) {
+      window.opener.fbCompleteLogin()
+      window.close()
+      var response = window.open('https://www.facebook.com/dialog/oauth?client_id=549948578487024&redirect_uri=' + document.location.href + '&scope=email,public_profile', '', null)
+      alert(response)
       this.statusChangeCallback(response)
-    }.bind(this),
-    {
-     scope: 'public_profile, email',
-     return_scopes: true
-    })
+    } else {
+      FB.login(function (response) {
+        this.statusChangeCallback(response)
+      }.bind(this),
+      {
+       scope: 'public_profile, email',
+       return_scopes: true
+      })
+    }
   },
 
   didLogin (e) {
