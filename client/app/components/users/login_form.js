@@ -41,6 +41,7 @@ export default React.createClass({
   getInfo () {
     var {router} = this.context
     FB.api('/me', {fields: 'email, first_name, last_name'}, function (response) {
+      alert(response)
       var user = {
         firstName: response.first_name,
         lastName: response.last_name,
@@ -53,6 +54,7 @@ export default React.createClass({
 
   statusChangeCallback (response) {
     if (response.status === 'connected') {
+      alert("going to call api now")
       this.getInfo()
     } else if (response.status === 'not_authorized') {
 
@@ -61,14 +63,20 @@ export default React.createClass({
     }
   },
 
+  fbChromeiOSLogin () {
+    FB.getLoginStatus(function (response) {
+      alert(response)
+      this.statusChangeCallback(response)
+    }, true)
+  },
+
   handleClick () {
       // fix iOS Chrome
     if ( navigator.userAgent.match('CriOS') ) {
-      window.opener.fbCompleteLogin()
+      alert("May experience issues with chrome iOS FB Login")
+      window.open('https://www.facebook.com/dialog/oauth?client_id=550843868397495&redirect_uri=' + document.location.href + '&scope=email,public_profile', '', null)
+      window.opener.fbChromeiOSLogin()
       window.close()
-      var response = window.open('https://www.facebook.com/dialog/oauth?client_id=550843868397495&redirect_uri=' + document.location.href + '&scope=email,public_profile', '', null)
-      alert(response)
-      this.statusChangeCallback(response)
     } else {
       FB.login(function (response) {
         this.statusChangeCallback(response)
