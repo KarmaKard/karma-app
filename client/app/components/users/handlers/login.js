@@ -46,7 +46,7 @@ export default React.createClass({
       if (d.getElementById(id)) return
       js = d.createElement(s)
       js.id = id
-      js.src = '//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.4&appId=549948578487024'
+      js.src = '//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.4&appId=550843868397495'
       fjs.parentNode.insertBefore(js, fjs)
     }(document, 'script', 'facebook-jssdk'))
   },
