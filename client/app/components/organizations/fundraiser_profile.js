@@ -39,7 +39,7 @@ export default React.createClass({
           </div>
           <hr />
 
-          <Link to='donate' params={{organizationStripePubKey: fundraiser.publicStripeKey}}><button className='karma_button'>Donate Now</button></Link>
+          <Link to='donate' params={{organizationId: fundraiser.id}}><button className='karma_button'>Donate Now</button></Link>
         </div>
       </div>
     )

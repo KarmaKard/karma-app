@@ -4,16 +4,19 @@ import LoginForm from '../login_form'
 import NewUser from '../new_user'
 
 export default React.createClass({
+  contextTypes: {
+    router: React.PropTypes.func
+  },
+
   getInitialState () {
-    return Object.assign(this.getStoreState(), {
-      mismatchPasswords: false,
-      isExistingUser: true
-    })
+    return this.getStoreState()
   },
 
   getStoreState () {
     return {
-      users: flux.stores.users.getState()
+      users: flux.stores.users.getState(),
+      mismatchPasswords: false,
+      isExistingUser: true
     }
   },
 
@@ -29,6 +32,25 @@ export default React.createClass({
     flux.stores.users.removeListener('change', this.storeChange)
   },
 
+  componentDidMount () {
+    var currentUser = this.state.users.currentUser
+    if (currentUser) {
+      var router = this.context.router
+      router.transitionTo('deals')
+    }
+
+    (function (d, s, id) {
+      var js
+      var fjs = d.getElementsByTagName(s)[0]
+
+      if (d.getElementById(id)) return
+      js = d.createElement(s)
+      js.id = id
+      js.src = '//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.4&appId=549948578487024'
+      fjs.parentNode.insertBefore(js, fjs)
+    }(document, 'script', 'facebook-jssdk'))
+  },
+
   toggleForm (e) {
     e.preventDefault()
     this.setState({
@@ -36,9 +58,19 @@ export default React.createClass({
     })
   },
 
+  setFbLogin (user) {
+    var {router} = this.context
+    flux.actions.users.facebookLogin(user, router, 'deals')
+  },
+
+  userLogin (email, password) {
+    var {router} = this.context
+    flux.actions.users.login(email, password, router, 'deals')
+  },
+
   render () {
     var form = this.state.isExistingUser
-      ? <LoginForm loginErrors={this.state.users.loginErrors}/>
+      ? <LoginForm loginErrors={this.state.users.loginErrors} setFbLogin={this.setFbLogin} userLogin={this.userLogin} />
       : <NewUser/>
 
     var toggleButtonText = this.state.isExistingUser ? 'New User?' : 'Existing User?'

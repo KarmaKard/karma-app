@@ -3,10 +3,16 @@ import { flux } from '../../main'
 import {Link} from 'react-router'
 
 export default React.createClass({
-  getDefaultProps() {
+  getDefaultProps () {
     return {
       loginErrors: []
     }
+  },
+
+  propTypes: {
+    loginErrors: React.PropTypes.array.isRequired,
+    userLogin: React.PropTypes.func.isRequired,
+    setFbLogin: React.PropTypes.func.isRequired
   },
 
   contextTypes: {
@@ -14,47 +20,32 @@ export default React.createClass({
   },
 
   componentDidMount () {
-    window.fbAsyncInit = function() {
-      FB.init({
-        appId      : '550843868397495',
-        xfbml      : true,
-        version    : 'v2.4',
-        cookie     : true
-      });
-
-    FB.getLoginStatus(function (response) {
-        this.statusChangeCallback(response)
-      }.bind(this)
-    )}.bind(this)
-
-    (function(d, s, id) {
-      var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) return;
-      js = d.createElement(s); js.id = id;
-      js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.4&appId=550843868397495";
-      fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
+    (function (d, s, id) {
+      var js
+      var fjs = d.getElementsByTagName(s)[0]
+      if (d.getElementById(id)) return
+      js = d.createElement(s)
+      js.id = id
+      js.src = '//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.4&appId=549948578487024'
+      fjs.parentNode.insertBefore(js, fjs)
+    }(document, 'script', 'facebook-jssdk'))
   },
 
-  // Here we run a very simple test of the Graph API after login is
-  // successful.  See statusChangeCallback() for when this call is made.
   getInfo () {
-    var {router} = this.context
+    var setFbLogin = this.props.setFbLogin
     FB.api('/me', {fields: 'email, first_name, last_name'}, function (response) {
-      alert(response)
       var user = {
         firstName: response.first_name,
         lastName: response.last_name,
         email: response.email,
         fbUserId: response.id
       }
-      flux.actions.users.facebookLogin(router, user)
+      setFbLogin(user)
     })
   },
 
   statusChangeCallback (response) {
     if (response.status === 'connected') {
-      alert("going to call api now")
       this.getInfo()
     } else if (response.status === 'not_authorized') {
 
@@ -65,73 +56,58 @@ export default React.createClass({
 
   fbChromeiOSLogin () {
     FB.getLoginStatus(function (response) {
-      alert(response)
       this.statusChangeCallback(response)
     }, true)
   },
 
   handleClick () {
       // fix iOS Chrome
-    if ( navigator.userAgent.match('CriOS') ) {
-      alert("May experience issues with chrome iOS FB Login")
-      window.open('https://www.facebook.com/dialog/oauth?client_id=550843868397495&redirect_uri=https://edge.karmakard.org/#/login&scope=email,public_profile', '', null)
-      window.opener.fbChromeiOSLogin()
-      window.close()
-    } else {
-      FB.login(function (response) {
-        this.statusChangeCallback(response)
-      }.bind(this),
-      {
-       scope: 'public_profile, email',
-       return_scopes: true
-      })
+    if (navigator.userAgent.match('CriOS')) {
+      alert('May experience issues with Chrome iOS FB Login')
     }
+
+    FB.login(function (response) {
+      this.statusChangeCallback(response)
+    }.bind(this),
+    {
+     scope: 'public_profile, email',
+     return_scopes: true
+    })
   },
 
   didLogin (e) {
     e.preventDefault()
     React.findDOMNode(this.refs.button).disabled = true
-
-    var { router } = this.context
     var email = React.findDOMNode(this.refs.email).value
     var password = React.findDOMNode(this.refs.password).value
+
     flux.actions.users.clearLoginErrors()
-    flux.actions.users.login(router, email, password)
+    this.props.userLogin(email, password)
+
     React.findDOMNode(this.refs.button).disabled = false
   },
 
-  onGoogleSignIn (googleUser) {
-    var profile = googleUser.getBasicProfile();
-    console.log('ID: ' + profile.getId()); 
-    console.log('Name: ' + profile.getName());
-    console.log('Image URL: ' + profile.getImageUrl());
-    console.log('Email: ' + profile.getEmail());
-  },
-
-  render() {
+  render () {
     var loginErrorMessage = this.props.loginErrors.length !== 0
       ? <div className='karma_error'>Incorrect Credentials</div>
       : null
 
     return (
       <div className='login' >
-        <div className='content_box-header'>Login</div>
+        <div className='content_box-header login_header'>Login</div>
         {loginErrorMessage}
-        <form>
           <input type='email' ref='email' className='karma_input' placeholder='Email' />
           <input type='password' ref='password' className='karma_input' placeholder='Password' />
-          <div className="login_buttons">
-          <input type='submit' ref='button' onClick={this.didLogin} className='karma_button' value='Login' />
+          <div className='login_buttons'>
+          <button ref='button' onClick={this.didLogin} className='login_button' >Login</button>
           <Link to='password_reset'><div className='login_forgot' >Forgot Password?</div></Link>
           </div>
-        </form>
         <hr/>
 
-        <button href="#" className="facebookButton" onClick={this.handleClick}>
-          <i className="fa fa-facebook fa-3x fa-inverse"></i>
-          <span>Login with Facebook</span>
+        <button href='#' className='facebookButton' onClick={this.handleClick}>
+          <i className='fa fa-facebook fa-3x fa-inverse'></i>
+          <span>Login</span>
         </button>
-        <div className="g-signin2" data-onsuccess="onGoogleSignIn"></div>
       </div>
     )
   }

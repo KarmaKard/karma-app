@@ -1,5 +1,4 @@
 import React from 'react'
-import Router, {RouteHandler, Link} from 'react-router'
 import { flux } from '../../../main'
 import WizardType from './wizard_type'
 import WizardName from './wizard_name'
@@ -12,43 +11,50 @@ export default React.createClass({
     router: React.PropTypes.func
   },
 
-  getInitialState() {
+  getInitialState () {
     return {
       usersStoreState: flux.stores.users.getState(),
       type: null,
       name: null,
       category: null,
-      logoURL: "http://fake-logo.png",
+      logoURL: '/img/logo-placeholder.png',
       step: 1,
-      status: "inactive"
+      status: 'inactive'
     }
   },
 
-  storeChange() {
+  storeChange () {
     this.setState(this.getStoreState())
   },
 
-  getStoreState() {
+  getStoreState () {
     return {
       usersStoreState: flux.stores.users.getState()
     }
   },
 
-  componentWillMount() {
+  componentWillMount () {
     flux.stores.users.addListener('change', this.storeChange)
   },
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     flux.stores.users.removeListener('change', this.storeChange)
   },
 
+  createUser (user) {
+    flux.actions.users.create(user)
+  },
 
-  setType(type){
+  setFbLogin (user) {
+    flux.actions.users.facebookLogin(user)
+  },
+
+  setType (type) {
     this.setState({type, step: this.state.step + 1})
   },
 
-  setName(name){
-    if(this.state.type === 'fundraiser'){
+  setName (name) {
+    if (this.state.type === 'fundraiser') {
       var { router } = this.context
       var organization = {
         type: 'fundraiser',
@@ -59,15 +65,14 @@ export default React.createClass({
         teamMembers: []
       }
 
-      flux.actions.organizations.create(router, organization)
-    }
-    else{
+      flux.actions.organizations.create(organization, router, 'organization_user_manages')
+    } else {
       var newState = { name, step: this.state.step + 1 }
       this.setState(newState)
     }
   },
 
-  setCategory(category){
+  setCategory (category) {
     var { router } = this.context
 
     this.setState({category}, () => {
@@ -82,48 +87,45 @@ export default React.createClass({
         status: this.state.status
       }
 
-      flux.actions.organizations.create(router, organization)
+      flux.actions.organizations.create(organization, router, 'organization_user_manages')
     })
 
   },
 
-  setLogo(logoURL){
+  setLogo (logoURL) {
     var { router } = this.context
     this.setState({logoURL, step: this.state.step + 1}, () => {
       flux.actions.organizations.create(router, this.state)
     })
   },
 
-  getWizardComponent() {
-    
-    if(!this.state.usersStoreState.currentUser){
-      return <Registration />
+  getWizardComponent () {
+    if (!this.state.usersStoreState.currentUser) {
+      return <Registration createUser={this.createUser} setFbLogin={this.setFbLogin} />
     }
 
-    switch(this.state.step) {
+    switch (this.state.step) {
       case 1:
-        return <WizardType 
-                setType={this.setType}/>
-        break
+        return (<WizardType
+                setType={this.setType}/>)
       case 2:
-        return <WizardName 
+        return (<WizardName
                 orgType={this.state.type}
-                setName={this.setName}/>
-        break
+                setName={this.setName}/>)
       case 3:
         if (this.state.type === 'business') {
-          return <WizardCategory
-                  setCategory={this.setCategory}/>
+          return (<WizardCategory
+                  setCategory={this.setCategory}/>)
         } // Fall-through to next if fundraiser
-      default:
-        return <WizardLogo 
-                orgType={this.state.type}
-                setLogo={this.setLogo}/>
         break
+      default:
+        return (<WizardLogo
+                orgType={this.state.type}
+                setLogo={this.setLogo}/>)
     }
   },
 
-  render(){
+  render () {
     return this.getWizardComponent()
   }
 })

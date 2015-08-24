@@ -1,5 +1,9 @@
 @media only screen and (max-width: 840px) {
 
+  body {
+    overflow-x:hidden
+  }
+
   .page_header{
     height: 45px;
   }
@@ -12,6 +16,15 @@
   .content_box {
     width: 100%;
     padding: 10px 20px 55px;
+  }
+
+  .content_box-header {
+    text-decoration: none;
+    font-family: Fjalla One,sans-serif;
+    text-transform: uppercase;
+    font-size: 28px;
+    margin-bottom: 10px;
+    color: #5d9dbd;
   }
 
   .header_left {
@@ -42,9 +55,13 @@
     text-indent: 4999px;
   }
 
+  .karma_button {
+    font-size: 28px;
+  }
+
   .mobile_page_title {
     margin: 5px 5% 0 6%;
-    font-size: 20pt;
+    font-size: 20px;
     float:left;
   }
 
@@ -67,21 +84,30 @@
     text-decoration: none;
     font-family: 'Fjalla One', sans-serif;
     text-transform: uppercase;
-    font-size: 42px;
+    font-size: 30px;
     color: #828282;
+  }
+
+  .side_bar_navigation_level1 li {
+    border-bottom: solid gray 1px;
+  }
+
+  .side_bar_navigation_level2 li {
+    border-bottom: none;
+    border-top: solid gray 1px;
   }
 
 
   .opened_navigation {
       right: 0px;
       transition: .5s;
-      padding-top: 20px;
+      padding-top: 5px;
   }
 
   .closed_navigation {
     right: -250px;
     transition: .5s;
-    padding-top: 20px;
+    padding-top: 5px;
 
   }
 }
@@ -95,6 +121,16 @@
   }
   .header_left{
     margin-left: 188px;
+  }
+
+  .content_box-header {
+    text-decoration: none;
+    font-family: 'Fjalla One', sans-serif;
+    text-transform: uppercase;
+    font-size: 42px;
+    margin-bottom: 10px;
+    color: #5D9DBD;
+
   }
 
   .karmatitle {
@@ -123,6 +159,10 @@
     border-style: solid;
     border-color: #000;
     overflow: auto
+  }
+
+  .karma_button {
+    font-size: 36px;
   }
 
   .disappear {

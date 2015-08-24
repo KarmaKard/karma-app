@@ -25,6 +25,22 @@
     width: 100%;
     padding: 10px 20px 55px;
   }
+
+  .login_header {
+    margin-top: 60px;
+  }
+
+  .login_button {
+    font-family: 'Fjalla One', sans-serif;
+    text-transform: uppercase;
+    font-size: 28px;
+    text-decoration: none;
+    color:#828282;
+    float:right;
+    margin: 10px 10px 20px 10px;
+    background: white;
+    border: 1px solid white;
+  }
 }
 
  @media only screen and (min-width: 841px) {
@@ -37,5 +53,16 @@
     border-style: solid;
     border-color: #000;
     overflow: auto
+  }
+  .login_button {
+    font-family: 'Fjalla One', sans-serif;
+    text-transform: uppercase;
+    font-size: 36px;
+    text-decoration: none;
+    color:#828282;
+    float:right;
+    margin: 10px 10px 20px 10px;
+    background: white;
+    border: 1px solid white;
   }
 }

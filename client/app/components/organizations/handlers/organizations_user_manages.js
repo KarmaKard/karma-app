@@ -13,7 +13,8 @@ export default React.createClass({
     user: React.PropTypes.object.isRequired,
     organizations: React.PropTypes.array.isRequired,
     toggleState: React.PropTypes.bool.isRequired,
-    toggleMenu: React.PropTypes.func.isRequired
+    toggleMenu: React.PropTypes.func.isRequired,
+    fundraiserMembers: React.PropTypes.array
   },
 
   getInitialState () {
@@ -28,7 +29,7 @@ export default React.createClass({
   },
 
   toggleMenu () {
-    var toggleState = this.state.toggleState ? false : true
+    var toggleState = !this.state.toggleState
     this.setState({toggleState})
   },
 
@@ -41,7 +42,7 @@ export default React.createClass({
 
     return (
       <div>
-        <UserSideBar toggleState={this.props.toggleState} toggleMenu={this.props.toggleMenu} organizations={organizations} user={user} />
+        <UserSideBar toggleState={this.props.toggleState} toggleMenu={this.props.toggleMenu} fundraiserMembers={this.props.fundraiserMembers} organizations={organizations} user={user} />
         <div className='content_box'>
           {isSuperAdmin}
         </div>
