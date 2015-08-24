@@ -2,7 +2,6 @@ import React from 'react'
 import { RouteHandler } from 'react-router'
 import FundraiserSideBar from '../fundraiser_sidebar'
 import BusinessSideBar from '../business_sidebar'
-import { Link } from 'react-router'
 
 export default React.createClass({
    propTypes: {
@@ -13,7 +12,10 @@ export default React.createClass({
     updateOrganization: React.PropTypes.func.isRequired,
     saveDeals: React.PropTypes.func,
     toggleMenu: React.PropTypes.func.isRequired,
-    toggleState: React.PropTypes.bool.isRequired
+    toggleState: React.PropTypes.bool.isRequired,
+    payments: React.PropTypes.array.isRequired,
+    fundraiserMembers: React.PropTypes.array.isRequired,
+    showBackLink: React.PropTypes.bool.isRequired
    },
 
   render () {
@@ -37,8 +39,8 @@ export default React.createClass({
     }
 
     var sidebar = organization.type === 'fundraiser'
-      ? <FundraiserSideBar toggleState={this.props.toggleState} toggleMenu={this.props.toggleMenu} org={organization} />
-      : <BusinessSideBar toggleState={this.props.toggleState} toggleMenu={this.props.toggleMenu} org={organization} />
+      ? <FundraiserSideBar toggleState={this.props.toggleState} toggleMenu={this.props.toggleMenu} fundraiserMembers={this.props.fundraiserMembers} org={organization} user={user}/>
+      : <BusinessSideBar toggleState={this.props.toggleState} toggleMenu={this.props.toggleMenu} fundraiserMembers={this.props.fundraiserMembers} org={organization} user={user} />
 
     return (
       <div>
@@ -46,8 +48,10 @@ export default React.createClass({
         <div className='content_box'>
           <RouteHandler
             organization={this.props.organization}
+            payments={this.props.payments}
             editDisabled={editDisabled}
             user={user} deals={deals}
+            fundraiserMembers={this.props.fundraiserMembers}
             initialLocations={locations}
             updateOrganization={this.props.updateOrganization}
             saveDeals={this.props.saveDeals}

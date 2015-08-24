@@ -16,7 +16,8 @@ module.exports = {
   },
   cors: {
     whitelist: [
-      'http://localhost:4200'
+      'http://localhost:4200',
+      'http://local.karmakard.org:4200'
     ]
   }
 }

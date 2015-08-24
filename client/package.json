@@ -5,7 +5,7 @@
   "description": "The Karma React App",
   "main": "client/app.js",
   "scripts": {
-    "start": "rm -rf dist && mkdir -p dist && cp -r assets/* dist && API_HOST=http://localhost:5000 webpack-dev-server --port 4200",
+    "start": "rm -rf dist && mkdir -p dist && cp -r assets/* dist && API_HOST=http://local.karmakard.org:5000 webpack-dev-server --port 4200",
     "build": "rm -rf dist && mkdir -p dist && cp -r assets/* dist && webpack -p",
     "test": "mocha --reporter nyan --compilers js:babel/register 'app/**/*.spec.js'",
     "test-integration": "karma start"

@@ -11,6 +11,8 @@ export default class UserStore extends Store {
       currentUser: token ? tokenToUser(token) : null,
       authenticated: token ? true : false,
       payments: [],
+      donations: [],
+      fundraiserMembers: [],
       createErrors: [],
       loginErrors: [],
       resetEmailSent: null,
@@ -27,9 +29,16 @@ export default class UserStore extends Store {
     this.handleAction('users.createPayment', this.createPayment)
     this.handleAction('organizations.create', this.createdOrganization)
     this.handleAction('users.getPayments', this.savePayments)
+    this.handleAction('users.getDonations', this.saveDonations)
     this.handleAction('users.emailPasswordReset', this.sendPasswordResetEmail)
     this.handleAction('users.checkPasswordResetExpiration', this.checkPasswordResetExpiration)
     this.handleAction('users.facebookLogin', this.handleAuth)
+    this.handleAction('users.tieFundraiserMembershipToUser', this.handleAuth)
+    this.handleAction('users.getFundraiserMembers', this.saveFundraiserMembers)
+    this.handleAction('organizations.createFundraiserMember', this.saveFundraiserMember)
+    this.handleAction('users.createInPersonDonation', this.saveDonation)
+    this.handleAction('users.activateDonation', this.handleAuth)
+    this.handleAction('organizations.updateOwedAmounts', this.saveFundraiserMembers)
   }
 
   handleAuth (user) {
@@ -44,10 +53,11 @@ export default class UserStore extends Store {
     this.setState({ currentUser: user, authenticated: true })
   }
 
-  createPayment (payment, user) {
+  createPayment (payment, user, donation) {
     this.setState({
       user,
-      payments: this.state.payments.concat(payment)
+      payments: this.state.payments.concat(payment),
+      donations: this.state.donations.concat(donation)
     })
   }
 
@@ -55,12 +65,13 @@ export default class UserStore extends Store {
     this.setState({payments})
   }
 
-  logout () {
+  logout (router) {
+    window.localStorage.clear()
     this.setState({
       currentUser: null,
       authenticated: false
     })
-    window.localStorage.clear()
+    router.transitionTo('login')
   }
 
   storeCreateError (error) {
@@ -84,6 +95,30 @@ export default class UserStore extends Store {
   checkPasswordResetExpiration (linkActiveBoolean) {
     this.setState({
       resetLinkActive: linkActiveBoolean
+    })
+  }
+
+  saveFundraiserMembers (fundraiserMembers) {
+    this.setState({fundraiserMembers})
+  }
+
+  saveDonations (donations) {
+    this.setState({donations})
+  }
+
+  saveDonation (fundraiserMember, donations, payment) {
+    var index = this.state.fundraiserMembers.findIndex(arrayFundraiserMember => arrayFundraiserMember.id === fundraiserMember.id)
+    var updatedFundraiserMembers = this.state.fundraiserMembers[index] = fundraiserMember
+    this.setState({
+      fundraiserMembers: updatedFundraiserMembers,
+      donations: this.state.donations.concat(donations),
+      payments: this.state.payments.concat(payment)
+    })
+  }
+
+  saveFundraiserMember (fundraiserMember) {
+    this.setState({
+      fundraiserMembers: this.state.fundraiserMembers.concat(fundraiserMember)
     })
   }
 

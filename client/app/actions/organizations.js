@@ -2,27 +2,29 @@ import { Actions } from 'minimal-flux'
 import * as KarmaAPI from '../sources/karma_api'
 
 export default class OrganizationsActions extends Actions {
-  create(router, organizationData) {
+  create (organizationData, router, whereTo) {
     var p = KarmaAPI.postNewOrganization(organizationData)
     p.then(response => {
       if (response) {
         this.dispatch('create', response.organization, response.user)
-        return router.transitionTo('organization_user_manages', {organizationId: response.organization.id})
+        return router
+          ? router.transitionTo(whereTo, {organizationId: response.organization.id})
+          : null
       }
       console.warn('No Organization returned from create')
     }).catch(this.createError)
   }
 
-  updateOrganization(organization){
+  updateOrganization (organization) {
     var p = KarmaAPI.updateOrganization(organization)
     p.then(organization => {
-      if (organization){
+      if (organization) {
         this.dispatch('updateOrganization', organization)
       }
     })
   }
 
-  getOrganizations(){
+  getOrganizations () {
     var p = KarmaAPI.getOrganizations()
     p.then(organizations => {
       if (organizations) {
@@ -31,7 +33,7 @@ export default class OrganizationsActions extends Actions {
     }).catch(this.getOrganizationsError)
   }
 
-  getOrganization(id){
+  getOrganization (id) {
     var p = KarmaAPI.getOrganization(id)
     p.then(organization => {
       if (organization) {
@@ -40,20 +42,20 @@ export default class OrganizationsActions extends Actions {
     }).catch(this.getOrganizationsError)
   }
 
-  getOrganizationsError(error) {
+  getOrganizationsError (error) {
     console.warn(error)
   }
 
-  saveLocation(location) {
+  saveLocation (location) {
     var p = KarmaAPI.saveLocation(location)
     p.then(location => {
-      if(location) {
+      if (location) {
         this.dispatch('saveLocation', location)
       }
     }).catch(this.createError)
   }
 
-  getLocations() {
+  getLocations () {
     var p = KarmaAPI.getLocations()
     p.then(locations => {
       if (locations) {
@@ -61,8 +63,44 @@ export default class OrganizationsActions extends Actions {
       }
     }).catch(this.getLocationsError)
   }
-  
-  createError(error) {
+
+  createFundraiserMember (organization, newMember) {
+    var p = KarmaAPI.createFundraiserMember(organization, newMember)
+    p.then(fundraiserMember=> {
+      if (fundraiserMember) {
+        this.dispatch('createFundraiserMember', fundraiserMember)
+      }
+    })
+  }
+
+  getOrganizationsAndDeals (fundraiserMemberId) {
+    var p = KarmaAPI.getOrganizationsAndDeals(fundraiserMemberId)
+    p.then(response => {
+      if (response) {
+        this.dispatch('getOrganizationsAndDeals', response.organizations, response.deals, response.organizationId)
+      }
+    })
+  }
+
+  confirmFundraiser (organization, fundraiserMembers) {
+    var p = KarmaAPI.confirmFundraiser(organization, fundraiserMembers)
+    p.then(organization => {
+      if (organization) {
+        this.dispatch('confirmFundraiser', organization)
+      }
+    })
+  }
+
+  updateOwedAmounts (paidMembers) {
+    var p = KarmaAPI.updateOwedAmounts(paidMembers)
+    p.then(fundraiserMembers => {
+      if (fundraiserMembers) {
+        this.dispatch('updateOwedAmounts', fundraiserMembers)
+      }
+    })
+  }
+
+  createError (error) {
     console.warn(error)
     this.dispatch('createError', error)
   }

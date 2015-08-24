@@ -20,6 +20,7 @@ export default React.createClass({
     }
     if (storeState.usersStoreState.payments.length === 0) {
       flux.actions.users.getPayments()
+      flux.actions.users.getFundraiserMembers()
     }
     return storeState
   },
@@ -75,6 +76,7 @@ export default React.createClass({
     var organizations = this.state.organizationsStoreState.organizations
     var currentUser = this.state.usersStoreState.currentUser
     var payments = this.state.usersStoreState.payments
+    var fundraiserMembers = this.state.usersStoreState.fundraiserMembers
     var deals = this.state.dealsStoreState.deals
     var locations = this.state.organizationsStoreState.locations
     var redemptions = this.state.dealsStoreState.redemptions
@@ -107,6 +109,7 @@ export default React.createClass({
             surveyQuestions={surveyQuestions}
             surveyResponses={surveyResponses}
             payments={payments}
+            fundraiserMembers={fundraiserMembers}
             showBackLink={this.showBackLink}
             toggleMenu={this.toggleMenu}
             toggleState={this.state.toggleState}/>

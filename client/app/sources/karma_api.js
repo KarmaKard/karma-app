@@ -12,20 +12,22 @@ const REDEMPTIONS_URL = BASE_URL + '/api/v1/redemptions'
 const SURVEY_QUESTIONS_URL = BASE_URL + '/api/v1/questions'
 const SURVEY_RESPONSES_URL = BASE_URL + '/api/v1/survey_responses'
 const PAYMENT_URL = BASE_URL + '/api/v1/payments'
+const FUNDRAISER_MEMBERS_URL = BASE_URL + '/api/v1/fundraiser_members'
+const DONATION_URL = BASE_URL + '/api/v1/donations'
 
 var token = window.localStorage.getItem('karma-token')
+var affiliateToken = window.localStorage.getItem('affiliate-token')
 
 function storeToken (t) {
   if (typeof localStorage === 'object') {
-      try {
-          window.localStorage.setItem('karma-token', t)
-      } catch (e) {
-          Storage.prototype._setItem = Storage.prototype.setItem;
-          Storage.prototype.setItem = function() {};
-          alert('Your web browser does not support storing settings locally. In Safari, the most common cause of this is using "Private Browsing Mode". Some settings may not save or some features may not work properly for you.');
-      }
+    try {
+      window.localStorage.setItem('karma-token', t)
+    } catch (e) {
+      Storage.prototype._setItem = Storage.prototype.setItem
+      Storage.prototype.setItem = function () {}
+      alert('Your web browser does not support storing settings locally. In Safari, the most common cause of this is using "Private Browsing Mode". Some settings may not save or some features may not work properly for you.');
+    }
   }
-  
   token = t
 }
 
@@ -92,16 +94,18 @@ export function updateUser (user) {
   })
 }
 
-export function createPayment (stripeToken, user) {
+export function createPayment (stripeToken, user, organizationId, fundraiserMemberId) {
   return new Promise((resolve, reject) => {
     request
       .post(PAYMENT_URL)
-      .send({stripeToken, user})
+      .send({stripeToken, user, organizationId, fundraiserMemberId})
       .set('token', token)
       .end((err, res) => {
         if (err) {
           return reject(err)
         }
+        storeToken(res.body.token)
+        res.body.user = tokenToUser(token)
         resolve(res.body)
       })
   })
@@ -159,6 +163,20 @@ export function getPayments () {
           return reject(err)
         }
         resolve(res.body.payments)
+      })
+  })
+}
+
+export function getDonations () {
+  return new Promise((resolve, reject) => {
+    request
+      .get(DONATION_URL)
+      .set('token', token)
+      .end((err, res) => {
+        if (err) {
+          return reject(err)
+        }
+        resolve(res.body.donations)
       })
   })
 }
@@ -286,7 +304,7 @@ export function getDeals () {
 }
 
 export function saveLocation (location) {
-  return new Promise ((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     request
       .post(LOCATIONS_URL)
       .send({location})
@@ -401,3 +419,124 @@ export function getSurveyResponses () {
       })
   })
 }
+
+export function createFundraiserMember (organization, newMember) {
+  return new Promise((resolve, reject) => {
+    request
+      .post(FUNDRAISER_MEMBERS_URL)
+      .send({organization, newMember})
+      .set('token', token)
+      .end((err, res) => {
+        if (err) {
+          return reject(err)
+        }
+        resolve(res.body.fundraiserMember)
+      })
+  })
+}
+
+export function tieFundraiserMembershipToUser (user, fundraiserMemberId) {
+  return new Promise((resolve, reject) => {
+    request
+      .put(FUNDRAISER_MEMBERS_URL)
+      .send({user, fundraiserMemberId})
+      .set('token', token)
+      .end((err, res) => {
+        if (err) {
+          return reject(err)
+        }
+        storeToken(res.body.token)
+        resolve(tokenToUser(token))
+      })
+  })
+}
+
+export function getFundraiserMembers () {
+  return new Promise((resolve, reject) => {
+    request
+      .get(FUNDRAISER_MEMBERS_URL)
+      .set('token', token)
+      .end((err, res) => {
+        if (err) {
+          return reject(err)
+        }
+        resolve(res.body.fundraiserMembers)
+      })
+  })
+}
+
+export function createInPersonDonation (donation, fundraiserMember) {
+  return new Promise((resolve, reject) => {
+    request
+      .post(DONATION_URL)
+      .send({donation, fundraiserMember})
+      .set('token', token)
+      .end((err, res) => {
+        if (err) {
+          return reject(err)
+        }
+        resolve(res.body)
+      })
+  })
+}
+
+export function activateDonation (user, donationId) {
+  return new Promise((resolve, reject) => {
+    request
+      .put(DONATION_URL)
+      .send({user, donationId})
+      .set('token', token)
+      .end((err, res) => {
+        if (err) {
+          return reject(err)
+        }
+        storeToken(res.body.token)
+        resolve(tokenToUser(token))
+      })
+  })
+}
+
+export function getOrganizationsAndDeals (fundraiserMemberId) {
+  return new Promise((resolve, reject) => {
+    request
+      .post(FUNDRAISER_MEMBERS_URL + '/join')
+      .send({fundraiserMemberId})
+      .end((err, res) => {
+        if (err) {
+          return reject(err)
+        }
+        resolve(res.body)
+      })
+  })
+}
+
+export function confirmFundraiser (organization, fundraiserMembers) {
+  return new Promise((resolve, reject) => {
+    request
+      .put(ORGANIZATIONS_URL + '/confirm/' + organization.id)
+      .send({organization, fundraiserMembers})
+      .set('token', token)
+      .end((err, res) => {
+        if (err) {
+          return reject(err)
+        }
+        resolve(res.body.organization)
+      })
+  })
+}
+
+export function updateOwedAmounts (paidMembers) {
+  return new Promise((resolve, reject) => {
+    request
+      .put(FUNDRAISER_MEMBERS_URL + '/pay')
+      .send({paidMembers})
+      .set('token', token)
+      .end((err, res) => {
+        if (err) {
+          return reject(err)
+        }
+        resolve(res.body.fundraiserMembers)
+      })
+  })
+}
+

@@ -3,21 +3,24 @@ import * as KarmaAPI from '../sources/karma_api'
 
 export default class UserActions extends Actions {
 
-  login (router, email, password) {
+  login (email, password, router, whereTo) {
     KarmaAPI.postLoginCredentials(email, password).then(user => {
       if (user) {
         this.dispatch('login', user)
-        return router.transitionTo('deals')
+        return router ? router.transitionTo(whereTo) : null
+
       }
       console.warn('No user returned from login')
     }).catch(this.loginError)
   }
 
-  facebookLogin (router, user) {
+  facebookLogin (user, router, whereTo) {
     KarmaAPI.postFacebookLoginCredentials(user).then(user => {
       if (user) {
         this.dispatch('facebookLogin', user)
-        return router.transitionTo('deals')
+        if (router) {
+          return router.transitionTo(whereTo)
+        }
       }
       console.warn('No user returned from login')
     }).catch(this.loginError)
@@ -50,10 +53,11 @@ export default class UserActions extends Actions {
     })
   }
 
-  createPayment (stripeToken, userData) {
-    KarmaAPI.createPayment(stripeToken, userData).then(response => {
+  createPayment (stripeToken, userData, router, whereTo, organizationId, fundraiserMemberId) {
+    KarmaAPI.createPayment(stripeToken, userData, organizationId, fundraiserMemberId).then(response => {
       if (response) {
-        this.dispatch('createPayment', response.payment, response.user)
+        this.dispatch('createPayment', response.payment, response.user, response.donation)
+        return router.transitionTo(whereTo)
       }
     })
   }
@@ -66,9 +70,16 @@ export default class UserActions extends Actions {
     })
   }
 
+  getDonations () {
+    KarmaAPI.getDonations().then(donations => {
+      if (donations) {
+        this.dispatch('getDonations', donations)
+      }
+    })
+  }
+
   logout (router) {
-    this.dispatch('logout')
-    return router.transitionTo('logout')
+    this.dispatch('logout', router)
   }
 
   emailPasswordReset (email) {
@@ -95,6 +106,43 @@ export default class UserActions extends Actions {
 
   saveNewPassword (router, passwordResetObject) {
     KarmaAPI.saveNewPassword(passwordResetObject).then(router.transitionTo('login'))
+  }
+
+  tieFundraiserMembershipToUser (user, fundraiserMemberId, router, whereTo) {
+    var p = KarmaAPI.tieFundraiserMembershipToUser(user, fundraiserMemberId)
+    p.then(user => {
+      if (user) {
+        this.dispatch('tieFundraiserMembershipToUser', user)
+        return router ? router.transitionTo(whereTo) : null
+      }
+    }).catch(this.loginError)
+  }
+
+  getFundraiserMembers () {
+    KarmaAPI.getFundraiserMembers().then(fundraiserMembers => {
+      if (fundraiserMembers) {
+        this.dispatch('getFundraiserMembers', fundraiserMembers)
+      }
+    }).catch(this.loginError)
+  }
+
+  createInPersonDonation (donation, fundraiserMember) {
+    var p = KarmaAPI.createInPersonDonation(donation, fundraiserMember)
+    p.then(response => {
+      if (response) {
+        this.dispatch('createInPersonDonation', response.fundraiserMember, response.donations, response.payment)
+      }
+    }).catch(this.createError)
+  }
+
+  activateDonation (user, donationId, router, whereTo) {
+    var p = KarmaAPI.activateDonation(user, donationId)
+    p.then(user => {
+      if (user) {
+        this.dispatch('activateDonation', user)
+        return router ? router.transitionTo(whereTo) : null
+      }
+    }).catch(this.loginError)
   }
 
   createError (error) {

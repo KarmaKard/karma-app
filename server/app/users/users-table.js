@@ -16,6 +16,10 @@ export async function getByEmail (email) {
   return r.table('users').getAll(email, {index: 'email'}).run()
 }
 
+export async function getById (userId) {
+  return r.table('users').get(userId).run()
+}
+
 export async function update (user) {
   var results = await r.table('users').get(user.id).update(user).run()
   if (results.changes) {

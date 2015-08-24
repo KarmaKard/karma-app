@@ -75,16 +75,6 @@ button {
   background-color: #fff;
 }
 
-.content_box-header {
-  text-decoration: none;
-  font-family: 'Fjalla One', sans-serif;
-  text-transform: uppercase;
-  font-size: 42px;
-  margin-bottom: 10px;
-  color: #5D9DBD;
-
-}
-
 .content_box-content {
   overflow: auto;
 }
@@ -151,7 +141,6 @@ button {
 .karma_button {
   font-family: 'Fjalla One', sans-serif;
   text-transform: uppercase;
-  font-size: 24pt;
   text-decoration: none;
   color:#828282;
   float:right;
@@ -193,7 +182,7 @@ hr {
 }
 
 .facebookButton i {
-  margin: 3px 10px 0 15px;
+  margin: 8px 10px 0 15px;
   float:left;
 }
 
