@@ -28,6 +28,8 @@ export default React.createClass({
     }
     if (storeState.usersStoreState.payments.length === 0) {
       flux.actions.users.getPayments()
+      flux.actions.users.getFundraiserMembers()
+      flux.actions.users.getDonations()
     }
     return storeState
   },
@@ -50,7 +52,7 @@ export default React.createClass({
       usersStoreState: flux.stores.users.getState(),
       dealsStoreState: flux.stores.deals.getState(),
       toggleState: false,
-      showBackLink: false,
+      showBackLink: false
     }
   },
 
@@ -67,7 +69,7 @@ export default React.createClass({
   },
 
   toggleMenu () {
-    var toggleState = this.state.toggleState ? false : true
+    var toggleState = !this.state.toggleState
     this.setState({toggleState})
   },
 
@@ -82,24 +84,25 @@ export default React.createClass({
   render  () {
     var organizations = this.state.organizationsStoreState.organizations
     var user = this.state.usersStoreState.currentUser
-    var payments = this.state.usersStoreState.payments
+    var donations = this.state.usersStoreState.donations
     var locations = this.state.organizationsStoreState.locations
     var surveyQuestions = this.state.dealsStoreState.surveyQuestions
     var surveyResponses = this.state.dealsStoreState.surveyResponses
+    var fundraiserMembers = this.state.usersStoreState.fundraiserMembers
     var redemptions = this.state.dealsStoreState.redemptions.filter(redemption => redemption.userId === user.id)
     var orgWithQualifiedDeals = new Map()
 
     var cardCounter = 0
     var deals = this.state.dealsStoreState.deals.filter(deal => {
       var dealLimitCounter = 0
-      payments.forEach(payment => {
-        if (payment.userId === user.id) {
-          var paymentExpDate = parseInt(payment.createdAt, 10) + 31557600000
+      donations.forEach(donation => {
+        if (donation.userId === user.id) {
+          var donationExpDate = parseInt(donation.createdAt, 10) + 31557600000
           // if payment hasn't expired
-          if (paymentExpDate > Date.now()) {
+          if (donationExpDate > Date.now()) {
             cardCounter++
             // if active payment period is within active deal period
-            if (paymentExpDate < parseInt(deal.endDate, 10) /* && parseInt(deal.beginDate, 10) < payment.createdAt*/) {
+            if (donationExpDate < parseInt(deal.endDate, 10) /* && parseInt(deal.beginDate, 10) < payment.createdAt*/) {
               dealLimitCounter++
               orgWithQualifiedDeals.set(deal.organizationId, deal.organizationId)
             }
@@ -132,7 +135,7 @@ export default React.createClass({
             <button className='header_right disappear' onClick={this.toggleMenu}> ☰ </button>
           </div>
           <div>
-            <UserSideBar toggleState={this.state.toggleState} toggleMenu={this.toggleMenu} organizations={organizations} user={user} />
+            <UserSideBar toggleState={this.state.toggleState} toggleMenu={this.toggleMenu} organizations={organizations} fundraiserMembers={fundraiserMembers} user={user} />
             <div className='content_box'>
               <h2>Donate now to start saving money with our deals!</h2>
               <Link to='list_deals'>
@@ -167,7 +170,7 @@ export default React.createClass({
           <button className='header_right disappear' onClick={this.toggleMenu}> ☰ </button>
         </div>
         <div>
-          <UserSideBar toggleState={this.state.toggleState} toggleMenu={this.toggleMenu} organizations={organizations} user={user} />
+          <UserSideBar toggleState={this.state.toggleState} toggleMenu={this.toggleMenu} fundraiserMembers={fundraiserMembers} organizations={organizations} user={user} />
           <div className='content_box'>
             <RouteHandler
               organizations={activeOrganizations}
@@ -178,6 +181,7 @@ export default React.createClass({
               redemptions={redemptions}
               surveyQuestions={surveyQuestions}
               surveyResponses={surveyResponses}
+              fundraiserMembers={fundraiserMembers}
               showBackLink={this.showBackLink}/>
           </div>
         </div>

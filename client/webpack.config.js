@@ -33,7 +33,7 @@ var configuration = {
   },
   devServer: {
     contentBase: 'dist/',
-    host: 'localhost',
+    host: 'local.karmakard.org',
     inline: true
   },
 

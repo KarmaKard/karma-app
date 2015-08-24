@@ -1,12 +1,15 @@
 import React from 'react'
 import { Link } from 'react-router'
+import { flux } from './../../main'
 
 export default React.createClass({
 
   propTypes: {
     organization: React.PropTypes.object.isRequired,
     updateOrganization: React.PropTypes.func.isRequired,
-    user: React.PropTypes.object.isRequired
+    user: React.PropTypes.object.isRequired,
+    payments: React.PropTypes.array.isRequired,
+    fundraiserMembers: React.PropTypes.array.isRequired
   },
 
   getInitialState () {
@@ -35,10 +38,10 @@ export default React.createClass({
   },
 
   confirmOrganization () {
-    var organization = this.state.organization
+    var organization = this.props.organization
     organization.status = 'active'
-
-    this.props.updateOrganization(organization)
+    var fundraiserMembers = this.props.fundraiserMembers.filter(fundraiserMember => fundraiserMember.organizationId === organization.id)
+    flux.actions.organizations.confirmFundraiser(organization, fundraiserMembers)
   },
 
   checkBankInfo () {
@@ -66,9 +69,12 @@ export default React.createClass({
 
   render () {
     var organization = this.props.organization
+    var payments = this.props.payments.filter(payment => payment.fundraiserId === organization.id)
     var addTeamMembers, organizationDescription, organizationPurpose, organizationBankInfo, submitButton
     var message = 'You have some task(s) remaining before your business can be reviewed:'
-    if (!organization.teamMembers || organization.teamMembers.length === 0) {
+    var fundraiserMembers = this.props.fundraiserMembers.find(fundraiserMember => fundraiserMember.organizationId === organization.id)
+
+    if (!fundraiserMembers || fundraiserMembers.length === 0) {
       addTeamMembers = (
         <li>
           <Link to='edit_fundraiser_team' params={{organizationId: organization.id}}>
@@ -107,8 +113,8 @@ export default React.createClass({
       message = 'Please Review this organization and Click the button to authorize their deals on our app.'
       submitButton = (
         <div>
-          <button onClick={this.confirmOrganization} className='karma_button'>Confirm This Business</button>
-          <button onClick={this.rejectOrganization} className='karma_button'>Reject This Business</button>
+          <button onClick={this.confirmOrganization} className='karma_button'>Confirm This Fundraiser</button>
+          <button onClick={this.rejectOrganization} className='karma_button'>Reject This Fundraiser</button>
         </div>
       )
     } else if (organization.status === 'pending') {
@@ -117,7 +123,40 @@ export default React.createClass({
     }
 
     if (organization.status === 'active') {
-      message = 'Your Organization is now active! Any changes you make to your information will require another review.'
+
+      var cardAmount = 0
+      var totalFundraised = 0
+      var cashFundraised = 0
+      var squareFundraised = 0
+      var onlineFundraised = 0
+
+      payments.forEach(payment => {
+        cardAmount += payment.cardAmount
+        totalFundraised += payment.amount
+        switch (payment.paymentType) {
+          case 'cash':
+              cashFundraised += payment.amount
+              break
+          case 'square':
+              squareFundraised += payment.amount
+              break
+          case 'stripe':
+              onlineFundraised += payment.amount
+              break
+          default:
+        }
+      })
+
+      message = (<div>
+                  <h2>Status: Active</h2>
+                  <h2>Cards Sold: {cardAmount}</h2>
+                  <h2>Total Fundraised: {'$' + (totalFundraised / 100)}</h2>
+                  <h2>Cash Fundraised: {'$' + (cashFundraised / 100)}</h2>
+                  <h2>Square Fundraised: {'$' + (squareFundraised / 100)}</h2>
+                  <h2>Online Fundraised: {'$' + (onlineFundraised / 100)}</h2>
+                  <h2>KarmaKard Balance:</h2>
+                </div>)
+
       submitButton = null
     }
 
