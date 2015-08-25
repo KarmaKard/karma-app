@@ -29,7 +29,7 @@ export async function create (req, res, next) {
       return res.status(201).json({fundraiserMember})
     }
 
-    var url = config.domain.base_url + '/add_fundraiser_member/' + fundraiserMember.id
+    var url = config.domain.base_url + '/#/add_fundraiser_member/' + fundraiserMember.id
     var data = {
       from: 'KarmaKard Fundraising <fundraising@karmakard.org>',
       to: req.body.newMember.email,

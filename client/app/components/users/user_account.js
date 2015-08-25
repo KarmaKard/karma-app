@@ -27,7 +27,7 @@ export default React.createClass({
 
   fbAsyncInit () {
     FB.init({
-      appId: '549948578487024',
+      appId: '550843868397495',
       cookie: true,
       xfbml: true,
       version: 'v2.4'

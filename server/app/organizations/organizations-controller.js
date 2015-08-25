@@ -83,7 +83,7 @@ export async function confirm (req, res, next) {
         recipients[fundraiserMember.email] = {
           organizationName: organization.name,
           name: fundraiserMember.name,
-          url: config.domain.base_url + '/add_fundraiser_member/' + fundraiserMember.id
+          url: config.domain.base_url + '/#/add_fundraiser_member/' + fundraiserMember.id
         }
       })
 

@@ -40,7 +40,7 @@ export async function create (req, res, next) {
     for (var i = 0; i < payment.cardAmount; i++) {
       var savedDonation = await donationsTable.insert(donationObject)
       donations.push(savedDonation)
-      activationLinks += config.domain.base_url + '/activate/' + savedDonation.id + ' '
+      activationLinks += config.domain.base_url + '/#/activate/' + savedDonation.id + ' '
     }
 
     if (donation.paymentType === 'cash') {
