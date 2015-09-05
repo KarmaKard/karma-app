@@ -83,7 +83,7 @@ export default React.createClass({
           <div className= 'header_left karmatitle'>KarmaKard</div>
           <button className='header_right' onClick={this.toggleForm}>{toggleButtonText}</button>
         </div>
-        <div className= 'guest_box'>
+        <div className= 'main_card'>
           {form}
         </div>
       </div>

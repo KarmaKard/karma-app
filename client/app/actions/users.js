@@ -110,9 +110,9 @@ export default class UserActions extends Actions {
 
   tieFundraiserMembershipToUser (user, fundraiserMemberId, router, whereTo) {
     var p = KarmaAPI.tieFundraiserMembershipToUser(user, fundraiserMemberId)
-    p.then(user => {
-      if (user) {
-        this.dispatch('tieFundraiserMembershipToUser', user)
+    p.then(response => {
+      if (response) {
+        this.dispatch('tieFundraiserMembershipToUser', response.user, response.fundraiserMember)
         return router ? router.transitionTo(whereTo) : null
       }
     }).catch(this.loginError)

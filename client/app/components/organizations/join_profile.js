@@ -47,7 +47,7 @@ export default React.createClass({
             <div className='header_center karmatitle'>KarmaKard</div>
           </div>
         </div>
-        <div className='guest_box'>
+        <div className='main_card'>
           <div className='content_box-header'>
             {fundraiser.name}
           </div>

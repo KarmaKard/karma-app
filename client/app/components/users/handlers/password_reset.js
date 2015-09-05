@@ -39,7 +39,7 @@ export default React.createClass({
             <button onClick={this.goBack} className='back_button'><i className='fa fa-chevron-left fa-2x'></i></button>
             <div className='header_center karmatitle'>KarmaKard</div>
           </div>        </div>
-        <div className='guest_box'>
+        <div className='main_card'>
           <PasswordReset resetEmailSent={this.state.user.resetEmailSent} />
         </div>
       </div>

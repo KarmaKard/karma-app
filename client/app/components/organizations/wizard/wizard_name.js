@@ -1,22 +1,49 @@
 import React from 'react'
+import mui from 'material-ui'
+import {AppBar, IconButton, CardTitle, FlatButton, RaisedButton, TextField} from 'material-ui'
+
+var ThemeManager = new mui.Styles.ThemeManager()
 
 export default React.createClass({
 
   nextClicked (e) {
-    e.preventDefault()
-    var name = React.findDOMNode(this.refs.name).value
-    this.props.setName(name.charAt(0).toUpperCase() + name.slice(1))
+    var name = this.state.name
+    if(name) {
+      this.props.setName(name.charAt(0).toUpperCase() + name.slice(1))
+    }
+  },
+
+  childContextTypes: {
+    muiTheme: React.PropTypes.object
+  },
+
+  getChildContext () {
+    return {
+      muiTheme: ThemeManager.getCurrentTheme()
+    }
+  },
+
+  setName (e) {
+    this.setState({
+      name: e.target.value
+    })
   },
 
   render () {
     var orgType = this.props.orgType
-    var capitalizedType = orgType === "business" ? "Business" : "Fundraiser"
+    var capitalizedType = orgType === 'business' ? 'Business' : 'Fundraiser'
     return (
       <div>
-        <div className="content_box-header">{capitalizedType} Name</div>
+        <div className='content_box-header'>{capitalizedType} Name</div>
         <form>
-          <input type="text" ref="name" className="karma_input" placeholder="Name" />
-          <input type="submit" ref="button" onClick={this.nextClicked} className="karma_button" value="Next" />
+          <TextField
+            fullWidth={true}
+            onBlur={this.setName}
+            hintText='ABC Co.'
+            floatingLabelText={capitalizedType + ' Name'} />
+          <RaisedButton onClick={this.nextClicked} style={{margin: '10px auto'}} fullWidth={true}>
+            Next
+          </RaisedButton>
         </form>
       </div>
     )

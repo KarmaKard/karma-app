@@ -1,7 +1,10 @@
 import {Route, RouteHandler, DefaultRoute} from 'react-router'
+import { flux } from './main'
 import React from 'react'
-
+import mui from 'material-ui'
+import {AppCanvas, AppBar, Tabs, Tab, FlatButton, FontIcon, UserSideBar, CardTitle, Card, CardMedia, CardHeader, TextField, List, ListItem, RaisedButton, CardText, FloatingActionButton} from 'material-ui'
 import Login from './components/users/handlers/login'
+import JoinOptions from './components/users/handlers/join_options'
 import Register from './components/users/handlers/register'
 import Donate from './components/users/handlers/donate'
 import DealList from './components/deals/handlers/list_deals'
@@ -44,21 +47,141 @@ import RedemptionScreen from './components/organizations/handlers/show_redemptio
 import RedemptionSuccess from './components/organizations/handlers/show_redemption_success'
 import AddRedemptions from './components/organizations/handlers/add_redemptions'
 import Survey from './components/organizations/handlers/survey'
+var ThemeManager = new mui.Styles.ThemeManager()
 
 var App = React.createClass({
-  render () {
-    return (
-      <div>
-        <RouteHandler />
-      </div>
-    )
-  }
-})
+
+    contextTypes: {
+      router: React.PropTypes.func
+    },
+    getInitialState () {
+      flux.actions.organizations.getOrganizations()
+      flux.actions.organizations.getLocations()
+      flux.actions.deals.getRedemptions()
+      flux.actions.deals.getDeals()
+      flux.actions.deals.getSurveyQuestions()
+      flux.actions.deals.getSurveyResponses()
+      flux.actions.users.getFundraiserMembers()
+      flux.actions.users.getDonations()
+      var storeState = this.getStoreState()
+      return storeState
+    },
+
+    storeChange () {
+      this.setState(this.getStoreState)
+    },
+
+    getStoreState () {
+      return {
+        organizations: flux.stores.organizations.getState(),
+        user: flux.stores.users.getState(),
+        deals: flux.stores.deals.getState(),
+        showBackLink: false
+      }
+    },
+
+    childContextTypes: {
+      muiTheme: React.PropTypes.object
+    },
+
+    getChildContext () {
+      return {
+        muiTheme: ThemeManager.getCurrentTheme()
+      }
+    },
+
+    componentWillMount () {
+      flux.stores.organizations.addListener('change', this.storeChange)
+      flux.stores.users.addListener('change', this.storeChange)
+      flux.stores.deals.addListener('change', this.storeChange)
+    },
+
+    componentWillUnmount () {
+      flux.stores.organizations.removeListener('change', this.storeChange)
+      flux.stores.users.removeListener('change', this.storeChange)
+      flux.stores.deals.removeListener('change', this.storeChange)
+    },
+
+    showBackLink (showBackLink) {
+      this.setState({showBackLink})
+    },
+
+    goBack () {
+      history.back()
+    },
+
+    compare (a, b) {
+      if (a < b) {
+        return -1
+      }
+      if (a > b) {
+        return 1
+      }
+      return 0
+    },
+
+    sortByName (a, b) {
+      return this.compare(a.name, b.name)
+    },
+
+    paymentsByDate (a, b) {
+      return a.createdAt - b.createdAt
+    },
+
+    render () {
+      var organizations = this.state.organizations.organizations || []
+      var currentUser = this.state.user.currentUser || {}
+      var payments = this.state.user.payments || []
+      var fundraiserMembers = this.state.user.fundraiserMembers || []
+      var deals = this.state.deals.deals || []
+      var locations = this.state.organizations.locations || []
+      var redemptions = this.state.deals.redemptions || []
+      var surveyQuestions = this.state.deals.surveyQuestions || []
+      var surveyResponses = this.state.deals.surveyResponses || []
+      var donations = this.state.user.donations || []
+      console.log('surveyQuestions', surveyQuestions)
+      organizations = organizations.sort(this.sortByName)
+      payments = payments.sort(this.paymentsByDate)
+      fundraiserMembers = fundraiserMembers.sort(this.sortByName)
+
+      var backLink
+      if (this.state.showBackLink) {
+        backLink = (<div><button onClick={this.goBack} className='back_button'><i className='fa fa-chevron-left fa-2x'></i></button><div className='header_center karmatitle'>KarmaKard</div></div>)
+      } else {
+        backLink = (<div className='header_left karmatitle'>KarmaKard</div>)
+      }
+      console.log(this.state.tabStatus)
+      return (
+        <AppCanvas>
+          <AppBar
+            showMenuIconButton={false}
+            title=<div className='karmatitle'></div>
+            iconElementRight={<div style={{width: 80 + 'px'}}></div>}
+            iconElementLeft={backLink}/>
+          <div className='spacer'></div>
+          <RouteHandler
+            organizations={organizations}
+            user={currentUser}
+            locations={locations}
+            deals={deals}
+            redemptions={redemptions}
+            surveyQuestions={surveyQuestions}
+            surveyResponses={surveyResponses}
+            payments={payments}
+            fundraiserMembers={fundraiserMembers}
+            donations={donations}
+            showBackLink={this.showBackLink}/>
+
+        </AppCanvas>
+      )
+    }
+  })
 
 export default (
   <Route name='root' handler={App} path='/'>
     <DefaultRoute handler={RedirectToDeals} onEnter={RedirectToDeals.willTransitionTo} />
     <Route name='login' handler={Login} path='login' />
+    <Route name='join_options' handler={JoinOptions} path='join_options' />
     <Route name='register' handler={Register} path='register' />
     <Route name='add_fundraiser_member' handler={AddFundraiserMember} path='add_fundraiser_member/:fundraiserMemberId' />
     <Route name='activate_donation' handler={ActivateDonation} path='activate/:donationId' />

@@ -47,10 +47,12 @@ export async function createPayment (req, res, next) {
     }
 
     payment = await paymentsTable.insert(payment)
-    var fundraiserMember = await fundraiserMembersTable.getById(fundraiserMemberId)
-    fundraiserMember.raisedAmount = fundraiserMember.raisedAmount + payment.amount
-    var returnedFundraiserMember = await fundraiserMembersTable.update(fundraiserMember)
-
+    if (req.body.fundraiserMemberId) {
+      var fundraiserMember = await fundraiserMembersTable.getById(fundraiserMemberId)
+      fundraiserMember.raisedAmount = fundraiserMember.raisedAmount + payment.amount
+      var returnedFundraiserMember = await fundraiserMembersTable.update(fundraiserMember)
+    }
+    
     var donation = {
       createdAt: Date.now(),
       activationStatus: 'active',

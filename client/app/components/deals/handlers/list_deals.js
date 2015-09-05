@@ -1,6 +1,10 @@
 import React from 'react'
 import { flux } from '../../../main'
 import DealList from '../list_deals'
+import mui from 'material-ui'
+import {AppCanvas, AppBar, IconButton, Card, CardTitle} from 'material-ui'
+
+var ThemeManager = new mui.Styles.ThemeManager()
 
 export default React.createClass({
 
@@ -19,6 +23,16 @@ export default React.createClass({
     return {
       organizationsStoreState: flux.stores.organizations.getState(),
       dealsStoreState: flux.stores.deals.getState()
+    }
+  },
+
+  childContextTypes: {
+    muiTheme: React.PropTypes.object
+  },
+
+  getChildContext () {
+    return {
+      muiTheme: ThemeManager.getCurrentTheme()
     }
   },
 
@@ -58,13 +72,30 @@ export default React.createClass({
     for (var [id, organization] of organizationMap) {
       organizationArray.push(organization)
     }
-    return [totalSavings, organizationArray]
+    console.log(organizationArray)
+    var sortedOrganizationArray = organizationArray.sort(this.orgsByAlphabet)
+    console.log(sortedOrganizationArray)
+    return [totalSavings, sortedOrganizationArray]
   },
 
   goBack () {
     history.back()
   },
 
+  compare (a, b) {
+    if (a < b) {
+      return -1
+    }
+    if (a > b) {
+      return 1
+    }
+    return 0
+  },
+
+  orgsByAlphabet (a, b) {
+    console.log(this.compare(a.name, b.name))
+    return this.compare(a.name, b.name)
+  },
   render () {
     var organizations = this.state.organizationsStoreState.organizations
       .filter(org => org.type === 'business' && org.status === 'active')
@@ -74,18 +105,17 @@ export default React.createClass({
     var dealsByOrganization = dealInfo[1]
 
     return (
-      <div>
-        <div className='page_header'>
-          <div>
-            <button onClick={this.goBack} className='back_button'><i className='fa fa-chevron-left fa-2x'></i></button>
-            <div className='header_center karmatitle'>KarmaKard</div>
-          </div>
-        </div>
-        <div className='guest_box'>
-          <div className='content_box-header'>Deals By Business</div>
+      <AppCanvas>
+        <AppBar
+          title=<div className='karmatitle'></div>
+          iconElementLeft={<button onFocus={this.goBack} ><i className="material-icons md-48 back_button">keyboard_arrow_left</i></button>}
+          iconElementRight={<div style={{width: 72 + 'px'}}></div>} />
+        <div className='spacer'></div>
+        <Card className='main_card'>
+          <CardTitle title='Deals by business' subtitle={'Savings Value: $' + totalSavings}/>
           <DealList dealsByOrganization={dealsByOrganization} totalSavings={totalSavings} />
-        </div>
-      </div>
+        </Card>
+      </AppCanvas>
     )
   }
 })

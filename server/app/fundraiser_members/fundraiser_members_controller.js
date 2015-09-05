@@ -65,7 +65,7 @@ export async function tieFundraiserMembershipToUser (req, res, next) {
       user.roles.fundraiserTeamMember = 'fundraiserTeamMember'
       user = await usersTable.update(user)
       res.status(201).json({
-        token: encodeToken(user)
+        token: encodeToken(user), fundraiserMember: fundraiserMember
       })
     } else {
       res.status(400).send('Link has already been used')

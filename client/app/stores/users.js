@@ -33,7 +33,7 @@ export default class UserStore extends Store {
     this.handleAction('users.emailPasswordReset', this.sendPasswordResetEmail)
     this.handleAction('users.checkPasswordResetExpiration', this.checkPasswordResetExpiration)
     this.handleAction('users.facebookLogin', this.handleAuth)
-    this.handleAction('users.tieFundraiserMembershipToUser', this.handleAuth)
+    this.handleAction('users.tieFundraiserMembershipToUser', this.handleFundraiserMemberAuth)
     this.handleAction('users.getFundraiserMembers', this.saveFundraiserMembers)
     this.handleAction('organizations.createFundraiserMember', this.saveFundraiserMember)
     this.handleAction('users.createInPersonDonation', this.saveDonation)
@@ -120,6 +120,17 @@ export default class UserStore extends Store {
     this.setState({
       fundraiserMembers: this.state.fundraiserMembers.concat(fundraiserMember)
     })
+  }
+
+  handleFundraiserMemberAuth (user, fundraiserMember) {
+    var fundraiserMembers = this.state.fundraiserMembers
+    for (var i = 0; i < fundraiserMembers.length; i++) {
+      if (fundraiserMembers[i].id === fundraiserMember.id) {
+        fundraiserMembers[i] = fundraiserMember
+      }
+    }
+
+    this.setState({ currentUser: user, authenticated: true, fundraiserMembers})
   }
 
   clearLoginErrors () {

@@ -3,6 +3,11 @@ import { flux } from '../../../main'
 import DonateForm from '../donate'
 import LoginForm from '../login_form'
 import Register from '../register'
+import mui from 'material-ui'
+import {AppBar, AppCanvas, IconButton, FlatButton, Card, CardHeader, CardTitle, Avatar, CardText, RaisedButton} from 'material-ui'
+
+var ThemeManager = new mui.Styles.ThemeManager()
+
 
 export default React.createClass({
   getInitialState () {
@@ -23,6 +28,10 @@ export default React.createClass({
     }
   },
 
+  goBack () {
+    history.back()
+  },
+
   storeChange () {
     this.setState(this.getStoreState())
   },
@@ -33,6 +42,16 @@ export default React.createClass({
 
   componentWillUnmount () {
     flux.stores.users.removeListener('change', this.storeChange)
+  },
+
+  childContextTypes: {
+    muiTheme: React.PropTypes.object
+  },
+
+  getChildContext () {
+    return {
+      muiTheme: ThemeManager.getCurrentTheme()
+    }
   },
 
   createToken (info) {
@@ -90,21 +109,23 @@ export default React.createClass({
       ? <DonateForm currentUser={user} createToken={this.createToken} toggleDisableButton={this.toggleDisableButton} buttonDisabled={this.state.buttonDisabled}/>
       : barrierForm
 
+    var toggleButtonText
     if (!user) {
-      var toggleButtonText = this.state.isExistingUser ? 'New User?' : 'Existing User?'
+      toggleButtonText = this.state.isExistingUser ? 'New User?' : 'Existing User?'
     }
 
     return (
-      <div>
-        <div className= 'page_header'>
-          <div className= 'header_left karmatitle'>KarmaKard</div>
-          <button className='header_right' onClick={this.toggleForm}>{toggleButtonText}</button>
-        </div>
-        <div className= 'guest_box'>
+      <AppCanvas>
+        <AppBar
+          title=<div className='karmatitle'></div>
+          iconElementLeft={<button onFocus={this.goBack}><i className="material-icons md-48 back_button">keyboard_arrow_left</i></button>}
+          iconElementRight={<FlatButton style={{marginLeft: -44 + 'px'}} onClick={this.toggleForm} label={toggleButtonText} />} />
+        <div className='spacer'></div>
+        <Card className= 'main_card'>
           {form}
           <span ref='errors' className='payment-errors'>{this.state.errors}</span>
-        </div>
-      </div>
+        </Card>
+      </AppCanvas>
     )
   }
 })

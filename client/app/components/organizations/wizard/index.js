@@ -5,6 +5,11 @@ import WizardName from './wizard_name'
 import WizardCategory from './wizard_category'
 import WizardLogo from './wizard_logo'
 import Registration from '../../users/register'
+import LoginForm from '../../users/login_form'
+import mui from 'material-ui'
+import {AppBar, AppCanvas, IconButton, Card, FlatButton} from 'material-ui'
+
+var ThemeManager = new mui.Styles.ThemeManager()
 
 export default React.createClass({
   contextTypes: {
@@ -17,9 +22,10 @@ export default React.createClass({
       type: null,
       name: null,
       category: null,
-      logoURL: '/img/logo-placeholder.png',
+      logoURL: null,
       step: 1,
-      status: 'inactive'
+      status: 'inactive',
+      isExistingUser: true
     }
   },
 
@@ -41,12 +47,30 @@ export default React.createClass({
     flux.stores.users.removeListener('change', this.storeChange)
   },
 
+  childContextTypes: {
+    muiTheme: React.PropTypes.object
+  },
+
+  getChildContext () {
+    return {
+      muiTheme: ThemeManager.getCurrentTheme()
+    }
+  },
+
   createUser (user) {
     flux.actions.users.create(user)
   },
 
   setFbLogin (user) {
     flux.actions.users.facebookLogin(user)
+  },
+
+  userLogin (email, password) {
+    flux.actions.users.login(email, password)
+  },
+
+  goBack () {
+    history.back()
   },
 
   setType (type) {
@@ -84,7 +108,8 @@ export default React.createClass({
         name: this.state.name,
         category: this.state.category,
         logoURL: this.state.logoURL,
-        status: this.state.status
+        status: this.state.status,
+        keywords: []
       }
 
       flux.actions.organizations.create(organization, router, 'organization_user_manages')
@@ -99,9 +124,18 @@ export default React.createClass({
     })
   },
 
+  toggleForm (e) {
+    e.preventDefault()
+    this.setState({
+      isExistingUser: !this.state.isExistingUser
+    })
+  },
+
   getWizardComponent () {
     if (!this.state.usersStoreState.currentUser) {
-      return <Registration createUser={this.createUser} setFbLogin={this.setFbLogin} />
+      return this.state.isExistingUser
+      ? <LoginForm loginErrors={this.state.usersStoreState.loginErrors} setFbLogin={this.setFbLogin} userLogin={this.userLogin} />
+      : <Registration setFbLogin={this.setFbLogin} userLogin={this.userLogin} createUser={this.createUser}/>
     }
 
     switch (this.state.step) {
@@ -126,6 +160,23 @@ export default React.createClass({
   },
 
   render () {
-    return this.getWizardComponent()
+    var user = this.state.usersStoreState.currentUser
+    var toggleButtonText
+    if (!user) {
+      toggleButtonText = this.state.isExistingUser ? 'New User?' : 'Existing User?'
+    }
+
+    return (
+      <AppCanvas>
+        <AppBar
+          title="KarmaKard"
+          iconElementRight={<FlatButton onClick={this.toggleForm} label={toggleButtonText} />}
+          iconElementLeft={<IconButton onFocus={this.goBack} iconClassName="material-icons" >keyboard_arrow_left</IconButton>}/>
+        <div className='spacer'></div>
+        <Card className='main_card'>
+          {this.getWizardComponent()}
+        </Card>
+      </AppCanvas>
+    )
   }
 })

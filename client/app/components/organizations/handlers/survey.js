@@ -28,6 +28,6 @@ export default React.createClass({
       if (response.userId === userId) {return response}
     })
     var surveyQuestion = this.findNewQuestion(surveyResponses)
-    return <Survey {... this.props} surveyQuestion={surveyQuestion} />
+    return <Survey surveyQuestion={surveyQuestion} {... this.props}  />
   }
 })

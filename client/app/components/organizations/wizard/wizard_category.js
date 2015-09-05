@@ -15,6 +15,7 @@ export default React.createClass({
     return (
       <div>
         <div className="content_box-header">Business Category</div>
+        
         <select ref="category" className="karma_input">
           <option value="Dining">Dining</option>
           <option value="Entertainment"> Entertainment</option>

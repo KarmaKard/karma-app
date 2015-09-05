@@ -1,95 +1,45 @@
 import React from 'react'
-import { flux } from '../../../main'
 import { RouteHandler } from 'react-router'
-import UserSideBar from '../user_sidebar'
+import mui from 'material-ui'
+import {AppCanvas, AppBar, Tabs, Tab, FlatButton, FontIcon, UserSideBar, CardTitle, Card, CardMedia, CardHeader, TextField, List, ListItem, RaisedButton, CardText, FloatingActionButton} from 'material-ui'
+var ThemeManager = new mui.Styles.ThemeManager()
 
 export default React.createClass({
-
   contextTypes: {
     router: React.PropTypes.func
   },
 
-  logOut () {
-    var { router } = this.context
-    flux.actions.users.logout(router)
+  childContextTypes: {
+    muiTheme: React.PropTypes.object
   },
 
-  getInitialState () {
-    var storeState = this.getStoreState()
-    if (storeState.organizations.organizations.length === 0) {
-      flux.actions.organizations.getOrganizations()
-      flux.actions.organizations.getLocations()
-      flux.actions.deals.getRedemptions()
-      flux.actions.deals.getDeals()
-      flux.actions.users.getFundraiserMembers()
-    }
-    return storeState
-  },
-
-  componentDidMount () {
-    var currentUser = this.state.user.currentUser
-    if (!currentUser) {
-      var router = this.context.router
-      router.transitionTo('login')
-    }
-  },
-
-  storeChange () {
-    this.setState(this.getStoreState)
-  },
-
-  getStoreState () {
+  getChildContext () {
     return {
-      organizations: flux.stores.organizations.getState(),
-      user: flux.stores.users.getState(),
-      deals: flux.stores.deals.getState(),
-      toggleState: false
+      muiTheme: ThemeManager.getCurrentTheme()
     }
   },
 
-  componentWillMount () {
-    flux.stores.organizations.addListener('change', this.storeChange)
-    flux.stores.users.addListener('change', this.storeChange)
-    flux.stores.deals.addListener('change', this.storeChange)
+  toAccount () {
+    this.context.router.transitionTo('account')
   },
 
-  componentWillUnmount () {
-    flux.stores.organizations.removeListener('change', this.storeChange)
-    flux.stores.users.removeListener('change', this.storeChange)
-    flux.stores.deals.removeListener('change', this.storeChange)
-  },
-
-  toggleMenu () {
-    var toggleState = !this.state.toggleState
-    this.setState({toggleState})
+  toDeals () {
+    this.context.router.transitionTo('deals')
   },
 
   render () {
-    var currentUser = this.state.user.currentUser
-    if (!currentUser) {return <div>No User</div>}
-    var organizations = this.state.organizations.organizations || []
-    var fundraiserMembers = this.state.user.fundraiserMembers
-    var redemptions = this.state.deals.redemptions
-    var totalSaved = redemptions.reduce(function (a, b) {
-      if (b['userId'] === currentUser.id) {
-        return a + parseFloat(b['amountSaved'])
-      }
-      return a
-    }, 0)
-
     return (
       <div>
-        <div className='page_header'>
-          <div className='header_left karmatitle'>KarmaKard</div>
-          <button className='header_right disappear' onClick={this.toggleMenu}> ☰ </button>
-        </div>
-        <div>
-          <UserSideBar toggleState={this.state.toggleState} toggleMenu={this.toggleMenu} fundraiserMembers={fundraiserMembers} organizations={organizations} user={currentUser} />
-          <div className='content_box'>
-            <RouteHandler user={currentUser} totalSaved={totalSaved}/>
-          </div>
-        </div>
+        <Card className='main_card'>
+          <RouteHandler {... this.props}/>
+        </Card>
+        <div className='spacer'></div>
+        <Tabs initialSelectedIndex={1} style={{bottom:-4, position: 'fixed', width: '100%'}}>
+          <Tab onClick={this.toDeals} value='0' label=<i className="material-icons md-36">local_offer</i> ></Tab>
+          <Tab onClick={this.toAccount} value='1' label=<i className="material-icons md-36">account_box</i> ></Tab>
+        </Tabs>
       </div>
     )
   }
 })
+

@@ -446,7 +446,11 @@ export function tieFundraiserMembershipToUser (user, fundraiserMemberId) {
           return reject(err)
         }
         storeToken(res.body.token)
-        resolve(tokenToUser(token))
+        var response = {
+          user: tokenToUser(token),
+          fundraiserMember: res.body.fundraiserMember
+        }
+        resolve(response)
       })
   })
 }

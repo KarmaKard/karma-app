@@ -32,8 +32,22 @@ export default React.createClass({
     flux.stores.organizations.removeListener('change', this.storeChange)
   },
 
+  compare (a, b) {
+    if (a < b) {
+      return -1
+    }
+    if (a > b) {
+      return 1
+    }
+    return 0
+  },
+
+  orgsByAlphabet (a, b) {
+    return this.compare(a.name, b.name)
+  },
+
   render () {
-    var organizations = this.state.organizationsStoreState.organizations
+    var organizations = this.state.organizationsStoreState.organizations.sort(this.orgsByAlphabet)
     var activeFundraisers = organizations
       .filter(organization => organization.type === 'fundraiser' && organization.status === 'active')
 

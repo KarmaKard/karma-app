@@ -24,6 +24,7 @@ export default React.createClass({
   },
 
   render () {
+    console.log(this.props.surveyQuestions)
     return (
       <div>
         <RouteHandler {... this.props} saveAmountSaved={this.saveAmountSaved} amountSaved={this.state.amountSaved}/>

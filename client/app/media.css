@@ -20,7 +20,6 @@
 
   .content_box-header {
     text-decoration: none;
-    font-family: Fjalla One,sans-serif;
     text-transform: uppercase;
     font-size: 28px;
     margin-bottom: 10px;
@@ -45,14 +44,6 @@
   .back_button {
     float: left;
     margin: 8px 0 0 10px;
-  }
-
-  .karmatitle {
-    width: 44px; 
-    height: 45px;
-    float: left;
-    background: url("../assets/img/blackandwhitelogo45.png");
-    text-indent: 4999px;
   }
 
   .karma_button {
@@ -82,7 +73,6 @@
     text-align: left;
     padding-left: 5px;
     text-decoration: none;
-    font-family: 'Fjalla One', sans-serif;
     text-transform: uppercase;
     font-size: 30px;
     color: #828282;
@@ -125,16 +115,11 @@
 
   .content_box-header {
     text-decoration: none;
-    font-family: 'Fjalla One', sans-serif;
     text-transform: uppercase;
     font-size: 42px;
     margin-bottom: 10px;
     color: #5D9DBD;
 
-  }
-
-  .karmatitle {
-    font-size: 60px;
   }
 
   .back_button {
@@ -186,7 +171,6 @@
   .side_bar_navigation {
     float: left;
     clear: both;
-    font-family: 'Fjalla One', sans-serif;
     text-transform: uppercase;
     font-size: 24pt;
     text-decoration: none;
