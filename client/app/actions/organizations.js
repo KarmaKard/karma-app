@@ -48,20 +48,12 @@ export default class OrganizationsActions extends Actions {
 
   saveLocation (location) {
     var p = KarmaAPI.saveLocation(location)
-    p.then(location => {
-      if (location) {
-        this.dispatch('saveLocation', location)
+    p.then(organization => {
+      if (organization) {
+        console.log('We getting anything?',organization)
+        this.dispatch('saveLocation', organization)
       }
     }).catch(this.createError)
-  }
-
-  getLocations () {
-    var p = KarmaAPI.getLocations()
-    p.then(locations => {
-      if (locations) {
-        this.dispatch('getLocations', locations)
-      }
-    }).catch(this.getLocationsError)
   }
 
   createFundraiserMember (organization, newMember) {
@@ -69,15 +61,6 @@ export default class OrganizationsActions extends Actions {
     p.then(fundraiserMember=> {
       if (fundraiserMember) {
         this.dispatch('createFundraiserMember', fundraiserMember)
-      }
-    })
-  }
-
-  getOrganizationsAndDeals (fundraiserMemberId) {
-    var p = KarmaAPI.getOrganizationsAndDeals(fundraiserMemberId)
-    p.then(response => {
-      if (response) {
-        this.dispatch('getOrganizationsAndDeals', response.organizations, response.deals, response.organizationId)
       }
     })
   }
@@ -91,11 +74,11 @@ export default class OrganizationsActions extends Actions {
     })
   }
 
-  updateOwedAmounts (paidMembers) {
-    var p = KarmaAPI.updateOwedAmounts(paidMembers)
-    p.then(fundraiserMembers => {
-      if (fundraiserMembers) {
-        this.dispatch('updateOwedAmounts', fundraiserMembers)
+  updateOwedAmounts (fundraiserPayment) {
+    var p = KarmaAPI.updateOwedAmounts(fundraiserPayment)
+    p.then(fundraiserMember => {
+      if (fundraiserMember) {
+        this.dispatch('updateOwedAmounts', fundraiserMember)
       }
     })
   }

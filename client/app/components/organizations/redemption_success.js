@@ -1,25 +1,24 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { flux } from '../../main'
 import Router from 'react-router'
 import { Link } from 'react-router'
+import mui from 'material-ui'
+import {AppCanvas, AppBar, Tabs, Tab, FlatButton, FontIcon, UserSideBar, CardTitle, Card, CardMedia, CardHeader, TextField, List, ListItem, RaisedButton, CardText, FloatingActionButton} from 'material-ui'
+var ThemeManager = new mui.Styles.ThemeManager()
 
 export default React.createClass({
   contextTypes: {
     router: React.PropTypes.func
   },
 
-  getInitialState () {
-    var rateExperienceDiv = (
-      <div>
-          <h3>Rate your experience </h3>
-          <div className='satisfaction_survey'>
-            <button className='satisfaction_survey_item'><i onClick={this.recordExperience} value='satisfied' className='fa fa-smile-o fa-5x'></i></button>
-            <button className='satisfaction_survey_item'><i onClick={this.recordExperience} value='dissatisfied' className='fa fa-frown-o fa-5x'></i></button>
-          </div>
-      </div>
-    )
+  childContextTypes: {
+    muiTheme: React.PropTypes.object
+  },
+
+  getChildContext () {
     return {
-      rateExperienceDiv
+      muiTheme: ThemeManager.getCurrentTheme()
     }
   },
 
@@ -32,17 +31,35 @@ export default React.createClass({
       response: e.target.value,
       timestamp: new Date().getTime()
     }
-    flux.actions.deals.createSurveyResponse(surveyResponse)
-    this.setState({rateExperienceDiv: ""})
+    var { router } = this.context
+    flux.actions.deals.createSurveyResponse(surveyResponse, router, 'deals')
 
   },
 
   render() {
+    var dealId = this.context.router.getCurrentParams().dealId
+    var deal = this.props.deals.filter(deal => deal.id === dealId)[0]
+    var amountRedeemed = this.props.redemptions.filter(function (redemption) {
+      return redemption.dealId === deal.id && redemption.userId === this.props.user.id ? redemption : null
+    }.bind(this))
+    var redemptionsLeft = deal.limit !== 'unlimited' ? deal.totalLimit - amountRedeemed.length : deal.limit
+    console.log(redemptionsLeft)
+    var amountSaved =(Math.round(this.props.amountSaved * 100)/100).toFixed(2)
     return(
       <div>
-        <h1>You Just Saved $ {(Math.round(this.props.amountSaved * 100) / 100).toFixed(2)}!</h1>
-          {this.state.rateExperienceDiv}
-        <Link to="deals"><div className="karma_button">Go Back to Deal Card</div></Link>
+        <CardTitle title={'You Just Saved $' + amountSaved + '!'} />
+        <CardText>You now have {redemptionsLeft} redemptions remaining.</CardText>
+        <CardText>Rate your experience </CardText>
+        <div style={{width: '50%', float: 'left'}}>
+        <FloatingActionButton style={{margin: '0 35%'}} value='satisfied' onClick={this.recordExperience}>
+          <i className="material-icons md-48">mood</i>
+        </FloatingActionButton>
+        </div>
+        <div style={{width: '50%', float: 'left'}}>
+        <FloatingActionButton style={{margin: '0 35%'}} value='dissatisfied' onClick={this.recordExperience}>
+          <i className="material-icons md-48">mood_bad</i>
+        </FloatingActionButton>
+        </div>
       </div>
     )
   }

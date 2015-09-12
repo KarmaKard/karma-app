@@ -1,9 +1,10 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { flux } from '../../main'
 import crypto from 'crypto'
 import AvatarEditor from 'react-avatar-editor'
 import mui from 'material-ui'
-import injectTapEventPlugin from 'react-tap-event-plugin'
+
 import {AppBar, FlatButton, Card, CardHeader, SelectField, CardTitle, TextField, RaisedButton, Slider} from 'material-ui'
 
 var ThemeManager = new mui.Styles.ThemeManager()
@@ -64,10 +65,6 @@ export default React.createClass({
   },
 
   saveProfile(){
-    if(this.state.descriptionCounter > 150){
-      React.findDOMNode(this.refs.descriptionCharacterCount).style.color="rgb(242, 29, 29)"
-      return
-    }
 
     var name = this.state.name
     var category = this.state.category
@@ -89,7 +86,6 @@ export default React.createClass({
   },
 
   nameChange(e){
-    
     this.setState({name: e.target.value, buttonDisabled: false})
   },
 
@@ -277,11 +273,12 @@ export default React.createClass({
   },
 
   render() {
-    injectTapEventPlugin()
+    
+  
     var avatarCropper
     if(this.state.cropperOpen) {
       avatarCropper = (
-        <Card style={{padding: '3%', margin: '0 auto'}}>
+        <Card style={{padding: '2%', margin: '0 auto'}}>
           <AvatarEditor
             style={{width:'100%', height:'100%'}}
             ref='cropper'
@@ -387,7 +384,7 @@ export default React.createClass({
                 disabled={this.state.buttonDisabled}
                 fullWidth={true} 
                 onClick={this.saveProfile} 
-                label="Donate" 
+                label="Save Profile" 
                 style={{
                   margin: '15px 0 0 0'
                 }}/>

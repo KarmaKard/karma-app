@@ -1,4 +1,5 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import {RouteHandler} from 'react-router'
 
 export default React.createClass({
@@ -7,7 +8,6 @@ export default React.createClass({
     organizations: React.PropTypes.array.isRequired,
     user: React.PropTypes.object.isRequired,
     payments: React.PropTypes.array.isRequired,
-    locations: React.PropTypes.array.isRequired,
     surveyQuestions: React.PropTypes.array.isRequired,
     surveyResponses: React.PropTypes.array.isRequired,
     redemptions: React.PropTypes.array.isRequired,
@@ -18,7 +18,19 @@ export default React.createClass({
     router: React.PropTypes.func
   },
 
-  render () {
+  render() {
+  injectTapEventPlugin()
+    function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+        x.innerHTML = "Geolocation is not supported by this browser.";
+    }
+}
+function showPosition(position) {
+    x.innerHTML = "Latitude: " + position.coords.latitude + 
+    "<br>Longitude: " + position.coords.longitude; 
+}
     var organizations = this.props.organizations
     var user = this.props.user
     var orgWithQualifiedDeals = new Map()
@@ -46,7 +58,7 @@ export default React.createClass({
         return deal
       }
     })
-    var locations = this.props.locations
+
     var surveyQuestions = this.props.surveyQuestions
     var surveyResponses = this.props.surveyResponses
     var redemptions = this.props.redemptions.filter(redemption => redemption.userId === user.id)
@@ -74,7 +86,6 @@ export default React.createClass({
           organizations={activeOrganizations}
           categories={activeCategories}
           user={user}
-          locations={locations}
           deals={deals}
           redemptions={redemptions}
           surveyQuestions={surveyQuestions}

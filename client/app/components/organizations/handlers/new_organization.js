@@ -1,4 +1,5 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import Wizard from '../wizard'
 import mui from 'material-ui'
 import {AppBar, IconButton, Card} from 'material-ui'
@@ -32,10 +33,11 @@ export default React.createClass({
     history.back()
   },
 
-  render () {
+  render() {
+  injectTapEventPlugin()
     return (
       <div>
-          <Wizard />
+          <Wizard {...this.props} />
       </div>
     )
   }

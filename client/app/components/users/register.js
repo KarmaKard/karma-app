@@ -1,4 +1,5 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import mui from 'material-ui'
 import {CardTitle, TextField, RaisedButton} from 'material-ui'
 
@@ -151,7 +152,8 @@ export default React.createClass({
     }
   },
 
-  render () {
+  render() {
+  injectTapEventPlugin()
     var mismatchPasswords = this.state.mismatchPasswords
       ? <div className='error-message'>Mismatched Passwords</div>
       : null
@@ -218,6 +220,11 @@ export default React.createClass({
           <hr/>
           <RaisedButton onClick={this.handleFbClick} className='fb_button' style={{margin: '20px auto', float: 'left'}} fullWidth={true}>
             <i style={{color: '#3A5795', margin: '4px 47%', float: 'left'}} className='fa fa-facebook fa-2x fa-inverse'></i>
+          </RaisedButton>
+          
+          <hr style={{margin: '10px 0'}} />
+
+          <RaisedButton onClick={this.props.toggleForm} style={{margin: '30px auto'}} label="Already A User?"  fullWidth={true}>
           </RaisedButton>
       </div>
 

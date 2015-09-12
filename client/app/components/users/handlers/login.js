@@ -1,4 +1,5 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import Mui from 'material-ui'
 import { flux } from '../../../main'
 import LoginForm from '../login_form'
@@ -82,23 +83,16 @@ export default React.createClass({
     flux.actions.users.login(email, password, router, 'deals')
   },
 
-  render () {
+  render() {
+  injectTapEventPlugin()
 
     var toggleButtonText = this.state.isExistingUser ? 'New User?' : 'Existing User?'
 
     return (
-      <AppCanvas>
-        <AppBar
-          showMenuIconButton={true}
-          title=<div className='karmatitle'></div>
-          iconElementRight={<FlatButton onClick={this.toggleForm} className='login_right_toggle' label={toggleButtonText} />}
-          iconElementLeft={<div style={{width: 80 + 'px'}}></div>}/>
-        <div className='spacer'></div>
-        <Card 
-          className="main_card">
-          <LoginForm loginErrors={this.state.users.loginErrors} setFbLogin={this.setFbLogin} userLogin={this.userLogin} />
-        </Card>
-      </AppCanvas>
+      <Card 
+        className="main_card">
+        <LoginForm loginErrors={this.state.users.loginErrors} setFbLogin={this.setFbLogin} userLogin={this.userLogin} />
+      </Card>
     )
   }
 })

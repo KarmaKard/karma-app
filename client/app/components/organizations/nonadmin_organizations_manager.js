@@ -1,4 +1,5 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { Link } from 'react-router'
 import mui from 'material-ui'
 import {CardTitle, TextField, CardText, RaisedButton, List, ListItem, CardHeader, Avatar, FlatButton, Card, FontIcon} from 'material-ui'
@@ -18,7 +19,14 @@ export default React.createClass({
 
   renderOrganizationLink (organization, i) {
     return (
-      <ListItem  onClick={this.toOrganization} primaryText={organization.name} leftAvatar={<Avatar src={organization.logoURL} />}/>
+      <Link to={'organization_user_manages'} params={{organizationId: organization.id}}>
+        <Card>
+          <CardHeader
+            title={organization.name}
+            subtitle={organization.status}
+            avatar={organization.logoURL}/>
+        </Card>
+      </Link>
     )
   },
 
@@ -43,7 +51,8 @@ export default React.createClass({
     this.context.router.transitionTo('organization_user_manages', {organizationId: organization.id})
   },
 
-  render () {
+  render() {
+  injectTapEventPlugin()
     var user = this.props.user
     var organizations = this.props.organizations || []
     var fundraisers, businesses
@@ -53,7 +62,7 @@ export default React.createClass({
       .map(this.renderOrganizationLink)
 
     businesses = businessLinks.length > 0
-      ? ( <List subheader='Businesses'>
+      ? (<List subheader='Businesses'>
             {businessLinks}
           </List>)
       : null

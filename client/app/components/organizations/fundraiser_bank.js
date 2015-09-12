@@ -1,164 +1,218 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { flux } from '../../main'
+import mui from 'material-ui'
+
+import {AppBar, FlatButton, Checkbox, DatePicker, Card, CardHeader, SelectField, CardTitle, TextField, RaisedButton, Slider} from 'material-ui'
+
+var ThemeManager = new mui.Styles.ThemeManager()
 
 export default React.createClass({
   getInitialState(){
     return {
-      organization: {}
+      organization: {},
+      accountNumberErrorMessage: null,
+      routingNumberErrorMessage: null,
+      routingNumberErrorColor: 'red',
+    }
+  },
+
+  childContextTypes: {
+    muiTheme: React.PropTypes.object
+  },
+
+  getChildContext () {
+    return {
+      muiTheme: ThemeManager.getCurrentTheme()
     }
   },
 
   componentWillMount() {
-    if(this.props.organization){
-      this.setState({organization: this.props.organization})
+    if(this.props.organization.bankInfo){
+      this.setState({
+        organization: this.props.organization,
+        firstName: this.props.organization.bankInfo.firstName,
+        lastName: this.props.organization.bankInfo.lastName,
+        birthDate: this.props.organization.bankInfo.birthDate,
+        accountNumber: this.props.organization.bankInfo.accountNumber,
+        routingNumber: this.props.organization.bankInfo.routingNumber,
+        tosChecked: this.props.organization.bankInfo.tosChecked,
+        buttonDisabled: true
+      })
     }
   },
 
-  changeMade(){
-    React.findDOMNode(this.refs.saveButton).style.border="3px solid rgb(242, 29, 29)"
+  firstNameChange(e){
+    this.setState({firstName: e.target.value, buttonDisabled: false})
+  },
+
+  lastNameChange(e){
+    this.setState({lastName: e.target.value, buttonDisabled: false})
+  },
+
+  dateChanged (nill, date) {
+    console.log(date)
+    this.setState({birthDate:date})
+  },
+
+  accountNumberChange(e){
+    if (isNaN(e.target.value) || !/^(?:\d*)$/.test(e.target.value)) {
+      e.target.value = e.target.value.substring(0, e.target.value.length - 1)
+      this.setState({accountNumberErrorMessage: 'Must be a whole number digit', routingNumberErrorColor: 'red'})
+      return
+    }
+    this.setState({accountNumber: e.target.value, buttonDisabled: false, accountNumberErrorMessage: null})
+  },
+
+  routingNumberChange(e){
+    console.log(124302150)
+    if (isNaN(e.target.value) || !/^(?:\d*)$/.test(e.target.value) || e.target.value.length > 9) {
+      e.target.value = e.target.value.substring(0, e.target.value.length - 1)
+      this.setState({routingNumberErrorMessage: 'Must be 9 whole number digits'})
+      return
+    }
+    var routingCheck = this.validateABA(e.target.value)
+    if (!routingCheck.isValid) {
+      this.setState({routingNumberErrorMessage: routingCheck.errorMsg})
+      return
+    } 
+    this.setState({routingNumber: e.target.value,buttonDisabled: false, routingNumberErrorMessage: 'Perfect!', routingNumberErrorColor: 'green'})
+  },
+
+  tosCheckedChange(e){
+    console.log(e.target.value)
+    if(e.target.value) {
+      console.log('it was true')
+      this.setState({tosChecked: true, buttonDisabled: false})
+      return
+    } else {
+      console.log('why')
+      this.setState({tosChecked: false, buttonDisabled: false})
+    }
+    
+  },
+
+  validateABA(n) {
+     
+    n = n ? n.match(/\d/g).join('') : 0;//get just digits
+    var c = 0, isValid = false;
+
+    if (n && n.length == 9){//don't waste energy totalling if its not 9 digits
+    for (var i = 0; i < n.length; i += 3) {//total the sums
+     c += parseInt(n.charAt(i), 10) * 3 +  parseInt(n.charAt(i + 1), 10) * 7 +  parseInt(n.charAt(i + 2), 10);
+    }
+    isValid = c != 0 && c % 10 == 0;//check if multiple of 10
+    }
+    if (n.length < 9) {
+      this.setState({routingNumberErrorColor: 'green'})
+    } else {
+      this.setState({routingNumberErrorColor: 'red'})
+    }
+    return {//return an object telling whether its valid and if not, why.
+    isValid: isValid,
+    errorMsg: n.length < 9 ? (9-n.length) + " Digits Lefts" : (!isValid ? 'Invalid bank routing number.' : '')//determine the error message
+    };
   },
 
   saveBankData(){
-    var organization = this.state.organization
-    var firstName = React.findDOMNode(this.refs.firstName).value
-    var lastName = React.findDOMNode(this.refs.lastName).value
-    var dobMonth = React.findDOMNode(this.refs.dobMonth).value
-    var dobDate = React.findDOMNode(this.refs.dobDate).value
-    var dobYear = React.findDOMNode(this.refs.dobYear).value
-    var accountNumber = React.findDOMNode(this.refs.accountNumber).value
-    var routingNumber = React.findDOMNode(this.refs.routingNumber).value
-    var tosChecked = React.findDOMNode(this.refs.tosCheck).checked ? 1 : 0
+    var organization = this.props.organization
+    var firstName = this.state.firstName ? this.state.firstName : this.props.organization.bankInfo.firstName
+    var lastName = this.state.lastName ? this.state.lastName : this.props.organization.bankInfo.lastName
+    var birthDate = this.state.birthDate ? this.state.birthDate : this.props.organization.bankInfo.birthDate
+    var accountNumber = this.state.accountNumber ? this.state.accountNumber : this.props.organization.bankInfo.accountNumber
+    var routingNumber = this.state.routingNumber ? this.state.routingNumber : this.props.organization.bankInfo.routingNumber
+    var tosChecked = this.state.tosChecked 
     var bankInfo = {
       firstName, 
       lastName,
-      dobMonth,
-      dobDate,
-      dobYear,
+      birthDate,
       accountNumber,
       routingNumber,
       tosChecked
     }
-
     organization.bankInfo = bankInfo
     this.props.updateOrganization(organization)
-    React.findDOMNode(this.refs.saveButton).style.border="3px solid rgb(75, 187, 44)"
+    this.setState({buttonDisabled: true})
   },
 
   render() {
-    var firstName, lastName, dobYear, dobMonth, dobDate, accountNumber, tosChecked, routingNumber
+    
+  
+    var firstName, lastName,birthDate, accountNumber, tosChecked, routingNumber
     if (this.props.organization.bankInfo){
-      var {
-        firstName,
-        lastName,
-        dobYear,
-        dobMonth,
-        dobDate,
-        accountNumber,
-        routingNumber,
-        tosChecked
-      } = this.props.organization.bankInfo
+      firstName = this.state.firstName ? this.state.firstName : this.props.organization.bankInfo.firstName
+      lastName = this.state.lastName ? this.state.lastName : this.props.organization.bankInfo.lastName
+      birthDate = this.state.birthDate ? this.state.birthDate : this.props.organization.bankInfo.birthDate
+      accountNumber = this.state.accountNumber ? this.state.accountNumber : this.props.organization.bankInfo.accountNumber
+      routingNumber = this.state.routingNumber ? this.state.routingNumber : this.props.organization.bankInfo.routingNumber
+      tosChecked = this.state.tosChecked ? this.state.tosChecked : this.props.organization.bankInfo.tosChecked
     }
 
-    var yearOption = []
-    var dayOption = []
-    var eligibleYear = new Date().getFullYear() - 18
-
-    for (var i = eligibleYear; i > 1900 + 1; i--) {
-      yearOption.push(<option value={i}>{i}</option>)
-    }
-
-    for (var i = 1; i < 32; i++) {
-      dayOption.push(<option value={i}>{i}</option>)
-    }
-
+    var today = new Date()
+    var maxDate = new Date(today - 568024668000) //18 years ago
+    var setDate = birthDate ? new Date(birthDate) : maxDate
     return (
       <div>
-        <div className="content_box-header">Bank Details</div>
-        <div>
-          First Name
-          <input 
-            type="text" 
-            className="karma_input" 
-            placeholder="First Name" 
-            onChange={this.changeMade}
-            ref="firstName" 
-            defaultValue={firstName}
-            disabled={this.props.editDisabled}/>
-          Last Name
-          <input 
-            type="text" 
-            onChange={this.changeMade}
-            ref="lastName" 
-            className="karma_input " 
-            placeholder="Last Name" 
-            defaultValue={lastName}
-            disabled={this.props.editDisabled} />
-          Date of Birth
-          <div className="bank_data-dob">
-            <select
-              className="karma_select bank_data-dob_month"
-              defaultValue={dobMonth}
-              ref="dobMonth">
-              <option value="1">January</option>
-              <option value="2">February</option>
-              <option value="3">March</option>
-              <option value="4">April</option>
-              <option value="5">May</option>
-              <option value="6">June</option>
-              <option value="7">July</option>
-              <option value="8">August</option>
-              <option value="9">September</option>
-              <option value="10">October</option>
-              <option value="11">November</option>
-              <option value="12">December</option>
-            </select>
-            <select
-              className="karma_select bank_data-dob_day"
-              defaultValue={dobDate}
-              ref="dobDate">
-              {dayOption}
-            </select>
-            <select
-              className="karma_select bank_data-dob_year"  
-              defaultValue={dobYear}
-              ref="dobYear">
-              {yearOption}
-            </select>
-          </div>
-          Bank Account No.
-          <input 
-            type="text" 
-            onChange={this.changeMade}
-            ref="accountNumber" 
-            className="karma_input" 
-            placeholder="Account No." 
-            defaultValue={accountNumber}
-            disabled={this.props.editDisabled} />
-          Routing No.
-          <input 
-            type="text" 
-            onChange={this.changeMade}
-            ref="routingNumber" 
-            className="karma_input" 
-            placeholder="Routing No." 
-            defaultValue={routingNumber}
-            disabled={this.props.editDisabled} />
+        <TextField
+          hintText="First Name"
+          floatingLabelText="First Name"
+          fullWidth={true}
+          onChange={this.firstNameChange} 
+          defaultValue={this.state.firstName}
+          disabled={this.props.editDisabled}/>
 
-          <div className="terms_of_service">
-            "I have read and agree to the terms and conditions listed here."
-            <input 
-              type="checkbox" 
-              defaultChecked={tosChecked} 
-              ref="tosCheck"/>
-          </div>
-          <button 
-            onClick={this.saveBankData}
-            ref="saveButton" 
-            className="karma_button"  
-            hidden={this.props.editDisabled}>
-              Save
-          </button>
-        </div>
+        <TextField
+          hintText="Last Name"
+          floatingLabelText="Last Name"
+          fullWidth={true}
+          onChange={this.lastNameChange} 
+          defaultValue={this.state.lastName}
+          disabled={this.props.editDisabled}/>
+
+        <DatePicker
+          hintText="Ranged Date Picker"
+          floatingLabelText="Birth Date"
+          autoOk={this.state.autoOk}
+          maxDate={maxDate}
+          defaultDate={setDate}
+          onChange={this.dateChanged}
+          fullWidth={true}
+          showYearSelector={true} />
+
+        <TextField
+          hintText="0000000000"
+          floatingLabelText="Bank Account Number"
+          fullWidth={true}
+          onChange={this.accountNumberChange} 
+          defaultValue={this.state.accountNumber}
+          disabled={this.props.editDisabled}
+          errorText={this.state.accountNumberErrorMessage}/>
+         
+        <TextField
+          hintText="000000000"
+          floatingLabelText="Routing Number"
+          fullWidth={true}
+          onChange={this.routingNumberChange} 
+          defaultValue={this.state.routingNumber}
+          disabled={this.props.editDisabled}
+          errorText={this.state.routingNumberErrorMessage}
+          errorStyle={{color:this.state.routingNumberErrorColor}}/>
+          <Checkbox
+            name="tosChecked"
+            value={this.state.tosChecked}
+            label="I have read and agree to the terms and conditions listed here."
+            defaultChecked={this.state.tosChecked}
+            onCheck={this.tosCheckedChange}/>
+
+          <RaisedButton 
+                disabled={this.state.buttonDisabled}
+                fullWidth={true} 
+                onClick={this.saveBankData} 
+                label="Save" 
+                style={{
+                  margin: '15px 0 0 0'
+                }}/>
+
       </div>
     )
   }

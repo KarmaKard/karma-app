@@ -1,36 +1,84 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { flux } from '../../main'
+import mui from 'material-ui'
+import {AppCanvas, AppBar, Tabs, Tab, FlatButton, FontIcon, UserSideBar, CardTitle, Card, CardMedia, CardHeader, TextField, List, ListItem, RaisedButton, CardText, FloatingActionButton} from 'material-ui'
+var ThemeManager = new mui.Styles.ThemeManager()
 
 export default React.createClass({
+  PropTypes: {
+    locations: React.PropTypes.array.isRequired
+  },
+
   getInitialState(){
     return {
       locations: [],
       newStreet: '',
-      newZip: ''
+      newZip: '',
+      zipErrorMessage: null,
+      zipErrorColor: 'red',
+      editDisabled: false,
+      buttonDisabled: true
+    }
+  },
+
+  childContextTypes: {
+    muiTheme: React.PropTypes.object
+  },
+
+  getChildContext () {
+    return {
+      muiTheme: ThemeManager.getCurrentTheme()
     }
   },
 
   componentWillMount() {
-    if(this.props.initialLocations.length > 0){
-      this.setState({locations: this.props.initialLocations})
+    if(this.props.organization.locations.length > 0){
+      this.setState({locations: this.props.organization.locations, editDisabled: this.props.editDisabled})
     }
   },
 
   updateNewStreet(e){
+    if (this.state.newZip && this.state.newZip.length === 5 && e.target.value) {
+      this.setState({
+        newStreet: e.target.value,
+        buttonDisabled: false
+      })
+      return
+    }
     this.setState({
-      newStreet: e.target.value
+      newStreet: e.target.value,
+      buttonDisabled: true
     })
-    React.findDOMNode(this.refs.saveButton).style.border="3px solid rgb(242, 29, 29)"
   },
 
-  updateNewZip(e){
-    this.setState({
-      newZip: e.target.value
-    })
-    if(this.validateZip(e.target.value)){
-      React.findDOMNode(this.refs.zip).style.border=""
+  updateNewZip (e) {
+    if (isNaN(e.target.value) || e.target.value.length > 5) {
+      e.target.value = e.target.value.substring(0, e.target.value.length - 1)
+      this.setState({zipErrorMessage: 'Must be 5 Digits', zipErrorColor: 'red'})
+      return
+    } else if (e.target.value.length === 5) {
+      if (this.state.newStreet) {
+        this.setState({newZip: e.target.value, zipErrorMessage: 'Perfect!', zipErrorColor: 'green', buttonDisabled: false})
+      }
+      else {
+        this.setState({newZip: e.target.value, zipErrorMessage: 'Perfect!', zipErrorColor: 'green', buttonDisabled: true})
+      }
+      
+    } else {
+      this.setState({newZip: e.target.value, buttonDisabled: true})
     }
-    React.findDOMNode(this.refs.saveButton).style.border="3px solid rgb(242, 29, 29)"
+  },
+
+  checkNewZip(e){
+    if(this.validateZip(e.target.value)){
+      this.setState({
+        newZip: e.target.value
+      })
+      return
+    }
+    e.target.value = e.target.value.substring(0, e.target.value.length - 1)
+    this.setState({zipErrorMessage: 'Must be 5 Digits'})
   },
 
   handleAddNew(){
@@ -38,6 +86,7 @@ export default React.createClass({
       React.findDOMNode(this.refs.zip).style.border="3px solid rgb(242, 29, 29)"
       return
     }
+
     var newLocation = {
       street: this.state.newStreet,
       zip: this.state.newZip,
@@ -46,15 +95,10 @@ export default React.createClass({
 
     this.setState({
       newStreet: '',
-      newZip: '',
-      locations: this.state.locations.concat(newLocation)
+      newZip: ''
     })
 
     flux.actions.organizations.saveLocation(newLocation)
-    flux.actions.organizations.getLocations()
-    React.findDOMNode(this.refs.saveButton).style.border="3px solid rgb(75, 187, 44)"
-
-    React.findDOMNode(this.refs.locationInput).focus()
   },
 
   validateZip(zipString){
@@ -62,47 +106,64 @@ export default React.createClass({
   },
 
   render() {
-    var locationArray = this.state.locations.length === 0 ? this.props.initialLocations : this.state.locations
+    var locationArray = this.props.organization.locations
 
     var listItems = locationArray.map((location, index) => {
       return (
-        <li key={index}>
-          {location.street} {location.zip}
-        </li>
+        <ListItem primaryText={location.formattedAddress}/>
       )
     })
+
+    var buttonDisabler = this.props.editDisabled 
+      ? this.props.editDisabled
+      : this.state.buttonDisabled
+
+    var mapString = 'https://maps.googleapis.com/maps/api/staticmap?size=600x300&maptype=roadmap'
+    console.log('LOCATIONS', locationArray)
+    for (var i = 0; i < locationArray.length; i++) {
+      var coords = '&markers=' + locationArray[i].latitude + ',' + locationArray[i].longitude 
+      mapString += coords
+    }
+    mapString += '&key=AIzaSyBm4B7SMPjld2uuinozMm2O-WwkKS7wT_M'
+    var mapImage = locationArray.length > 0 ? <img src={mapString} /> : null
+
     return (
       <div>
-        <div className="content_box-header">Locations</div>
+      {mapImage}
+      <CardText>*One location Required</CardText>
         <div>
-          <ul className="location_list">
+          <List>
             {listItems}
-          </ul>
+          </List>
         </div>
         <div>
-          <input 
-            type="text" 
-            className="karma_input street_address_input" 
-            placeholder="Full Street Address" 
-            ref="locationInput" 
-            value={this.state.newStreet} 
-            onChange={this.updateNewStreet} 
-            disabled={this.props.editDisabled}/>
-          <input 
-            type="text" 
-            ref="zip" 
-            className="zip_input karma_input " 
-            placeholder="Zip" 
-            value={this.state.newZip} 
-            onChange={this.updateNewZip} 
-            disabled={this.props.editDisabled} />
-          <button 
-            ref="saveButton" 
-            className="karma_button" 
+        <TextField
+          hintText="123 Easy St."
+          fullWidth={true}
+          floatingLabelText="Full Street Address"
+          value={this.state.newStreet} 
+          onChange={this.updateNewStreet} 
+          disabled={this.props.editDisabled} />
+
+        <TextField
+          hintText="84604"
+          fullWidth={true}
+          floatingLabelText="Zip Code"
+          value={this.state.newZip} 
+          onBlur={this.checkNewZip}
+          onChange={this.updateNewZip} 
+          disabled={this.props.editDisabled} 
+          errorText={this.state.zipErrorMessage}
+          errorStyle={{color:this.state.zipErrorColor}}/>
+
+          <RaisedButton 
+            label="Add Location" 
+            fullWidth={true}
             onClick={this.handleAddNew} 
-            disabled={this.props.editDisabled}>
-              Save
-          </button>
+            disabled={buttonDisabler}
+            style={{
+                  margin: '15px 0'
+            }}/>
         </div>
       </div>
     )

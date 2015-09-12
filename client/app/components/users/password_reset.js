@@ -1,4 +1,5 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { flux } from '../../main'
 
 export default React.createClass({
@@ -17,7 +18,8 @@ export default React.createClass({
     flux.actions.users.emailPasswordReset(email)
   },
 
-  render () {
+  render() {
+  injectTapEventPlugin()
     var content = this.props.resetEmailSent
       ? <div className='reset' >
           <div className='content_box-header'>Email Sent</div>

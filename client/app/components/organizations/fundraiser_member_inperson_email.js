@@ -1,6 +1,19 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
+import mui from 'material-ui'
+
+import {AppCanvas, AppBar, SelectField, Tabs, Tab, FlatButton, FontIcon, UserSideBar, CardTitle, Card, CardMedia, CardHeader, TextField, List, ListItem, RaisedButton, CardText, FloatingActionButton} from 'material-ui'
+var ThemeManager = new mui.Styles.ThemeManager()
 
 export default React.createClass({
+
+  getInitialState () {
+    return {
+      disabledButton: true,
+      email: null
+    }
+  },
+
   propTypes: {
     setEmail: React.PropTypes.func.isRequired
   },
@@ -9,30 +22,56 @@ export default React.createClass({
     router: React.PropTypes.func
   },
 
+  childContextTypes: {
+    muiTheme: React.PropTypes.object
+  },
+
+  getChildContext () {
+    return {
+      muiTheme: ThemeManager.getCurrentTheme()
+    }
+  },
+
   setEmail () {
-    var email = React.findDOMNode(this.refs.email).value
+    var email = this.state.email
     if (this.validateEmail(email)) {
       this.props.setEmail(email)
-    } else {
-      React.findDOMNode(this.refs.email).style.border = '3px solid rgb(242, 29, 29)'
-    }
+    } 
+  },
 
+  setEmailValue (e) {
+    if(this.validateEmail(e.target.value)) {
+      this.setState({disabledButton: false, email: e.target.value})
+    }
+    else {
+      this.setState({disabledButton: true})
+    }
   },
 
   validateEmail (emailString) {
     return /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/.test(emailString)
   },
 
-  render () {
+  render() {
+  injectTapEventPlugin()
+    
+  
     return (
       <div>
-        <div className='organization_information' >
-          <div className='content_box-header'>Donor Email</div>
-        </div>
-        <h2>Email</h2>
-        <h3>For each card purchased an activation link will be sent to the following email. User can share these links as gifts.</h3>
-        <input className='karma_input' ref='email' placeholder='email@email.com'></input>
-        <button className='karma_button' onClick={this.setEmail}>Send</button>
+        <CardTitle title='Donor Email' />
+        <CardText>If card(s) are being purchased, an email will be sent with easy activation.</CardText>
+        <TextField
+          hintText="peter@karmakard.org"
+          onChange={this.setEmailValue}
+          fullWidth={true}
+          floatingLabelText="Donor's Email" />
+        <RaisedButton 
+          style={{margin: '15px 0'}} 
+          label="Next" 
+          fullWidth={true} 
+          value='Send' 
+          onClick={this.setEmail} 
+          disabled={this.state.disabledButton}/>
       </div>
     )
   }

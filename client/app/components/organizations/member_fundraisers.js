@@ -1,4 +1,5 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { Link } from 'react-router'
 import mui from 'material-ui'
 import moneyPicture from '../../../assets/img/dollar-bills.png'
@@ -17,7 +18,14 @@ export default React.createClass({
 
   renderOrganizationLink (organization, i) {
     return (
-        <ListItem onClick={this.toFundraiserMember} primaryText={organization.name} leftAvatar={<Avatar src={organization.logoURL} />}/>
+      <Link to={'member_fundraiser'} params={{organizationId: organization.id}}>
+        <Card>
+          <CardHeader
+            title={organization.name}
+            subtitle={organization.category}
+            avatar={organization.logoURL}/>
+        </Card>
+      </Link>
     )
   },
 
@@ -38,19 +46,18 @@ export default React.createClass({
     this.context.router.transitionTo('member_fundraiser', {organizationId: organization.id})
   },
 
-  render () {
+  render() {
+  injectTapEventPlugin()
     console.log(this.props.memberFundraisers)
     var fundraiserLinks = this.props.memberFundraisers
       .map(this.renderOrganizationLink)
     console.log(fundraiserLinks)
     var output = fundraiserLinks.length > 0
-      ? <Card style={{padding: '3% 0', margin: '15px auto'}}>
-        <CardMedia className='overlay_title' overlay={<div style={{margin: '0 0 8px 8px', fontSize: '36px', color: 'rgb(246, 115, 133)', display: 'block', lineHeight: '36px'}}> Your Fundraising</div>}>
+      ? <Card style={{ margin: '15px auto'}}>
+        <CardMedia className='overlay_title' overlay={<div style={{margin: '0 0 8px 8px', fontSize: '36px', color: '#FF7070', display: 'block', lineHeight: '36px'}}> Your Fundraising</div>}>
           <img src={moneyPicture} />
         </CardMedia>
-        <List>
           {fundraiserLinks}
-        </List>
         </Card>
       : <span></span>
     return (

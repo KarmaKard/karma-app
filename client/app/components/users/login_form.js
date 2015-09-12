@@ -1,4 +1,5 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { flux } from '../../main'
 import {Link} from 'react-router'
 import mui from 'material-ui'
@@ -104,8 +105,6 @@ export default React.createClass({
     flux.actions.users.clearLoginErrors()
     console.log(email, password)
     this.props.userLogin(email, password)
-
-    React.findDOMNode(this.refs.button).disabled = false
   },
 
   setPassword (e) {
@@ -120,7 +119,8 @@ export default React.createClass({
     })
   },
 
-  render () {
+  render() {
+  injectTapEventPlugin()
     var loginErrorMessage = this.props.loginErrors.length !== 0
       ? <div className='karma_error'>Incorrect Credentials</div>
       : null
@@ -137,7 +137,7 @@ export default React.createClass({
           }}/>
       : <RaisedButton 
           fullWidth={true} 
-          onClick={this.didLogin} 
+          onTouchTap={this.didLogin} 
           className='login_button' 
           label="Login" 
           style={{
@@ -172,10 +172,17 @@ export default React.createClass({
               floatingLabelText='Email' />
             {forgotPassword}
             {disabledLogin}
-          <hr/>
-          <RaisedButton onClick={this.handleClick} style={{margin: '20px auto', float: 'left'}} className='fb_button' fullWidth={true}>
+
+          <RaisedButton onClick={this.handleClick} style={{margin: '30px auto'}} className='fb_button' fullWidth={true}>
             <i style={{color: '#3A5795', margin: '4px 47%', float: 'left'}} className='fa fa-facebook fa-2x fa-inverse'></i>
           </RaisedButton>
+
+          <hr style={{margin: '10px 0'}} />
+
+          <Link to='join_options' >
+            <RaisedButton style={{margin: '30px auto'}} label="New User?"  fullWidth={true}>
+            </RaisedButton>
+          </Link>
       </div>
     )
   }

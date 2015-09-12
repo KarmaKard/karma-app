@@ -1,4 +1,5 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { flux } from '../../main'
 import { Link } from 'react-router'
 import BusinessProfile from './business_profile'
@@ -6,11 +7,16 @@ import Locations from './locations'
 import Keywords from './keywords'
 import DealBuilder from './../deals/deal_builder.js'
 import mui from 'material-ui'
-import {CardTitle, Card, CardMedia, Avatar, CardHeader, TextField, List, ListItem, RaisedButton, CardText, FloatingActionButton} from 'material-ui'
+import {CardTitle, CircularProgress, Card, CardMedia, Avatar, CardHeader, TextField, List, ListItem, RaisedButton, CardText, FloatingActionButton} from 'material-ui'
 var ThemeManager = new mui.Styles.ThemeManager()
 
 export default React.createClass({
-  getInitialState() {
+
+  propTypes: {
+    organization: React.PropTypes.object.isRequired
+  },
+
+  getInitialState () {
     return {
       organization: {}
     }
@@ -18,7 +24,9 @@ export default React.createClass({
 
   componentWillMount() {
     if(this.props.organization){
-      this.setState({organization: this.props.organization})
+      this.setState({
+        organization: this.props.organization
+      })
     }
   },
 
@@ -48,10 +56,11 @@ export default React.createClass({
   getStatusIcon (status) {
     return status 
       ? <i style={{color: '#73BF73'}} className="material-icons md-36">check_circle</i>
-      : <i style={{color: 'red'}} className="material-icons md-36">mode_edit</i>
+      : <i style={{color: '#F67385'}} className="material-icons md-36">mode_edit</i>
   },
 
   render() {
+
     var addLocations, addDeals, addKeywords, submitButton
     var message = "You have some task(s) remaining before your business can be reviewed:"
 
@@ -61,9 +70,16 @@ export default React.createClass({
       !this.props.organization.name ||
       !this.props.organization.beginDate ? 0 : 1
 
-    var locationsStatus = this.props.locations.length === 0 ? 0 : 1
+    console.log(this.props.organization, profileStatus)
 
-    var keywordsStatus = this.props.organization.keywords.length === 0 ? 0 : 1
+    var locationsStatus = this.props.organization.locations.length === 0 ? 0 : 1
+
+    var keywordsStatus = 0
+    for (var i = 0; i < this.props.organization.keywords.length; i++) {
+      if (this.state.organization.keywords[i]) {
+        keywordsStatus = 1
+      }
+    }
         
     var dealsStatus
     if(this.props.deals.length >= 2){
@@ -83,14 +99,26 @@ export default React.createClass({
       dealsStatus = 0
     }
 
-    if(!dealsStatus && !keywordsStatus && !locationsStatus && !profileStatus) {
+    if(dealsStatus && keywordsStatus && locationsStatus && profileStatus) {
         message = "All required information has been completed. Please thoroughly review your information before you submit this business to be reviewed."
-        submitButton = <button onClick={this.submitToReview} className="karma_button">Submit for Review</button>
+        submitButton = <RaisedButton 
+                fullWidth={true} 
+                onClick={this.submitToReview} 
+                label="Submit To Review" 
+                style={{
+                  margin: '0 0 25px 0'
+                }}/>
     }
 
     if(this.props.organization.status === "pending" && this.props.user.roles.superadmin){
       message = "Please Review this organization and Click the button to authorize their deals on our app."
-      submitButton = <button onClick={this.confirmOrganization} className="karma_button">Confirm This Business</button>
+      submitButton = <RaisedButton 
+                fullWidth={true} 
+                onClick={this.confirmOrganization} 
+                label="Confirm Organization" 
+                style={{
+                  margin: '0 0 25px 0'
+                }}/>
     }
     else if(this.props.organization.status === "pending"){
       message = "Your Organization is now being reviewed. Do not change any of the information you have already submitted."
@@ -109,10 +137,10 @@ export default React.createClass({
     
     return (
       <div>
-        <CardTitle title="Dashboard" />
+        <CardTitle title={this.props.organization.name} />
         <CardText>{message}</CardText>
-        
-        <Card style={{padding: '0 3%'}} initiallyExpanded={false}>
+        {submitButton}
+        <Card style={{padding: '0 2%'}} initiallyExpanded={false}>
           <CardHeader
             title=<span style={{fontSize:'30px'}}>Profile</span>
             avatar={profileStatus}
@@ -121,7 +149,7 @@ export default React.createClass({
           <BusinessProfile expandable={true} {... this.props}/>
           <CardText style={{padding: '5px 0'}} expandable={true}></CardText>
         </Card>
-        <Card style={{padding: '0 3%'}} initiallyExpanded={false}>
+        <Card style={{padding: '0 2%'}} initiallyExpanded={false}>
           <CardHeader
             title=<span style={{fontSize:'30px'}}>Locations</span>
             avatar={locationsStatus}
@@ -130,7 +158,7 @@ export default React.createClass({
           <Locations expandable={true} {... this.props} />
           <CardText style={{padding: '5px 0'}} expandable={true}></CardText>
         </Card>
-        <Card style={{padding: '0 3%'}} initiallyExpanded={false}>
+        <Card style={{padding: '0 2%'}} initiallyExpanded={false}>
           <CardHeader
             title=<span style={{fontSize:'30px'}}>Keywords</span>
             avatar={keywordsStatus}
@@ -139,7 +167,7 @@ export default React.createClass({
           <Keywords expandable={true} {... this.props} />
           <CardText style={{padding: '5px 0'}} expandable={true}></CardText>
         </Card>
-        <Card style={{padding: '0 3%'}} initiallyExpanded={false}>
+        <Card style={{padding: '0 2%'}} initiallyExpanded={false}>
           <CardHeader
             title=<span style={{fontSize:'30px'}}>Deals</span>
             avatar={dealsStatus}
@@ -154,7 +182,6 @@ export default React.createClass({
           {addDeals}
           {addKeywords}
         </ul>
-        {submitButton}
       </div>
     )
   }

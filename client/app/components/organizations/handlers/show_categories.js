@@ -1,8 +1,10 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { flux } from '../../../main'
 import { Link } from 'react-router'
 import mui from 'material-ui'
 import {CardTitle, Card, CardMedia, CardHeader, TextField, List, ListItem, RaisedButton, CardText, FloatingActionButton} from 'material-ui'
+
 var ThemeManager = new mui.Styles.ThemeManager()
 
 export default React.createClass({
@@ -12,11 +14,11 @@ export default React.createClass({
     deals: React.PropTypes.array.isRequired,
     organizations: React.PropTypes.array.isRequired,
     categories: React.PropTypes.array.isRequired,
-    showBackLink: React.PropTypes.func.isRequired,
-    locations: React.PropTypes.array.isRequired
+    showBackLink: React.PropTypes.func.isRequired
   },
 
   getInitialState () {
+    flux.actions.users.getUserLocation()
     return {
       searchOrganizations: [],
       searchLength: 0
@@ -52,7 +54,7 @@ export default React.createClass({
 
   renderLocationList (address, i) {
     return (
-      <li>{address.street + ', ' + address.zip}</li>
+      <li><a target='_blank' href={'http://maps.google.com/maps?z=18&q='+address.latitude+','+address.longitude}>{address.formattedAddress}</a></li>
     )
   },
 
@@ -67,28 +69,49 @@ export default React.createClass({
   },
 
   orgsByPoints (a, b) {
-    if (b.points > a.points) {
-      return b.points - a.points
-    } else if (b.points === a.points) {
-      return this.compare(a.name, b.name)
-    }
+    return a.points - b.points
   },
 
   searchOrganization (organization, pattern) {
     var points = 0
-    points += pattern.test(organization.name) ? 20 : 0
+    var bestReference = null
+
+    var locations = organization.locations.filter(location => location.organizationId === organization.id)
+    for (var i = 0; i < locations.length; i++) {
+      points += pattern.test(locations[i].formattedAddress) ? 2 : 0
+      points += pattern.test(locations[i].neighborhood) ? 2 : 0
+      points += pattern.test(locations[i].stateLong) ? 2 : 0
+
+      bestReference = 'Locations'
+    }
+
+    if (pattern.test(organization.description)) {
+      points += 3
+      bestReference = 'Description'
+    }
+
+    for (var i = 0; i < organization.keywords.length; i++) {
+      if (pattern.test(organization.keywords[i])) {
+        points += 5
+        bestReference = 'Keywords'
+      }
+    }
+
     var deals = this.props.deals.filter(deal => deal.organizationId === organization.id)
     for (var i = 0; i < deals.length; i++) {
-      points += pattern.test(deals[i].dealText) ? 10 : 0
-    }
-    console.log('rabbit',organization)
-    for (var i = 0; i < organization.keywords.length; i++) {
-      points += pattern.test(organization.keywords[i]) ? 5 : 0
+      if (pattern.test(deals[i].dealText)) {
+        points += 10
+        bestReference = 'Deals'
+      }
     }
 
-    points += pattern.test(organization.description) ? 3 : 0
+    if (pattern.test(organization.name)) {
+      points += 20
+      bestReference = 'Name'
+    }
 
     organization.points = points
+    organization.bestReference = bestReference
     return organization
   },
 
@@ -98,13 +121,13 @@ export default React.createClass({
       var searchedOrganizations = this.state.searchOrganizations
         .map(organization => {return this.searchOrganization(organization, pattern)})
       var filteredOrganizations = searchedOrganizations.filter(organization => organization.points > 0)
-      var sortedOrganizations = filteredOrganizations.sort(this.orgsByPoints)
+      var sortedOrganizations = filteredOrganizations.sort(this.orgsByDistance)
       this.setState({searchOrganizations: sortedOrganizations})
     } else if (e.target.value.length <= this.state.searchLength && this.state.searchLength !== 0) {
       var searchedOrganizations = this.props.organizations
         .map(organization => {return this.searchOrganization(organization, pattern)})
       var filteredOrganizations = searchedOrganizations.filter(organization => organization.points > 0)
-      var sortedOrganizations = filteredOrganizations.sort(this.orgsByPoints)
+      var sortedOrganizations = filteredOrganizations.sort(this.orgsByDistance)
       this.setState({searchOrganizations: sortedOrganizations})
     } else if (e.target.value.length !== 0 && this.state.searchLength === 0) {
       this.setState({
@@ -136,16 +159,18 @@ export default React.createClass({
 
     return (
       <Link expandable={true} to={redeemLink} params={{organizationId: deal.organizationId, dealId: deal.id}}>
-       <Card expandable={true} style={{width: '95%', margin: '2% auto', padding: '2% 2% 2% 0', boxShadow: '0 1px 6px rgba(246, 115, 133, 0.35), 0 1px 4px rgba(246, 115, 133, 0.41)', border: '1px solid #F67385'}}>
-        <div style={{width: '100%', height: '100%'}}>
-          <CardText style={{float:'left', width:'80%', padding: '1% 0 1% 2%'}}>
-            {deal.dealText} 
-          </CardText>
-          <FloatingActionButton  mini={true} style={{float:'right', top: '30px'}}>
-              <span style={{color: 'white'}}>
-                {redemptionsLeft}
-              </span>
-            </FloatingActionButton>
+         <Card expandable={true} style={{width: '95%', margin: '2% auto', padding: '1% 2% 1% 2%', boxShadow: '0 1px 6px rgba(246, 115, 133, 0.35), 0 1px 4px rgba(246, 115, 133, 0.41)', border: '1px solid #F67385'}}>
+          <div style={{width: '100%', height: '100%'}}>
+            <CardTitle style={{float:'left', width:'80%', lineHeight: '24px', padding: 0}} 
+              title=<span style={{fontSize: '20px', color: 'black', fontFamily: 'sans-serif', fontWeight: '500', verticalAlign: 'middle'}} >{deal.dealText}</span> 
+              subtitle={'$' + deal.dollarValue + ' savings per use'}/>
+            <div style={{padding: '3px 0 0 0'}}>
+              <FloatingActionButton  mini={true} style={{float:'right', top: '30px'}}>
+                <span style={{color: 'white'}}>
+                  {redemptionsLeft}
+                </span>
+              </FloatingActionButton>
+            </div>
           </div>
         </Card>
       </Link>
@@ -165,16 +190,19 @@ export default React.createClass({
     var deals = this.props.deals
     .filter(deal => deal.organizationId === organization.id)
     .map(this.renderDealLink)
-    var locations = this.props.locations
-      .filter(address => address.organizationId === organization.id)
+    var locations = organization.locations
       .map(this.renderLocationList)
+
+    var subtitle = organization.distance 
+      ? (Math.round(organization.distance * 10) / 10).toString() + ' miles'
+      : organization.category
 
     return (
 
       <Card initiallyExpanded={false}>
       <CardHeader
         title={organization.name}
-        subtitle={organization.category}
+        subtitle={subtitle}
         avatar={organization.logoURL}
         showExpandableButton={true}/>
           <CardText expandable={true} ><span style={{fontWeight: 'bold'}}>Description: </span>{organization.description}</CardText>
@@ -191,7 +219,8 @@ export default React.createClass({
     )
   },
 
-  render () {
+  render() {
+  injectTapEventPlugin()
     var user = this.props.user
     var organizations = this.props.organizations
 
@@ -203,7 +232,7 @@ export default React.createClass({
       var headerImage = require('../../../../assets/img/' + category.toLowerCase() + '.jpg')
       return (
         <Card style={{ margin: '15px auto'}}>
-        <CardMedia className='overlay_title' overlay={<div style={{margin: '0 0 8px 8px', fontSize: '36px', color: 'rgb(246, 115, 133)', display: 'block', lineHeight: '36px'}}> {category}</div>}>
+        <CardMedia className='overlay_title' overlay={<div style={{margin: '0 0 8px 8px', fontSize: '36px', color: '#FF7070', display: 'block', lineHeight: '36px'}}> {category}</div>}>
           <img src={headerImage} />
         </CardMedia>
 
@@ -216,7 +245,7 @@ export default React.createClass({
       return (
         <div>
           <div className='content_box-header'>
-            Wow! We Dont Have Any Businesses
+            
           </div>
           <p>Have a business that to offer deal with us?</p>
           <p><Link to='create_organization'>Sign Up Here!</Link></p>
@@ -224,8 +253,19 @@ export default React.createClass({
       )
     }
 
-    var searchReturnOrganizations = this.state.searchOrganizations
-      .map(this.renderOrganizationLink)
+    var searchReturnOrganizations = ['Name', 'Deals', 'Keywords', 'Description', 'Locations'].map((bestReference, index) => {
+      var organizationLinks = this.state.searchOrganizations 
+        .filter(organization => organization.bestReference === bestReference)
+        .map(this.renderOrganizationLink)
+      if (organizationLinks.length === 0) {return}
+      return (
+        <Card style={{backgroundColor:'#FF7070', margin: '15px auto'}}>
+        <CardTitle 
+          title=<span style={{fontSize: '30px', margin: '0px 0 0 15px', color: 'white', display: 'block', lineHeight: '20px'}} >{bestReference}</span> />
+          {organizationLinks}
+        </Card>
+      )
+    })
 
     var cardFill
 

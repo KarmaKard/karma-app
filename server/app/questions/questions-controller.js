@@ -4,7 +4,7 @@ import * as auth from '../common/middleware/authentication'
 
 export var router = express.Router()
 
-router.get('/', auth.token, list)
+router.get('/', list)
 export async function list (req, res, next) {
   try {
     var questions = await questionsTable.index()

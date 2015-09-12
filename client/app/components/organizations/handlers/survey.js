@@ -1,4 +1,5 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import Survey from '../survey'
 
 export default React.createClass({
@@ -22,7 +23,8 @@ export default React.createClass({
     }
   },
 
-  render () {
+  render() {
+  injectTapEventPlugin()
     var userId = this.props.user.id
     var surveyResponses = this.props.surveyResponses.filter(function (response) {
       if (response.userId === userId) {return response}

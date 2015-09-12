@@ -13,7 +13,7 @@ export async function getOrganizationsByUserId (userId){
 
 export async function getById (id){
   return r.table('organizations')
-    .get(organization.id)
+    .get(id)
     .run()
 }
 

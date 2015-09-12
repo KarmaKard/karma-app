@@ -1,4 +1,5 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { RouteHandler } from 'react-router'
 
 export default React.createClass({
@@ -7,21 +8,19 @@ export default React.createClass({
     user: React.PropTypes.object.isRequired
    },
 
-  render () {
-    var organization = this.props.organization || {}
+  render() {
+  injectTapEventPlugin()
+    var organization = this.props.organization
     var user = this.props.user
     var editDisabled = false
-
-    if (organization.status === 'pending' || user.roles.superadmin) {
-      editDisabled = true
-    }
-
+    // if (organization.status === 'pending' ) {
+    //   editDisabled = true
+    // }
     return (
       <div>
           <RouteHandler
             {... this.props}
-            editDisabled={editDisabled}
-            organization = {organization}/>
+            editDisabled={editDisabled}/>
       </div>
     )
   }

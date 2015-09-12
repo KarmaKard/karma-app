@@ -1,4 +1,5 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import Register from '../register'
 import { flux } from '../../../main'
 
@@ -49,7 +50,8 @@ export default React.createClass({
     flux.actions.users.create(user)
   },
 
-  render () {
+  render() {
+  injectTapEventPlugin()
     return (
       <div>
         <div className='page_header'>

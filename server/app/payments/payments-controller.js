@@ -9,7 +9,7 @@ import { encode as encodeToken } from '../common/services/token'
 
 export var router = express.Router()
 
-router.get('/', auth.token, list)
+router.get('/', list)
 export async function list (req, res, next) {
   try {
     var payments = await paymentsTable.index()
@@ -48,9 +48,11 @@ export async function createPayment (req, res, next) {
 
     payment = await paymentsTable.insert(payment)
     if (req.body.fundraiserMemberId) {
-      var fundraiserMember = await fundraiserMembersTable.getById(fundraiserMemberId)
-      fundraiserMember.raisedAmount = fundraiserMember.raisedAmount + payment.amount
-      var returnedFundraiserMember = await fundraiserMembersTable.update(fundraiserMember)
+      var fundraiserMember = await fundraiserMembersTable.getById(req.body.fundraiserMemberId)
+      if(fundraiserMember) {
+         fundraiserMember.raisedAmount = fundraiserMember.raisedAmount + payment.amount
+        var returnedFundraiserMember = await fundraiserMembersTable.update(fundraiserMember)
+      }
     }
     
     var donation = {
@@ -66,6 +68,39 @@ export async function createPayment (req, res, next) {
 
     res.status(201).json({payment, token: encodeToken(user), donation})
 
+  } catch (e) {
+    next(e)
+  }
+}
+
+router.put('/', activatePayment)
+export async function activatePayment (req, res, next) {
+  try {
+    console.log('request', req)
+    var user = req.body.user
+    var paymentId = req.body.paymentId
+    var payment = await paymentsTable.getById(paymentId)
+    if (payment.activationStatus === 'inactive') {
+      user.roles.customer = 'paid'
+      user = await usersTable.update(user)
+      var activePayment = await paymentsTable.activate(paymentId, user.id)
+      var donationsUpdated = await donationsTable.updateByPaymentActivation(paymentId, user.id)
+      var newValueDonations = donationsUpdated.map(donation => {
+      return donation.new_val
+    })
+      console.log('in activation', newValueDonations)
+      console.log('return', activePayment)
+      res.status(201).json({
+        token: encodeToken(user),
+        payment: activePayment,
+        donations: newValueDonations
+      })
+      return
+    }
+    res.json({
+      token: encodeToken(user),
+      message: 'This payment has already been activated.'
+    })
   } catch (e) {
     next(e)
   }

@@ -1,4 +1,5 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { flux } from '../../../main'
 import WizardType from './wizard_type'
 import WizardName from './wizard_name'
@@ -18,7 +19,6 @@ export default React.createClass({
 
   getInitialState () {
     return {
-      usersStoreState: flux.stores.users.getState(),
       type: null,
       name: null,
       category: null,
@@ -29,22 +29,10 @@ export default React.createClass({
     }
   },
 
-  storeChange () {
-    this.setState(this.getStoreState())
-  },
-
-  getStoreState () {
-    return {
-      usersStoreState: flux.stores.users.getState()
-    }
-  },
+  
 
   componentWillMount () {
-    flux.stores.users.addListener('change', this.storeChange)
-  },
-
-  componentWillUnmount () {
-    flux.stores.users.removeListener('change', this.storeChange)
+    this.props.showBackLink(true)
   },
 
   childContextTypes: {
@@ -109,7 +97,8 @@ export default React.createClass({
         category: this.state.category,
         logoURL: this.state.logoURL,
         status: this.state.status,
-        keywords: []
+        keywords: [],
+        locations: []
       }
 
       flux.actions.organizations.create(organization, router, 'organization_user_manages')
@@ -132,23 +121,26 @@ export default React.createClass({
   },
 
   getWizardComponent () {
-    if (!this.state.usersStoreState.currentUser) {
+    if (!this.props.user) {
       return this.state.isExistingUser
-      ? <LoginForm loginErrors={this.state.usersStoreState.loginErrors} setFbLogin={this.setFbLogin} userLogin={this.userLogin} />
+      ? <LoginForm loginErrors={this.props.loginErrors} setFbLogin={this.setFbLogin} userLogin={this.userLogin} />
       : <Registration setFbLogin={this.setFbLogin} userLogin={this.userLogin} createUser={this.createUser}/>
     }
 
     switch (this.state.step) {
       case 1:
-        return (<WizardType
+        return (<WizardType 
+                {... this.props}
                 setType={this.setType}/>)
       case 2:
         return (<WizardName
+                {... this.props}
                 orgType={this.state.type}
                 setName={this.setName}/>)
       case 3:
         if (this.state.type === 'business') {
           return (<WizardCategory
+                  {... this.props}
                   setCategory={this.setCategory}/>)
         } // Fall-through to next if fundraiser
         break
@@ -159,24 +151,18 @@ export default React.createClass({
     }
   },
 
-  render () {
-    var user = this.state.usersStoreState.currentUser
+  render() {
+  injectTapEventPlugin()
+    var user = this.props.user
     var toggleButtonText
     if (!user) {
       toggleButtonText = this.state.isExistingUser ? 'New User?' : 'Existing User?'
     }
 
     return (
-      <AppCanvas>
-        <AppBar
-          title="KarmaKard"
-          iconElementRight={<FlatButton onClick={this.toggleForm} label={toggleButtonText} />}
-          iconElementLeft={<IconButton onFocus={this.goBack} iconClassName="material-icons" >keyboard_arrow_left</IconButton>}/>
-        <div className='spacer'></div>
-        <Card className='main_card'>
-          {this.getWizardComponent()}
-        </Card>
-      </AppCanvas>
+      <div>
+        {this.getWizardComponent()}
+      </div>
     )
   }
 })

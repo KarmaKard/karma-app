@@ -1,8 +1,8 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { Link } from 'react-router'
 import mui from 'material-ui'
 import {AppBar, FlatButton, Card, IconButton, FontIcon, MenuItem, LeftNav} from 'material-ui'
-var injectTapEventPlugin = require("react-tap-event-plugin")
 var ThemeManager = new mui.Styles.ThemeManager()
 
 export default React.createClass({
@@ -102,9 +102,9 @@ export default React.createClass({
     this.context.router.transitionTo(payload.route, payload.params)
   },
 
-  render () {
+  render() {
+    injectTapEventPlugin ()
 
-    injectTapEventPlugin()
     return (
         <LeftNav 
           ref="leftNav" 

@@ -1,12 +1,20 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { RouteHandler } from 'react-router'
 import mui from 'material-ui'
+import LoginForm from '../login_form'
 import {AppCanvas, AppBar, Tabs, Tab, FlatButton, FontIcon, UserSideBar, CardTitle, Card, CardMedia, CardHeader, TextField, List, ListItem, RaisedButton, CardText, FloatingActionButton} from 'material-ui'
 var ThemeManager = new mui.Styles.ThemeManager()
 
 export default React.createClass({
   contextTypes: {
     router: React.PropTypes.func
+  },
+
+  getInitialState () {
+    return {
+      isExistingUser: true
+    }
   },
 
   childContextTypes: {
@@ -27,11 +35,53 @@ export default React.createClass({
     this.context.router.transitionTo('deals')
   },
 
-  render () {
+  setFbLogin (user) {
+    flux.actions.users.facebookLogin(user)
+  },
+
+  userLogin (email, password) {
+    console.log(email, password)
+    flux.actions.users.login(email, password)
+  },
+
+  createUser (user) {
+    flux.actions.users.create(user)
+  },
+
+  render() {
+  injectTapEventPlugin()
+    var user = this.props.user
+    var totalSaved
+    if (user) {
+      if (this.props.redemptions.length > 0) {
+        totalSaved = this.props.redemptions
+          .filter(redemption => redemption.userId === user.id)
+          .map(redemption => {
+            return redemption.amountSaved
+          })
+        if (totalSaved.length > 0) {
+          totalSaved = totalSaved.reduce(function (previousValue, currentValue, index) {
+            return previousValue + currentValue
+          })
+        } else {
+          totalSaved = 0
+        }
+      }
+    } else {
+      return (<div>
+                <Card className='main_card'>
+                  <LoginForm setFbLogin={this.setFbLogin} userLogin={this.userLogin} />
+                </Card>
+              </div>
+              ) 
+    }
+
+    var form = <RouteHandler totalSaved={totalSaved} {... this.props}/>
+
     return (
       <div>
         <Card className='main_card'>
-          <RouteHandler {... this.props}/>
+          {form}
         </Card>
         <div className='spacer'></div>
         <Tabs initialSelectedIndex={1} style={{bottom:-4, position: 'fixed', width: '100%'}}>

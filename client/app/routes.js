@@ -1,6 +1,7 @@
 import {Route, RouteHandler, DefaultRoute} from 'react-router'
 import { flux } from './main'
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import mui from 'material-ui'
 import {AppCanvas, AppBar, Tabs, Tab, FlatButton, FontIcon, UserSideBar, CardTitle, Card, CardMedia, CardHeader, TextField, List, ListItem, RaisedButton, CardText, FloatingActionButton} from 'material-ui'
 import Login from './components/users/handlers/login'
@@ -14,6 +15,7 @@ import Account from './components/users/handlers/account'
 import User from './components/users/handlers/user'
 import AddFundraiserMember from './components/users/handlers/add_fundraiser_member'
 import ActivateDonation from './components/users/handlers/activate_donation'
+import ActivateSharedCard from './components/users/handlers/activate_shared_card'
 
 import Fundraisers from './components/organizations/handlers/fundraisers'
 import FundraiserList from './components/organizations/handlers/fundraiser_list'
@@ -56,12 +58,12 @@ var App = React.createClass({
     },
     getInitialState () {
       flux.actions.organizations.getOrganizations()
-      flux.actions.organizations.getLocations()
       flux.actions.deals.getRedemptions()
       flux.actions.deals.getDeals()
       flux.actions.deals.getSurveyQuestions()
       flux.actions.deals.getSurveyResponses()
       flux.actions.users.getFundraiserMembers()
+      flux.actions.users.getPayments()
       flux.actions.users.getDonations()
       var storeState = this.getStoreState()
       return storeState
@@ -124,37 +126,39 @@ var App = React.createClass({
       return this.compare(a.name, b.name)
     },
 
-    paymentsByDate (a, b) {
+    sortByDate (a, b) {
       return a.createdAt - b.createdAt
     },
 
     render () {
+       console.log(this.state.latitude, this.state.longitude)
       var organizations = this.state.organizations.organizations || []
-      var currentUser = this.state.user.currentUser || {}
+      var currentUser = this.state.user.currentUser
       var payments = this.state.user.payments || []
       var fundraiserMembers = this.state.user.fundraiserMembers || []
       var deals = this.state.deals.deals || []
-      var locations = this.state.organizations.locations || []
       var redemptions = this.state.deals.redemptions || []
       var surveyQuestions = this.state.deals.surveyQuestions || []
       var surveyResponses = this.state.deals.surveyResponses || []
       var donations = this.state.user.donations || []
-      console.log('surveyQuestions', surveyQuestions)
+      var loginErrors = this.state.user.loginErrors || {}
+      var userLocation = this.state.user.userLocation || {}
       organizations = organizations.sort(this.sortByName)
-      payments = payments.sort(this.paymentsByDate)
+      console.log('sorted!',organizations)
+      payments = payments.sort(this.sortByDate)
+      donations = donations.sort(this.sortByDate)
       fundraiserMembers = fundraiserMembers.sort(this.sortByName)
-
+      console.log(organizations)
       var backLink
       if (this.state.showBackLink) {
-        backLink = (<div><button onClick={this.goBack} className='back_button'><i className='fa fa-chevron-left fa-2x'></i></button><div className='header_center karmatitle'>KarmaKard</div></div>)
+        backLink = (<button onClick={this.goBack} className='karma_button'><i style={{color: 'white'}} className="material-icons md-48 md-light">keyboard_arrow_left</i></button>)
       } else {
-        backLink = (<div className='header_left karmatitle'>KarmaKard</div>)
+        backLink = (<div style={{width: 80 + 'px'}}></div>)
       }
-      console.log(this.state.tabStatus)
       return (
         <AppCanvas>
           <AppBar
-            showMenuIconButton={false}
+            showMenuIconButton={true}
             title=<div className='karmatitle'></div>
             iconElementRight={<div style={{width: 80 + 'px'}}></div>}
             iconElementLeft={backLink}/>
@@ -162,7 +166,6 @@ var App = React.createClass({
           <RouteHandler
             organizations={organizations}
             user={currentUser}
-            locations={locations}
             deals={deals}
             redemptions={redemptions}
             surveyQuestions={surveyQuestions}
@@ -170,7 +173,9 @@ var App = React.createClass({
             payments={payments}
             fundraiserMembers={fundraiserMembers}
             donations={donations}
-            showBackLink={this.showBackLink}/>
+            showBackLink={this.showBackLink}
+            userLocation={userLocation}
+            loginErrors={loginErrors}/>
 
         </AppCanvas>
       )
@@ -184,10 +189,10 @@ export default (
     <Route name='join_options' handler={JoinOptions} path='join_options' />
     <Route name='register' handler={Register} path='register' />
     <Route name='add_fundraiser_member' handler={AddFundraiserMember} path='add_fundraiser_member/:fundraiserMemberId' />
-    <Route name='activate_donation' handler={ActivateDonation} path='activate/:donationId' />
+    <Route name='activate_donation' handler={ActivateDonation} path='activate/:paymentId' />
+    <Route name='activate_shared_card' handler={ActivateSharedCard} path='activate/shared/:donationId' />
     <Route name='password_reset' handler={PasswordReset} path='reset' />
     <Route name='new_password' handler={NewPassword} path='new_password/:passwordResetId' />
-    <Route name='create_organization' handler={NewOrganization} path='organization' />
     <Route name='list_deals' handler={DealList} path='deals' />
 
     <Route name='fundraisers' handler={Fundraisers} path='fundraisers' >
@@ -197,7 +202,8 @@ export default (
       <Route name='fundraiser_list_deals' handler={DealList} path='deals' />
     </Route>
 
-    <Route name='fundraiser_join' handler={FundraiserJoin} path='join/:fundraiserMemberId' />
+    <Route name='fundraiser_join' handler={FundraiserJoin} path='join/:fundraiserName' />
+    <Route name='fundraiser_member_join' handler={FundraiserJoin} path='join/:fundraiserName/:fundraiserMemberName' />
 
     <Route name='deals' handler={Deals} path='dealcards' >
       <DefaultRoute handler={ShowCategories} />
@@ -215,6 +221,7 @@ export default (
 
     <Route name='organizations' handler={Organizations} path='organizations'>
       <DefaultRoute handler={OrganizationsUserManages} />
+      <Route name='create_organization' handler={NewOrganization} path='new' />
       <Route name='member_fundraisers' handler={MemberFundraisers} path='fundraisers' />
       <Route name='organization' handler={Organization} path=':organizationId' >
         <DefaultRoute handler={ShowOrganizationProfile} />

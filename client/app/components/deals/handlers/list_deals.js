@@ -1,29 +1,22 @@
 import React from 'react'
-import { flux } from '../../../main'
-import DealList from '../list_deals'
+import injectTapEventPlugin from 'react-tap-event-plugin'
+import { RouteHandler } from 'react-router'
 import mui from 'material-ui'
-import {AppCanvas, AppBar, IconButton, Card, CardTitle} from 'material-ui'
-
+import DealList from '../list_deals'
+import { Link } from 'react-router'
+import {AppCanvas, AppBar, Tabs, Tab, FlatButton, FontIcon, UserSideBar, CardTitle, Card, CardMedia, CardHeader, TextField, List, ListItem, RaisedButton, CardText, FloatingActionButton} from 'material-ui'
 var ThemeManager = new mui.Styles.ThemeManager()
 
 export default React.createClass({
-
-  getInitialState () {
-    var storeState = this.getStoreState()
-    flux.actions.organizations.getOrganizations()
-    flux.actions.deals.getDeals()
-    return storeState
+  contextTypes: {
+    router: React.PropTypes.func
   },
 
-  storeChange () {
-    this.setState(this.getStoreState())
-  },
-
-  getStoreState () {
-    return {
-      organizationsStoreState: flux.stores.organizations.getState(),
-      dealsStoreState: flux.stores.deals.getState()
-    }
+  propTypes: {
+    organizations: React.PropTypes.array.isRequired,
+    donations: React.PropTypes.array.isRequired,
+    deals: React.PropTypes.array.isRequired,
+    userLocation: React.PropTypes.object.isRequired
   },
 
   childContextTypes: {
@@ -36,86 +29,101 @@ export default React.createClass({
     }
   },
 
-  componentWillMount () {
-    flux.stores.organizations.addListener('change', this.storeChange)
-    flux.stores.deals.addListener('change', this.storeChange)
+  sortByDistance (a, b) {
+    return a.distance - b.distance
   },
 
-  componentWillUnmount () {
-    flux.stores.organizations.removeListener('change', this.storeChange)
-    flux.stores.deals.removeListener('change', this.storeChange)
+  getDistance(lat1, lon1, lat2, lon2) {
+    var p = 0.017453292519943295;    // Math.PI / 180
+    var c = Math.cos;
+    var a = 0.5 - c((lat2 - lat1) * p)/2 + 
+            c(lat1 * p) * c(lat2 * p) * 
+            (1 - c((lon2 - lon1) * p))/2;
+
+    return 12742 * Math.asin(Math.sqrt(a)) * 0.621371; // 2 * R; R = 6371 km
   },
 
-  getDealInformation (organizations, deals) {
-    var organizationMap = new Map()
-    var totalSavings = 0
-    organizations.forEach(function (organization, i) {
-      organizationMap.set(organization.id, organizations[i])
-      organizationMap.get(organization.id).deals = []
-    })
-
-    deals.forEach(function (deal, t) {
-      if (organizationMap.has(deal.organizationId)) {
-        if (isNaN(deal.dollarValue)) {
-          return
-        } else if (deal.limit === 'unlimited') {
-          totalSavings += parseFloat(deal.dollarValue)
-        } else if (deal.type === 'Free') {
-          totalSavings += parseFloat(deal.dollarValue) * parseInt(deal.limit, 10)
-        } else {
-          totalSavings += parseFloat(deal.dollarValue) * parseInt(deal.limit, 10)
-        }
-        organizationMap.get(deal.organizationId).deals.push(deal)
+  sortByLocation (organizations, latitude, longitude) {
+    var orgsWithDistances = []
+    for (var i = 0; i < organizations.length; i++) {
+      var distance = 0
+      var leastDistance = 100000000
+      for (var t = 0; t < organizations[i].locations.length; t++) {
+        var orgLat = organizations[i].locations[t].latitude
+        var orgLng = organizations[i].locations[t].longitude
+        distance = this.getDistance(latitude, longitude, orgLat, orgLng)
+        leastDistance = distance < leastDistance ? distance : leastDistance
       }
+      organizations[i].distance = leastDistance
+      orgsWithDistances.push(organizations[i])
+    }
+    console.log('bout to sort', orgsWithDistances)
+    return orgsWithDistances.sort(this.sortByDistance)
+  },
+
+  render  () {
+    console.log(this.props)
+    var businesses = this.props.organizations.filter(organization => organization.type === 'business')
+    var organizations = this.props.userLocation.latitude && this.props.userLocation.longitude
+        ? this.sortByLocation(businesses, this.props.userLocation.latitude, this.props.userLocation.longitude) 
+        : businesses
+    var donations = this.props.donations
+    var orgWithQualifiedDeals = new Map()
+    var cardCounter = 0
+    var deals = this.props.deals.filter(deal => {
+      var dealLimitCounter = 0
+      donations.forEach(donation => {
+        Date.now() < (parseInt(deal.endDate, 10) - 31557600000)
+        orgWithQualifiedDeals.set(deal.organizationId, deal.organizationId)
+      })
+
+      if (deal.limit !== 'unlimited') {
+        deal.totalLimit = deal.limit * dealLimitCounter
+      }
+
+      return deal
     })
-    var organizationArray = []
-    for (var [id, organization] of organizationMap) {
-      organizationArray.push(organization)
+
+    var activeCategories = []
+    var activeOrganizations = []
+    var uniqueCategory = new Map()
+    for (var i in organizations) {
+      if (organizations[i].category !== 'undefined' &&
+        organizations[i].category !== 'fundraiser' &&
+        organizations[i].status === 'active' &&
+        orgWithQualifiedDeals.has(organizations[i].id)) {
+        activeOrganizations.push(organizations[i])
+        if (!uniqueCategory.has(organizations[i].category)) {
+          activeCategories.push(organizations[i].category)
+          uniqueCategory.set(organizations[i].category, organizations[i].category)
+        }
+      }
     }
-    console.log(organizationArray)
-    var sortedOrganizationArray = organizationArray.sort(this.orgsByAlphabet)
-    console.log(sortedOrganizationArray)
-    return [totalSavings, sortedOrganizationArray]
-  },
 
-  goBack () {
-    history.back()
-  },
+    var fundraiserNameToken = window.localStorage.getItem('fundraiser-token')
+    var memberNameToken = window.localStorage.getItem('member-token')
+    var fundraiserLink 
 
-  compare (a, b) {
-    if (a < b) {
-      return -1
+    if (fundraiserNameToken && memberNameToken) {
+      fundraiserLink = <Link to = 'fundraiser_join' params={{fundraiserName: fundraiserNameToken, fundraiserMemberName: memberNameToken}}><RaisedButton fullWidth={true} style={{margin:'10px 0 0 0'}} label='Donate' /></Link>
+    } else if (fundraiserNameToken && !memberNameToken) {
+      fundraiserLink = <Link to = 'fundraiser_join' params={{fundraiserName: fundraiserNameToken}}><RaisedButton fullWidth={true} style={{margin:'10px 0 0 0'}} label='Donate' /></Link>
+    } else {
+      fundraiserLink = <Link to = 'fundraisers'><RaisedButton fullWidth={true} style={{margin:'10px 0 0 0'}} label='Donate to a local Fundraiser' /></Link>
     }
-    if (a > b) {
-      return 1
-    }
-    return 0
-  },
 
-  orgsByAlphabet (a, b) {
-    console.log(this.compare(a.name, b.name))
-    return this.compare(a.name, b.name)
-  },
-  render () {
-    var organizations = this.state.organizationsStoreState.organizations
-      .filter(org => org.type === 'business' && org.status === 'active')
-    var deals = this.state.dealsStoreState.deals
-    var dealInfo = this.getDealInformation(organizations, deals)
-    var totalSavings = dealInfo[0]
-    var dealsByOrganization = dealInfo[1]
-
+    var form = <DealList {... this.props}
+                  organizations={activeOrganizations}
+                  categories={activeCategories}
+                  deals={deals} />
     return (
-      <AppCanvas>
-        <AppBar
-          title=<div className='karmatitle'></div>
-          iconElementLeft={<button onFocus={this.goBack} ><i className="material-icons md-48 back_button">keyboard_arrow_left</i></button>}
-          iconElementRight={<div style={{width: 72 + 'px'}}></div>} />
-        <div className='spacer'></div>
-        <Card className='main_card'>
-          <CardTitle title='Deals by business' subtitle={'Savings Value: $' + totalSavings}/>
-          <DealList dealsByOrganization={dealsByOrganization} totalSavings={totalSavings} />
-        </Card>
-      </AppCanvas>
+      <Card className='main_card'>
+        <CardTitle title='KarmaKard'/>
+        {fundraiserLink}
+        {form}
+        {fundraiserLink}
+      </Card>
     )
   }
 })
+

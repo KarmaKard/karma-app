@@ -1,4 +1,9 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
+import mui from 'material-ui'
+import {AppBar, IconButton, CardTitle, FlatButton, RaisedButton, TextField} from 'material-ui'
+
+var ThemeManager = new mui.Styles.ThemeManager()
 
 export default React.createClass({
   contextTypes: {

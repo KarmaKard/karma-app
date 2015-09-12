@@ -1,4 +1,5 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import UserSideBar from '../../users/user_sidebar'
 import MemberFundraisers from '../member_fundraisers'
 
@@ -26,7 +27,8 @@ export default React.createClass({
     this.setState({toggleState})
   },
 
-  render () {
+  render() {
+  injectTapEventPlugin()
     var user = this.props.user
     var organizations = this.props.organizations
     var membershipMap = new Map()

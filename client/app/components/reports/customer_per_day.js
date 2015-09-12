@@ -1,28 +1,29 @@
 import React from 'react'
-import { LineChart } from 'react-d3'
+import injectTapEventPlugin from 'react-tap-event-plugin'
+import { BarChart } from 'react-d3'
+
 
 export default React.createClass({
   render(){
-
-    var lineData = [
-      {
-        name: "Total Customers",
-        values: [ { x: 0, y: 20 }, { x: 10, y: 30 },{ x: 20, y: 10 },{ x: 30, y: 35 },{ x: 40, y: 15 },{ x: 50, y: 57 } ]
-      },
-      {
-        name: "First Time Customers",
-        values: [ { x: 0, y: 7 }, { x: 10, y: 5 },{ x: 20, y: 9 },{ x: 30, y: 21 },{ x: 40, y: 28 },{ x: 50, y: 35 } ]
+    var barData = [
+      { 
+        "name": "Series A",
+        "values": [
+          { "x": 1, "y": 91}
+        ]
       }
     ]
-
     return (
       <div className="custperday-chart">
-        <LineChart
-          legend={true}
-          data={lineData}
+        <h3>Times Each Customer Has Redeemed Deal</h3>
+        <BarChart
+          data={barData}
           width={500}
-          height={300}
-          title="Line Chart"/>
+          height={200}
+          fill={'#3182bd'}
+          title='Bar Chart'
+          yAxisLabel='Label'
+          xAxisLabel='Value'/>
       </div>
     )
   }

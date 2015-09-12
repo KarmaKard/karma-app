@@ -1,4 +1,5 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { flux } from '../../../main'
 import NewUser from '../new_user'
 import mui from 'material-ui'
@@ -80,18 +81,11 @@ export default React.createClass({
     flux.actions.users.login(email, password, router, 'deals')
   },
 
-  render () {
+  render() {
+  injectTapEventPlugin()
 
     return (
-      <AppCanvas>
-        <AppBar
-          showMenuIconButton={true}
-          title=<div className='karmatitle'></div>
-          iconElementRight={<FlatButton onClick={this.toggleForm} label='Existing User?' />} 
-          iconElementLeft={<div style={{width: 103 + 'px'}}></div>} />
-          <div className='spacer'></div>
-          <NewUser />
-      </AppCanvas>
+      <NewUser />
     )
   }
 })

@@ -1,10 +1,18 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import mui from 'material-ui'
 import {AppBar, IconButton, CardTitle, FlatButton, RaisedButton, TextField} from 'material-ui'
 
 var ThemeManager = new mui.Styles.ThemeManager()
 
 export default React.createClass({
+
+  getInitialState () {
+    return {
+      nameErrorMessage: null,
+      buttonDisabled: true
+    }
+  },
 
   nextClicked (e) {
     var name = this.state.name
@@ -24,12 +32,22 @@ export default React.createClass({
   },
 
   setName (e) {
+    var sameNameOrganizations = this.props.organizations.filter(organization => 
+      organization.name.toLowerCase().replace(/ /g,'') === e.target.value.toLowerCase().replace(/ /g,''))
+
+    if (sameNameOrganizations.length > 0) {
+      this.setState({nameErrorMessage: 'Must have unique name', buttonDisabled: true})
+      return
+    }
     this.setState({
+      buttonDisabled: false,
+      nameErrorMessage: null,
       name: e.target.value
     })
   },
 
-  render () {
+  render() {
+  injectTapEventPlugin()
     var orgType = this.props.orgType
     var capitalizedType = orgType === 'business' ? 'Business' : 'Fundraiser'
     return (
@@ -38,12 +56,17 @@ export default React.createClass({
         <form>
           <TextField
             fullWidth={true}
-            onBlur={this.setName}
+            onChange={this.setName}
             hintText='ABC Co.'
-            floatingLabelText={capitalizedType + ' Name'} />
-          <RaisedButton onClick={this.nextClicked} style={{margin: '10px auto'}} fullWidth={true}>
-            Next
-          </RaisedButton>
+            floatingLabelText={capitalizedType + ' Name'} 
+            errorText={this.state.nameErrorMessage}/>
+          <RaisedButton 
+            onClick={this.nextClicked} 
+            label='Next' 
+            disabled={this.state.buttonDisabled} 
+            style={{margin: '10px auto'}} 
+            fullWidth={true} />
+
         </form>
       </div>
     )

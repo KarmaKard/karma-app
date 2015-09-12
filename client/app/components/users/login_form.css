@@ -23,21 +23,3 @@
   box-shadow: rgba(58, 87, 145, 0.57647) 0px 1px 8px, rgba(58, 87, 145, 0.6647) 0px 1px 4px !important;
   background-color: white !important;
 }
-
-@media only screen and (max-width: 840px) {
-
-  .main_card {
-    width: 95%;
-    padding: 2% 2% 5% 2%;
-    margin: 20px auto;
-  }
-}
-
- @media only screen and (min-width: 841px) {
-
-  .main_card {
-    width: 50%;
-    margin: 20px auto;
-    padding: 2%;
-  }
-}

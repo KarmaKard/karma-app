@@ -85,11 +85,14 @@ export default class DealActions extends Actions {
     }).catch(this.createError)
   }
 
-  createSurveyResponse(newSurveyResponse){
+  createSurveyResponse(newSurveyResponse, router, whereTo){
     var p = KarmaAPI.postNewSurveyResponse(newSurveyResponse)
     p.then(surveyResponse => {
       if(surveyResponse) {
         this.dispatch('createSurveyResponse', surveyResponse)
+        return router 
+          ? router.transitionTo(whereTo)
+          : null
       }
       else {
         console.warn('No Responses Returned')

@@ -1,4 +1,5 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { Link } from 'react-router'
 import mui from 'material-ui'
 import {AppBar, AppCanvas, IconButton, Card, CardTitle, List, ListItem, Avatar} from 'material-ui'
@@ -11,6 +12,10 @@ export default React.createClass({
     activeFundraisers: React.PropTypes.array.isRequired
   },
 
+  componentWillMount() {
+    this.props.showBackLink(true)
+  },
+  
   contextTypes: {
     router: React.PropTypes.func
   },
@@ -25,11 +30,9 @@ export default React.createClass({
     }
   },
 
-  goBack () {
-    history.back()
-  },
 
-  render () {
+  render() {
+  injectTapEventPlugin()
     var activeFundraisers = this.props.activeFundraisers
     if (activeFundraisers.length === 0) {
       return (
@@ -60,12 +63,6 @@ export default React.createClass({
     })
 
     return (
-      <AppCanvas>
-        <AppBar
-          title=<div className='karmatitle'></div>
-          iconElementLeft={<button onFocus={this.goBack} ><i className="material-icons md-48 back_button">keyboard_arrow_left</i></button>}
-          iconElementRight={<div style={{width: 72 + 'px'}}></div>} />
-        <div className='spacer'></div>
         <Card className='main_card'>
           <CardTitle
             title="Select a fundraiser" />
@@ -73,7 +70,6 @@ export default React.createClass({
             {fundraiserLinks}
           </List>
         </Card>
-      </AppCanvas>
     )
   }
 })

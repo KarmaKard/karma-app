@@ -1,4 +1,5 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import mui from 'material-ui'
 import {AppBar, IconButton, CardTitle, FlatButton, RaisedButton} from 'material-ui'
 
@@ -29,16 +30,15 @@ export default React.createClass({
     this.props.setType(type.toLowerCase())
   },
 
-  render () {
+  render() {
+  injectTapEventPlugin()
     return (
       <div>
         <CardTitle title='Oganization Type:' />
-          <RaisedButton onClick={this.didChooseBusiness} style={{margin: '10px auto'}} fullWidth={true}>
-            Business
-          </RaisedButton>
-          <RaisedButton onClick={this.didChooseFundraiser} style={{margin: '10px auto'}} fullWidth={true}>
-            Fundraiser
-          </RaisedButton>
+          <RaisedButton label='Business' onClick={this.didChooseBusiness} style={{margin: '10px auto'}} fullWidth={true} />
+
+          <RaisedButton label='Fundraiser' onClick={this.didChooseFundraiser} style={{margin: '10px auto'}} fullWidth={true} />
+
       </div>
     )
   }

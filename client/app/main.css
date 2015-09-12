@@ -68,7 +68,7 @@ button {
 
 .spacer {
   width: 100%;
-  height: 60px;
+  height: 50px;
 }
 
 .footer_menu {
@@ -171,9 +171,8 @@ button {
   text-decoration: none;
   color:#828282;
   float:right;
-  margin: 5px 10px;
-  background: white;
-  border: 1px solid white;
+  background: rgba(255, 255, 255, 0);
+  border: none;
 }
 
 
@@ -189,9 +188,6 @@ input[disabled] {
 }
 
 hr { 
-  display: block;
-  color: gray;
-  margin-bottom: 25px;
   margin-left: auto;
   margin-right: auto;
   border: rgba(240, 81, 103, 0.72) solid thin;

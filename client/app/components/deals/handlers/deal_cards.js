@@ -1,4 +1,5 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { flux } from '../../../main'
 import { Link } from 'react-router'
 import { formatDateString } from '../../../utils/transforms'
@@ -23,7 +24,8 @@ export default React.createClass({
     flux.actions.users.logout(router)
   },
 
-  render () {
+  render() {
+  injectTapEventPlugin()
     var payments = this.props.payments
     var user = this.props.user
     var now = Date.now()

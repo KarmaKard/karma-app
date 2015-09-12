@@ -1,4 +1,5 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import NonAdminManageOrganizations from '../organizations/nonadmin_organizations_manager'
 import DealCards from '../deals/deal_cards'
 import MemberFundraisers from '../organizations/member_fundraisers'
@@ -33,6 +34,13 @@ export default React.createClass({
     organizations: React.PropTypes.array.isRequired,
     donations: React.PropTypes.array.isRequired,
     fundraiserMembers: React.PropTypes.array.isRequired
+  },
+
+  componentWillMount () {
+    console.log(this.props)
+    if(this.props.showBackLink) {
+      this.props.showBackLink(false)
+    }
   },
 
   componentDidMount () {
@@ -74,10 +82,11 @@ export default React.createClass({
     this.fbAsyncInit()
   },
 
-  render () {
+  render() {
+  injectTapEventPlugin()
     var organizations = this.props.organizations
     var user = this.props.user
-    var donations = this.props.donations.filter(donation => donation.userId === user.id)
+    var donations = this.props.donations.filter(donation => donation.userId === user.id && donation.activationStatus === 'active')
     var membershipMap = new Map()
     console.log('user_account', this.props.fundraiserMembers, user.id)
     var fundraiserMembers = this.props.fundraiserMembers
@@ -97,16 +106,16 @@ export default React.createClass({
       <div>
         <CardTitle title='Account'/>
         <Card style={{margin: '15px auto'}}>
-        <CardMedia className='overlay_title' overlay={<div style={{margin: '0 0 8px 8px', fontSize: '36px', color: 'rgb(246, 115, 133)', display: 'block', lineHeight: '36px'}}> Your Deal Cards</div>}>
+        <CardMedia className='overlay_title' overlay={<div style={{margin: '0 0 8px 8px', fontSize: '36px', color: '#FF7070', display: 'block', lineHeight: '36px'}}> Your Deal Cards</div>}>
           <img src={dealCardPicture} />
         </CardMedia>
           <CardTitle
             style={{margin: '0 0 0 10px', fontSize:'16px', padding:'10px 0 !important'}}
             subtitle={'Total Savings Value: $' + this.props.totalSaved}/>
-          <DealCards donations={donations} user={user} totalSaved={this.props.totalSaved} />
+          <DealCards {... this.props} donations={donations} user={user} totalSaved={this.props.totalSaved} />
         </Card>
-        <Card style={{padding: '3% 0', margin: '15px auto'}}>
-        <CardMedia className='overlay_title' overlay={<div style={{margin: '0 0 8px 8px', fontSize: '36px', color: 'rgb(246, 115, 133)', display: 'block', lineHeight: '36px'}}> Your Organizations</div>}>
+        <Card style={{margin: '15px auto'}}>
+        <CardMedia className='overlay_title' overlay={<div style={{margin: '0 0 8px 8px', fontSize: '36px', color: '#FF7070', display: 'block', lineHeight: '36px'}}> Your Organizations</div>}>
           <img src={organizationsPicture} />
         </CardMedia>
           <NonAdminManageOrganizations organizations={organizations} user={user} />

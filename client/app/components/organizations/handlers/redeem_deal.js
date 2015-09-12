@@ -1,4 +1,5 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { flux } from '../../../main'
 import { RouteHandler } from 'react-router'
 
@@ -23,7 +24,8 @@ export default React.createClass({
     this.setState({amountSaved})
   },
 
-  render () {
+  render() {
+  injectTapEventPlugin()
     console.log(this.props.surveyQuestions)
     return (
       <div>

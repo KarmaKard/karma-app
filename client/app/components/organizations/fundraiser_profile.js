@@ -1,4 +1,5 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { Link } from 'react-router'
 import mui from 'material-ui'
 import {AppBar, AppCanvas, IconButton, Card, CardHeader, CardTitle, Avatar, CardText, RaisedButton} from 'material-ui'
@@ -9,6 +10,10 @@ export default React.createClass({
 
   propTypes: {
     fundraiser: React.PropTypes.object.isRequired
+  },
+
+  componenetWillMount () {
+    this.props.showBackLink(true)
   },
 
   contextTypes: {
@@ -29,16 +34,11 @@ export default React.createClass({
     history.back()
   },
 
-  render () {
+  render() {
+  injectTapEventPlugin()
     var fundraiser = this.props.fundraiser
     var logo = fundraiser.logoURL ? <Avatar style={{height: '60px', width: '60px', padding: 0}} src={fundraiser.logoURL} /> : <i className="material-icons">photo</i>
     return (
-      <AppCanvas>
-        <AppBar
-          title=<div className='karmatitle'></div>
-          iconElementLeft={<button onFocus={this.goBack} ><i className="material-icons md-48 back_button">keyboard_arrow_left</i></button>}
-          iconElementRight={<div style={{width: 72 + 'px'}}></div>} />
-        <div className='spacer'></div>
         <Card className='main_card'>
           <CardHeader
             avatar={logo}
@@ -55,7 +55,6 @@ export default React.createClass({
           <Link to='list_deals'><RaisedButton fullWidth={true} style={{margin:'10px 0 20px 0'}} label='Check out the list of deals' /></Link>
           <Link to='donate' params={{organizationId: fundraiser.id}}><RaisedButton fullWidth={true} label='Donate Now' /></Link>
         </Card>
-      </AppCanvas>
     )
   }
 })

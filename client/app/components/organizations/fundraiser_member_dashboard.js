@@ -1,6 +1,10 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { flux } from '../../main'
 import { Link } from 'react-router'
+import mui from 'material-ui'
+import {AppCanvas, AppBar, Tabs, Tab, FlatButton, FontIcon, UserSideBar, CardTitle, Card, CardMedia, CardHeader, TextField, List, ListItem, RaisedButton, CardText, FloatingActionButton} from 'material-ui'
+var ThemeManager = new mui.Styles.ThemeManager()
 
 export default React.createClass({
   propTypes: {
@@ -8,6 +12,16 @@ export default React.createClass({
     user: React.PropTypes.object.isRequired,
     fundraiserMember: React.PropTypes.object.isRequired,
     showBackLink: React.PropTypes.func.isRequired
+  },
+
+  childContextTypes: {
+    muiTheme: React.PropTypes.object
+  },
+
+  getChildContext () {
+    return {
+      muiTheme: ThemeManager.getCurrentTheme()
+    }
   },
 
   contextTypes: {
@@ -24,12 +38,13 @@ export default React.createClass({
   },
 
   copyToClipboard () {
-    var text = location.protocol + '//' + location.hostname + 
-      (location.port && ':' + location.port) + '/#' + '/join/' + this.props.fundraiserMember.id
+    var subDirectory = location.hostname.charAt(0)
+    var text = subDirectory + '.kkrd.org/' + this.props.organization.name.toLowerCase().replace(/ /g,'') + '/' + this.props.fundraiserMember.name.toLowerCase().replace(/ /g,'')
     window.prompt('Copy to clipboard', text)
   },
 
-  render () {
+  render() {
+  injectTapEventPlugin()
     var organization = this.props.organization
     var fundraiserMember = this.props.fundraiserMember
     if (!organization || !fundraiserMember) {
@@ -42,11 +57,10 @@ export default React.createClass({
     }
     return (
       <div>
-        <div className='organization_information' >
-          <div className='content_box-header'>{organization.name}</div>
-        </div>
-        <button className='karma_button' onClick={this.copyToClipboard}>Shareable Link</button>
-        <Link to='inperson' params={{organizationId: organization.id}}><button className='karma_button'>In Person Sale</button></Link>
+        <CardTitle title={organization.name} />
+        <CardText>Put some text here that will instruct fundraisers how to most effectively fundraise. May even include a instructional video?</CardText>
+        <RaisedButton style={{margin: '15px 0'}} label="Shareable Link" fullWidth={true} onClick={this.copyToClipboard} />
+        <Link to='inperson' params={{organizationId: organization.id}}><RaisedButton style={{margin: '15px 0'}} label="In Person Sale" fullWidth={true} /></Link>
       </div>
     )
   }

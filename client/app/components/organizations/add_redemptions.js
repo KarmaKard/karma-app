@@ -1,14 +1,32 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { Link } from 'react-router'
+import mui from 'material-ui'
+import {AppBar, AppCanvas, IconButton, FlatButton, Card, CardHeader, CardTitle, Avatar, CardText, RaisedButton} from 'material-ui'
+
+var ThemeManager = new mui.Styles.ThemeManager()
 
 export default React.createClass({
 
-  render () {
+  childContextTypes: {
+    muiTheme: React.PropTypes.object
+  },
+
+  getChildContext () {
+    return {
+      muiTheme: ThemeManager.getCurrentTheme()
+    }
+  },
+
+  render() {
+  injectTapEventPlugin()
     return (
       <div>
-        <div className='content_box-header'>Want More?</div>
-        <p>By donating again, you will get another card with new deals being updated each quarter! </p>
-        <Link to='list_deals'><button className='karma_button'>Check Here To See What You Will Get If You Donate Again!</button></Link>
+        <CardTitle title="Want More?" />
+        <CardText>Donate to a local Fundraiser to get access to more deals. See the available deals below. </CardText>
+        <Link to='list_deals'>
+          <RaisedButton fullWidth={true} label="Donate for more deals!" />
+        </Link>
       </div>
     )
   }

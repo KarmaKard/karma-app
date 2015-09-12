@@ -7,6 +7,7 @@ import * as auth from '../common/middleware/authentication'
 import { encode as encodeToken } from '../common/services/token'
 import * as mailgun from '../common/services/mailgun'
 import config from 'config'
+import * as geocoder from '../common/services/geocoder'
 
 export var router = express.Router()
 
@@ -38,7 +39,7 @@ export async function create (req, res, next) {
   }
 }
 
-router.put('/:orgId', auth.token, validateUpdate, update)
+router.put('/:orgId', auth.token, update)
 export async function update (req, res, next) {
   try {
     var organization = req.body.organization
@@ -107,3 +108,34 @@ export async function confirm (req, res, next) {
     next(e)
   }
 }
+
+router.post('/location', auth.token, createLocation)
+export async function createLocation (req, res, next) {
+  try {
+    console.log(req.body)
+    var organization = await organizationsTable.getById(req.body.location.organizationId)
+    console.log(organization)
+    var locationToSave = req.body.location
+    var address = await geocoder.getGeocode(locationToSave.street, locationToSave.zip)
+    console.log(address)
+    address = address[0]
+    locationToSave.formattedAddress = address.formattedAddress
+    locationToSave.latitude = address.latitude
+    locationToSave.longitude = address.longitude
+    locationToSave.googlePlaceId = address.extra.googlePlaceId
+    locationToSave.neighborhood = address.extra.neighborhood
+    locationToSave.countyLong = address.administrativeLevels.level2long
+    locationToSave.countyShort = address.administrativeLevels.level2short
+    locationToSave.stateLong = address.administrativeLevels.level1long
+    locationToSave.userId = req.user.id
+    organization.locations.push(locationToSave)
+    var updatedOrganization = await organizationsTable.update(organization)
+    console.log(updatedOrganization)
+    res.json({organization: updatedOrganization})
+  } catch (e) {
+    next(e)
+  }
+}
+
+
+

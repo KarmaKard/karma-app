@@ -1,4 +1,5 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { flux } from '../../main'
 import crypto from 'crypto'
 import AvatarEditor from 'react-avatar-editor'
@@ -21,7 +22,9 @@ export default React.createClass({
       img: null,
       croppedImg: "/img/grayicon.png",
       zoom: 1.2,
-      imageType: null
+      imageType: null,
+      buttonDisabled: true,
+      nameErrorMessage: null
     }
   },
 
@@ -40,28 +43,38 @@ export default React.createClass({
     if(this.props.organization.description || this.props.organization.purpose){
       this.setState({
         descriptionCounter: 150 - this.props.organization.description.length,
-        purposeCounter: 150 - this.props.organization.purpose.length
+        purposeCounter: 150 - this.props.organization.purpose.length,
+        purpose: this.props.organization.purpose,
+        description: this.props.organization.description,
+        name: this.props.organization.name,
+        logoURL: this.props.organization.logoURL
       })
     }
     else{
       this.setState({
-          descriptionCounter: 150,
-          purposeCounter: 150
+        descriptionCounter: 150,
+        purposeCounter: 150,
+        purpose: this.props.organization.purpose,
+        description: this.props.organization.description,
+        name: this.props.organization.name,
+        logoURL: this.props.organization.logoURL
       })
     }
   },
 
   nameChange (e) {
-    React.findDOMNode(this.refs.saveButton).style.border="3px solid rgb(242, 29, 29)"
-    this.setState({name: e.target.value})
-  },
+    var sameNameOrganizations = this.props.organizations.filter(organization => 
+      organization.name.toLowerCase().replace(/ /g,'') === e.target.value.toLowerCase().replace(/ /g,''))
 
-  saveProfile(){
-
-    if(React.findDOMNode(this.refs.description).value.length > 150){
-      React.findDOMNode(this.refs.descriptionCharacterCount).style.color="rgb(242, 29, 29)"
+    if (sameNameOrganizations.length > 0) {
+      this.setState({nameErrorMessage: 'Must have unique name', buttonDisabled: true})
       return
     }
+    this.setState({nameErrorMessage: null, name: e.target.value, buttonDisabled: false})
+  },
+
+  saveProfile (){
+
     var name = this.state.name ? this.state.name : this.props.organization.name
     var description = this.state.description ? this.state.description : this.props.organization.description
     var purpose = this.state.purpose ? this.state.purpose : this.props.organization.purpose
@@ -75,17 +88,31 @@ export default React.createClass({
     organization.logoURL = logoURL
 
     this.props.updateOrganization(organization)
-    React.findDOMNode(this.refs.saveButton).style.border="3px solid rgb(75, 187, 44)"
+    this.setState({buttonDisabled: true})
   },
 
   descriptionChange(e){
-    React.findDOMNode(this.refs.saveButton).style.border="3px solid rgb(242, 29, 29)"
-    this.setState({descriptionCounter: 150 - e.target.textLength, description: e.target.value})
+    if ((150 - e.target.value.length) > 20) {
+      this.setState({buttonDisabled: false, descriptionCounter: 150 - e.target.textLength, description: e.target.value, descriptionCounterColor: 'green'})
+    } else if ((150 - e.target.value.length) >= 0 && (150 - e.target.textLength) <= 20){
+      this.setState({buttonDisabled: false, descriptionCounter: 150 - e.target.textLength, description: e.target.value, descriptionCounterColor: 'orange'}) 
+    } else {
+      e.target.value = e.target.value.substring(0, e.target.value.length - 1)
+      this.setState({descriptionCounter: 'only 150 characters', descriptionCounterColor: 'red'}) 
+    }
+    
   },
 
   purposeChange(e){
-    React.findDOMNode(this.refs.saveButton).style.border="3px solid rgb(242, 29, 29)"
-    this.setState({purposeCounter: 150 - e.target.textLength, purpose: e.target.value})
+    if ((150 - e.target.value.length) > 20) {
+      this.setState({buttonDisabled: false, purposeCounter: 150 - e.target.textLength, purpose: e.target.value, purposeCounterColor: 'green'})
+    } else if ((150 - e.target.value.length) >= 0 && (150 - e.target.textLength) <= 20){
+      this.setState({buttonDisabled: false, purposeCounter: 150 - e.target.textLength, purpose: e.target.value, purposeCounterColor: 'orange'}) 
+    } else {
+      e.target.value = e.target.value.substring(0, e.target.value.length - 1)
+      this.setState({purposeCounter: 'only 150 characters', purposeCounterColor: 'red'}) 
+    }
+    
   },
 
   handleFileChange (dataURI) {
@@ -95,6 +122,7 @@ export default React.createClass({
       cropperOpen: true
     })
   },
+
   handleCrop (dataURI) {
 
     var imageData = this.refs.cropper.getImage().replace(/^data:image\/(png|jpg);base64,/, "")
@@ -149,8 +177,9 @@ export default React.createClass({
       console.log('here')
       if (xhr.readyState != 4)  { return; }
       var uploadedImageURL = 'https://karmakard.s3.amazonaws.com/' + key
-      React.findDOMNode(this.refs.saveButton).style.border="3px solid rgb(242, 29, 29)"
+      
       this.setState({
+        buttonDisabled: false,
         cropperOpen: false,
         img: null,
         croppedImg:uploadedImageURL,
@@ -209,12 +238,14 @@ export default React.createClass({
     this.setState({zoom: value})
   },
 
-  render () {
+  render() {
+  injectTapEventPlugin()
     var avatarCropper
     if(this.state.cropperOpen) {
       avatarCropper = (
-        <div>
+       <Card style={{padding: '2%', margin: '0 auto'}}>
           <AvatarEditor
+            style={{width:'100%', height:'100%'}}
             ref='cropper'
             image={this.state.img}
             width={250}
@@ -223,30 +254,27 @@ export default React.createClass({
             color={[255, 255, 255, 0.6]} // RGBA 
             scale={this.state.zoom} />
           <Slider name="slider1" onChange={this.zoom} defaultValue={1.2} max={2} min={1} />
-          <RaisedButton label = 'Crop Image' onClick={this.handleCrop} />
-        </div>
+          <RaisedButton fullWidth={true} label = 'Crop Image' onClick={this.handleCrop} />
+        </Card>
       )
     } else {
       var logoURL = this.props.organization.logoURL ? this.props.organization.logoURL : this.state.croppedImg
       avatarCropper = (
-        <div className="avatar-photo">
+         <Card style={{margin:'0 auto'}} className="avatar-photo">
           <input ref="in" type="file" accept="image/*" onChange={this.handleFile} />
           <div className="avatar-edit">
-            <span>Click to Pick Avatar</span>
+            <span>Logo Upload</span>
             <i className="fa fa-camera"></i>
           </div>
           <img src={logoURL} />
-        </div>
+        </Card>
       )
     }
 
     return (
       <div>
-        <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-        <CardTitle title='Profile'/>
           {avatarCropper}
-          <span className="label-span">Name</span>
+
           <TextField
             ref="name"
             onChange={this.nameChange}
@@ -254,27 +282,39 @@ export default React.createClass({
             hintText="XYZ Company"
             disabled={this.props.editDisabled}
             fullWidth={true}
-            floatingLabelText="Floating Label Text" />
+            errorText={this.state.nameErrorMessage}
+            floatingLabelText="Fundraiser Name" />
+        
+          <TextField
+            hintText="Write fundraiser description here."
+            floatingLabelText="Fundraiser Description"
+            fullWidth={true}
+            onChange={this.descriptionChange} 
+            value= {this.state.description}
+            disabled={this.props.editDisabled}
+            multiLine={true}
+            errorText={this.state.descriptionCounter}
+            errorStyle={{color:this.state.descriptionCounterColor}}/>
 
-          <span className="label-span">Fundraiser Description</span>
-          <span ref="descriptionCharacterCount" className="profile_description-counter">{this.state.descriptionCounter}</span>
-          <textarea
-            ref="description"
-            className="karma_input"
-            placeholder="Write fundraiser description here."
-            onChange={this.descriptionChange}
-            defaultValue={this.props.organization.description} 
-            disabled={this.props.editDisabled}/>
-          <span className="label-span">Fundraiser Purpose</span>
-          <span ref="purposeCharacterCount" className="profile_description-counter">{this.state.purposeCounter}</span>
-          <textarea
-            ref="purpose"
-            className="karma_input"
-            placeholder="Write fundraiser purpose here."
-            onChange={this.purposeChange}
-            defaultValue={this.props.organization.purpose} 
-            disabled={this.props.editDisabled}/>
-          <button ref="saveButton" className="karma_button" onClick={this.saveProfile} disabled={this.props.editDisabled}>Save</button>
+          <TextField
+            hintText="Write fundraiser purpose here."
+            floatingLabelText="Fundraiser Purpose"
+            fullWidth={true}
+            onChange={this.purposeChange} 
+            value= {this.state.purpose}
+            disabled={this.props.editDisabled}
+            multiLine={true}
+            errorText={this.state.purposeCounter}
+            errorStyle={{color:this.state.purposeCounterColor}}/>
+
+          <RaisedButton 
+            disabled={this.state.buttonDisabled}
+            fullWidth={true} 
+            onClick={this.saveProfile} 
+            label="Save Profile" 
+            style={{
+              margin: '15px 0 0 0'
+            }}/>
       </div>
     )
   }

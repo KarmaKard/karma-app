@@ -21,6 +21,9 @@ module.exports = {
   mailgun: {
     key: process.env.MAILGUN_KEY
   },
+  googleGeocoder: {
+    key: process.env.GOOGLE_GEOCODE
+  },
   domain: {
     base_url: process.env.BASE_URL
   },

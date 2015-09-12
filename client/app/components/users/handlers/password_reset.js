@@ -1,4 +1,5 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { flux } from '../../../main'
 import PasswordReset from '../password_reset'
 import {Link} from 'react-router'
@@ -31,7 +32,8 @@ export default React.createClass({
     history.back()
   },
 
-  render () {
+  render() {
+  injectTapEventPlugin()
     return (
       <div>
         <div className='page_header'>

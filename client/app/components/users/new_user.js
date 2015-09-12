@@ -1,4 +1,5 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { flux } from '../../main'
 import { Link } from 'react-router'
 import mui from 'material-ui'
@@ -33,6 +34,12 @@ export default React.createClass({
         <CardTitle title='Have an Organization?'/>
         <CardText>If you have a business or a fundraiser, you can signup and apply for your organization to be a part of Karmakard!</CardText>
         <Link to='create_organization'><RaisedButton fullWidth={true} style={{margin:'10px 0 0 0'}} label='Register your organization' /></Link>
+        </Card>
+        <Card
+          className='main_card'>
+        <CardTitle title='Already a User?'/>
+        <CardText>Click here to go to the login page.</CardText>
+        <Link to='login'><RaisedButton fullWidth={true} style={{margin:'10px 0 0 0'}} label='Login' /></Link>
         </Card>
       </div>
     )

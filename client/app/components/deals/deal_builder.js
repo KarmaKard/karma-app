@@ -1,10 +1,15 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { flux } from '../../main'
 import FreeDeal from './free_deal'
 import BXXDeal from './bxx_deal'
 import BXYDeal from './bxy_deal'
 import POXDeal from './pox_deal'
 import DOXDeal from './dox_deal'
+import mui from 'material-ui'
+
+import {CardTitle, CircularProgress, SelectField, Card, CardMedia, Avatar, CardHeader, TextField, List, ListItem, RaisedButton, CardText, FloatingActionButton} from 'material-ui'
+var ThemeManager = new mui.Styles.ThemeManager()
 
 export default React.createClass({
 
@@ -14,7 +19,10 @@ export default React.createClass({
       changedDeals: [],
       activePeriod: this.getActivePeriod(),
       newDealPlaceholder: null,
-      editDisabled: false
+      editDisabled: false, 
+      buttonDisabled: true,
+      dealOptionSelected:null,
+      displayAddDropdown: false
     }
   },
 
@@ -32,6 +40,24 @@ export default React.createClass({
     this.setState({editDisabled})
   },
 
+  childContextTypes: {
+    muiTheme: React.PropTypes.object
+  },
+
+  getChildContext () {
+    return {
+      muiTheme: ThemeManager.getCurrentTheme()
+    }
+  },
+
+  showDropDown () {
+    this.setState({displayAddDropdown: true})
+  },
+
+  hideDropDown () {
+    this.setState({displayAddDropdown: false, buttonDisabled: true, newDealPlaceholder: null, dealOptionSelected: null })
+  },
+
   saveDeal(deal){
     if(!deal.id){
       deal.organizationId = this.props.organization.id
@@ -39,24 +65,24 @@ export default React.createClass({
       for (let i in newDeals) {
         if (newDeals[i].dealText === deal.dealText) {
           newDeals.splice(i, 1, deal)
-          this.setState({newDeals})
+          this.setState({newDeals, buttonDisabled: false})
           return
         }
       }
       newDeals = this.state.newDeals.concat(deal)
-      this.setState({newDeals})
+      this.setState({newDeals, buttonDisabled: false})
     }
     else{
       var changedDeals = this.state.changedDeals
       for (let i in changedDeals) {
         if (changedDeals[i].id === deal.id) {
           changedDeals.splice(i, 1, deal)
-          this.setState({changedDeals})
+          this.setState({changedDeals, buttonDisabled: false})
           return
         }
       }
       changedDeals = this.state.changedDeals.concat(deal)
-      this.setState({changedDeals})
+      this.setState({changedDeals, buttonDisabled: false})
     }
   },
 
@@ -80,28 +106,25 @@ export default React.createClass({
     }
   },
 
-  newDeal(){
-    var newDeal = {type: React.findDOMNode(this.refs.dealTypeSelect).value}
+  newDeal(e){
+    var newDeal = {type: e.target.value}
     var newDealPlaceholder = this.lookupDeal(newDeal,0)
-    this.setState({newDealPlaceholder})
+    this.setState({newDealPlaceholder, dealOptionSelected: e.target.value})
   },
 
   changeMade(){
-    React.findDOMNode(this.refs.saveButton).style.border="3px solid rgb(242, 29, 29)"
+    this.setState({buttonDisabled: false})
   },
 
   saveClicked(){
     if(this.state.newDeals.length > 0){
-      this.setState({newDealPlaceholder:null})
+      this.setState({newDealPlaceholder:null, buttonDisabled: true, displayAddDropdown: false})
       flux.actions.deals.create(this.state.newDeals)
       this.setState({newDeals: []})
-      React.findDOMNode(this.refs.dealTypeSelect).value = "add"
-      React.findDOMNode(this.refs.saveButton).style.border="3px solid rgb(75, 187, 44)"
     }
     if(this.state.changedDeals.length > 0){
       flux.actions.deals.updateDeals(this.state.changedDeals)
-      this.setState({changedDeals: []})
-      React.findDOMNode(this.refs.saveButton).style.border="3px solid rgb(75, 187, 44)"
+      this.setState({changedDeals: [], buttonDisabled: true, displayAddDropdown: false})
     }
 
   },
@@ -140,42 +163,82 @@ export default React.createClass({
     return activePeriod
   },
 
+  selectDealType (e) {
+
+  },
+
   render() {
+    
+  
     if(!this.props.deals){
       return <span>No Deals</span>
     }
-    
+    console.log(this.state.buttonDisabled)
     var deals = this.props.deals
     var dealsComponents = deals.map(this.lookupDeal)
+    var saveButton = this.state.buttonDisabled
+      ? null
+      : (<RaisedButton 
+          fullWidth={true} 
+          onClick={this.saveClicked} 
+          disabled={this.state.buttonDisabled}
+          hidden={this.state.editDisabled} 
+          label="Save" 
+          style={{
+            margin: '15px 0 0 0'
+          }}/>)
 
+    var options = [
+      {value: "Free", text: 'Free'},
+      {value: "BXX", text: 'Buy X get X Free'},
+      {value: "BXY", text: 'Buy X get Y Free'},
+      {value: "DOX", text: 'Dollars off X'},
+      {value: "POX", text: 'Percentage off X'}
+    ]
+
+    var displayAddDropdown = !this.state.displayAddDropdown
+      ? (<RaisedButton 
+          expandable={true}
+          fullWidth={true} 
+          onClick={this.showDropDown} 
+          disabled={this.props.editDisabled}
+          label="Add Deal" 
+          style={{
+            margin: '15px 0 0 0'
+          }}/>)
+      : (
+          <SelectField
+            expandable={true}
+            value={this.state.dealOptionSelected}
+            hintText="Select Deal Type"
+            onChange={this.newDeal}
+            floatingLabelText="Select Deal Type"
+            valueMember="value"
+            displayMember="text"
+            fullWidth={true}
+            menuItems={options} 
+            disabled={this.state.editDisabled}/>
+        )
+    var cancelButton = this.state.displayAddDropdown
+      ? <RaisedButton 
+          expandable={true}
+          fullWidth={true} 
+          onClick={this.hideDropDown} 
+          disabled={this.props.editDisabled}
+          label="Cancel" 
+          style={{
+            margin: '15px 0 0 0'
+          }}/>
+      : null
+    console.log('display add dropdwon', this.state.displayAddDropdown)
     return (
       <div>
-        <div className="content_box-header">
-          Deals
-        </div>
-        One free deal and one or more paid deal(s) are required
+        <CardText>*One free deal and one or more paid deal(s) are required</CardText>
         {dealsComponents}
-        <select 
-          ref="dealTypeSelect" 
-          onChange={this.newDeal} 
-          defaultValue="add" 
-          className="karma_select"
-          disabled={this.state.editDisabled}>
-          <option value="add">Add Another Deal</option>
-          <option value="Free">Free</option>
-          <option value="BXX">Buy X get X Free</option>
-          <option value="BXY">Buy X get Y Free</option>
-          <option value="DOX">Dollars off X</option>
-          <option value="POX">Percentage off X</option>
-        </select>
+        {displayAddDropdown}
         <div ref="addDealPlaceholder">{this.state.newDealPlaceholder}</div>
-        <button 
-          ref="saveButton" 
-          className="karma_button" 
-          hidden={this.state.editDisabled} 
-          onClick={this.saveClicked}>
-            Save
-        </button>
+        {saveButton}
+        {cancelButton}
       </div>  
     )
   }

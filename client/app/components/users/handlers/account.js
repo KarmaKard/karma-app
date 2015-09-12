@@ -1,4 +1,5 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import UserAccount from '../user_account'
 
 export default React.createClass({
@@ -10,9 +11,11 @@ export default React.createClass({
     fundraiserMembers: React.PropTypes.array.isRequired
   },
 
-  render () {
-    console.log('account fundraiserMembers', this.props.fundraiserMembers)
-    return <UserAccount user={this.props.user}
+  render() {
+  injectTapEventPlugin()
+    return <UserAccount 
+      {... this.props}
+      user={this.props.user}
       donations={this.props.donations}
       organizations={this.props.organizations}
       totalSaved={this.props.totalSaved} 

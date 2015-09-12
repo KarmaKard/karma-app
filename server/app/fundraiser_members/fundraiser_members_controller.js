@@ -2,6 +2,7 @@ import express from 'express'
 import * as organizationsTable from '../organizations/organizations-table'
 import * as usersTable from '../users/users-table'
 import * as dealsTable from '../deals/deals-table'
+import * as emailTemplates from '../common/email_templates/templates'
 import * as fundraiserMembersTable from './fundraiser_members_table'
 import * as auth from '../common/middleware/authentication'
 import * as mailgun from '../common/services/mailgun'
@@ -29,22 +30,35 @@ export async function create (req, res, next) {
       return res.status(201).json({fundraiserMember})
     }
 
+    var mailgunResponse
     var url = config.domain.base_url + '/#/add_fundraiser_member/' + fundraiserMember.id
-    var data = {
-      from: 'KarmaKard Fundraising <fundraising@karmakard.org>',
-      to: req.body.newMember.email,
-      subject: req.body.organization.name + ' has added you',
-      text: 'Hello ' + req.body.newMember.name + ', ' + req.body.organization.name +
+    res.status(201).json({fundraiserMember})
+    var emailTemplate = await emailTemplates.addFundraiserMember(req.body.newMember, req.body.organization, url)
+    premailer.prepare({html: emailTemplate }, async function(err, email) {
+      var mailcomposer = new MailComposer()
+      await mailcomposer.setMessageOption({
+        from: 'KarmaKard Fundraising <fundraising@karmakard.org>',
+        to: req.body.newMember.email,
+        subject: req.body.organization.name + ' has added you',
+        body: 'Hello ' + req.body.newMember.name + ', \n' + req.body.organization.name +
         ' has added you as a fundraiser for their team. Go ahead and join by clicking the following link and logging in or registering.' +
-        url
-    }
+        url,
+        html: email.html
+      })
 
-    var mailgunResponse = await mailgun.send(data)
-    if (mailgunResponse) {
-      res.status(201).json({fundraiserMember})
-    } else {
-      res.status(400).send('Was not able to send email to this person.')
-    }
+      mailcomposer.buildMessage(async function(mailBuildError, messageSource) {
+        try {
+          var dataToSend = {
+              to: req.body.newMember.email,
+              message: messageSource
+          }
+          mailgunResponse = await mailgun.sendMimeMessage(dataToSend)
+          return
+        } catch (e) {
+          next(e)
+        }
+      })
+    })
   } catch (e) {
     next(e)
   }
@@ -75,7 +89,7 @@ export async function tieFundraiserMembershipToUser (req, res, next) {
   }
 }
 
-router.get('/', auth.token, list)
+router.get('/', list)
 export async function list (req, res, next) {
   try {
     var fundraiserMembers = await fundraiserMembersTable.index()
@@ -103,13 +117,10 @@ router.put('/pay', memberOwedUpdate)
 export async function memberOwedUpdate (req, res, next) {
   try {
 
-    var paidMembers = req.body.paidMembers
-    for (var i = 0; i < paidMembers.length; i++) {
-      var returned = await fundraiserMembersTable.updateOwedAmount(paidMembers[i].fundraiserMemberId, paidMembers[i].newOweAmount)
-    }
+    var fundraiserPayment = req.body.fundraiserPayment
+    var fundraiserMember = await fundraiserMembersTable.updateOwedAmount(fundraiserPayment.fundraiserMemberId, fundraiserPayment.newOweAmount)
 
-    var fundraiserMembers = await fundraiserMembersTable.index()
-    res.json({fundraiserMembers})
+    res.json({fundraiserMember})
   } catch (e) {
     next(e)
   }

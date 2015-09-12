@@ -1,4 +1,5 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import AddRedemptions from '../add_redemptions'
 import Router, { Link } from 'react-router'
 

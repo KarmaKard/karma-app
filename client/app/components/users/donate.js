@@ -1,8 +1,9 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import mui from 'material-ui'
 import {Card, CardTitle, CardText, List, ListItem, TextField, SelectField, RaisedButton} from 'material-ui'
 var ThemeManager = new mui.Styles.ThemeManager()
-import injectTapEventPlugin from 'react-tap-event-plugin'
+
 export default React.createClass({
 
   getInitialState () {
@@ -47,12 +48,12 @@ export default React.createClass({
       var info = {
       cardNumber: this.state.ccNumber,
       cvc: this.state.cvvNumber,
-      expirationMonth: this.state.monthValue-1,
+      expirationMonth: this.state.monthValue,
       expirationYear: this.state.yearValue
     }
+    this.setState({cvvNumber: null})
 
       this.props.createToken(info)
-      this.setState({buttonDisabled: false})
     }
   },
 
@@ -239,8 +240,10 @@ export default React.createClass({
     this.enableButton()
   },
 
-  render () {
-    injectTapEventPlugin()
+  render() {
+  injectTapEventPlugin()
+    
+  
 
     var ccIcon = this.state.ccTypeIcon
       ? this.state.ccTypeIcon
