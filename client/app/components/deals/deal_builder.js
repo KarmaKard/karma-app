@@ -167,13 +167,10 @@ export default React.createClass({
 
   },
 
-  render() {
-    
-  
-    if(!this.props.deals){
+  render () {
+    if (!this.props.deals){
       return <span>No Deals</span>
     }
-    console.log(this.state.buttonDisabled)
     var deals = this.props.deals
     var dealsComponents = deals.map(this.lookupDeal)
     var saveButton = this.state.buttonDisabled
@@ -230,7 +227,6 @@ export default React.createClass({
             margin: '15px 0 0 0'
           }}/>
       : null
-    console.log('display add dropdwon', this.state.displayAddDropdown)
     return (
       <div>
         <CardText>*One free deal and one or more paid deal(s) are required</CardText>

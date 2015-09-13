@@ -103,7 +103,6 @@ export default React.createClass({
     var password = this.state.password
 
     flux.actions.users.clearLoginErrors()
-    console.log(email, password)
     this.props.userLogin(email, password)
   },
 
@@ -120,7 +119,7 @@ export default React.createClass({
   },
 
   render() {
-  injectTapEventPlugin()
+    injectTapEventPlugin()
     var loginErrorMessage = this.props.loginErrors.length !== 0
       ? <div className='karma_error'>Incorrect Credentials</div>
       : null

@@ -48,15 +48,12 @@ export default React.createClass({
   },
 
   setEmail (email) {
-    console.log(email, this.state.amount, this.state.paymentType)
-
     if (email && this.state.amount && this.state.paymentType) {
       var donation = {
         email: email,
         amount: this.state.amount,
         paymentType: this.state.paymentType
       }
-      console.log('are we here?')
       flux.actions.users.createInPersonDonation(donation, this.props.fundraiserMember)
       this.setState(
       { email: null, 

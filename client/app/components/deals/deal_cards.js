@@ -72,7 +72,6 @@ export default React.createClass({
               return previousValue + currentValue
             })
           }
-          console.log(organization)
           return (
             <DealCardInfo 
               donationDate={donationDate} 
@@ -87,7 +86,6 @@ export default React.createClass({
         }
         return null
       }.bind(this))
-    console.log('totally', dealCardLinks)
     return (
       <div>
         {dealCardLinks}

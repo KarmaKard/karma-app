@@ -63,7 +63,6 @@ export default React.createClass({
   injectTapEventPlugin()
     var user = this.props.user
     var redemptions = this.props.redemptions
-    console.log(this.props)
     var organizationId = this.context.router.getCurrentParams().organizationId
     var dealId = this.context.router.getCurrentParams().dealId
     var organization = this.props.organizations.filter(organization => organization.id === organizationId)[0]
@@ -73,7 +72,6 @@ export default React.createClass({
       return redemption.dealId === deal.id && redemption.userId === user.id ? redemption : null
     })
     var redemptionsLeft = deal.limit !== 'unlimited' ? deal.totalLimit - amountRedeemed.length : deal.limit
-    console.log(redemptionsLeft)
 
     var locations = organization.locations
       .filter(address => address.organizationId === organization.id)

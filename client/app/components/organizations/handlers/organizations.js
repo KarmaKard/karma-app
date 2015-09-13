@@ -50,7 +50,6 @@ export default React.createClass({
   },
 
   userLogin (email, password) {
-    console.log(email, password)
     flux.actions.users.login(email, password)
   },
 
@@ -59,11 +58,10 @@ export default React.createClass({
   },
 
   render() {
-  injectTapEventPlugin()
+    injectTapEventPlugin()
     var barrierForm = <LoginForm setFbLogin={this.setFbLogin} userLogin={this.userLogin} />
 
     var user = this.props.user
-    console.log(user)
     var form = user
       ? <RouteHandler {... this.props}/>
       : barrierForm

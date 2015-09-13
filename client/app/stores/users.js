@@ -75,7 +75,6 @@ export default class UserStore extends Store {
       currentUser: null,
       authenticated: false
     })
-    
   }
 
   storeCreateError (error) {
@@ -159,12 +158,10 @@ export default class UserStore extends Store {
   }
 
   activatePayment (user, payment, donations) {
-    console.log('trying to activate', user, payment, donations)
     var donationsMap = new Map()
     for (var i = 0; i < donations.length; i++) {
       donationsMap.set([donations[i].id], donations[i])
-    } 
-        console.log(donationsMap)
+    }
     var stateDonations = this.state.donations
     for (var i = 0; i < stateDonations.length; i++) {
       if (donationsMap.has(stateDonations[i].id)) {
@@ -204,7 +201,6 @@ export default class UserStore extends Store {
     this.setState({
       userLocation: locationObject
     })
-    
   }
 
   clearLoginErrors () {

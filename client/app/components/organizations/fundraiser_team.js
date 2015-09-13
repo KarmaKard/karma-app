@@ -157,7 +157,6 @@ export default React.createClass({
       var statusIcon = member.status === 'inactive'
       ? <i className='fa fa-clock-o fa-2x'></i>
       : <i className='fa fa-check fa-2x'></i>
-      console.log(member)
       var payment = member.status === 'active' && member.oweAmount > 0
         ? (
             <div expandable={true}>

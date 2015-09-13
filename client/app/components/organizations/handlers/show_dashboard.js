@@ -22,7 +22,6 @@ export default React.createClass({
   },
 
   render() {
-    console.log("you look cool", this.props.organization)
     if (!this.props.organization) {
       return (<div style={{margin: 'auto', width: '150px'}}><CircularProgress  mode="indeterminate" size={2} /></div>)
     } 

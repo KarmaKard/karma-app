@@ -57,12 +57,10 @@ export default React.createClass({
       organizations[i].distance = leastDistance
       orgsWithDistances.push(organizations[i])
     }
-    console.log('bout to sort', orgsWithDistances)
     return orgsWithDistances.sort(this.sortByDistance)
   },
 
   render  () {
-    console.log(this.props)
     var businesses = this.props.organizations.filter(organization => organization.type === 'business')
     var organizations = this.props.userLocation.latitude && this.props.userLocation.longitude
         ? this.sortByLocation(businesses, this.props.userLocation.latitude, this.props.userLocation.longitude) 

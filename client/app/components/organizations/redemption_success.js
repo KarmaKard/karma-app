@@ -43,7 +43,6 @@ export default React.createClass({
       return redemption.dealId === deal.id && redemption.userId === this.props.user.id ? redemption : null
     }.bind(this))
     var redemptionsLeft = deal.limit !== 'unlimited' ? deal.totalLimit - amountRedeemed.length : deal.limit
-    console.log(redemptionsLeft)
     var amountSaved =(Math.round(this.props.amountSaved * 100)/100).toFixed(2)
     return(
       <div>

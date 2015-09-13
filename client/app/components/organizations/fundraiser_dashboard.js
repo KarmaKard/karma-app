@@ -72,7 +72,6 @@ export default React.createClass({
   injectTapEventPlugin()
     var organization = this.props.organization
     var payments = this.props.payments.filter(payment => payment.fundraiserId === organization.id)
-    console.log(this.props.payments)
     var submitButton
     var message = 'You have some task(s) remaining before your business can be reviewed:'
     var paymentPerDayChart = null
@@ -82,8 +81,6 @@ export default React.createClass({
     !this.props.organization.purpose ||
     !this.props.organization.logoURL ||
     !this.props.organization.name ? 0 : 1
-
-    console.log(fundraiserMembers)
 
     var teamStatus = fundraiserMembers.length === 0 ? 0 : 1
 
@@ -169,7 +166,6 @@ export default React.createClass({
 
       submitButton = null
     }
-    console.log(this.props.organization)
     teamStatus = this.getStatusIcon(teamStatus)
     bankStatus = this.getStatusIcon(bankStatus)
     profileStatus = this.getStatusIcon(profileStatus)

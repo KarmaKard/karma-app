@@ -126,14 +126,11 @@ export async function share (req, res, next) {
     var donation = req.body.donation
     var emailAddress = req.body.email
     var user = req.body.user
-    console.log('are we in hereee', donation, emailAddress, user)
     if (!donation || !emailAddress || !user) {return res.status(404)}
-    console.log('1', donation)
     donation.activationStatus = 'inactive'
     donation.userId = null
 
     var updatedDonation = await donationsTable.update(donation)
-    console.log('2', updatedDonation)
 
     var mailgunResponse
     res.status(201).json({donation: updatedDonation})

@@ -51,7 +51,6 @@ export default React.createClass({
   },
 
   dateChanged (nill, date) {
-    console.log(date)
     this.setState({birthDate:date})
   },
 
@@ -65,7 +64,6 @@ export default React.createClass({
   },
 
   routingNumberChange(e){
-    console.log(124302150)
     if (isNaN(e.target.value) || !/^(?:\d*)$/.test(e.target.value) || e.target.value.length > 9) {
       e.target.value = e.target.value.substring(0, e.target.value.length - 1)
       this.setState({routingNumberErrorMessage: 'Must be 9 whole number digits'})
@@ -80,13 +78,10 @@ export default React.createClass({
   },
 
   tosCheckedChange(e){
-    console.log(e.target.value)
     if(e.target.value) {
-      console.log('it was true')
       this.setState({tosChecked: true, buttonDisabled: false})
       return
     } else {
-      console.log('why')
       this.setState({tosChecked: false, buttonDisabled: false})
     }
     

@@ -112,12 +112,9 @@ export async function confirm (req, res, next) {
 router.post('/location', auth.token, createLocation)
 export async function createLocation (req, res, next) {
   try {
-    console.log(req.body)
     var organization = await organizationsTable.getById(req.body.location.organizationId)
-    console.log(organization)
     var locationToSave = req.body.location
     var address = await geocoder.getGeocode(locationToSave.street, locationToSave.zip)
-    console.log(address)
     address = address[0]
     locationToSave.formattedAddress = address.formattedAddress
     locationToSave.latitude = address.latitude
@@ -130,7 +127,6 @@ export async function createLocation (req, res, next) {
     locationToSave.userId = req.user.id
     organization.locations.push(locationToSave)
     var updatedOrganization = await organizationsTable.update(organization)
-    console.log(updatedOrganization)
     res.json({organization: updatedOrganization})
   } catch (e) {
     next(e)

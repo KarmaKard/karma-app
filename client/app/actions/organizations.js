@@ -50,7 +50,6 @@ export default class OrganizationsActions extends Actions {
     var p = KarmaAPI.saveLocation(location)
     p.then(organization => {
       if (organization) {
-        console.log('We getting anything?',organization)
         this.dispatch('saveLocation', organization)
       }
     }).catch(this.createError)

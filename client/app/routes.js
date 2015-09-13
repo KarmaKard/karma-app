@@ -131,7 +131,6 @@ var App = React.createClass({
     },
 
     render () {
-       console.log(this.state.latitude, this.state.longitude)
       var organizations = this.state.organizations.organizations || []
       var currentUser = this.state.user.currentUser
       var payments = this.state.user.payments || []
@@ -144,11 +143,9 @@ var App = React.createClass({
       var loginErrors = this.state.user.loginErrors || {}
       var userLocation = this.state.user.userLocation || {}
       organizations = organizations.sort(this.sortByName)
-      console.log('sorted!',organizations)
       payments = payments.sort(this.sortByDate)
       donations = donations.sort(this.sortByDate)
       fundraiserMembers = fundraiserMembers.sort(this.sortByName)
-      console.log(organizations)
       var backLink
       if (this.state.showBackLink) {
         backLink = (<button onClick={this.goBack} className='karma_button'><i style={{color: 'white'}} className="material-icons md-48 md-light">keyboard_arrow_left</i></button>)

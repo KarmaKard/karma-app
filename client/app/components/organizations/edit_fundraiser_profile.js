@@ -127,7 +127,6 @@ export default React.createClass({
 
     var imageData = this.refs.cropper.getImage().replace(/^data:image\/(png|jpg);base64,/, "")
     var imageBlob = this.b64toBlob(imageData, this.state.imageType)
-    console.log(imageBlob)
 
     var s3Policy = { "expiration": "2020-12-01T12:00:00.000Z",
             "conditions": [
@@ -145,7 +144,6 @@ export default React.createClass({
   // sign the base64 encoded policy
   var signature = crypto.createHmac("sha1", process.env.AWS_SECRET_KEY_ID)
     .update(new Buffer(base64Policy, "utf-8")).digest("base64");
-  console.log(signature)
 
     var xhr = new XMLHttpRequest()
     var fd = new FormData()
@@ -164,7 +162,6 @@ export default React.createClass({
     xhr.send(fd)
 
     xhr.upload.addEventListener('progress', function(e) {
-      console.log(e)
       if (firstProgressEvent) {
         _this.total += e.total;
       }
@@ -174,7 +171,6 @@ export default React.createClass({
     }, false);
 
     xhr.onreadystatechange = function() {
-      console.log('here')
       if (xhr.readyState != 4)  { return; }
       var uploadedImageURL = 'https://karmakard.s3.amazonaws.com/' + key
       
@@ -219,15 +215,12 @@ export default React.createClass({
   },
 
   handleFile(e) {
-    console.log(e.target.files)
     var reader = new FileReader();
     var file = e.target.files[0];
     this.setState({imageType: file.type})
 
     if (!file) return;
-    console.log(file)
     reader.onload = function(img) {
-      console.log(img.target.result)
       React.findDOMNode(this.refs.in).value = '';
       this.handleFileChange(img.target.result);
     }.bind(this);
@@ -239,7 +232,7 @@ export default React.createClass({
   },
 
   render() {
-  injectTapEventPlugin()
+    injectTapEventPlugin()
     var avatarCropper
     if(this.state.cropperOpen) {
       avatarCropper = (

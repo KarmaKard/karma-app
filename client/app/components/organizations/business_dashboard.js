@@ -64,13 +64,10 @@ export default React.createClass({
     var addLocations, addDeals, addKeywords, submitButton
     var message = "You have some task(s) remaining before your business can be reviewed:"
 
-    console.log('check this out', this.props.organization)
     var profileStatus = !this.props.organization.description ||
       !this.props.organization.logoURL ||
       !this.props.organization.name ||
       !this.props.organization.beginDate ? 0 : 1
-
-    console.log(this.props.organization, profileStatus)
 
     var locationsStatus = this.props.organization.locations.length === 0 ? 0 : 1
 

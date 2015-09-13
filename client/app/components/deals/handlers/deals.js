@@ -49,7 +49,6 @@ export default React.createClass({
   },
 
   userLogin (email, password) {
-    console.log(email, password)
     flux.actions.users.login(email, password)
   },
 
@@ -85,11 +84,11 @@ export default React.createClass({
       organizations[i].distance = leastDistance
       orgsWithDistances.push(organizations[i])
     }
-    console.log('bout to sort', orgsWithDistances)
     return orgsWithDistances.sort(this.sortByDistance)
   },
 
   render  () {
+    injectTapEventPlugin()
     var user = this.props.user
     if (!user) {
       return  (<div>
@@ -152,7 +151,6 @@ export default React.createClass({
         }
       }
     }
-    console.log('surveyQuestions', this.props.surveyQuestions)
 
     var form =  <RouteHandler
                   {... this.props}

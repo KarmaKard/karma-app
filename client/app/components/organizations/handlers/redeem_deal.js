@@ -25,8 +25,7 @@ export default React.createClass({
   },
 
   render() {
-  injectTapEventPlugin()
-    console.log(this.props.surveyQuestions)
+    injectTapEventPlugin()
     return (
       <div>
         <RouteHandler {... this.props} saveAmountSaved={this.saveAmountSaved} amountSaved={this.state.amountSaved}/>

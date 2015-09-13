@@ -27,7 +27,6 @@ export default React.createClass({
   },
 
   renderOrganizationLink (organization, i) {
-    console.log('trying to render organizationLInk', organization)
     return (
         {route: 'organization_user_manages', text: organization.name, params: {organizationId: organization.id}}
     )
@@ -61,8 +60,6 @@ export default React.createClass({
     if (fundraiserMemberLink) {
       menuItems.push(fundraiserMemberLink)
     }
-    console.log('manageLink', manageLink)
-    console.log('orgLinks', organizationLinks)
     if (manageLink) {
       menuItems.push(manageLink)
       menuItems.push({ type: MenuItem.Types.SUBHEADER, text: 'Managed Organizations' })

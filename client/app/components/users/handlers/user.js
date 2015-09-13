@@ -40,7 +40,6 @@ export default React.createClass({
   },
 
   userLogin (email, password) {
-    console.log(email, password)
     flux.actions.users.login(email, password)
   },
 
@@ -49,7 +48,7 @@ export default React.createClass({
   },
 
   render() {
-  injectTapEventPlugin()
+    injectTapEventPlugin()
     var user = this.props.user
     var totalSaved
     if (user) {

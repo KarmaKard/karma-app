@@ -35,11 +35,9 @@ export default React.createClass({
     var {router} = this.context
     var paymentId = this.context.router.getCurrentParams().paymentId
     var user = this.props.user
-    console.log(paymentId, user)
     var payment = this.props.payments.filter(payment => payment.id === paymentId)[0]
       if (payment && payment.activationStatus === 'inactive') {
         if (user) {
-          console.log('call to api')
 
           flux.actions.users.activatePayment(user, paymentId)
         }

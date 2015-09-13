@@ -37,7 +37,6 @@ export default React.createClass({
   },
 
   componentWillMount () {
-    console.log(this.props)
     if(this.props.showBackLink) {
       this.props.showBackLink(false)
     }
@@ -83,12 +82,11 @@ export default React.createClass({
   },
 
   render() {
-  injectTapEventPlugin()
+    injectTapEventPlugin()
     var organizations = this.props.organizations
     var user = this.props.user
     var donations = this.props.donations.filter(donation => donation.userId === user.id && donation.activationStatus === 'active')
     var membershipMap = new Map()
-    console.log('user_account', this.props.fundraiserMembers, user.id)
     var fundraiserMembers = this.props.fundraiserMembers
       .filter(fundraiserMembership => {
         if (fundraiserMembership.userId === user.id) {

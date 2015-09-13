@@ -78,7 +78,6 @@ export default React.createClass({
   },
 
   userLogin (email, password) {
-    console.log(email, password)
     flux.actions.users.login(email, password)
   },
 
@@ -92,14 +91,13 @@ export default React.createClass({
     })
   },
 
-  render() {
-  injectTapEventPlugin()
+  render () {
+    injectTapEventPlugin()
     var barrierForm = this.state.isExistingUser
       ? <LoginForm toggleForm={this.toggleForm} loginErrors={this.props.loginErrors} setFbLogin={this.setFbLogin} userLogin={this.userLogin} />
       : <Register toggleForm={this.toggleForm} setFbLogin={this.setFbLogin} userLogin={this.userLogin} createUser={this.createUser}/>
 
     var user = this.props.user
-    console.log(this.props.user)
     var form = user
       ? <DonateForm user={user} createToken={this.createToken} toggleDisableButton={this.toggleDisableButton} buttonDisabled={this.state.buttonDisabled}/>
       : barrierForm
@@ -109,8 +107,7 @@ export default React.createClass({
       toggleButtonText = this.state.isExistingUser ? 'New User?' : 'Existing User?'
     }
 
-     var memberNameToken = window.localStorage.getItem('member-token')
-     console.log('donate name', memberNameToken)
+    var memberNameToken = window.localStorage.getItem('member-token')
     return (
       <Card className= 'main_card'>
         {form}

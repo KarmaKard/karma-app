@@ -222,29 +222,23 @@ export default React.createClass({
   },
 
   enableButton () {
-    console.log(this.checkFormFields())
     if (this.checkFormFields()) {
       this.setState({buttonDisabled: false})
     }
   },
 
   changeMonth (e) {
-    console.log(e.target.value)
     this.setState({monthValue: e.target.value})
     this.enableButton()
   },
 
   changeYear (e) {
-    console.log(e.target.value)
     this.setState({yearValue: e.target.value})
     this.enableButton()
   },
 
   render() {
-  injectTapEventPlugin()
-    
-  
-
+    injectTapEventPlugin()
     var ccIcon = this.state.ccTypeIcon
       ? this.state.ccTypeIcon
       : ( <div>

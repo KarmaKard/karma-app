@@ -119,7 +119,6 @@ export default React.createClass({
       : this.state.buttonDisabled
 
     var mapString = 'https://maps.googleapis.com/maps/api/staticmap?size=600x300&maptype=roadmap'
-    console.log('LOCATIONS', locationArray)
     for (var i = 0; i < locationArray.length; i++) {
       var coords = '&markers=' + locationArray[i].latitude + ',' + locationArray[i].longitude 
       mapString += coords

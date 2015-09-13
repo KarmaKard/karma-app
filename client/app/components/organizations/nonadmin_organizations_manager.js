@@ -45,18 +45,15 @@ export default React.createClass({
   },
 
   toOrganization (e) {
-    console.log(e.target.innerHTML)
     var organization = this.props.organizations.filter(organization => organization.name === e.target.innerHTML)[0]
-    console.log(organization)
     this.context.router.transitionTo('organization_user_manages', {organizationId: organization.id})
   },
 
   render() {
-  injectTapEventPlugin()
+    injectTapEventPlugin()
     var user = this.props.user
     var organizations = this.props.organizations || []
     var fundraisers, businesses
-    console.log(organizations)
     var businessLinks = organizations
       .filter(org => org.userId === user.id && org.type === 'business')
       .map(this.renderOrganizationLink)

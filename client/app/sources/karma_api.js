@@ -189,7 +189,6 @@ export function postNewOrganization (organization) {
         if (err) {
           return reject(err)
         }
-        console.log('response', res)
         storeToken(res.body.token)
         var response = {
           organization: res.body.organization,
@@ -487,7 +486,6 @@ export function activateDonation (user, donationId) {
         if (err) {
           return reject(err)
         }
-        console.log(res.body)
         storeToken(res.body.token)
         var response = {
           user: tokenToUser(token),
@@ -508,7 +506,6 @@ export function activatePayment (user, paymentId) {
         if (err) {
           return reject(err)
         }
-        console.log(res.body)
         storeToken(res.body.token)
         var response = {
           user: tokenToUser(token),

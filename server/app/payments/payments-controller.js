@@ -76,7 +76,6 @@ export async function createPayment (req, res, next) {
 router.put('/', activatePayment)
 export async function activatePayment (req, res, next) {
   try {
-    console.log('request', req)
     var user = req.body.user
     var paymentId = req.body.paymentId
     var payment = await paymentsTable.getById(paymentId)
@@ -88,8 +87,6 @@ export async function activatePayment (req, res, next) {
       var newValueDonations = donationsUpdated.map(donation => {
       return donation.new_val
     })
-      console.log('in activation', newValueDonations)
-      console.log('return', activePayment)
       res.status(201).json({
         token: encodeToken(user),
         payment: activePayment,
