@@ -1,4 +1,5 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { flux } from '../../main'
 
 export default React.createClass({
@@ -36,7 +37,8 @@ export default React.createClass({
     flux.actions.users.saveNewPassword(router, passwordResetObject)
   },
 
-  render () {
+  render() {
+  injectTapEventPlugin()
     var mismatchPasswords = this.state.mismatchPasswords
       ? <div className='error-message'>Mismatched Passwords</div>
       : null

@@ -1,7 +1,12 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
+import Mui from 'material-ui'
 import { flux } from '../../../main'
 import LoginForm from '../login_form'
-import NewUser from '../new_user'
+import mui from 'material-ui'
+import {AppBar, AppCanvas, FlatButton, Card, IconButton} from 'material-ui'
+
+var ThemeManager = new mui.Styles.ThemeManager()
 
 export default React.createClass({
   contextTypes: {
@@ -17,6 +22,17 @@ export default React.createClass({
       users: flux.stores.users.getState(),
       mismatchPasswords: false,
       isExistingUser: true
+    }
+  },
+
+  childContextTypes: {
+    muiTheme: React.PropTypes.object
+  },
+
+  getChildContext () {
+    
+    return {
+      muiTheme: ThemeManager.getCurrentTheme()
     }
   },
 
@@ -46,16 +62,15 @@ export default React.createClass({
       if (d.getElementById(id)) return
       js = d.createElement(s)
       js.id = id
-      js.src = '//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.4&appId=550843868397495'
+      js.src = '//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.4&appId=549948578487024'
       fjs.parentNode.insertBefore(js, fjs)
     }(document, 'script', 'facebook-jssdk'))
   },
 
   toggleForm (e) {
     e.preventDefault()
-    this.setState({
-      isExistingUser: !this.state.isExistingUser
-    })
+    var {router} = this.context
+    router.transitionTo('join_options')
   },
 
   setFbLogin (user) {
@@ -68,23 +83,16 @@ export default React.createClass({
     flux.actions.users.login(email, password, router, 'deals')
   },
 
-  render () {
-    var form = this.state.isExistingUser
-      ? <LoginForm loginErrors={this.state.users.loginErrors} setFbLogin={this.setFbLogin} userLogin={this.userLogin} />
-      : <NewUser/>
+  render() {
+  injectTapEventPlugin()
 
     var toggleButtonText = this.state.isExistingUser ? 'New User?' : 'Existing User?'
 
     return (
-      <div>
-        <div className= 'page_header'>
-          <div className= 'header_left karmatitle'>KarmaKard</div>
-          <button className='header_right' onClick={this.toggleForm}>{toggleButtonText}</button>
-        </div>
-        <div className= 'guest_box'>
-          {form}
-        </div>
-      </div>
+      <Card 
+        className="main_card">
+        <LoginForm loginErrors={this.state.users.loginErrors} setFbLogin={this.setFbLogin} userLogin={this.userLogin} />
+      </Card>
     )
   }
 })

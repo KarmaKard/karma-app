@@ -1,4 +1,5 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import FundraiserList from '../fundraiser_list'
 
 export default React.createClass({
@@ -6,8 +7,8 @@ export default React.createClass({
     activeFundraisers: React.PropTypes.array.isRequired
   },
 
-  render () {
-    var activeFundraisers = this.props.activeFundraisers
-    return (<FundraiserList activeFundraisers={activeFundraisers} />)
+  render() {
+  injectTapEventPlugin()
+    return (<FundraiserList {... this.props} />)
   }
 })

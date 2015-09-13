@@ -157,7 +157,6 @@ export function getPayments () {
   return new Promise((resolve, reject) => {
     request
       .get(PAYMENT_URL)
-      .set('token', token)
       .end((err, res) => {
         if (err) {
           return reject(err)
@@ -171,7 +170,6 @@ export function getDonations () {
   return new Promise((resolve, reject) => {
     request
       .get(DONATION_URL)
-      .set('token', token)
       .end((err, res) => {
         if (err) {
           return reject(err)
@@ -205,7 +203,6 @@ export function getOrganizations () {
   return new Promise((resolve, reject) => {
     request
       .get(ORGANIZATIONS_URL)
-      .set('token', token)
       .end((err, res) => {
         if (err) {
           return reject(err)
@@ -219,7 +216,6 @@ export function getOrganization (id) {
   return new Promise((resolve, reject) => {
     request
       .get(ORGANIZATIONS_URL + '/' + id)
-      .set('token', token)
       .end((err, res) => {
         if (err) {
           return reject(err)
@@ -248,7 +244,6 @@ export function getManagedOrganizations () {
   return new Promise((resolve, reject) => {
     request
       .get(MANAGE_ORGANIZATIONS_URL)
-      .set('token', token)
       .end((err, res) => {
         if (err) {
           return reject(err)
@@ -306,28 +301,14 @@ export function getDeals () {
 export function saveLocation (location) {
   return new Promise((resolve, reject) => {
     request
-      .post(LOCATIONS_URL)
+      .post(ORGANIZATIONS_URL + '/location')
       .send({location})
       .set('token', token)
       .end((err, res) => {
         if (err) {
           return reject(err)
         }
-        resolve(res.body.location)
-      })
-  })
-}
-
-export function getLocations () {
-  return new Promise((resolve, reject) => {
-    request
-      .get(LOCATIONS_URL)
-      .set('token', token)
-      .end((err, res) => {
-        if (err) {
-          return reject(err)
-        }
-        resolve(res.body.locations)
+        resolve(res.body.organization)
       })
   })
 }
@@ -367,7 +348,6 @@ export function getRedemptions () {
   return new Promise((resolve, reject) => {
     request
       .get(REDEMPTIONS_URL)
-      .set('token', token)
       .end((err, res) => {
         if (err) {
           return reject(err)
@@ -381,7 +361,6 @@ export function getSurveyQuestions () {
   return new Promise((resolve, reject) => {
     request
       .get(SURVEY_QUESTIONS_URL)
-      .set('token', token)
       .end((err, res) => {
         if (err) {
           return reject(err)
@@ -410,7 +389,6 @@ export function getSurveyResponses () {
   return new Promise((resolve, reject) => {
     request
       .get(SURVEY_RESPONSES_URL)
-      .set('token', token)
       .end((err, res) => {
         if (err) {
           return reject(err)
@@ -446,7 +424,11 @@ export function tieFundraiserMembershipToUser (user, fundraiserMemberId) {
           return reject(err)
         }
         storeToken(res.body.token)
-        resolve(tokenToUser(token))
+        var response = {
+          user: tokenToUser(token),
+          fundraiserMember: res.body.fundraiserMember
+        }
+        resolve(response)
       })
   })
 }
@@ -455,7 +437,6 @@ export function getFundraiserMembers () {
   return new Promise((resolve, reject) => {
     request
       .get(FUNDRAISER_MEMBERS_URL)
-      .set('token', token)
       .end((err, res) => {
         if (err) {
           return reject(err)
@@ -468,7 +449,7 @@ export function getFundraiserMembers () {
 export function createInPersonDonation (donation, fundraiserMember) {
   return new Promise((resolve, reject) => {
     request
-      .post(DONATION_URL)
+      .post(DONATION_URL + '/inperson')
       .send({donation, fundraiserMember})
       .set('token', token)
       .end((err, res) => {
@@ -476,6 +457,21 @@ export function createInPersonDonation (donation, fundraiserMember) {
           return reject(err)
         }
         resolve(res.body)
+      })
+  })
+}
+
+export function shareCard (email, donation, user) {
+  return new Promise((resolve, reject) => {
+    request
+      .put(DONATION_URL + '/share')
+      .send({email, donation, user})
+      .set('token', token)
+      .end((err, res) => {
+        if (err) {
+          return reject(err)
+        }
+        resolve(res.body.donation)
       })
   })
 }
@@ -491,21 +487,32 @@ export function activateDonation (user, donationId) {
           return reject(err)
         }
         storeToken(res.body.token)
-        resolve(tokenToUser(token))
+        var response = {
+          user: tokenToUser(token),
+          donation: res.body.donation
+        }
+        resolve(response)
       })
   })
 }
 
-export function getOrganizationsAndDeals (fundraiserMemberId) {
+export function activatePayment (user, paymentId) {
   return new Promise((resolve, reject) => {
     request
-      .post(FUNDRAISER_MEMBERS_URL + '/join')
-      .send({fundraiserMemberId})
+      .put(PAYMENT_URL)
+      .send({user, paymentId})
+      .set('token', token)
       .end((err, res) => {
         if (err) {
           return reject(err)
         }
-        resolve(res.body)
+        storeToken(res.body.token)
+        var response = {
+          user: tokenToUser(token),
+          payment: res.body.payment,
+          donations: res.body.donations
+        }
+        resolve(response)
       })
   })
 }
@@ -525,17 +532,17 @@ export function confirmFundraiser (organization, fundraiserMembers) {
   })
 }
 
-export function updateOwedAmounts (paidMembers) {
+export function updateOwedAmounts (fundraiserPayment) {
   return new Promise((resolve, reject) => {
     request
       .put(FUNDRAISER_MEMBERS_URL + '/pay')
-      .send({paidMembers})
+      .send({fundraiserPayment})
       .set('token', token)
       .end((err, res) => {
         if (err) {
           return reject(err)
         }
-        resolve(res.body.fundraiserMembers)
+        resolve(res.body.fundraiserMember)
       })
   })
 }

@@ -11,7 +11,7 @@
   cursor: pointer;
 }
 
-.guest_box {
+.main_card {
   background-color: #fff;
 }
 
@@ -19,50 +19,7 @@
   margin-bottom: 20px;
 }
 
-@media only screen and (max-width: 840px) {
-
-  .guest_box {
-    width: 100%;
-    padding: 10px 20px 55px;
-  }
-
-  .login_header {
-    margin-top: 60px;
-  }
-
-  .login_button {
-    font-family: 'Fjalla One', sans-serif;
-    text-transform: uppercase;
-    font-size: 28px;
-    text-decoration: none;
-    color:#828282;
-    float:right;
-    margin: 10px 10px 20px 10px;
-    background: white;
-    border: 1px solid white;
-  }
-}
-
- @media only screen and (min-width: 841px) {
-
-  .guest_box {
-    width: 500px;
-    margin: 20px 0 0 33%;
-    padding: 10px 20px 55px;
-    border-width: 2px;
-    border-style: solid;
-    border-color: #000;
-    overflow: auto
-  }
-  .login_button {
-    font-family: 'Fjalla One', sans-serif;
-    text-transform: uppercase;
-    font-size: 36px;
-    text-decoration: none;
-    color:#828282;
-    float:right;
-    margin: 10px 10px 20px 10px;
-    background: white;
-    border: 1px solid white;
-  }
+.fb_button {
+  box-shadow: rgba(58, 87, 145, 0.57647) 0px 1px 8px, rgba(58, 87, 145, 0.6647) 0px 1px 4px !important;
+  background-color: white !important;
 }

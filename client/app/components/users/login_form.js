@@ -1,11 +1,22 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { flux } from '../../main'
 import {Link} from 'react-router'
+import mui from 'material-ui'
+import {AppBar, FlatButton, Card, CardTitle, TextField, RaisedButton} from 'material-ui'
+
+var ThemeManager = new mui.Styles.ThemeManager()
 
 export default React.createClass({
   getDefaultProps () {
     return {
       loginErrors: []
+    }
+  },
+
+  getInitialState () {
+    return {
+      disabledLogin: false
     }
   },
 
@@ -17,6 +28,16 @@ export default React.createClass({
 
   contextTypes: {
     router: React.PropTypes.func
+  },
+
+  childContextTypes: {
+    muiTheme: React.PropTypes.object
+  },
+
+  getChildContext () {
+    return {
+      muiTheme: ThemeManager.getCurrentTheme()
+    }
   },
 
   componentDidMount () {
@@ -77,37 +98,90 @@ export default React.createClass({
 
   didLogin (e) {
     e.preventDefault()
-    React.findDOMNode(this.refs.button).disabled = true
-    var email = React.findDOMNode(this.refs.email).value
-    var password = React.findDOMNode(this.refs.password).value
+    this.setState({disableLogin: true})
+    var email = this.state.email
+    var password = this.state.password
 
     flux.actions.users.clearLoginErrors()
     this.props.userLogin(email, password)
-
-    React.findDOMNode(this.refs.button).disabled = false
   },
 
-  render () {
+  setPassword (e) {
+    this.setState ({
+      password: e.target.value
+    })
+  },
+
+  setEmail (e) {
+    this.setState ({
+      email: e.target.value
+    })
+  },
+
+  render() {
+    injectTapEventPlugin()
     var loginErrorMessage = this.props.loginErrors.length !== 0
       ? <div className='karma_error'>Incorrect Credentials</div>
       : null
 
-    return (
-      <div className='login' >
-        <div className='content_box-header login_header'>Login</div>
-        {loginErrorMessage}
-          <input type='email' ref='email' className='karma_input' placeholder='Email' />
-          <input type='password' ref='password' className='karma_input' placeholder='Password' />
-          <div className='login_buttons'>
-          <button ref='button' onClick={this.didLogin} className='login_button' >Login</button>
-          <Link to='password_reset'><div className='login_forgot' >Forgot Password?</div></Link>
-          </div>
-        <hr/>
+    var disabledLogin = this.state.disabledLogin 
+      ? <RaisedButton 
+          fullWidth={true} 
+          onClick={this.didLogin} 
+          className='login_button' 
+          label="Login" 
+          disabled={true}
+          style={{
+            margin: '15px 0 0 0'
+          }}/>
+      : <RaisedButton 
+          fullWidth={true} 
+          onTouchTap={this.didLogin} 
+          className='login_button' 
+          label="Login" 
+          style={{
+            margin: '15px 0 0 0'
+          }}/>
 
-        <button href='#' className='facebookButton' onClick={this.handleClick}>
-          <i className='fa fa-facebook fa-3x fa-inverse'></i>
-          <span>Login</span>
-        </button>
+    var forgotPassword = this.props.loginErrors.length !== 0
+      ? (<TextField
+            onBlur={this.setPassword}
+            ref='password'
+            fullWidth={true}
+            type='password'
+            floatingLabelText='Password'
+            errorText=<Link to='password_reset'>Forgot Password?</Link> />)
+      : (<TextField
+            onBlur={this.setPassword}
+            ref='password'
+            fullWidth={true}
+            type='password'
+            floatingLabelText='Password' />)
+
+    return (
+      <div>
+          <CardTitle title='Login'/>
+          {loginErrorMessage}
+            <TextField
+              onBlur={this.setEmail}
+              ref='email'
+              hintText='example@karmakard.org'
+              fullWidth={true}
+              type='email'
+              floatingLabelText='Email' />
+            {forgotPassword}
+            {disabledLogin}
+
+          <RaisedButton onClick={this.handleClick} style={{margin: '30px auto'}} className='fb_button' fullWidth={true}>
+            <i style={{color: '#3A5795', margin: '4px 47%', float: 'left'}} className='fa fa-facebook fa-2x fa-inverse'></i>
+          </RaisedButton>
+
+          <hr style={{margin: '10px 0'}} />
+
+          <Link to='join_options' >
+            <RaisedButton style={{margin: '30px auto'}} label="New User?"  fullWidth={true}>
+            </RaisedButton>
+          </Link>
       </div>
     )
   }

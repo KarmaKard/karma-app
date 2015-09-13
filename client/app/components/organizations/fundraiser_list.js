@@ -1,5 +1,10 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { Link } from 'react-router'
+import mui from 'material-ui'
+import {AppBar, AppCanvas, IconButton, Card, CardTitle, List, ListItem, Avatar} from 'material-ui'
+
+var ThemeManager = new mui.Styles.ThemeManager()
 
 export default React.createClass({
 
@@ -7,15 +12,27 @@ export default React.createClass({
     activeFundraisers: React.PropTypes.array.isRequired
   },
 
+  componentWillMount() {
+    this.props.showBackLink(true)
+  },
+  
   contextTypes: {
     router: React.PropTypes.func
   },
 
-  goBack () {
-    history.back()
+  childContextTypes: {
+    muiTheme: React.PropTypes.object
   },
 
-  render () {
+  getChildContext () {
+    return {
+      muiTheme: ThemeManager.getCurrentTheme()
+    }
+  },
+
+
+  render() {
+  injectTapEventPlugin()
     var activeFundraisers = this.props.activeFundraisers
     if (activeFundraisers.length === 0) {
       return (
@@ -34,32 +51,25 @@ export default React.createClass({
       )
     }
     var fundraiserLinks = activeFundraisers.map((fundraiser, index) => {
+      var logo = fundraiser.logoURL ? <Avatar style={{height: '40px', width: '40px', padding: 0}} src={fundraiser.logoURL} /> : <i className="material-icons">photo</i>
       return (
-        <Link to='fundraiser_profile' params={{organizationId: fundraiser.id}}>
-          <li className='list-item' key={index}>
-            {fundraiser.name}
-          </li>
+        <Link key={index} to='fundraiser_profile' params={{organizationId: fundraiser.id}}>
+          <ListItem
+            primaryText={fundraiser.name}
+            initiallyOpen={true}
+            leftIcon={logo}/>
         </Link>
       )
     })
 
     return (
-      <div>
-        <div className='page_header'>
-          <div>
-            <button onClick={this.goBack} className='back_button'><i className='fa fa-chevron-left fa-2x'></i></button>
-            <div className='header_center karmatitle'>KarmaKard</div>
-          </div>
-        </div>
-        <div className='guest_box'>
-          <div className='content_box-header'>
-            Select A Fundraiser
-          </div>
-          <ul>
+        <Card className='main_card'>
+          <CardTitle
+            title="Select a fundraiser" />
+          <List>
             {fundraiserLinks}
-          </ul>
-        </div>
-      </div>
+          </List>
+        </Card>
     )
   }
 })

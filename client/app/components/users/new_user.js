@@ -1,24 +1,46 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { flux } from '../../main'
 import { Link } from 'react-router'
+import mui from 'material-ui'
+import {AppBar, FlatButton, Card, CardTitle, RaisedButton, CardText} from 'material-ui'
+
+var ThemeManager = new mui.Styles.ThemeManager()
 
 export default React.createClass({
+  childContextTypes: {
+    muiTheme: React.PropTypes.object
+  },
+
+  getChildContext () {
+    return {
+      muiTheme: ThemeManager.getCurrentTheme()
+    }
+  },
 
   render() {
 
     return (
       <div>
-        <div className="content_box-header">Get On Board!</div>
-        <p>Give good, Get good. In order to have full access to KarmaKard, we ask that you give to a local fundraising organization. A $30 dollar donation will give you instant access to thousands of dollars in exclusive deals.</p>
-        <Link to="fundraisers"><button className="karma_button">Donate to a local Fundraiser</button></Link>
-        <hr/>
-        <div className="content_box-header">Not Convinced?</div>
-        <p>We have built special relationships with local businesses to provide quality deals in which we handpick only quality deals that you will love. Dont beleive us? </p>
-        <Link to="list_deals"><button className="karma_button">Check out the ever growing list of local deals</button></Link>
-        <hr/>
-        <div className="content_box-header">Have an Organization?</div>
-        <p>If you have a business or a fundraiser, you can signup and apply for your organization to be a part of Karmakard!</p>
-        <Link to="create_organization"><button className="karma_button">Register your Organization</button></Link>
+        <Card
+          className='main_card'>
+        <CardTitle title='Get Good Karma!'/>
+          <CardText>Give good, Get good. In order to have full access to KarmaKard, we ask that you give to a local fundraising organization. A $30 dollar donation will give you instant access to thousands of dollars in exclusive deals.</CardText>
+          <Link to='list_deals'><RaisedButton fullWidth={true} style={{margin:'10px 0 20px 0'}} label='Check out the list of deals' /></Link>
+          <Link to='fundraisers'><RaisedButton fullWidth={true} label='Donate to a local fundraiser' /></Link>
+        </Card>
+        <Card
+          className='main_card'>
+        <CardTitle title='Have an Organization?'/>
+        <CardText>If you have a business or a fundraiser, you can signup and apply for your organization to be a part of Karmakard!</CardText>
+        <Link to='create_organization'><RaisedButton fullWidth={true} style={{margin:'10px 0 0 0'}} label='Register your organization' /></Link>
+        </Card>
+        <Card
+          className='main_card'>
+        <CardTitle title='Already a User?'/>
+        <CardText>Click here to go to the login page.</CardText>
+        <Link to='login'><RaisedButton fullWidth={true} style={{margin:'10px 0 0 0'}} label='Login' /></Link>
+        </Card>
       </div>
     )
   }

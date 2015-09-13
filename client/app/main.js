@@ -2,6 +2,7 @@ import './main.css'
 
 import { Flux } from 'minimal-flux'
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import Router from 'react-router'
 import routes from './routes'
 import UserActions from './actions/users'

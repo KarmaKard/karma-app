@@ -1,5 +1,9 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { Link } from 'react-router'
+import mui from 'material-ui'
+import {AppBar, FlatButton, Card, IconButton, FontIcon, MenuItem, LeftNav} from 'material-ui'
+var ThemeManager = new mui.Styles.ThemeManager()
 
 export default React.createClass({
   propTypes: {
@@ -10,50 +14,102 @@ export default React.createClass({
     fundraiserMembers: React.PropTypes.array.isRequired
   },
 
+  getInitialState () {
+    return {
+      toggleState: false,
+      menuItems: [],
+      menuItemsSet: false
+    }
+  },
+
+  contextTypes: {
+    router: React.PropTypes.func
+  },
+
   renderOrganizationLink (organization, i) {
     return (
-        <Link to='organization_user_manages' params={{organizationId: organization.id}}>
-          <li key={i}>
-            {organization.name}
-          </li>
-        </Link>
+        {route: 'organization_user_manages', text: organization.name, params: {organizationId: organization.id}}
     )
   },
 
-  render () {
+
+  componentDidUpdate() {
+    if (this.props.toggleState !== this.state.toggleState) {
+      this.refs.leftNav.toggle()
+      this.setState({toggleState: this.props.toggleState})
+    }
 
     var user = this.props.user
-
     var organizationLinks = this.props.organizations
       .filter(org => org.userId === user.id)
       .map(this.renderOrganizationLink)
 
     var manageLink = user.roles.manager || user.roles.superadmin
-      ? (<li><Link to='organizations'>Manage</Link>
-          <ul className='side_bar_navigation_level2' onClick={this.props.toggleMenu}>
-            {organizationLinks}
-          </ul>
-        </li>)
+      ? {route: 'organizations', text: 'Manage'}
       : null
 
     var isFundraiser = this.props.fundraiserMembers.filter(fundraiserMember => fundraiserMember.userId === user.id)
     var fundraiserMemberLink = isFundraiser.length > 0
-      ? (<li><Link to='member_fundraisers'>Fundraise</Link></li>)
+      ? {route: 'member_fundraisers', text: 'Fundraise'}
       : null
 
-    var navigationStatus = this.props.toggleState
-      ? 'side_bar_navigation opened_navigation'
-      : 'side_bar_navigation closed_navigation'
+    var menuItems = [
+      { route: 'account', text: 'Account' },
+      { route: 'deals', text: 'Deal Card'}
+    ]
+    if (fundraiserMemberLink) {
+      menuItems.push(fundraiserMemberLink)
+    }
+    if (manageLink) {
+      menuItems.push(manageLink)
+      menuItems.push({ type: MenuItem.Types.SUBHEADER, text: 'Managed Organizations' })
+      menuItems.push.apply(menuItems, organizationLinks)
+    }
+    if (!this.state.menuItemsSet && organizationLinks.length > 0 && manageLink) {
+      this.setState({menuItems, menuItemsSet: true})
+    } else if (!this.state.menuItemsSet && !manageLink && menuItems.length > 0) {
+      this.setState({menuItems, menuItemsSet: true})
+    }
+    
+
+  },
+
+  childContextTypes: {
+    muiTheme: React.PropTypes.object
+  },
+
+  getChildContext () {
+    return {
+      muiTheme: ThemeManager.getCurrentTheme()
+    }
+  },
+    // Get the selected item in LeftMenu
+  getSelectedIndex () {
+    var currentItem
+ 
+    for (let i = this.state.menuItems.length - 1; i >= 0; i--) {
+      currentItem = this.state.menuItems[i]
+      if (currentItem.route && this.context.router.isActive(currentItem.route)) {
+        return i
+      }
+    }
+  },
+
+  onLeftNavChange(e, key, payload) {
+    this.context.router.transitionTo(payload.route, payload.params)
+  },
+
+  render() {
+    injectTapEventPlugin ()
 
     return (
-     <div className={navigationStatus} >
-        <ul className='side_bar_navigation_level1' onClick={this.props.toggleMenu}>
-          <Link to='account'><li>Account</li></Link>
-          <Link to='deals'><li>Deals</li></Link>
-          {fundraiserMemberLink}
-          {manageLink}
-        </ul>
-      </div>
+        <LeftNav 
+          ref="leftNav" 
+          openRight={true}
+          menuItems={this.state.menuItems} 
+          docked={false}
+          selectedIndex={this.getSelectedIndex()}
+          onChange={this.onLeftNavChange}/>
     )
   }
 })

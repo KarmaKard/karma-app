@@ -1,4 +1,5 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { flux } from '../../../main'
 import { RouteHandler } from 'react-router'
 
@@ -7,7 +8,6 @@ export default React.createClass({
   propTypes: {
     organizations: React.PropTypes.array.isRequired,
     deals: React.PropTypes.array.isRequired,
-    locations: React.PropTypes.array.isRequired,
     redemptions: React.PropTypes.array.isRequired,
     surveyQuestions: React.PropTypes.array.isRequired,
     surveyResponses: React.PropTypes.array.isRequired,
@@ -28,12 +28,12 @@ export default React.createClass({
     flux.actions.organizations.updateOrganization(organization)
   },
 
-  render () {
+  render() {
+  injectTapEventPlugin()
     var orgId = this.context.router.getCurrentParams().organizationId
     var deals = this.props.deals.filter(deals => deals.organizationId === orgId)
     var organization = this.props.organizations.filter(org => org.id === orgId)[0]
     var fundraiserMember = this.props.fundraiserMembers.filter(fundraiserMembership => fundraiserMembership.organizationId === orgId && fundraiserMembership.userId === this.props.user.id)[0]
-    var locations = this.props.locations.filter(locations => locations.organizationId === orgId)
     var redemptions = this.props.redemptions.filter(redemptions => redemptions.organizationId === orgId)
     var surveyResponses = this.props.surveyResponses.filter(response => response.organizationId === orgId)
     var surveyQuestions = this.props.surveyQuestions
@@ -41,21 +41,15 @@ export default React.createClass({
     return (
       <div>
         <RouteHandler
+          {... this.props}
           organization={organization}
-          organizations={this.props.organizations}
-          user={this.props.user}
           deals={deals}
           payments={payments}
-          locations={locations}
           redemptions={redemptions}
           updateOrganization={this.updateOrganization}
           surveyResponses={surveyResponses}
           surveyQuestions={surveyQuestions}
-          fundraiserMember={fundraiserMember}
-          fundraiserMembers={this.props.fundraiserMembers}
-          showBackLink={this.props.showBackLink}
-          toggleState={this.props.toggleState}
-          toggleMenu={this.props.toggleMenu}/>
+          fundraiserMember={fundraiserMember}/>
       </div>
     )
   }

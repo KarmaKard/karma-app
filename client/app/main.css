@@ -11,15 +11,22 @@
 @import 'https://fonts.googleapis.com/css?family=Quicksand';
 @import 'https://fonts.googleapis.com/css?family=Fjalla+One';
 @import 'https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css';
+@import 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js';
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,300,500');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 
-@font-face {
-    font-family: BebasNeue;
-    src: url("../assets/font/bebas/TTF's/BebasNeue Regular.ttf");
+
+html {
+  font-family: 'Fjalla One', sans-serif;
 }
+
+.material-icons.md-18 { font-size: 18px; }
+.material-icons.md-24 { font-size: 24px; }
+.material-icons.md-36 { font-size: 36px; }
+.material-icons.md-48 { font-size: 48px; }
 
 h2 {
 
-    font-family: 'Fjalla One', sans-serif;
     color: #808080;
     font-size: 30px;
     text-transform: uppercase;
@@ -45,10 +52,32 @@ button {
     outline:none;
 }
 
+.karmatitle {
+  width: 44px; 
+  height: 45px;
+  margin-top: 8px;
+  margin: 8px auto;
+  background: url("../assets/img/blackandwhitelogo45.png");
+}
+
 .list-header {
   border-bottom: 1px solid black;
   padding: 10px 0 5px 0;
   font-weight: bold;
+}
+
+.spacer {
+  width: 100%;
+  height: 50px;
+}
+
+.footer_menu {
+  position:absolute;
+  bottom:0;
+}
+
+.header_space {
+  width:50px;
 }
 
 .list-item {
@@ -82,7 +111,6 @@ button {
 .page_header{
   background-color: #5D9DBD;
   width: 100%;
-  font-family: 'Fjalla One', sans-serif;
   text-transform: uppercase;
   color: white;
 }
@@ -139,14 +167,12 @@ button {
 }
 
 .karma_button {
-  font-family: 'Fjalla One', sans-serif;
   text-transform: uppercase;
   text-decoration: none;
   color:#828282;
   float:right;
-  margin: 5px 10px;
-  background: white;
-  border: 1px solid white;
+  background: rgba(255, 255, 255, 0);
+  border: none;
 }
 
 
@@ -162,13 +188,9 @@ input[disabled] {
 }
 
 hr { 
-  display: block;
-  margin-top: 30px;
-  margin-bottom: 10px;
   margin-left: auto;
   margin-right: auto;
-  border-style: inset;
-  border-width: 1px;
+  border: rgba(240, 81, 103, 0.72) solid thin;
   width: 100%;
 } 
 
@@ -178,7 +200,6 @@ hr {
   margin-top: 20px;
   background-color: #3A5795;
   float:left;
-  font-family: 'Fjalla One', sans-serif;
 }
 
 .facebookButton i {
@@ -193,6 +214,9 @@ hr {
   font-size: 24px;
 }
 
-.back_button i {
-  color: white;
+.back_button {
+  color: white !important;
+  margin-top: 0px !important;
+  margin-right: 0px !important;
+  margin-left: 0px !important;
 }

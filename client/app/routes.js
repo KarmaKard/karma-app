@@ -1,7 +1,11 @@
 import {Route, RouteHandler, DefaultRoute} from 'react-router'
+import { flux } from './main'
 import React from 'react'
-
+import injectTapEventPlugin from 'react-tap-event-plugin'
+import mui from 'material-ui'
+import {AppCanvas, AppBar, Tabs, Tab, FlatButton, FontIcon, UserSideBar, CardTitle, Card, CardMedia, CardHeader, TextField, List, ListItem, RaisedButton, CardText, FloatingActionButton} from 'material-ui'
 import Login from './components/users/handlers/login'
+import JoinOptions from './components/users/handlers/join_options'
 import Register from './components/users/handlers/register'
 import Donate from './components/users/handlers/donate'
 import DealList from './components/deals/handlers/list_deals'
@@ -11,6 +15,7 @@ import Account from './components/users/handlers/account'
 import User from './components/users/handlers/user'
 import AddFundraiserMember from './components/users/handlers/add_fundraiser_member'
 import ActivateDonation from './components/users/handlers/activate_donation'
+import ActivateSharedCard from './components/users/handlers/activate_shared_card'
 
 import Fundraisers from './components/organizations/handlers/fundraisers'
 import FundraiserList from './components/organizations/handlers/fundraiser_list'
@@ -44,27 +49,147 @@ import RedemptionScreen from './components/organizations/handlers/show_redemptio
 import RedemptionSuccess from './components/organizations/handlers/show_redemption_success'
 import AddRedemptions from './components/organizations/handlers/add_redemptions'
 import Survey from './components/organizations/handlers/survey'
+var ThemeManager = new mui.Styles.ThemeManager()
 
 var App = React.createClass({
-  render () {
-    return (
-      <div>
-        <RouteHandler />
-      </div>
-    )
-  }
-})
+
+    contextTypes: {
+      router: React.PropTypes.func
+    },
+    getInitialState () {
+      flux.actions.organizations.getOrganizations()
+      flux.actions.deals.getRedemptions()
+      flux.actions.deals.getDeals()
+      flux.actions.deals.getSurveyQuestions()
+      flux.actions.deals.getSurveyResponses()
+      flux.actions.users.getFundraiserMembers()
+      flux.actions.users.getPayments()
+      flux.actions.users.getDonations()
+      var storeState = this.getStoreState()
+      return storeState
+    },
+
+    storeChange () {
+      this.setState(this.getStoreState)
+    },
+
+    getStoreState () {
+      return {
+        organizations: flux.stores.organizations.getState(),
+        user: flux.stores.users.getState(),
+        deals: flux.stores.deals.getState(),
+        showBackLink: false
+      }
+    },
+
+    childContextTypes: {
+      muiTheme: React.PropTypes.object
+    },
+
+    getChildContext () {
+      return {
+        muiTheme: ThemeManager.getCurrentTheme()
+      }
+    },
+
+    componentWillMount () {
+      flux.stores.organizations.addListener('change', this.storeChange)
+      flux.stores.users.addListener('change', this.storeChange)
+      flux.stores.deals.addListener('change', this.storeChange)
+    },
+
+    componentWillUnmount () {
+      flux.stores.organizations.removeListener('change', this.storeChange)
+      flux.stores.users.removeListener('change', this.storeChange)
+      flux.stores.deals.removeListener('change', this.storeChange)
+    },
+
+    showBackLink (showBackLink) {
+      this.setState({showBackLink})
+    },
+
+    goBack () {
+      history.back()
+    },
+
+    compare (a, b) {
+      if (a < b) {
+        return -1
+      }
+      if (a > b) {
+        return 1
+      }
+      return 0
+    },
+
+    sortByName (a, b) {
+      return this.compare(a.name, b.name)
+    },
+
+    sortByDate (a, b) {
+      return a.createdAt - b.createdAt
+    },
+
+    render () {
+      var organizations = this.state.organizations.organizations || []
+      var currentUser = this.state.user.currentUser
+      var payments = this.state.user.payments || []
+      var fundraiserMembers = this.state.user.fundraiserMembers || []
+      var deals = this.state.deals.deals || []
+      var redemptions = this.state.deals.redemptions || []
+      var surveyQuestions = this.state.deals.surveyQuestions || []
+      var surveyResponses = this.state.deals.surveyResponses || []
+      var donations = this.state.user.donations || []
+      var loginErrors = this.state.user.loginErrors || {}
+      var userLocation = this.state.user.userLocation || {}
+      organizations = organizations.sort(this.sortByName)
+      payments = payments.sort(this.sortByDate)
+      donations = donations.sort(this.sortByDate)
+      fundraiserMembers = fundraiserMembers.sort(this.sortByName)
+      var backLink
+      if (this.state.showBackLink) {
+        backLink = (<button onClick={this.goBack} className='karma_button'><i style={{color: 'white'}} className="material-icons md-48 md-light">keyboard_arrow_left</i></button>)
+      } else {
+        backLink = (<div style={{width: 80 + 'px'}}></div>)
+      }
+      return (
+        <AppCanvas>
+          <AppBar
+            showMenuIconButton={true}
+            title=<div className='karmatitle'></div>
+            iconElementRight={<div style={{width: 80 + 'px'}}></div>}
+            iconElementLeft={backLink}/>
+          <div className='spacer'></div>
+          <RouteHandler
+            organizations={organizations}
+            user={currentUser}
+            deals={deals}
+            redemptions={redemptions}
+            surveyQuestions={surveyQuestions}
+            surveyResponses={surveyResponses}
+            payments={payments}
+            fundraiserMembers={fundraiserMembers}
+            donations={donations}
+            showBackLink={this.showBackLink}
+            userLocation={userLocation}
+            loginErrors={loginErrors}/>
+
+        </AppCanvas>
+      )
+    }
+  })
 
 export default (
   <Route name='root' handler={App} path='/'>
     <DefaultRoute handler={RedirectToDeals} onEnter={RedirectToDeals.willTransitionTo} />
     <Route name='login' handler={Login} path='login' />
+    <Route name='join_options' handler={JoinOptions} path='join_options' />
     <Route name='register' handler={Register} path='register' />
     <Route name='add_fundraiser_member' handler={AddFundraiserMember} path='add_fundraiser_member/:fundraiserMemberId' />
-    <Route name='activate_donation' handler={ActivateDonation} path='activate/:donationId' />
+    <Route name='activate_donation' handler={ActivateDonation} path='activate/:paymentId' />
+    <Route name='activate_shared_card' handler={ActivateSharedCard} path='activate/shared/:donationId' />
     <Route name='password_reset' handler={PasswordReset} path='reset' />
     <Route name='new_password' handler={NewPassword} path='new_password/:passwordResetId' />
-    <Route name='create_organization' handler={NewOrganization} path='organization' />
     <Route name='list_deals' handler={DealList} path='deals' />
 
     <Route name='fundraisers' handler={Fundraisers} path='fundraisers' >
@@ -74,7 +199,8 @@ export default (
       <Route name='fundraiser_list_deals' handler={DealList} path='deals' />
     </Route>
 
-    <Route name='fundraiser_join' handler={FundraiserJoin} path='join/:fundraiserMemberId' />
+    <Route name='fundraiser_join' handler={FundraiserJoin} path='join/:fundraiserName' />
+    <Route name='fundraiser_member_join' handler={FundraiserJoin} path='join/:fundraiserName/:fundraiserMemberName' />
 
     <Route name='deals' handler={Deals} path='dealcards' >
       <DefaultRoute handler={ShowCategories} />
@@ -92,6 +218,7 @@ export default (
 
     <Route name='organizations' handler={Organizations} path='organizations'>
       <DefaultRoute handler={OrganizationsUserManages} />
+      <Route name='create_organization' handler={NewOrganization} path='new' />
       <Route name='member_fundraisers' handler={MemberFundraisers} path='fundraisers' />
       <Route name='organization' handler={Organization} path=':organizationId' >
         <DefaultRoute handler={ShowOrganizationProfile} />

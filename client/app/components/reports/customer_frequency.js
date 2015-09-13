@@ -1,4 +1,5 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { PieChart } from 'react-d3'
 
 export default  React.createClass({

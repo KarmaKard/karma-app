@@ -14,7 +14,7 @@ export async function create (req, res, next) {
   }
 }
 
-router.get('/', auth.token, list)
+router.get('/', list)
 export async function list (req, res, next) {
   try {
     var surveyResponses = await surveyResponseTable.index()

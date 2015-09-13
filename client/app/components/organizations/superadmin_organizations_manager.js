@@ -1,4 +1,5 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { Link } from 'react-router'
 
 export default React.createClass({
@@ -16,7 +17,8 @@ export default React.createClass({
       </li>
     )
   },
-  render () {
+  render() {
+  injectTapEventPlugin()
     var inactiveLinks = this.props.organizations
     .filter(org => org.status === 'inactive')
     .map(this.renderOrganizationLink)

@@ -21,7 +21,6 @@ export default class DealStore extends Store {
     this.handleAction('deals.getSurveyQuestions', this.saveQuestions)
     this.handleAction('deals.createSurveyResponse', this.handleSurveyResponseCreate)
     this.handleAction('deals.getSurveyResponses', this.saveResponses)
-    this.handleAction('organizations.getOrganizationsAndDeals', this.saveOrganizationsAndDeals)
   }
 
   handleDealCreate (deals) {
@@ -31,10 +30,6 @@ export default class DealStore extends Store {
   }
 
   saveDeals (deals) {
-    this.setState({deals})
-  }
-
-  saveOrganizationsAndDeals (organizations, deals, organizationId) {
     this.setState({deals})
   }
 

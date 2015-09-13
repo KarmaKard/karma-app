@@ -1,21 +1,44 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
+import mui from 'material-ui'
+import {AppBar, IconButton, CardTitle, FlatButton, RaisedButton} from 'material-ui'
+
+var ThemeManager = new mui.Styles.ThemeManager()
 
 export default React.createClass({
   contextTypes: {
     router: React.PropTypes.func
   },
 
-  didChooseType(e) {
-    var type = e.target.value
+  childContextTypes: {
+    muiTheme: React.PropTypes.object
+  },
+
+  getChildContext () {
+    return {
+      muiTheme: ThemeManager.getCurrentTheme()
+    }
+  },
+
+  didChooseBusiness () {
+    var type = 'business'
+    this.props.setType(type.toLowerCase())
+  },
+
+  didChooseFundraiser () {
+    var type = 'fundraiser'
     this.props.setType(type.toLowerCase())
   },
 
   render() {
+  injectTapEventPlugin()
     return (
       <div>
-        <div className="content_box-header">Organization Type?</div>
-        <input type="submit" onClick={this.didChooseType} className="Organization_type_button" value="Business" />
-        <input type="submit" onClick={this.didChooseType} className="Organization_type_button" value="Fundraiser" />
+        <CardTitle title='Oganization Type:' />
+          <RaisedButton label='Business' onClick={this.didChooseBusiness} style={{margin: '10px auto'}} fullWidth={true} />
+
+          <RaisedButton label='Fundraiser' onClick={this.didChooseFundraiser} style={{margin: '10px auto'}} fullWidth={true} />
+
       </div>
     )
   }

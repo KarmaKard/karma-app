@@ -1,6 +1,10 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { flux } from '../../main'
 import { Link } from 'react-router'
+import mui from 'material-ui'
+import {AppCanvas, AppBar, Tabs, Tab, FlatButton, FontIcon, UserSideBar, CardTitle, Card, CardMedia, CardHeader, TextField, List, ListItem, RaisedButton, CardText, FloatingActionButton} from 'material-ui'
+var ThemeManager = new mui.Styles.ThemeManager()
 
 export default React.createClass({
 
@@ -31,10 +35,21 @@ export default React.createClass({
   },
 
   renderAnswerLink (option, i) {
-    return <li key={i}><button className='karma_button' value={option} onClick={this.saveResponse}>{option}</button></li>
+    return <RaisedButton style={{margin: '25px 0'}} label={option} fullWidth={true} onClick={this.saveResponse} value={option}/>
   },
 
-  render () {
+  childContextTypes: {
+    muiTheme: React.PropTypes.object
+  },
+
+  getChildContext () {
+    return {
+      muiTheme: ThemeManager.getCurrentTheme()
+    }
+  },
+
+  render() {
+  injectTapEventPlugin()
     if (!this.props.surveyQuestion) {
       return (
       <div className='surveyQuestion' >
@@ -50,11 +65,11 @@ export default React.createClass({
     var questionText = this.props.surveyQuestion.text
 
     return (
-      <div className='surveyQuestion' >
-        <h1>{questionText}</h1>
-        <ul>
+      <div>
+        <CardTitle title="Are You Sure?" />
+        <CardText>Before you hand your phone to the cashier, confirm your redemption by answering the following:</CardText>
+        <CardTitle title=<span style={{fontSize: "24px", color: "rgb(66, 66, 66)"}}>{questionText}</span> />
           {options}
-        </ul>
       </div>
     )
   }

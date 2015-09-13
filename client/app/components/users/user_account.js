@@ -1,6 +1,16 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
+import NonAdminManageOrganizations from '../organizations/nonadmin_organizations_manager'
+import DealCards from '../deals/deal_cards'
+import MemberFundraisers from '../organizations/member_fundraisers'
 import {flux} from '../../main'
 import { Link } from 'react-router'
+import mui from 'material-ui'
+import dealCardPicture from '../../../assets/img/piggy-bank.png'
+import organizationsPicture from '../../../assets/img/business-building.png'
+import {CardTitle, CardMedia, TextField, RaisedButton, List, CardHeader, Avatar, FlatButton, Card, FontIcon} from 'material-ui'
+
+var ThemeManager = new mui.Styles.ThemeManager()
 
 export default React.createClass({
 
@@ -8,9 +18,28 @@ export default React.createClass({
     router: React.PropTypes.func
   },
 
+  childContextTypes: {
+    muiTheme: React.PropTypes.object
+  },
+
+  getChildContext () {
+    return {
+      muiTheme: ThemeManager.getCurrentTheme()
+    }
+  },
+
   propTypes: {
     user: React.PropTypes.object.isRequired,
-    totalSaved: React.PropTypes.number.isRequired
+    totalSaved: React.PropTypes.number.isRequired,
+    organizations: React.PropTypes.array.isRequired,
+    donations: React.PropTypes.array.isRequired,
+    fundraiserMembers: React.PropTypes.array.isRequired
+  },
+
+  componentWillMount () {
+    if(this.props.showBackLink) {
+      this.props.showBackLink(false)
+    }
   },
 
   componentDidMount () {
@@ -52,42 +81,46 @@ export default React.createClass({
     this.fbAsyncInit()
   },
 
-  render () {
-    var addNewLink = null
+  render() {
+    injectTapEventPlugin()
+    var organizations = this.props.organizations
     var user = this.props.user
-    if (!user.roles.manager && !user.roles.superadmin) {
-      addNewLink = (
-        <div>
-          <hr />
-          <Link to= 'create_organization' className= 'create_organization-link'>
-            Business? Fundraiser?
-            <span className= 'create_organization-link_span'>Offer deals with us!</span>
-          </Link>
-        </div>
-      )
-    }
-
+    var donations = this.props.donations.filter(donation => donation.userId === user.id && donation.activationStatus === 'active')
+    var membershipMap = new Map()
+    var fundraiserMembers = this.props.fundraiserMembers
+      .filter(fundraiserMembership => {
+        if (fundraiserMembership.userId === user.id) {
+          membershipMap.set(fundraiserMembership.organizationId, fundraiserMembership)
+          return fundraiserMembership
+        }
+      })
+    var memberFundraisers = organizations.filter(organization => {
+      if (membershipMap.has(organization.id)) {
+        return organization
+      }
+    })
+    
     return (
       <div>
-        <div className= 'content_box-header'>
-          Account
-        </div>
-        <div className= 'content_box-content'>
-          <h3>You have saved ${(Math.round(this.props.totalSaved * 100) / 100).toFixed(2)}!</h3>
-          <p>Thank you for being an awesome donor!</p>
-          <br/>
-            <label>
-              Email
-              <input
-                type= 'text'
-                className= 'karma_input'
-                placeholder= 'Type Keyword'
-                defaultValue={this.props.user.email}
-              />
-            </label>
-            <button className= 'karma_button' onClick={this.logOut}>Log Out</button>
-        </div>
-        {addNewLink}
+        <CardTitle title='Account'/>
+        <Card style={{margin: '15px auto'}}>
+        <CardMedia className='overlay_title' overlay={<div style={{margin: '0 0 8px 8px', fontSize: '36px', color: '#FF7070', display: 'block', lineHeight: '36px'}}> Your Deal Cards</div>}>
+          <img src={dealCardPicture} />
+        </CardMedia>
+          <CardTitle
+            style={{margin: '0 0 0 10px', fontSize:'16px', padding:'10px 0 !important'}}
+            subtitle={'Total Savings Value: $' + this.props.totalSaved}/>
+          <DealCards {... this.props} donations={donations} user={user} totalSaved={this.props.totalSaved} />
+        </Card>
+        <Card style={{margin: '15px auto'}}>
+        <CardMedia className='overlay_title' overlay={<div style={{margin: '0 0 8px 8px', fontSize: '36px', color: '#FF7070', display: 'block', lineHeight: '36px'}}> Your Organizations</div>}>
+          <img src={organizationsPicture} />
+        </CardMedia>
+          <NonAdminManageOrganizations organizations={organizations} user={user} />
+        </Card>
+
+        <MemberFundraisers user={user} memberFundraisers={memberFundraisers} fundraiserMembers={fundraiserMembers} />
+        <RaisedButton style={{margin: '20px 0 0 0'}} fullWidth={true} onClick={this.logOut} label="Log Out" />
       </div>
     )
   }

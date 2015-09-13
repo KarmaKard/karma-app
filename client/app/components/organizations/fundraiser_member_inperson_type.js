@@ -1,5 +1,9 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { flux } from '../../main'
+import mui from 'material-ui'
+import {AppCanvas, AppBar, Tabs, Tab, FlatButton, FontIcon, UserSideBar, CardTitle, Card, CardMedia, CardHeader, TextField, List, ListItem, RaisedButton, CardText, FloatingActionButton} from 'material-ui'
+var ThemeManager = new mui.Styles.ThemeManager()
 
 export default React.createClass({
   propTypes: {
@@ -10,24 +14,36 @@ export default React.createClass({
     router: React.PropTypes.func
   },
 
+  childContextTypes: {
+    muiTheme: React.PropTypes.object
+  },
+
+  getChildContext () {
+    return {
+      muiTheme: ThemeManager.getCurrentTheme()
+    }
+  },
+
   logOut () {
     var { router } = this.context
     flux.actions.users.logout(router)
   },
 
-  setType (e) {
-    this.props.setPaymentType(e.target.value)
+  setTypeCash () {
+    this.props.setPaymentType('cash')
   },
 
-  render () {
+  setTypeSquare () {
+    this.props.setPaymentType('square')
+  },
+
+  render() {
+  injectTapEventPlugin()
     return (
       <div>
-        <div className='organization_information' >
-          <div className='content_box-header'>Payment Type</div>
-        </div>
-        <button className='karma_button' value='cash' onClick={this.setType}>Cash / Check</button>
-        <button className='karma_button' value='square' onClick={this.setType}>Square Slider</button>
-
+        <CardTitle title='Payment Type' />
+        <RaisedButton style={{margin: '15px 0'}} label="Cash / Check" fullWidth={true} value='cash' onClick={this.setTypeCash} />
+        <RaisedButton style={{margin: '15px 0'}} label="Square Slider" fullWidth={true} value='square' onClick={this.setTypeSquare} />
       </div>
     )
   }

@@ -1,4 +1,5 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { flux } from '../../../main'
 import { Link } from 'react-router'
 
@@ -29,7 +30,8 @@ export default React.createClass({
     )
   },
 
-  render () {
+  render() {
+  injectTapEventPlugin()
     var user = this.props.user
     var organizations = this.props.organizations
     var category = this.context.router.getCurrentParams().category

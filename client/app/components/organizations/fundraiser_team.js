@@ -1,5 +1,11 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { flux } from '../../main'
+import mui from 'material-ui'
+
+import {AppBar, FlatButton, Card, CardText, CardHeader, SelectField, CardTitle, TextField, RaisedButton, Slider} from 'material-ui'
+
+var ThemeManager = new mui.Styles.ThemeManager()
 
 export default React.createClass({
 
@@ -15,7 +21,20 @@ export default React.createClass({
       newEmail: '',
       organization: {},
       disableInput: false,
-      paidMembers: []
+      fundraiserPayment: {},
+      buttonDisabled: false,
+      emailErrorMessage: null,
+      nameErrorMessage: null
+    }
+  },
+
+  childContextTypes: {
+    muiTheme: React.PropTypes.object
+  },
+
+  getChildContext () {
+    return {
+      muiTheme: ThemeManager.getCurrentTheme()
     }
   },
 
@@ -26,29 +45,46 @@ export default React.createClass({
   },
 
   updateName (e) {
-    if (React.findDOMNode(this.refs.name).value.length > 10) {
-      React.findDOMNode(this.refs.name).value = React.findDOMNode(this.refs.name).value.substring(0, 10)
+    if(e.target.value && this.validateEmail(this.state.newEmail)) {
+      this.setState({newName: e.target.value, buttonDisabled: false})
+      return
     }
     this.setState({
-      newName: React.findDOMNode(this.refs.name).value
+      newName: e.target.value
     })
-    React.findDOMNode(this.refs.saveButton).style.border = '3px solid rgb(242, 29, 29)'
   },
 
   updateNewEmail (e) {
-    this.setState({
-      newEmail: e.target.value
-    })
-    if (this.validateEmail(e.target.value)) {
-      React.findDOMNode(this.refs.email).style.border = ''
+    if(this.state.newName && this.validateEmail(e.target.value)) {
+      this.setState({newEmail: e.target.value, buttonDisabled: false})
+      return
     }
-    React.findDOMNode(this.refs.saveButton).style.border = '3px solid rgb(242, 29, 29)'
+    this.setState({newEmail: e.target.value})
   },
 
   handleAddNew () {
 
     if (!this.validateEmail(this.state.newEmail)) {
-      React.findDOMNode(this.refs.email).style.border = '3px solid rgb(242, 29, 29)'
+      this.setState({emailErrorMessage: 'Must Be Email Format'})
+      return
+    }
+
+    var fundraiserMembers = this.props.fundraiserMembers.filter(fundraiserMember => 
+      fundraiserMember.organizationId === this.props.organization.id)
+
+    var sameNameMembers = fundraiserMembers.filter(fundraiserMember =>
+      fundraiserMember.name.toLowerCase().replace(/ /g,'') === this.state.newName.toLowerCase().replace(/ /g,''))
+
+    if (sameNameMembers.length > 0) {
+      this.setState({nameErrorMessage: 'Must have unique name'})
+      return
+    }
+
+    var sameEmailMembers = fundraiserMembers.filter(fundraiserMember =>
+      fundraiserMember.email.toLowerCase().replace(/ /g,'') === this.state.newEmail.toLowerCase().replace(/ /g,''))
+
+    if (sameEmailMembers.length > 0) {
+      this.setState({emailErrorMessage: 'This is already associated with another team mate'})
       return
     }
 
@@ -62,9 +98,11 @@ export default React.createClass({
     flux.actions.organizations.createFundraiserMember(organization, newMember)
 
     this.setState({
-      newName: '',
-      newEmail: '',
-      organization
+      newName: null,
+      newEmail: null,
+      organization,
+      emailErrorMessage: null,
+      nameErrorMessage: null
     })
     React.findDOMNode(this.refs.add_form).style.display = 'none'
     React.findDOMNode(this.refs.add_button).style.display = 'inherit'
@@ -86,42 +124,9 @@ export default React.createClass({
     })
   },
 
-  payInputChanged (e) {
-    React.findDOMNode(this.refs.add_form).style.display = 'none'
-    React.findDOMNode(this.refs.add_button).style.display = 'none'
-    React.findDOMNode(this.refs.save_all_button).style.display = 'inherit'
-
-    if (parseInt(e.target.value, 10) > parseInt(e.target.parentNode.parentNode.childNodes[3].innerHTML, 10)) {
-      e.target.value = e.target.value.substring(0, e.target.value.length - 1)
-    }
-  },
-
-  setPayOnMemberObject (e) {
-    var fundraiserMember = this.props.fundraiserMembers.find(fundraiserMember => fundraiserMember.id === e.target.id)
-
-    var newOweAmount = (fundraiserMember.oweAmount - (parseInt(e.target.value, 10) * 100))
-
-    var paidObject = {fundraiserMemberId: e.target.id, newOweAmount: newOweAmount}
-    var paidMembers = this.state.paidMembers
-    var objectInPaidMembers
-    for (var i = 0; i < paidMembers.length; i++) {
-      if (paidMembers[i].id === e.target.id) {
-        paidMembers[i] = paidObject
-        objectInPaidMembers++
-      }
-    }
-    if (!objectInPaidMembers) {
-      paidMembers.push(paidObject)
-    }
-    this.setState({paidMembers})
-  },
-
   saveAll () {
-    flux.actions.organizations.updateOwedAmounts(this.state.paidMembers)
-    var inputFields = document.getElementsByClassName('team_member_pay_input')
-    for (var i = 0; i < inputFields.length; i++) {
-      inputFields[i].value = null
-    }
+    this.setState({buttonDisabled: true})
+    flux.actions.organizations.updateOwedAmounts(this.state.fundraiserPayment)
 
     React.findDOMNode(this.refs.add_form).style.display = 'none'
     React.findDOMNode(this.refs.add_button).style.display = 'inherit'
@@ -140,7 +145,8 @@ export default React.createClass({
     })
   },
 
-  render () {
+  render() {
+  injectTapEventPlugin()
     var fundraiserMembers = this.props.fundraiserMembers.filter(fundraiserMember => fundraiserMember.organizationId === this.props.organization.id)
     var listItems = fundraiserMembers.map((member, index) => {
       var disableInput = false
@@ -149,74 +155,105 @@ export default React.createClass({
       }
 
       var statusIcon = member.status === 'inactive'
-      ? <i className='fa fa-clock-o'></i>
-      : <i className='fa fa-check'></i>
+      ? <i className='fa fa-clock-o fa-2x'></i>
+      : <i className='fa fa-check fa-2x'></i>
+      var payment = member.status === 'active' && member.oweAmount > 0
+        ? (
+            <div expandable={true}>
+              <TextField
+                hintText="Cash Paid By This Person"
+                floatingLabelText="Cash Payment"
+                fullWidth={true}
+                onChange={function(e){
+                  React.findDOMNode(this.refs.add_form).style.display = 'none'
+                  React.findDOMNode(this.refs.add_button).style.display = 'none'
+                  if (parseInt(e.target.value, 10) > (member.oweAmount / 100) || isNaN(e.target.value)) {
+                    e.target.value = e.target.value.substring(0, e.target.value.length - 1)
+                    return
+                  }
+                  var newOweAmount = (member.oweAmount - (parseInt(e.target.value, 10) * 100))
+                  var fundraiserPayment = {fundraiserMemberId: e.target.id, newOweAmount: newOweAmount}
+                  this.setState({fundraiserPayment: fundraiserPayment, buttonDisabled: false})
+                }.bind(this)} 
+                id={member.id}
+                expandable={true}/>
+           
+              <RaisedButton 
+                expandable={true}
+                fullWidth={true} 
+                onClick={this.saveAll} 
+                disabled={this.state.buttonDisabled}
+                label="Record Payment" 
+                style={{
+                  margin: '15px 0 0 0'
+                }}/>
+            </div>
+          )
+        : null
+
+        var subDirectory = location.hostname.charAt(0)
+        var URL = subDirectory + '.kkrd.org/' + this.props.organization.name.toLowerCase().replace(/ /g,'') + '/' + member.name.toLowerCase().replace(/ /g,'')
 
       return (
-        <tr key={index}>
-          <td className='team_member_name'>{member.name}</td>
-          <td className='team_member_status'>{statusIcon}</td>
-          <td className='team_member_raised'>${member.raisedAmount / 100}</td>
-          <td className='team_member_owe'>${member.oweAmount / 100}</td>
-          <td><input type='number' id={member.id} onBlur={this.setPayOnMemberObject} onChange={this.payInputChanged} disabled={disableInput} className='team_member_pay_input'/></td>
-        </tr>
+        <Card style={{padding: '0 2%'}} initiallyExpanded={false}>
+          <CardHeader
+            title=<span style={{fontSize:'22px'}}>{member.name}</span>
+            avatar={statusIcon}
+            showExpandableButton={true}>
+          </CardHeader> 
+          <CardText style={{padding: '5px 0'}} expandable={true}>Affiliate Link: {URL}</CardText>
+          <CardText style={{padding: '5px 0'}} expandable={true}>Raised Amount: ${member.raisedAmount / 100}</CardText>
+          <CardText style={{padding: '5px 0'}} expandable={true}>Owed Amount: ${member.oweAmount / 100}</CardText>
+          {payment}
+        </Card>
       )
     })
     return (
       <div>
-        <div className='content_box-header'>Members</div>
-        <div>
-          <table className='teamTable'>
-            <tr>
-              <th className='team_table_header team_member_name'>Name</th>
-              <th className='team_table_header team_member_status'>Status</th>
-              <th className='team_table_header team_member_raised'>Raised</th>
-              <th className='team_table_header team_member_owe'>Owe</th>
-              <th>Payment</th>
-            </tr>
-            {listItems}
-          </table>
-        </div>
-        <button
-          ref='add_button'
-          className='karma_button'
-          onClick={this.addClicked}>
-            Add
-        </button>
-        <button
-          ref='save_all_button'
-          className='karma_button save_members'
-          onClick={this.saveAll}>
-            Save All
-        </button>
+
+        {listItems}
+
+        <RaisedButton 
+            ref='add_button'
+            fullWidth={true} 
+            onClick={this.addClicked}
+            disabled={this.state.buttonDisabled}
+            label="Add" 
+            style={{
+              margin: '15px 0 0 0'
+            }}/>
         <div className='add_member' ref='add_form'>
-          <input
-            type='text'
-            className='karma_input name_address_input'
-            placeholder='Name'
-            ref='name'
-            maxLength='10'
-            value={this.state.newName}
-            onChange={this.updateName}/>
-          <input
-            type='text'
-            ref='email'
-            className='email_input karma_input '
-            placeholder='Email'
-            value={this.state.newEmail}
-            onChange={this.updateNewEmail} />
-          <button
-            ref='saveButton'
-            className='karma_button'
-            onClick={this.handleAddNew}>
-              Save
-          </button>
-          <button
-            ref='cancelButton'
-            className='karma_button'
-            onClick={this.cancelClicked}>
-              Cancel
-          </button>
+          <TextField
+            hintText="Jon H, Alex, Haley"
+            floatingLabelText="Name"
+            fullWidth={true}
+            onChange={this.updateName} 
+            value= {this.state.newName}
+            errorText={this.state.nameErrorMessage}/>
+
+          <TextField
+            hintText="abc@example.com"
+            floatingLabelText="Email"
+            fullWidth={true}
+            onChange={this.updateNewEmail} 
+            value= {this.state.newEmail}
+            errorText={this.state.emailErrorMessage}/>
+
+          <RaisedButton 
+            fullWidth={true} 
+            onClick={this.handleAddNew} 
+            disabled={this.state.buttonDisabled}
+            label="Save" 
+            style={{
+              margin: '15px 0 0 0'
+            }}/>
+          <RaisedButton 
+            fullWidth={true} 
+            onClick={this.cancelClicked} 
+            label="Cancel" 
+            style={{
+              margin: '15px 0 0 0'
+            }}/>
         </div>
       </div>
     )

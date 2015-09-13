@@ -1,5 +1,9 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { flux } from '../../main'
+import mui from 'material-ui'
+import {AppCanvas, AppBar, Tabs, Tab, FlatButton, FontIcon, UserSideBar, CardTitle, Card, CardMedia, CardHeader, TextField, List, ListItem, RaisedButton, CardText, FloatingActionButton} from 'material-ui'
+var ThemeManager = new mui.Styles.ThemeManager()
 
 export default React.createClass({
   getInitialState () {
@@ -18,11 +22,27 @@ export default React.createClass({
     router: React.PropTypes.func
   },
 
+  childContextTypes: {
+    muiTheme: React.PropTypes.object
+  },
+
+  getChildContext () {
+    return {
+      muiTheme: ThemeManager.getCurrentTheme()
+    }
+  },
+
   redeem () {
-    var amountSaved = this.state.amountSaved / 100
+    var dealId = this.context.router.getCurrentParams().dealId
+    var deal = this.props.deals.filter(deal => deal.id === dealId)[0]
+    var today = new Date()
+    var yearAgo = today.setYear(today.getFullYear() - 1)
+    var donation = this.props.donations.filter(donation => donation.userId === this.props.user.id && donation.createdAt > yearAgo)[0]
+    var amountSaved =(Math.round(deal.dollarValue * 100)/100)
     var redemption = {
-      dealId: this.context.router.getCurrentParams().dealId,
+      dealId: dealId,
       paymentId: this.context.router.getCurrentParams().paymentId,
+      donationId: donation.id,
       organizationId: this.props.organization.id,
       userId: this.props.user.id,
       amountSaved
@@ -33,49 +53,47 @@ export default React.createClass({
     flux.actions.deals.createRedemption(router, redemption)
   },
 
-  keyPressed (e) {
-    var keyPressed = e.target.innerHTML
-    
-    switch (keyPressed) {
-      case 'Clear':
-         this.setState({amountSaved: ''})
-         break
-      case 'Back':
-        var amountSaved = Math.floor(this.state.amountSaved / 1e1)
-        this.setState({amountSaved})
-        break
-      default:
-        if (!this.state.amountSaved) {
-          this.setState({amountSaved: keyPressed})
-        } else {
-          var currentAmount = this.state.amountSaved
-          amountSaved = parseFloat('' + currentAmount + keyPressed)
-          this.setState({amountSaved})
-        }
-    }
+  renderLocationList (address, i) {
+    return (
+      <li>{address.street + ', ' + address.zip}</li>
+    )
   },
 
-  render () {
+  render() {
+  injectTapEventPlugin()
+    var user = this.props.user
+    var redemptions = this.props.redemptions
+    var organizationId = this.context.router.getCurrentParams().organizationId
+    var dealId = this.context.router.getCurrentParams().dealId
+    var organization = this.props.organizations.filter(organization => organization.id === organizationId)[0]
+    var deal = this.props.deals.filter(deal => deal.id === dealId)[0]
+
+    var amountRedeemed = redemptions.filter(function (redemption) {
+      return redemption.dealId === deal.id && redemption.userId === user.id ? redemption : null
+    })
+    var redemptionsLeft = deal.limit !== 'unlimited' ? deal.totalLimit - amountRedeemed.length : deal.limit
+
+    var locations = organization.locations
+      .filter(address => address.organizationId === organization.id)
+      .map(this.renderLocationList)
     return (
       <div>
-        <p>Give your device to the clerk and the clerk will input how much you have saved to verify the discount.</p>
+        <CardTitle title="Cashier Confirmation" />
+        <Card>
+          <CardHeader
+            title={organization.name}
+            subtitle={organization.category}
+            avatar={organization.logoURL}/>
 
-        <input ref='amountSaved' className='karma_input' value={'$' + (this.state.amountSaved / 100).toFixed(2)}/>
-        <div className='dialpad'>
-          <button onClick={this.keyPressed} className='dialpad-element'>1</button>
-          <button onClick={this.keyPressed} className='dialpad-element'>2</button>
-          <button onClick={this.keyPressed} className='dialpad-element'>3</button>
-          <button onClick={this.keyPressed} className='dialpad-element'>4</button>
-          <button onClick={this.keyPressed} className='dialpad-element'>5</button>
-          <button onClick={this.keyPressed} className='dialpad-element'>6</button>
-          <button onClick={this.keyPressed} className='dialpad-element'>7</button>
-          <button onClick={this.keyPressed} className='dialpad-element'>8</button>
-          <button onClick={this.keyPressed} className='dialpad-element'>9</button>
-          <button onClick={this.keyPressed} className='dialpad-element'>0</button>
-          <button onClick={this.keyPressed} className='dialpad-element'>Clear</button>
-          <button onClick={this.keyPressed} className='dialpad-element'>Back</button>
-        </div>
-        <button className='karma_button' onClick={this.redeem}>Redeem Deal</button>
+          <CardText>Deal: {deal.dealText}</CardText>
+          <CardText>Maximum Savings: {deal.dollarValue}</CardText>
+          <CardText>
+          Locations where valid:
+          <ul style={{padding:'10px 0 0 20px'}}>{locations}</ul>
+        </CardText>
+        <CardText>{user.firstName} has {redemptionsLeft} redemptions remaining on this deal.</CardText>
+         <RaisedButton style={{margin: '25px auto'}} label='Confirm Redemption' fullWidth={true} onClick={this.redeem} />
+        </Card>
       </div>
       )
   }

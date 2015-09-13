@@ -1,4 +1,5 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { flux } from '../../../main'
 import {RouteHandler, Link} from 'react-router'
 import Dashboard from '../fundraiser_member_dashboard'
@@ -25,7 +26,8 @@ export default React.createClass({
     this.props.showBackLink(true)
   },
 
-  render () {
+  render() {
+  injectTapEventPlugin()
 
     return (
       <div>

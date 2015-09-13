@@ -1,52 +1,110 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { flux } from '../../main'
+import crypto from 'crypto'
+import AvatarEditor from 'react-avatar-editor'
+import mui from 'material-ui'
+
+import {AppBar, FlatButton, Card, CardHeader, SelectField, CardTitle, TextField, RaisedButton, Slider} from 'material-ui'
+
+var ThemeManager = new mui.Styles.ThemeManager()
 
 export default React.createClass({
   getInitialState() {
     return {
       descriptionCounter: 150,
+      description: null,
+      beginDate: null,
+      endDate: null,
+      category: null,
+      name: null,
+      logoURL: null,
+      cropperOpen: false,
+      img: null,
+      croppedImg: "/img/grayicon.png",
+      zoom: 1.2,
+      imageType: null,
+      buttonDisabled: true
+    }
+  },
+
+  childContextTypes: {
+    muiTheme: React.PropTypes.object
+  },
+
+  getChildContext () {
+    return {
+      muiTheme: ThemeManager.getCurrentTheme()
     }
   },
 
   componentWillMount(){
     var descriptionCharactersLeft, purposeCharactersLeft
     if(this.props.organization.description){
-      this.setState({descriptionCounter: 150 - this.props.organization.description.length})
+      this.setState({
+        descriptionCounter: 150 - this.props.organization.description.length,
+        beginDate: this.props.organization.beginDate,
+        endDate: this.props.organization.endDate,
+        category: this.props.organization.category,
+        description: this.props.organization.description,
+        name: this.props.organization.name,
+        logoURL: this.props.organization.logoURL
+      })
     }
     else{
-      this.setState({descriptionCounter: 150})
+      this.setState({
+        descriptionCounter: 150,
+        beginDate: this.props.organization.beginDate,
+        endDate: this.props.organization.endDate,
+        category: this.props.organization.category,
+        description: this.props.organization.description,
+        name: this.props.organization.name,
+        logoURL: this.props.organization.logoURL
+      })
     }
-  },
-
-  changeMade(){
-    React.findDOMNode(this.refs.saveButton).style.border="3px solid rgb(242, 29, 29)"
   },
 
   saveProfile(){
-    if(this.state.descriptionCounter > 150){
-      React.findDOMNode(this.refs.descriptionCharacterCount).style.color="rgb(242, 29, 29)"
-      return
-    }
-    var name = React.findDOMNode(this.refs.name).value
-    var category = React.findDOMNode(this.refs.category).value
-    var description = React.findDOMNode(this.refs.description).value
-    var logo = React.findDOMNode(this.refs.logo).src
-    var beginDate = new Date(parseInt(React.findDOMNode(this.refs.beginDate).value))
-    var endDate = new Date(beginDate.getFullYear()+2, beginDate.getMonth())
 
-    this.props.organization.name = name
-    this.props.organization.category = category
-    this.props.organization.description = description
-    this.props.organization.logoURL = logo
-    this.props.organization.beginDate = beginDate
-    this.props.organization.endDate = endDate
+    var name = this.state.name
+    var category = this.state.category
+    var description = this.state.description
+    var beginDate = this.state.beginDate
+    var endDate = this.state.endDate
+    var logoURL = this.state.logoURL
+
+    var organization = this.props.organization
+    organization.name = name
+    organization.category = category
+    organization.description = description
+    organization.logoURL = logoURL
+    organization.beginDate = beginDate
+    organization.endDate = endDate
 
     this.props.updateOrganization(this.props.organization)
-    React.findDOMNode(this.refs.saveButton).style.border="3px solid rgb(75, 187, 44)"
+    this.setState({buttonDisabled: true})
   },
 
-  descriptionCounter(e){
-    this.setState({descriptionCounter: 150 - e.target.textLength})
+  nameChange(e){
+    this.setState({name: e.target.value, buttonDisabled: false})
+  },
+
+  descriptionChange(e){
+    
+    if ((150 - e.target.value.length) > 20) {
+      this.setState({buttonDisabled: false, descriptionCounter: 150 - e.target.textLength, description: e.target.value, descriptionCounterColor: 'green'})
+    } else if ((150 - e.target.value.length) >= 0 && (150 - e.target.textLength) <= 20){
+      this.setState({buttonDisabled: false, descriptionCounter: 150 - e.target.textLength, description: e.target.value, descriptionCounterColor: 'orange'}) 
+    } else {
+      e.target.value = e.target.value.substring(0, e.target.value.length - 1)
+      this.setState({descriptionCounter: 'only 150 characters', descriptionCounterColor: 'red'}) 
+    }
+    
+  },
+
+  categoryChange(e) {
+    
+    this.setState({buttonDisabled: false, category: e.target.value})
   },
 
   getActivePeriod(){
@@ -87,74 +145,242 @@ export default React.createClass({
     var beginDate = new Date(parseInt(e.target.value))
     var endDate = new Date(beginDate.getFullYear()+2, beginDate.getMonth())
     endDate = endDate.toDateString()
-    this.setState({endDate})
-    this.changeMade()
+    this.setState({buttonDisabled: false, beginDate: beginDate.toDateString(), endDate})
+    
+  },
+
+  handleFileChange (dataURI) {
+    this.setState({
+      img: dataURI,
+      croppedImg: this.state.croppedImg,
+      cropperOpen: true
+    })
+  },
+
+  handleCrop (dataURI) {
+
+    var imageData = this.refs.cropper.getImage().replace(/^data:image\/(png|jpg);base64,/, "")
+    var imageBlob = this.b64toBlob(imageData, this.state.imageType)
+
+    var s3Policy = { "expiration": "2020-12-01T12:00:00.000Z",
+            "conditions": [
+            {"bucket": 'karmakard'},
+            ["starts-with", "$key", ""],                    
+            ["starts-with", "$Content-Type", ""],
+            ["content-length-range", 0, 524288000]
+            ]
+          };
+
+    // stringify and encode the policy
+  var stringPolicy = JSON.stringify(s3Policy);
+  var base64Policy = Buffer(stringPolicy, "utf-8").toString("base64");
+
+  // sign the base64 encoded policy
+  var signature = crypto.createHmac("sha1", process.env.AWS_SECRET_KEY_ID)
+    .update(new Buffer(base64Policy, "utf-8")).digest("base64");
+
+    var xhr = new XMLHttpRequest()
+    var fd = new FormData()
+    var key = 'uploads/' + this.props.organization.id + '_' + Date.now() + '.png'
+
+    // Populate the Post paramters.
+    fd.append('key', key);
+    fd.append('AWSAccessKeyId', 'AKIAJPJSSDYIMIBTAXSA');
+    fd.append('policy', base64Policy)
+    fd.append('signature',signature)
+    fd.append('Content-Type', this.state.imageType)
+    // This file object is retrieved from a file input.
+    fd.append('file', imageBlob);
+
+    xhr.open('POST', 'https://karmakard.s3.amazonaws.com', true);
+    xhr.send(fd)
+
+    xhr.upload.addEventListener('progress', function(e) {
+      if (firstProgressEvent) {
+        _this.total += e.total;
+      }
+      firstProgressEvent = false;
+      _this.loaded += (e.loaded - lastBytesLoaded);
+      _this.onProgress(_this.loaded / _this.total);
+    }, false);
+
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState != 4)  { return; }
+      var uploadedImageURL = 'https://karmakard.s3.amazonaws.com/' + key
+      
+      this.setState({
+        buttonDisabled: false,
+        cropperOpen: false,
+        img: null,
+        croppedImg:uploadedImageURL,
+        logoURL: uploadedImageURL
+      })
+    }.bind(this)
+  },
+
+  b64toBlob (b64Data, contentType, sliceSize) {
+    contentType = contentType || ''
+    sliceSize = sliceSize || 512
+
+    var byteCharacters = atob(b64Data)
+    var byteArrays = []
+
+    for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+      var slice = byteCharacters.slice(offset, offset + sliceSize)
+
+      var byteNumbers = new Array(slice.length)
+      for (var i = 0; i < slice.length; i++) {
+        byteNumbers[i] = slice.charCodeAt(i)
+      }
+
+      var byteArray = new Uint8Array(byteNumbers)
+
+      byteArrays.push(byteArray)
+    }
+
+    var blob = new Blob(byteArrays, {type: contentType})
+    return blob
+  },
+
+  handleRequestHide () {
+    this.setState({
+      cropperOpen: false
+    })
+  },
+
+  handleFile(e) {
+    var reader = new FileReader();
+    var file = e.target.files[0];
+    this.setState({imageType: file.type})
+
+    if (!file) return;
+    reader.onload = function(img) {
+      React.findDOMNode(this.refs.in).value = '';
+      this.handleFileChange(img.target.result);
+    }.bind(this);
+    reader.readAsDataURL(file);
+  },
+
+  zoom (e, value) {
+    this.setState({zoom: value})
   },
 
   render() {
+    
+  
+    var avatarCropper
+    if(this.state.cropperOpen) {
+      avatarCropper = (
+        <Card style={{padding: '2%', margin: '0 auto'}}>
+          <AvatarEditor
+            style={{width:'100%', height:'100%'}}
+            ref='cropper'
+            image={this.state.img}
+            width={250}
+            height={250}
+            border={50}
+            color={[255, 255, 255, 0.6]} // RGBA 
+            scale={this.state.zoom} />
+          <Slider name="slider1" onChange={this.zoom} defaultValue={1.2} max={2} min={1} />
+          <RaisedButton fullWidth={true} label = 'Crop Image' onClick={this.handleCrop} />
+        </Card>
+      )
+    } else {
+      var logoURL = this.props.organization.logoURL ? this.props.organization.logoURL : this.state.croppedImg
+      avatarCropper = (
+        <Card style={{margin:'0 auto'}} className="avatar-photo">
+          <input ref="in" type="file" accept="image/*" onChange={this.handleFile} />
+          <div className="avatar-edit">
+            <span>Logo Upload</span>
+            <i className="fa fa-camera"></i>
+          </div>
+          <img src={logoURL} />
+        </Card>
+      )
+    }
+
     var beginDateOptions = this.getActivePeriod()
-    var beginDate = new Date(this.props.organization.beginDate)
-    var endDate = new Date(this.props.organization.endDate)
+    var beginDate = new Date(this.state.beginDate)
+    var endDate = new Date(this.state.endDate)
     var endDateText
     if (this.state.endDate){endDateText = this.state.endDate}
     else if (endDate) {endDateText = endDate.toDateString()}
     else {endDateText = "End Date"}
+    
+    var startDate = [
+      {value:beginDateOptions.beginDate1.getTime(), text:beginDateOptions.beginDate1.toDateString()},
+      {value:beginDateOptions.beginDate2.getTime(), text:beginDateOptions.beginDate2.toDateString()}
+      ]
+
+    var categoryOptions = [
+      {value:"Dining", text:"Dining"},
+      {value:"Entertainment", text:"Entertainment"},
+      {value:"Health & Fitness", text:"Health & Fitness"},
+      {value:"Home & Garden", text:"Home & Garden"},
+      {value:"Professional", text:"Professional"},
+      {value:"Services", text:"Services"},
+      {value:"Shopping", text:"Shopping"}
+    ]
+
     return (
       <div>
-        <div className="content_box-header">Profile</div>
-          <div className="deal_begin_date">
-            <span className="deal_text-left">Period: From</span> 
-            <select 
-            onBlur={this.saveThisDeal} 
-            onChange={this.changeDates} 
-            defaultValue={beginDate.getTime()} 
-            ref="beginDate" 
-            className="karma_select begin_date-select"
-            disabled={this.props.editDisabled}>
-              <option>Select Begin Date</option>
-              <option value={beginDateOptions.beginDate1.getTime()}>{beginDateOptions.beginDate1.toDateString()}</option>
-              <option value={beginDateOptions.beginDate2.getTime()}>{beginDateOptions.beginDate2.toDateString()}</option>
-            </select>
-            <span className="deal-to_date" ref="endDate" defaultValue={endDate}>To</span> 
-            {endDateText}
-          </div>
-          <span className="label-span">Name</span>
-          <input
-            type="text"
-            ref="name"
-            className="karma_input"
-            onChange={this.changeMade}
-            defaultValue={this.props.organization.name}
-            disabled={this.props.editDisabled} />
+          {avatarCropper}
 
-          <span className="label-span">Category</span>
-          <select 
-            ref="category" 
-            onChange={this.changeMade} 
-            className="karma_input" 
-            defaultValue={this.props.organization.category}
-            disabled={this.props.editDisabled}>
-            <option value="Dining">Dining</option>
-            <option value="Entertainment"> Entertainment</option>
-            <option value="Health & Fitness">Health & Fitness</option>
-            <option value="Home & Garden">Home & Garden</option>
-            <option value="Professional">Professional</option>
-            <option value="Services">Services</option>
-            <option value="Shopping">Shopping</option>
-          </select>
-          <span className="label-span">Business Description</span>
-          <span ref="descriptionCharacterCount" className="profile_description-counter">{this.state.descriptionCounter}</span>
-          <textarea
-            ref="description"
-            className="karma_input"
-            placeholder="Write business description here."
-            onChange={this.changeMade}
-            onKeyUp={this.descriptionCounter}
-            defaultValue={this.props.organization.description} 
+          <SelectField
+            value={beginDate.getTime()}
+            hintText="Beginning Date"
+            onChange={this.changeDates}
+            floatingLabelText="Contract Start Date"
+            valueMember="value"
+            displayMember="text"
+            fullWidth={true}
+            menuItems={startDate} 
             disabled={this.props.editDisabled}/>
-          <span ref="logo" className="label-span"> Business Logo</span>
-          <img className="organization_profile-logo" src="/img/logo-placeholder.png" alt="logo" height="100" width="100" />
-          <button ref="saveButton" className="karma_button" onClick={this.saveProfile} disabled={this.props.editDisabled}>Save</button>
+
+          <TextField
+            disabled={true}
+            value={this.state.endDate}
+            fullWidth={true}
+            floatingLabelText="Contract End Date" />
+
+          <TextField
+            hintText="Organization Name"
+            floatingLabelText="Business Name"
+            fullWidth={true}
+            onChange={this.nameChange} 
+            defaultValue={this.props.organization.name}
+            disabled={this.props.editDisabled}/>
+
+          <SelectField
+            value={this.state.category}
+            hintText="Category"
+            onChange={this.categoryChange}
+            floatingLabelText="Contract Start Date"
+            valueMember="value"
+            displayMember="text"
+            fullWidth={true}
+            menuItems={categoryOptions} 
+            disabled={this.props.editDisabled}/>
+          
+          <TextField
+            hintText="Write business description here."
+            floatingLabelText="Business Description"
+            fullWidth={true}
+            onChange={this.descriptionChange} 
+            value= {this.state.description}
+            disabled={this.props.editDisabled}
+            multiLine={true}
+            errorText={this.state.descriptionCounter}
+            errorStyle={{color:this.state.descriptionCounterColor}}/>
+
+            <RaisedButton 
+                disabled={this.state.buttonDisabled}
+                fullWidth={true} 
+                onClick={this.saveProfile} 
+                label="Save Profile" 
+                style={{
+                  margin: '15px 0 0 0'
+                }}/>
       </div>
     )
   }

@@ -1,4 +1,5 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import Bank from '../fundraiser_bank'
 
 export default React.createClass ({
@@ -6,7 +7,8 @@ export default React.createClass ({
     this.props.showBackLink(true)
   },
 
-  render () {
+  render() {
+  injectTapEventPlugin()
     return <Bank {... this.props} />
   }
 })

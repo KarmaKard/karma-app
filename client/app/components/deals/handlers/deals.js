@@ -1,99 +1,112 @@
 import React from 'react'
-import { flux } from '../../../main'
-import UserSideBar from '../../users/user_sidebar'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { RouteHandler } from 'react-router'
-import { Link } from 'react-router'
+import mui from 'material-ui'
+import LoginForm from '../../users/login_form'
+import {AppCanvas, AppBar, Tabs, Tab, FlatButton, FontIcon, UserSideBar, CardTitle, Card, CardMedia, CardHeader, TextField, List, ListItem, RaisedButton, CardText, FloatingActionButton} from 'material-ui'
+var ThemeManager = new mui.Styles.ThemeManager()
 
 export default React.createClass({
   contextTypes: {
     router: React.PropTypes.func
   },
 
-  logOut () {
-    var { router } = this.context
-    flux.actions.users.logout(router)
-  },
-
-  getInitialState () {
-    var storeState = this.getStoreState()
-    if (storeState.organizationsStoreState.organizations.length === 0) {
-      flux.actions.organizations.getOrganizations()
-      flux.actions.organizations.getLocations()
-    }
-    if (storeState.dealsStoreState.deals.length === 0) {
-      flux.actions.deals.getDeals()
-      flux.actions.deals.getRedemptions()
-      flux.actions.deals.getSurveyQuestions()
-      flux.actions.deals.getSurveyResponses()
-    }
-    if (storeState.usersStoreState.payments.length === 0) {
-      flux.actions.users.getPayments()
-      flux.actions.users.getFundraiserMembers()
-      flux.actions.users.getDonations()
-    }
-    return storeState
+  propTypes: {
+    user: React.PropTypes.object.isRequired,
+    organizations: React.PropTypes.array.isRequired,
+    donations: React.PropTypes.array.isRequired,
+    redemptions: React.PropTypes.array.isRequired,
+    deals: React.PropTypes.array.isRequired,
+    userLocation: React.PropTypes.object.isRequired
   },
 
   componentDidMount () {
-    var currentUser = this.state.usersStoreState.currentUser
-    if (!currentUser) {
-      var router = this.context.router
-      router.transitionTo('login')
+    if (!this.props.user) {
+      this.context.router.transitionTo('login')
     }
   },
 
-  storeChange () {
-    this.setState(this.getStoreState())
+  childContextTypes: {
+    muiTheme: React.PropTypes.object
   },
 
-  getStoreState () {
+  getChildContext () {
     return {
-      organizationsStoreState: flux.stores.organizations.getState(),
-      usersStoreState: flux.stores.users.getState(),
-      dealsStoreState: flux.stores.deals.getState(),
-      toggleState: false,
-      showBackLink: false
+      muiTheme: ThemeManager.getCurrentTheme()
     }
   },
 
-  componentWillMount () {
-    flux.stores.organizations.addListener('change', this.storeChange)
-    flux.stores.deals.addListener('change', this.storeChange)
-    flux.stores.users.addListener('change', this.storeChange)
+  toAccount () {
+    this.context.router.transitionTo('account')
   },
 
-  componentWillUnmount () {
-    flux.stores.organizations.removeListener('change', this.storeChange)
-    flux.stores.deals.removeListener('change', this.storeChange)
-    flux.stores.users.removeListener('change', this.storeChange)
+  toDeals () {
+    this.context.router.transitionTo('deals')
+  },
+  
+  setFbLogin (user) {
+    flux.actions.users.facebookLogin(user)
   },
 
-  toggleMenu () {
-    var toggleState = !this.state.toggleState
-    this.setState({toggleState})
+  userLogin (email, password) {
+    flux.actions.users.login(email, password)
   },
 
-  showBackLink (showBackLink) {
-    this.setState({showBackLink})
+  createUser (user) {
+    flux.actions.users.create(user)
   },
 
-  goBack () {
-    history.back()
+  sortByDistance (a, b) {
+    return a.distance - b.distance
+  },
+
+  getDistance(lat1, lon1, lat2, lon2) {
+    var p = 0.017453292519943295;    // Math.PI / 180
+    var c = Math.cos;
+    var a = 0.5 - c((lat2 - lat1) * p)/2 + 
+            c(lat1 * p) * c(lat2 * p) * 
+            (1 - c((lon2 - lon1) * p))/2;
+
+    return 12742 * Math.asin(Math.sqrt(a)) * 0.621371; // 2 * R; R = 6371 km
+  },
+
+  sortByLocation (organizations, latitude, longitude) {
+    var orgsWithDistances = []
+    for (var i = 0; i < organizations.length; i++) {
+      var distance = 0
+      var leastDistance = 100000000
+      for (var t = 0; t < organizations[i].locations.length; t++) {
+        var orgLat = organizations[i].locations[t].latitude
+        var orgLng = organizations[i].locations[t].longitude
+        distance = this.getDistance(latitude, longitude, orgLat, orgLng)
+        leastDistance = distance < leastDistance ? distance : leastDistance
+      }
+      organizations[i].distance = leastDistance
+      orgsWithDistances.push(organizations[i])
+    }
+    return orgsWithDistances.sort(this.sortByDistance)
   },
 
   render  () {
-    var organizations = this.state.organizationsStoreState.organizations
-    var user = this.state.usersStoreState.currentUser
-    var donations = this.state.usersStoreState.donations
-    var locations = this.state.organizationsStoreState.locations
-    var surveyQuestions = this.state.dealsStoreState.surveyQuestions
-    var surveyResponses = this.state.dealsStoreState.surveyResponses
-    var fundraiserMembers = this.state.usersStoreState.fundraiserMembers
-    var redemptions = this.state.dealsStoreState.redemptions.filter(redemption => redemption.userId === user.id)
+    injectTapEventPlugin()
+    var user = this.props.user
+    if (!user) {
+      return  (<div>
+                <Card className='main_card'>
+                  <LoginForm setFbLogin={this.setFbLogin} userLogin={this.userLogin} />
+                </Card>
+              </div>
+              ) 
+    }
+    var businesses = this.props.organizations.filter(organization => organization.type === 'business')
+    var organizations = this.props.userLocation.latitude && this.props.userLocation.longitude
+        ? this.sortByLocation(businesses, this.props.userLocation.latitude, this.props.userLocation.longitude) 
+        : businesses
+    var donations = this.props.donations
+    var redemptions = this.props.redemptions.filter(redemption => redemption.userId === user.id)
     var orgWithQualifiedDeals = new Map()
-
     var cardCounter = 0
-    var deals = this.state.dealsStoreState.deals.filter(deal => {
+    var deals = this.props.deals.filter(deal => {
       var dealLimitCounter = 0
       donations.forEach(donation => {
         if (donation.userId === user.id) {
@@ -110,42 +123,18 @@ export default React.createClass({
             // a beginning date less than the payment date and an expiration date greater than
             // the 1 year after payment date
           }
+        } else {
+          if (Date.now() < (parseInt(deal.endDate) - 31557600000))
+          orgWithQualifiedDeals.set(deal.organizationId, deal.organizationId)
         }
       })
-      if (dealLimitCounter !== 0) {
-        if (deal.limit !== 'unlimited') {
-          deal.totalLimit = deal.limit * dealLimitCounter
-        }
+
+      if (deal.limit !== 'unlimited') {
+        deal.totalLimit = deal.limit * dealLimitCounter
       }
+
       return deal
     })
-
-    var backLink
-    if (this.state.showBackLink) {
-      backLink = (<div><button onClick={this.goBack} className='back_button'><i className='fa fa-chevron-left fa-2x'></i></button><div className='header_center karmatitle'>KarmaKard</div></div>)
-    } else {
-      backLink = (<div className='header_left karmatitle'>KarmaKard</div>)
-    }
-
-    if (cardCounter === 0) {
-      return (
-        <div>
-          <div className='page_header'>
-            {backLink}
-            <button className='header_right disappear' onClick={this.toggleMenu}> ☰ </button>
-          </div>
-          <div>
-            <UserSideBar toggleState={this.state.toggleState} toggleMenu={this.toggleMenu} organizations={organizations} fundraiserMembers={fundraiserMembers} user={user} />
-            <div className='content_box'>
-              <h2>Donate now to start saving money with our deals!</h2>
-              <Link to='list_deals'>
-                <div className='karma_button'>Add a Card!</div>
-              </Link>
-            </div>
-          </div>
-        </div>
-      )
-    }
 
     var activeCategories = []
     var activeOrganizations = []
@@ -163,28 +152,23 @@ export default React.createClass({
       }
     }
 
+    var form =  <RouteHandler
+                  {... this.props}
+                  organizations={activeOrganizations}
+                  categories={activeCategories}
+                  user={user}
+                  deals={deals}
+                  redemptions={redemptions}/>
     return (
       <div>
-        <div className='page_header'>
-          {backLink}
-          <button className='header_right disappear' onClick={this.toggleMenu}> ☰ </button>
-        </div>
-        <div>
-          <UserSideBar toggleState={this.state.toggleState} toggleMenu={this.toggleMenu} fundraiserMembers={fundraiserMembers} organizations={organizations} user={user} />
-          <div className='content_box'>
-            <RouteHandler
-              organizations={activeOrganizations}
-              categories={activeCategories}
-              user={user}
-              locations={locations}
-              deals={deals}
-              redemptions={redemptions}
-              surveyQuestions={surveyQuestions}
-              surveyResponses={surveyResponses}
-              fundraiserMembers={fundraiserMembers}
-              showBackLink={this.showBackLink}/>
-          </div>
-        </div>
+        <Card className='main_card'>
+        {form}
+        </Card>
+        <div className='spacer'></div>
+        <Tabs initialSelectedIndex={0} style={{bottom:-4, position: 'fixed', width: '100%'}}>
+          <Tab onClick={this.toDeals} value='0' label=<i className="material-icons md-36">local_offer</i> ></Tab>
+          <Tab onClick={this.toAccount} value='1' label=<i className="material-icons md-36">account_box</i> ></Tab>
+        </Tabs>
       </div>
     )
   }

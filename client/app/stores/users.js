@@ -13,6 +13,7 @@ export default class UserStore extends Store {
       payments: [],
       donations: [],
       fundraiserMembers: [],
+      userLocation: {},
       createErrors: [],
       loginErrors: [],
       resetEmailSent: null,
@@ -33,12 +34,15 @@ export default class UserStore extends Store {
     this.handleAction('users.emailPasswordReset', this.sendPasswordResetEmail)
     this.handleAction('users.checkPasswordResetExpiration', this.checkPasswordResetExpiration)
     this.handleAction('users.facebookLogin', this.handleAuth)
-    this.handleAction('users.tieFundraiserMembershipToUser', this.handleAuth)
+    this.handleAction('users.tieFundraiserMembershipToUser', this.handleFundraiserMemberAuth)
     this.handleAction('users.getFundraiserMembers', this.saveFundraiserMembers)
     this.handleAction('organizations.createFundraiserMember', this.saveFundraiserMember)
     this.handleAction('users.createInPersonDonation', this.saveDonation)
-    this.handleAction('users.activateDonation', this.handleAuth)
-    this.handleAction('organizations.updateOwedAmounts', this.saveFundraiserMembers)
+    this.handleAction('users.activateDonation', this.activateDonation)
+    this.handleAction('users.activatePayment', this.activatePayment)
+    this.handleAction('users.getUserLocation', this.saveLocation)
+    this.handleAction('users.shareCard', this.saveSharedDonation)
+    this.handleAction('organizations.updateOwedAmounts', this.updateFundraiserMember)
   }
 
   handleAuth (user) {
@@ -66,12 +70,11 @@ export default class UserStore extends Store {
   }
 
   logout (router) {
-    window.localStorage.clear()
+    localStorage.clear()
     this.setState({
       currentUser: null,
       authenticated: false
     })
-    router.transitionTo('login')
   }
 
   storeCreateError (error) {
@@ -98,6 +101,16 @@ export default class UserStore extends Store {
     })
   }
 
+  updateFundraiserMember (fundraiserMember) {
+    var fundraiserMembers = this.state.fundraiserMembers
+    for (var i = 0; i < fundraiserMembers.length; i++) {
+      if (fundraiserMembers[i].id === fundraiserMember.id) {
+        fundraiserMembers[i] = fundraiserMember
+      }
+    }
+    this.setState({fundraiserMembers})
+  }
+
   saveFundraiserMembers (fundraiserMembers) {
     this.setState({fundraiserMembers})
   }
@@ -106,19 +119,87 @@ export default class UserStore extends Store {
     this.setState({donations})
   }
 
-  saveDonation (fundraiserMember, donations, payment) {
-    var index = this.state.fundraiserMembers.findIndex(arrayFundraiserMember => arrayFundraiserMember.id === fundraiserMember.id)
-    var updatedFundraiserMembers = this.state.fundraiserMembers[index] = fundraiserMember
+  saveDonation (returnedFundraiserMember, newValueDonations, payment) {
+    var fundraiserMembers = this.state.fundraiserMembers
+    var index = fundraiserMembers.findIndex(arrayFundraiserMember => arrayFundraiserMember.id === returnedFundraiserMember.id)
+    fundraiserMembers[index] = returnedFundraiserMember
     this.setState({
-      fundraiserMembers: updatedFundraiserMembers,
-      donations: this.state.donations.concat(donations),
+      fundraiserMembers: fundraiserMembers,
+      donations: this.state.donations.concat(newValueDonations),
       payments: this.state.payments.concat(payment)
     })
+  }
+
+  saveSharedDonation (donation) {
+    var donations = this.state.donations
+    for (var i = 0; i < donations.length; i++) {
+      if (donations[i].id === donation.id) {
+        donations[i] = donation
+      }
+    }
+    this.setState({donations})
   }
 
   saveFundraiserMember (fundraiserMember) {
     this.setState({
       fundraiserMembers: this.state.fundraiserMembers.concat(fundraiserMember)
+    })
+  }
+
+  handleFundraiserMemberAuth (user, fundraiserMember) {
+    var fundraiserMembers = this.state.fundraiserMembers
+    for (var i = 0; i < fundraiserMembers.length; i++) {
+      if (fundraiserMembers[i].id === fundraiserMember.id) {
+        fundraiserMembers[i] = fundraiserMember
+      }
+    }
+
+    this.setState({ currentUser: user, authenticated: true, fundraiserMembers})
+  }
+
+  activatePayment (user, payment, donations) {
+    var donationsMap = new Map()
+    for (var i = 0; i < donations.length; i++) {
+      donationsMap.set([donations[i].id], donations[i])
+    }
+    var stateDonations = this.state.donations
+    for (var i = 0; i < stateDonations.length; i++) {
+      if (donationsMap.has(stateDonations[i].id)) {
+        stateDonations[i] = donationsMap.get(stateDonations[i])
+      }
+    }
+
+    var payments = this.state.payments
+    for (var i = 0; i < payments.length; i++) {
+      if (payments[i].id === payment.id) {
+        payments[i] = payment
+      }
+    }
+    this.setState({
+      currentUser: user,
+      authenticated: true,
+      donations: donations,
+      payments: payments
+    })
+  }
+
+  activateDonation (user, donation) {
+    var donations = this.state.donations
+    for (var i = 0; i < donations.length; i++) {
+      if (donations[i].id === donation.id) {
+        donations[i] = donation
+      }
+    }
+    this.setState({
+      currentUser: user,
+      authenticated: true,
+      donations
+    })
+  }
+
+  saveLocation (locationObject) {
+    this.setState({
+      userLocation: locationObject
     })
   }
 
