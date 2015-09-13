@@ -1,4 +1,5 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { flux } from '../../../main'
 import PasswordReset from '../password_reset'
 import {Link} from 'react-router'
@@ -31,7 +32,8 @@ export default React.createClass({
     history.back()
   },
 
-  render () {
+  render() {
+  injectTapEventPlugin()
     return (
       <div>
         <div className='page_header'>
@@ -39,7 +41,7 @@ export default React.createClass({
             <button onClick={this.goBack} className='back_button'><i className='fa fa-chevron-left fa-2x'></i></button>
             <div className='header_center karmatitle'>KarmaKard</div>
           </div>        </div>
-        <div className='guest_box'>
+        <div className='main_card'>
           <PasswordReset resetEmailSent={this.state.user.resetEmailSent} />
         </div>
       </div>

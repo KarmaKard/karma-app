@@ -1,4 +1,5 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import BusinessProfile from '../business_profile'
 import EditFundraiserProfile from '../edit_fundraiser_profile'
 

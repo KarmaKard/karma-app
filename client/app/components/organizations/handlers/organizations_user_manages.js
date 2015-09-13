@@ -1,4 +1,5 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { flux } from '../../../main'
 import SuperAdminView from '../superadmin_organizations_manager'
 import NonAdminView from '../nonadmin_organizations_manager'
@@ -33,7 +34,8 @@ export default React.createClass({
     this.setState({toggleState})
   },
 
-  render () {
+  render() {
+  injectTapEventPlugin()
     var user = this.props.user
     var organizations = this.props.organizations
     var isSuperAdmin = user.roles.superadmin

@@ -1,4 +1,5 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { flux } from '../../../main'
 import PaymentType from '../fundraiser_member_inperson_type'
 import Amount from '../fundraiser_member_inperson_amount'
@@ -47,12 +48,6 @@ export default React.createClass({
   },
 
   setEmail (email) {
-    this.setState(
-      {
-        email: email,
-        step: this.state.step + 1
-      }
-    )
     if (email && this.state.amount && this.state.paymentType) {
       var donation = {
         email: email,
@@ -60,6 +55,12 @@ export default React.createClass({
         paymentType: this.state.paymentType
       }
       flux.actions.users.createInPersonDonation(donation, this.props.fundraiserMember)
+      this.setState(
+      { email: null, 
+        step: this.state.step + 1,
+        amount: 0,
+        paymentType: null
+      })
     }
   },
 
@@ -89,7 +90,8 @@ export default React.createClass({
     }
   },
 
-  render () {
+  render() {
+  injectTapEventPlugin()
     return (this.getInPersonComponent())
   }
 })

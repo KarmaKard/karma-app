@@ -1,4 +1,5 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { Link } from 'react-router'
 
 export default React.createClass({
@@ -10,7 +11,8 @@ export default React.createClass({
     toggleMenu: React.PropTypes.func.isRequired
   },
 
-  render () {
+  render() {
+  injectTapEventPlugin()
     var user = this.props.user
     var navigationStatus = this.props.toggleState
       ? 'side_bar_navigation opened_navigation'

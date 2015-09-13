@@ -62,6 +62,20 @@ export default class UserActions extends Actions {
     })
   }
 
+  getUserLocation () {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function (position) {
+        var userLocation = {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude
+        }
+        this.dispatch('getUserLocation', userLocation)
+      }.bind(this))
+    } else {
+      alert("Geolocation is not supported by this browser.")
+    }
+  }
+
   getPayments () {
     KarmaAPI.getPayments().then(payments => {
       if (payments) {
@@ -80,6 +94,7 @@ export default class UserActions extends Actions {
 
   logout (router) {
     this.dispatch('logout', router)
+    router.transitionTo('login')
   }
 
   emailPasswordReset (email) {
@@ -110,9 +125,9 @@ export default class UserActions extends Actions {
 
   tieFundraiserMembershipToUser (user, fundraiserMemberId, router, whereTo) {
     var p = KarmaAPI.tieFundraiserMembershipToUser(user, fundraiserMemberId)
-    p.then(user => {
-      if (user) {
-        this.dispatch('tieFundraiserMembershipToUser', user)
+    p.then(response => {
+      if (response) {
+        this.dispatch('tieFundraiserMembershipToUser', response.user, response.fundraiserMember)
         return router ? router.transitionTo(whereTo) : null
       }
     }).catch(this.loginError)
@@ -130,17 +145,34 @@ export default class UserActions extends Actions {
     var p = KarmaAPI.createInPersonDonation(donation, fundraiserMember)
     p.then(response => {
       if (response) {
-        this.dispatch('createInPersonDonation', response.fundraiserMember, response.donations, response.payment)
+        this.dispatch('createInPersonDonation', response.returnedFundraiserMember, response.newValueDonations, response.payment)
       }
     }).catch(this.createError)
   }
 
-  activateDonation (user, donationId, router, whereTo) {
+  shareCard (recipientEmail, donation, user) {
+    var p = KarmaAPI.shareCard(recipientEmail, donation, user)
+    p.then(donation => {
+      if (donation) {
+        this.dispatch('shareCard', donation)
+      }
+    }).catch(this.createError)
+  }
+
+  activateDonation (user, donationId) {
     var p = KarmaAPI.activateDonation(user, donationId)
-    p.then(user => {
-      if (user) {
-        this.dispatch('activateDonation', user)
-        return router ? router.transitionTo(whereTo) : null
+    p.then(response => {
+      if (response) {
+        this.dispatch('activateDonation', response.user, response.donation)
+      }
+    }).catch(this.loginError)
+  }
+
+  activatePayment (user, paymentId) {
+    var p = KarmaAPI.activatePayment(user, paymentId)
+    p.then(response => {
+      if (response) {
+        this.dispatch('activatePayment', response.user, response.payment, response.donations)
       }
     }).catch(this.loginError)
   }

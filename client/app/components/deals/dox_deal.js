@@ -1,19 +1,42 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { flux } from '../../main'
+import mui from 'material-ui'
+
+import {CardTitle, CircularProgress, SelectField, Card, CardMedia, Avatar, CardHeader, TextField, List, ListItem, RaisedButton, CardText, FloatingActionButton} from 'material-ui'
+var ThemeManager = new mui.Styles.ThemeManager()
 
 export default React.createClass({
-  getInitialState(){
+  getInitialState () {
     return {
-      endDate: this.props.endDate
+      endDate: this.props.endDate,
+      limit: null,
+      primaryProductName: null,
+      dollarValue: null,
+      beginDate: this.props.deal.beginDate,
+      valueErrorMessage: null,
+      dealText: null
+    }
+  },
+
+  childContextTypes: {
+    muiTheme: React.PropTypes.object
+  },
+
+  getChildContext () {
+    return {
+      muiTheme: ThemeManager.getCurrentTheme()
     }
   },
 
   saveThisDeal(){
-    var primaryProductName = React.findDOMNode(this.refs.primaryProductName).value
-    var limit = React.findDOMNode(this.refs.limit).value
-    var dollarValue = React.findDOMNode(this.refs.dollarValue).value
-    var beginDate = new Date(parseInt(React.findDOMNode(this.refs.beginDate).value))
-    var endDate = new Date(beginDate.getFullYear()+2, beginDate.getMonth())
+    var primaryProductName = this.state.primaryProductName ? this.state.primaryProductName : this.props.deal.primaryProductName
+    var limit = this.state.limit ? this.state.limit : this.props.deal.limit
+    var dollarValue = this.state.dollarValue ? this.state.dollarValue : this.props.deal.dollarValue
+    var beginDate = this.state.beginDate ? this.state.beginDate : this.props.deal.beginDate
+    var endDate = this.state.endDate? new Date(this.state.endDate) : new Date(this.props.deal.endDate)
+    beginDate = new Date(parseInt(beginDate))
+    endDate = new Date(beginDate.getFullYear()+2, beginDate.getMonth())
 
     if (!primaryProductName || !limit || !dollarValue || isNaN(beginDate) || isNaN(endDate)) {
       return null
@@ -28,7 +51,8 @@ export default React.createClass({
       type: "DOX"
     } 
 
-    deal.dealText = "Get " + dollarValue + " off purchase of "+ primaryProductName 
+    deal.dealText = 'Get ' + dollarValue + ' dollars off of ' + primaryProductName
+    this.setState({dealText: deal.dealText})
     
     if(this.props.deal){
       deal.id = this.props.deal.id
@@ -44,98 +68,159 @@ export default React.createClass({
     var beginDate = new Date(parseInt(e.target.value))
     var endDate = new Date(beginDate.getFullYear()+2, beginDate.getMonth())
     endDate = endDate.toDateString()
-    this.setState({endDate})
+    this.setState({endDate, beginDate: parseInt(e.target.value)})
     this.props.changeMade()
   },
 
+  changePrimaryProductName (e) {
+    this.setState({
+      primaryProductName: e.target.value
+    })
+  },
+
+  changeLimit (e) {
+    this.setState({
+      limit: e.target.value
+    })
+  },
+
+  changeDollarValue (e) {
+    if(!e.target.value) {
+      this.setState({dollarValue: e.target.value, valueErrorMessage: null})
+      return
+    }
+
+    if (isNaN(e.target.value) || !/^(?:\d*)$/.test(e.target.value)) {
+      e.target.value = e.target.value.substring(0, e.target.value.length - 1)
+      this.setState({valueErrorMessage: 'Must be a whole number digit'})
+      return
+    }
+
+    this.setState({dollarValue: e.target.value, valueErrorMessage: null})
+  },
+
   render() {
+    
+  
     if (!this.props.deal){
       return <span />
     }
 
-    var primaryProductName = this.props.deal.primaryProductName
-    var limit = this.props.deal.limit
-    var dollarValue = this.props.deal.dollarValue
-    var beginDate = this.props.deal.beginDate
-    var endDate = new Date(this.props.deal.endDate)
-    var endDateText
-    if (this.state.endDate){endDateText = this.state.endDate}
-    else if (endDate) {endDateText = endDate.toDateString()}
-    else {endDateText = "End Date"}
+    var primaryProductName = this.state.primaryProductName ? this.state.primaryProductName : this.props.deal.primaryProductName
+    var limit = this.state.limit ? this.state.limit : this.props.deal.limit
+    var dollarValue = this.state.dollarValue ? this.state.dollarValue : this.props.deal.dollarValue
+    var beginDate = this.state.beginDate ? this.state.beginDate : this.props.deal.beginDate
+    var endDate = this.state.endDate? new Date(this.state.endDate) : new Date(this.props.deal.endDate)
+    var endDateText = endDate
+      ? endDate.toDateString()
+      : null
 
+    var limits = [
+      {value: 1 , text: '1'},
+      {value: 2 , text: '2'},
+      {value: 3 , text: '3'},
+      {value: 4 , text: '4'},
+      {value: 5 , text: '5'},
+      {value: 6 , text: '6'},
+      {value: 7 , text: '7'},
+      {value: 8 , text: '8'},
+      {value: 9 , text: '9'},
+      {value: 10, text: '10'},
+      {value: 'unlimited', text: 'unlimited'}
+    ]
+
+    var startDate = [
+      {value:this.props.activePeriod.beginDate1.getTime(), text:this.props.activePeriod.beginDate1.toDateString()},
+      {value:this.props.activePeriod.beginDate2.getTime(), text:this.props.activePeriod.beginDate2.toDateString()}
+    ]
+
+    var displayDeleteButton = this.props.deal.primaryProductName
+      ? (<RaisedButton 
+          expandable={true}
+          fullWidth={true} 
+          onClick={this.deleteClicked} 
+          disabled={this.props.editDisabled}
+          label="Delete" 
+          style={{
+            margin: '15px 0 0 0'
+          }}/>)
+      : null
+
+    var offerText = primaryProductName 
+      ? 'Get ' + dollarValue + ' dollars off of ' + primaryProductName
+      : 'Your deal text to show here'
+
+    var expanded = this.props.deal.primaryProductName ? false : true
     return(
-      <div className="bxx_deal">
-        <div className="deal_header">
-          Dollars Off
-          <button className="deal-delete" onClick={this.deleteClicked} hidden={this.props.editDisabled}>Delete</button>
-        </div>
-        <div className="deal_contents">
-          <div className="deal-row">
-            <div className="required_amount">
-              <span className="deal_text-left">Get</span> 
-              <input 
-                ref="dollarValue" 
-                className="deal-input dollar_value-input" 
-                placeholder="Value"
-                onBlur={this.saveThisDeal} 
-                onChange={this.props.changeMade} 
-                defaultValue={dollarValue} 
-                disabled={this.props.editDisabled}/>
-            </div>
-            <span className="deal_text-right">Dollars Off</span>
-          </div>
-          <div className="deal-row">
-            <span className="deal_text2-left">Purchase of: </span> 
-            <input 
-              ref="primaryProductName" 
-              className="deal-input" 
-              placeholder="Purchase Item Requirement"
-              onBlur={this.saveThisDeal} 
-              onChange={this.props.changeMade} 
-              defaultValue={primaryProductName} 
-              disabled={this.props.editDisabled}/> 
-          </div>
-          <div className="deal_limit">
-            <span className="deal_text-left">Limit</span> 
-            <select 
-              ref="limit" 
-              className="karma_select"
-              onBlur={this.saveThisDeal}
-              onChange={this.props.changeMade}  
-              defaultValue={limit}
-              disabled={this.props.editDisabled}>
-              <option>unlimited</option>
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
-              <option>6</option>
-              <option>7</option>
-              <option>8</option>
-              <option>9</option>
-              <option>10</option>
-            </select>
-          </div>
-            <div className="deal_begin_date">
-            <span className="deal_text-left">Period: From</span> 
-            <select 
-            onBlur={this.saveThisDeal} 
-            onChange={this.changeDates} 
-            defaultValue={beginDate} 
-            ref="beginDate" 
-            className="karma_select begin_date-select"
-            disabled={this.props.editDisabled}>
-              <option>Select Begin Date</option>
-              <option value={this.props.activePeriod.beginDate1.getTime()}>{this.props.activePeriod.beginDate1.toDateString()}</option>
-              <option value={this.props.activePeriod.beginDate2.getTime()}>{this.props.activePeriod.beginDate2.toDateString()}</option>
-            </select>
-            <span className="deal-to_date" ref="endDate" defaultValue={endDate}>To</span> 
-            {endDateText}
-          </div>
-        </div>
-        <hr />
-      </div>
+      <Card style={{padding: '15px 2%', margin: '10px 0' }} initiallyExpanded={expanded}>
+        <CardTitle
+          style={{padding: '0'}}
+          title=<span style={{fontSize:'18px'}}>{offerText}</span>
+          subtitle= {'Limit: ' + limit}
+          showExpandableButton={true} />
+
+        <TextField
+          expandable={true}
+          hintText="ex. 10"
+          floatingLabelText="How Many Dollars?"
+          fullWidth={true}
+          onBlur={this.saveThisDeal} 
+          onChange={this.changeDollarValue} 
+          value={dollarValue} 
+          disabled={this.props.editDisabled}
+          multiLine={true}
+          errorText={this.state.valueErrorMessage}/>
+
+        <TextField
+          expandable={true}
+          hintText="Dollars off of what?"
+          floatingLabelText="Offering Item"
+          fullWidth={true}
+          onBlur={this.saveThisDeal} 
+          onChange={this.changePrimaryProductName} 
+          defaultValue={primaryProductName} 
+          disabled={this.props.editDisabled}
+          multiLine={true}
+          errorText={this.state.descriptionCounter}
+          errorStyle={{color:this.state.descriptionCounterColor}}/>
+
+        <SelectField
+          expandable={true}
+          value={limit}
+          hintText="How Many Times Can This Deal Be Used"
+          onChange={this.changeLimit}
+          floatingLabelText="Use Limit"
+          valueMember="value"
+          displayMember="text"
+          fullWidth={true}
+          menuItems={limits} 
+          disabled={this.props.editDisabled}/>
+
+
+        <SelectField
+          expandable={true}
+          value={beginDate}
+          hintText="Beginning Date"
+          onBlur={this.saveThisDeal} 
+          onChange={this.changeDates}
+          floatingLabelText="Deal Contract Start Date"
+          valueMember="value"
+          displayMember="text"
+          fullWidth={true}
+          menuItems={startDate} 
+          disabled={this.props.editDisabled}/>
+
+        <TextField
+          expandable={true}
+          hintText="Deal Term End Date"
+          floatingLabelText="Deal Contract End Date"
+          fullWidth={true}
+          value={endDateText} 
+          disabled={true}
+          multiLine={true}/>
+
+        {displayDeleteButton}
+      </Card>
     )
   }
 })

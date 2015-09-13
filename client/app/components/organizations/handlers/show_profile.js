@@ -1,4 +1,5 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { flux } from '../../../main'
 import { Link } from 'react-router'
 
@@ -9,7 +10,6 @@ export default React.createClass({
     organization: React.PropTypes.object.isRequired,
     user: React.PropTypes.object.isRequired,
     deals: React.PropTypes.array.isRequired,
-    locations: React.PropTypes.array.isRequired,
     organizations: React.PropTypes.array.isRequired,
     showBackLink: React.PropTypes.func.isRequired
   },
@@ -48,7 +48,8 @@ export default React.createClass({
     )
   },
 
-  render () {
+  render() {
+  injectTapEventPlugin()
     var organization = this.props.organization
     if (!organization) {
       return (
@@ -60,7 +61,7 @@ export default React.createClass({
     }
 
     var deals = this.props.deals.map(this.renderDealLink)
-    var locations = this.props.locations.map(function (location) {
+    var locations = organization.locations.map(function (location) {
       return <li className='dealButton'>{location.street + ' ' + location.zip}</li>
     })
 

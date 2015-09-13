@@ -1,4 +1,5 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import Redemption from '../redemption'
 
 export default React.createClass({
@@ -7,11 +8,11 @@ export default React.createClass({
     router: React.PropTypes.func
   },
 
-  render () {
+  render() {
+  injectTapEventPlugin()
 
     return (
       <div>
-        <div className='content_box-header'>Redemption</div>
         <Redemption {...this.props} />
       </div>
     )

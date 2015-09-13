@@ -1,4 +1,5 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import Register from '../register'
 import { flux } from '../../../main'
 
@@ -49,7 +50,8 @@ export default React.createClass({
     flux.actions.users.create(user)
   },
 
-  render () {
+  render() {
+  injectTapEventPlugin()
     return (
       <div>
         <div className='page_header'>
@@ -58,7 +60,7 @@ export default React.createClass({
             <div className='header_center karmatitle'>KarmaKard</div>
           </div>
         </div>
-        <div className='guest_box'>
+        <div className='main_card'>
           <div className='content_box-header'>Register</div>
           <Register setRegistrationInfo={this.setRegistrationInfo} setFbLogin={this.setFbLogin} createUser={this.createUser}/>
            <input type='submit' ref='button' onClick={this.didClick} className='karma_button' value='Submit'/>

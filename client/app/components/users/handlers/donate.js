@@ -1,38 +1,41 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { flux } from '../../../main'
 import DonateForm from '../donate'
-import LoginForm from '../login_form'
+import LoginForm from '../reusable_login_form'
 import Register from '../register'
+import mui from 'material-ui'
+import {AppBar, AppCanvas, IconButton, FlatButton, Card, CardHeader, CardTitle, Avatar, CardText, RaisedButton} from 'material-ui'
+
+var ThemeManager = new mui.Styles.ThemeManager()
+
 
 export default React.createClass({
   getInitialState () {
-    return Object.assign(this.getStoreState(), {
+    return {
       mismatchPasswords: false,
       isExistingUser: false,
-      errors: null
-    })
+      errors: null,
+      buttonDisabled: false
+    }
   },
 
   contextTypes: {
     router: React.PropTypes.func
   },
 
-  getStoreState () {
-    return {
-      users: flux.stores.users.getState()
-    }
-  },
-
-  storeChange () {
-    this.setState(this.getStoreState())
-  },
-
   componentWillMount () {
-    flux.stores.users.addListener('change', this.storeChange)
+    this.props.showBackLink(true)
   },
 
-  componentWillUnmount () {
-    flux.stores.users.removeListener('change', this.storeChange)
+  childContextTypes: {
+    muiTheme: React.PropTypes.object
+  },
+
+  getChildContext () {
+    return {
+      muiTheme: ThemeManager.getCurrentTheme()
+    }
   },
 
   createToken (info) {
@@ -51,12 +54,21 @@ export default React.createClass({
     } else {
       var stripeToken = response.id
       var { router } = this.context
-      var currentUser = this.state.users.currentUser
+      var user = this.props.user
 
-      if (currentUser) {
-        var fundraiserMemberId = window.localStorage.getItem('affiliate-token')
+      if (user) {
         var organizationId = this.context.router.getCurrentParams().organizationId
-        flux.actions.users.createPayment(stripeToken, currentUser, router, 'deals', organizationId, fundraiserMemberId)
+        var memberNameToken = window.localStorage.getItem('member-token')
+        var fundraiserMemberId
+        if (memberNameToken) {
+          var fundraiserMember = this.props.fundraiserMembers.filter(
+            fundraiserMember => fundraiserMember.name.toLowerCase().replace(/ /g,'') === memberNameToken 
+            && fundraiserMember.organizationId === organizationId)[0]
+          fundraiserMemberId = fundraiserMember.id
+        } else {
+          fundraiserMemberId = 'KARMAKARD'
+        }
+        flux.actions.users.createPayment(stripeToken, user, router, 'deals', organizationId, fundraiserMemberId)
       }
     }
   },
@@ -73,38 +85,34 @@ export default React.createClass({
     flux.actions.users.create(user)
   },
 
-  toggleForm (e) {
-    e.preventDefault()
+  toggleForm () {
     this.setState({
       isExistingUser: !this.state.isExistingUser
     })
   },
 
   render () {
+    injectTapEventPlugin()
     var barrierForm = this.state.isExistingUser
-      ? <LoginForm loginErrors={this.state.users.loginErrors} setFbLogin={this.setFbLogin} userLogin={this.userLogin} />
-      : <Register setFbLogin={this.setFbLogin} userLogin={this.userLogin} createUser={this.createUser}/>
+      ? <LoginForm toggleForm={this.toggleForm} loginErrors={this.props.loginErrors} setFbLogin={this.setFbLogin} userLogin={this.userLogin} />
+      : <Register toggleForm={this.toggleForm} setFbLogin={this.setFbLogin} userLogin={this.userLogin} createUser={this.createUser}/>
 
-    var user = this.state.users.currentUser
+    var user = this.props.user
     var form = user
-      ? <DonateForm currentUser={user} createToken={this.createToken} toggleDisableButton={this.toggleDisableButton} buttonDisabled={this.state.buttonDisabled}/>
+      ? <DonateForm user={user} createToken={this.createToken} toggleDisableButton={this.toggleDisableButton} buttonDisabled={this.state.buttonDisabled}/>
       : barrierForm
 
+    var toggleButtonText
     if (!user) {
-      var toggleButtonText = this.state.isExistingUser ? 'New User?' : 'Existing User?'
+      toggleButtonText = this.state.isExistingUser ? 'New User?' : 'Existing User?'
     }
 
+    var memberNameToken = window.localStorage.getItem('member-token')
     return (
-      <div>
-        <div className= 'page_header'>
-          <div className= 'header_left karmatitle'>KarmaKard</div>
-          <button className='header_right' onClick={this.toggleForm}>{toggleButtonText}</button>
-        </div>
-        <div className= 'guest_box'>
-          {form}
-          <span ref='errors' className='payment-errors'>{this.state.errors}</span>
-        </div>
-      </div>
+      <Card className= 'main_card'>
+        {form}
+        <span ref='errors' className='payment-errors'>{this.state.errors}</span>
+      </Card>
     )
   }
 })

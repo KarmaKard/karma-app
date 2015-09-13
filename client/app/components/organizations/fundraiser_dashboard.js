@@ -1,6 +1,13 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { Link } from 'react-router'
 import { flux } from './../../main'
+import FundraiserProfile from './edit_fundraiser_profile'
+import FundraiserTeam from './fundraiser_team'
+import FundraiserBank from './fundraiser_bank'
+import mui from 'material-ui'
+import {CardTitle, CircularProgress, Card, CardMedia, Avatar, CardHeader, TextField, List, ListItem, RaisedButton, CardText, FloatingActionButton} from 'material-ui'
+var ThemeManager = new mui.Styles.ThemeManager()
 
 export default React.createClass({
 
@@ -44,77 +51,77 @@ export default React.createClass({
     flux.actions.organizations.confirmFundraiser(organization, fundraiserMembers)
   },
 
-  checkBankInfo () {
-    if (!this.props.organization.bankInfo) {
-      return (
-        <li>
-          <Link to='edit_fundraiser_bank' params={{organizationId: this.props.organization.id}}>
-            Complete bank information
-          </Link>
-        </li>
-      )
-    }
-    for (var field in this.props.organization.bankInfo) {
-      if (this.props.organization.bankInfo[field] == null) {
-        return (
-          <li>
-            <Link to='edit_fundraiser_bank' params={{organizationId: this.props.organization.id}}>
-              Complete Bank Information
-            </Link>
-          </li>
-        )
-      }
+  childContextTypes: {
+    muiTheme: React.PropTypes.object
+  },
+
+  getChildContext () {
+    return {
+      muiTheme: ThemeManager.getCurrentTheme()
     }
   },
 
-  render () {
+  getStatusIcon (status) {
+    return status 
+      ? <i style={{color: '#73BF73'}} className="material-icons md-36">check_circle</i>
+      : <i style={{color: '#F67385'}} className="material-icons md-36">mode_edit</i>
+  },
+
+
+  render() {
+  injectTapEventPlugin()
     var organization = this.props.organization
     var payments = this.props.payments.filter(payment => payment.fundraiserId === organization.id)
-    var addTeamMembers, organizationDescription, organizationPurpose, organizationBankInfo, submitButton
+    var submitButton
     var message = 'You have some task(s) remaining before your business can be reviewed:'
-    var fundraiserMembers = this.props.fundraiserMembers.find(fundraiserMember => fundraiserMember.organizationId === organization.id)
+    var paymentPerDayChart = null
+    var fundraiserMembers = this.props.fundraiserMembers.filter(fundraiserMember => fundraiserMember.organizationId === organization.id)
 
-    if (!fundraiserMembers || fundraiserMembers.length === 0) {
-      addTeamMembers = (
-        <li>
-          <Link to='edit_fundraiser_team' params={{organizationId: organization.id}}>
-            Add team member(s)
-          </Link>
-        </li>
-      )
-    }
-    if (!organization.description) {
-      organizationDescription = (
-        <li>
-          <Link to='edit_profile' params={{organizationId: organization.id}}>
-            Add profile description
-          </Link>
-        </li>
-      )
-    }
-    if (!organization.purpose) {
-      organizationPurpose = (
-        <li>
-          <Link to='edit_profile' params={{organizationId: organization.id}}>
-            Add profile purpose
-          </Link>
-        </li>
-      )
-    }
+    var profileStatus = !this.props.organization.description ||
+    !this.props.organization.purpose ||
+    !this.props.organization.logoURL ||
+    !this.props.organization.name ? 0 : 1
 
-    organizationBankInfo = this.checkBankInfo()
+    var teamStatus = fundraiserMembers.length === 0 ? 0 : 1
 
-    if (!organizationDescription && !organizationPurpose && !addTeamMembers) {
-      message = 'All required information has been completed. Please thoroughly review your information before you submit this business to be reviewed.'
-      submitButton = <button onClick={this.submitToReview} className='karma_button'>Submit for Review</button>
+    var bankStatus = !this.props.organization.bankInfo ||
+    !this.props.organization.bankInfo.accountNumber ||
+    !this.props.organization.bankInfo.birthDate ||
+    !this.props.organization.bankInfo.firstName ||
+    !this.props.organization.bankInfo.lastName||
+    !this.props.organization.bankInfo.routingNumber ||
+    !this.props.organization.bankInfo.tosChecked ? 0 : 1
+    
+
+    if (bankStatus && teamStatus && profileStatus) {
+      message = "All required information has been completed. Please thoroughly review your information before you submit this fundraiser to be reviewed."
+      submitButton = <RaisedButton 
+              fullWidth={true} 
+              onClick={this.submitToReview} 
+              label="Submit To Review" 
+              style={{
+                margin: '0 0 25px 0'
+              }}/>
     }
 
     if (organization.status === 'pending' && this.props.user.roles.superadmin) {
-      message = 'Please Review this organization and Click the button to authorize their deals on our app.'
+      message = "Please Review this organization and Click the button to authorize their deals on our app."
       submitButton = (
         <div>
-          <button onClick={this.confirmOrganization} className='karma_button'>Confirm This Fundraiser</button>
-          <button onClick={this.rejectOrganization} className='karma_button'>Reject This Fundraiser</button>
+          <RaisedButton 
+            fullWidth={true} 
+            onClick={this.confirmOrganization} 
+            label="Confirm Organization" 
+            style={{
+              margin: '0 0 25px 0'
+            }}/>
+          <RaisedButton 
+            fullWidth={true} 
+            onClick={this.rejectOrganization} 
+            label="Reject Organization" 
+            style={{
+              margin: '0 0 25px 0'
+            }}/>
         </div>
       )
     } else if (organization.status === 'pending') {
@@ -159,22 +166,42 @@ export default React.createClass({
 
       submitButton = null
     }
+    teamStatus = this.getStatusIcon(teamStatus)
+    bankStatus = this.getStatusIcon(bankStatus)
+    profileStatus = this.getStatusIcon(profileStatus)
 
     return (
       <div>
-        <div className='content_box-header'>
-          Dashboard
-        </div>
-        <p>
-          {message}
-        </p>
-        <ul className='toDoList'>
-          {addTeamMembers}
-          {organizationDescription}
-          {organizationPurpose}
-          {organizationBankInfo}
-        </ul>
+        <CardTitle title={this.props.organization.name} />
+        <CardText>{message}</CardText>
         {submitButton}
+        <Card style={{padding: '0 2%'}} initiallyExpanded={false}>
+          <CardHeader
+            title=<span style={{fontSize:'30px'}}>Profile</span>
+            avatar={profileStatus}
+            showExpandableButton={true}>
+          </CardHeader> 
+          <FundraiserProfile expandable={true} {... this.props}/>
+          <CardText style={{padding: '5px 0'}} expandable={true}></CardText>
+        </Card>
+        <Card style={{padding: '0 2%'}} initiallyExpanded={false}>
+          <CardHeader
+            title=<span style={{fontSize:'30px'}}>Team</span>
+            avatar={teamStatus}
+            showExpandableButton={true}>
+          </CardHeader> 
+          <FundraiserTeam expandable={true} {... this.props} />
+          <CardText style={{padding: '5px 0'}} expandable={true}></CardText>
+        </Card>
+        <Card style={{padding: '0 2%'}} initiallyExpanded={false}>
+          <CardHeader
+            title=<span style={{fontSize:'30px'}}>Bank Information</span>
+            avatar={bankStatus}
+            showExpandableButton={true}>
+          </CardHeader> 
+          <FundraiserBank expandable={true} {... this.props} />
+          <CardText style={{padding: '5px 0'}} expandable={true}></CardText>
+        </Card>
       </div>
     )
   }

@@ -1,6 +1,6 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { RouteHandler } from 'react-router'
-import UserSideBar from '../../users/user_sidebar'
 
 export default React.createClass({
    propTypes: {
@@ -14,7 +14,8 @@ export default React.createClass({
     fundraiserMembers: React.PropTypes.array.isRequired
    },
 
-  render () {
+  render() {
+  injectTapEventPlugin()
 
     var organization = this.props.organization
     var user = this.props.user
@@ -26,8 +27,6 @@ export default React.createClass({
 
     return (
       <div>
-        <UserSideBar toggleState={this.props.toggleState} user={user} toggleMenu={this.props.toggleMenu} fundraiserMembers={this.props.fundraiserMembers} organizations={this.props.organizations} />
-        <div className='content_box'>
           <RouteHandler
             organization={this.props.organization}
             user={user}
@@ -35,7 +34,6 @@ export default React.createClass({
             showBackLink={this.props.showBackLink}
             toggleState={this.props.toggleState}
             toggleMenu={this.props.toggleMenu}/>
-        </div>
       </div>
     )
   }

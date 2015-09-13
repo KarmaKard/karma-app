@@ -39,7 +39,7 @@ var configuration = {
 
   plugins: [
     new webpack.EnvironmentPlugin([
-      "NODE_ENV", "API_HOST"
+      "NODE_ENV", "API_HOST", "AWS_SECRET_KEY_ID"
     ])
   ]
 }

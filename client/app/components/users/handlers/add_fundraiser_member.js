@@ -1,7 +1,12 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { flux } from '../../../main'
-import LoginForm from '../login_form'
+import LoginForm from '../reusable_login_form'
 import Register from '../register'
+import mui from 'material-ui'
+import {AppBar, AppCanvas, IconButton, FlatButton, Card, CardHeader, CardTitle, Avatar, CardText, RaisedButton} from 'material-ui'
+
+var ThemeManager = new mui.Styles.ThemeManager()
 
 export default React.createClass({
   getInitialState () {
@@ -10,6 +15,16 @@ export default React.createClass({
 
   contextTypes: {
     router: React.PropTypes.func
+  },
+
+  childContextTypes: {
+    muiTheme: React.PropTypes.object
+  },
+
+  getChildContext () {
+    return {
+      muiTheme: ThemeManager.getCurrentTheme()
+    }
   },
 
   getStoreState () {
@@ -37,7 +52,7 @@ export default React.createClass({
     var user = this.state.users.currentUser
     if (user) {
       user.roles.fundraiserTeamMember = 'fundraiserTeamMember'
-      flux.actions.users.tieFundraiserMembershipToUser(user, fundraiserMemberId, router, 'member_fundraisers')
+      flux.actions.users.tieFundraiserMembershipToUser(user, fundraiserMemberId, router, 'account')
     }
   },
 
@@ -47,7 +62,7 @@ export default React.createClass({
     var user = this.state.users.currentUser
     if (user) {
       user.roles.fundraiserTeamMember = 'fundraiserTeamMember'
-      flux.actions.users.tieFundraiserMembershipToUser(user, fundraiserMemberId, router, 'member_fundraisers')
+      flux.actions.users.tieFundraiserMembershipToUser(user, fundraiserMemberId, router, 'account')
     }
   },
 
@@ -70,23 +85,18 @@ export default React.createClass({
     })
   },
 
-  render () {
+  render() {
+  injectTapEventPlugin()
     var form = this.state.isExistingUser
-      ? <LoginForm loginErrors={this.state.users.loginErrors} setFbLogin={this.setFbLogin} userLogin={this.userLogin} />
-      : <Register setFbLogin={this.setFbLogin} userLogin={this.userLogin} createUser={this.createUser}/>
+      ? <LoginForm toggleForm={this.toggleForm} loginErrors={this.state.users.loginErrors} setFbLogin={this.setFbLogin} userLogin={this.userLogin} />
+      : <Register toggleForm={this.toggleForm} setFbLogin={this.setFbLogin} userLogin={this.userLogin} createUser={this.createUser}/>
 
     var toggleButtonText = this.state.isExistingUser ? 'New User?' : 'Existing User?'
 
     return (
-      <div>
-        <div className= 'page_header'>
-          <div className= 'header_left karmatitle'>KarmaKard</div>
-          <button className='header_right' onClick={this.toggleForm}>{toggleButtonText}</button>
-        </div>
-        <div className= 'guest_box'>
-          {form}
-        </div>
-      </div>
+      <Card className= 'main_card'>
+        {form}
+      </Card>
     )
   }
 })

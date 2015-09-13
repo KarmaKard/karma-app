@@ -1,11 +1,27 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import Wizard from '../wizard'
+import mui from 'material-ui'
+import {AppBar, IconButton, Card} from 'material-ui'
+
+var ThemeManager = new mui.Styles.ThemeManager()
+
 
 export default React.createClass({
 
   getInitialState () {
     return {
       showBackLink: false
+    }
+  },
+
+  childContextTypes: {
+    muiTheme: React.PropTypes.object
+  },
+
+  getChildContext () {
+    return {
+      muiTheme: ThemeManager.getCurrentTheme()
     }
   },
 
@@ -17,17 +33,11 @@ export default React.createClass({
     history.back()
   },
 
-  render () {
+  render() {
+  injectTapEventPlugin()
     return (
       <div>
-        <div className='page_header'>
-          <div><button onClick={this.goBack} className='back_button'><i className='fa fa-chevron-left fa-2x'></i></button><div className='header_center karmatitle'>KarmaKard</div></div>
-        </div>
-        <div>
-          <div className='guest_box'>
-            <Wizard />
-          </div>
-        </div>
+          <Wizard {...this.props} />
       </div>
     )
   }

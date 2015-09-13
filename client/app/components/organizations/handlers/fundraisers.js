@@ -1,4 +1,5 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { flux } from '../../../main'
 import {RouteHandler} from 'react-router'
 
@@ -8,37 +9,28 @@ export default React.createClass({
     router: React.PropTypes.func
   },
 
-  getInitialState () {
-    var storeState = this.getStoreState()
-    flux.actions.organizations.getOrganizations()
-    return storeState
-  },
-
-  storeChange () {
-    this.setState(this.getStoreState())
-  },
-
-  getStoreState () {
-    return {
-      organizationsStoreState: flux.stores.organizations.getState()
+  compare (a, b) {
+    if (a < b) {
+      return -1
     }
+    if (a > b) {
+      return 1
+    }
+    return 0
   },
 
-  componentWillMount () {
-    flux.stores.organizations.addListener('change', this.storeChange)
+  orgsByAlphabet (a, b) {
+    return this.compare(a.name, b.name)
   },
 
-  componentWillUnmount () {
-    flux.stores.organizations.removeListener('change', this.storeChange)
-  },
-
-  render () {
-    var organizations = this.state.organizationsStoreState.organizations
+  render() {
+  injectTapEventPlugin()
+    var organizations = this.props.organizations.sort(this.orgsByAlphabet)
     var activeFundraisers = organizations
       .filter(organization => organization.type === 'fundraiser' && organization.status === 'active')
 
     return (
-      <RouteHandler activeFundraisers={activeFundraisers} />
+      <RouteHandler {... this.props} activeFundraisers={activeFundraisers} />
       )
   }
 })

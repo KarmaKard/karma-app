@@ -1,4 +1,5 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import NewPassword from '../new_password'
 import { flux } from '../../../main'
 
@@ -31,7 +32,8 @@ export default React.createClass({
     flux.stores.users.removeListener('change', this.storeChange)
   },
 
-  render () {
+  render() {
+  injectTapEventPlugin()
     return (
       <div>
         <div className='page_header'>

@@ -1,5 +1,10 @@
 import React from 'react'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 import { Link } from 'react-router'
+import mui from 'material-ui'
+
+import {AppCanvas, AppBar, SelectField, Tabs, Tab, FlatButton, FontIcon, UserSideBar, CardTitle, Card, CardMedia, CardHeader, TextField, List, ListItem, RaisedButton, CardText, FloatingActionButton} from 'material-ui'
+var ThemeManager = new mui.Styles.ThemeManager()
 
 export default React.createClass({
   propTypes: {
@@ -10,18 +15,29 @@ export default React.createClass({
     router: React.PropTypes.func
   },
 
-  render () {
+  childContextTypes: {
+    muiTheme: React.PropTypes.object
+  },
+
+  getChildContext () {
+    return {
+      muiTheme: ThemeManager.getCurrentTheme()
+    }
+  },
+
+  render() {
+  injectTapEventPlugin()
     return (
       <div>
-        <div className='organization_information' >
-          <div className='content_box-header'>Thank You!</div>
-        </div>
-        <h3>Email has been sent! </h3>
-        <h3>The donor may now activate their Karmakard with the activation link(s) that they received.</h3>
+      <CardTitle title='Donor Email' />
+        <CardText>KarmaKard Activation has been sent</CardText>
+        <CardText>The donor may now activate their Karmakard with the activation link(s) that they received.</CardText>
         <Link to='member_fundraiser' params={{organizationId: this.props.organization.id}}>
-          <button className='karma_button'>Back to Fundraise Dashbaord</button>
+          <RaisedButton 
+            style={{margin: '15px 0'}} 
+            label="Back To Fundraising Dashboard" 
+            fullWidth={true} />
         </Link>
-
       </div>
     )
   }
