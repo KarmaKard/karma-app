@@ -157,8 +157,8 @@ export default React.createClass({
     })
   },
 
-  handleCrop (dataURI) {
-    console.log('handleCrop1')
+  handleCrop () {
+    console.log('handleCrop1', dataURI)
     var imageData = this.refs.cropper.getImage().replace(/^data:image\/(png|jpg);base64,/, "")
     var imageBlob = this.b64toBlob(imageData, this.state.imageType)
     console.log('handleCrop2')
