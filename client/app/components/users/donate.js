@@ -282,9 +282,9 @@ export default React.createClass({
     return (
       <div className='register' >
         <div>
-            <CardTitle title='Secure Donation'/>
+            <CardTitle className='cardTitle'  title='Secure Donation'/>
             <hr/>
-            <CardText>
+            <CardText className='cardText' >
               Thankyou for donating! This donation is for 1 year access to full list exclusive deals. What other text should I put here? 
             </CardText>
             <List>
@@ -292,7 +292,7 @@ export default React.createClass({
               <ListItem style={{borderBottom:'#515A5F solid 1px'}} primaryText="1 Full KarmaKard Access" rightIcon={<div style={{height:'0', top:'5px', width:'inherit', color:'#515A5F'}}>$30.00</div>} />
               <ListItem style={{fontSize:'24px'}} primaryText="Total:" rightIcon={<div style={{height:'0', width:'inherit', top:'5px', color:'#515A5F'}}>$30.00</div>} />
             </List>
-            <CardTitle title='Payment Information'/>
+            <CardTitle className='cardTitle'  title='Payment Information'/>
             <hr/>
             {ccIcon}
             <TextField
@@ -327,7 +327,7 @@ export default React.createClass({
               displayMember="name"
               fullWidth={true}
               menuItems={years} />
-              <RaisedButton 
+              <RaisedButton className='raisedButton' primary={true} 
                 disabled={this.state.buttonDisabled}
                 fullWidth={true} 
                 onClick={this.didClick} 

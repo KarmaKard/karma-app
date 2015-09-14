@@ -57,10 +57,10 @@ export default React.createClass({
     }
     return (
       <div>
-        <CardTitle title={organization.name} />
-        <CardText>Put some text here that will instruct fundraisers how to most effectively fundraise. May even include a instructional video?</CardText>
-        <RaisedButton style={{margin: '15px 0'}} label="Shareable Link" fullWidth={true} onClick={this.copyToClipboard} />
-        <Link to='inperson' params={{organizationId: organization.id}}><RaisedButton style={{margin: '15px 0'}} label="In Person Sale" fullWidth={true} /></Link>
+        <CardTitle className='cardTitle'  title={organization.name} />
+        <CardText className='cardText' >Put some text here that will instruct fundraisers how to most effectively fundraise. May even include a instructional video?</CardText>
+        <RaisedButton className='raisedButton' primary={true} style={{margin: '15px 0'}} label="Shareable Link" fullWidth={true} onClick={this.copyToClipboard} />
+        <Link to='inperson' params={{organizationId: organization.id}}><RaisedButton className='raisedButton' primary={true} style={{margin: '15px 0'}} label="In Person Sale" fullWidth={true} /></Link>
       </div>
     )
   }

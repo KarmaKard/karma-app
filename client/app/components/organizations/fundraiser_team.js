@@ -178,7 +178,7 @@ export default React.createClass({
                 id={member.id}
                 expandable={true}/>
            
-              <RaisedButton 
+              <RaisedButton className='raisedButton' primary={true} 
                 expandable={true}
                 fullWidth={true} 
                 onClick={this.saveAll} 
@@ -196,14 +196,14 @@ export default React.createClass({
 
       return (
         <Card style={{padding: '0 2%'}} initiallyExpanded={false}>
-          <CardHeader
+          <CardHeader className='cardHeader' 
             title=<span style={{fontSize:'22px'}}>{member.name}</span>
             avatar={statusIcon}
             showExpandableButton={true}>
           </CardHeader> 
-          <CardText style={{padding: '5px 0'}} expandable={true}>Affiliate Link: {URL}</CardText>
-          <CardText style={{padding: '5px 0'}} expandable={true}>Raised Amount: ${member.raisedAmount / 100}</CardText>
-          <CardText style={{padding: '5px 0'}} expandable={true}>Owed Amount: ${member.oweAmount / 100}</CardText>
+          <CardText className='cardText'  style={{padding: '5px 0'}} expandable={true}>Affiliate Link: {URL}</CardText>
+          <CardText className='cardText'  style={{padding: '5px 0'}} expandable={true}>Raised Amount: ${member.raisedAmount / 100}</CardText>
+          <CardText className='cardText'  style={{padding: '5px 0'}} expandable={true}>Owed Amount: ${member.oweAmount / 100}</CardText>
           {payment}
         </Card>
       )
@@ -213,7 +213,7 @@ export default React.createClass({
 
         {listItems}
 
-        <RaisedButton 
+        <RaisedButton className='raisedButton' primary={true} 
             ref='add_button'
             fullWidth={true} 
             onClick={this.addClicked}
@@ -239,7 +239,7 @@ export default React.createClass({
             value= {this.state.newEmail}
             errorText={this.state.emailErrorMessage}/>
 
-          <RaisedButton 
+          <RaisedButton className='raisedButton' primary={true} 
             fullWidth={true} 
             onClick={this.handleAddNew} 
             disabled={this.state.buttonDisabled}
@@ -247,7 +247,7 @@ export default React.createClass({
             style={{
               margin: '15px 0 0 0'
             }}/>
-          <RaisedButton 
+          <RaisedButton className='raisedButton' primary={true} 
             fullWidth={true} 
             onClick={this.cancelClicked} 
             label="Cancel" 

@@ -40,20 +40,20 @@ export default React.createClass({
     var logo = fundraiser.logoURL ? <Avatar style={{height: '60px', width: '60px', padding: 0}} src={fundraiser.logoURL} /> : <i className="material-icons">photo</i>
     return (
         <Card className='main_card'>
-          <CardHeader
+          <CardHeader className='cardHeader' 
             avatar={logo}
             style={{float: 'left', padding: '0 10px'}}/>
-          <CardTitle title={fundraiser.name}/>
-          <CardText>Description:{fundraiser.description}</CardText>
-          <CardText>Purpose: {fundraiser.purpose}</CardText>
+          <CardTitle className='cardTitle'  title={fundraiser.name}/>
+          <CardText className='cardText' >Description:{fundraiser.description}</CardText>
+          <CardText className='cardText' >Purpose: {fundraiser.purpose}</CardText>
           <hr/>
           <div>
-            <CardTitle title='Why KarmaKard?'/>
-            <CardText>KarmaKard teams up with fundraisers and local businesses to bring the ultimate deal card. If you donate, you will receive.... This will be a place that we will sell you on the idea of our card...</CardText>
+            <CardTitle className='cardTitle'  title='Why KarmaKard?'/>
+            <CardText className='cardText' >KarmaKard teams up with fundraisers and local businesses to bring the ultimate deal card. If you donate, you will receive.... This will be a place that we will sell you on the idea of our card...</CardText>
           </div>
           <hr />
-          <Link to='list_deals'><RaisedButton fullWidth={true} style={{margin:'10px 0 20px 0'}} label='Check out the list of deals' /></Link>
-          <Link to='donate' params={{organizationId: fundraiser.id}}><RaisedButton fullWidth={true} label='Donate Now' /></Link>
+          <Link to='list_deals'><RaisedButton className='raisedButton' primary={true} fullWidth={true} style={{margin:'10px 0 20px 0'}} label='Check out the list of deals' /></Link>
+          <Link to='donate' params={{organizationId: fundraiser.id}}><RaisedButton className='raisedButton' primary={true} fullWidth={true} label='Donate Now' /></Link>
         </Card>
     )
   }

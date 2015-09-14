@@ -178,7 +178,7 @@ export default React.createClass({
     ]
 
     var displayDeleteButton = this.props.deal.primaryProductName
-      ? (<RaisedButton 
+      ? (<RaisedButton className='raisedButton' primary={true} 
           expandable={true}
           fullWidth={true} 
           onClick={this.deleteClicked} 
@@ -197,7 +197,7 @@ export default React.createClass({
 
     return(
       <Card style={{padding: '15px 2%', margin:'10px 0'}} initiallyExpanded={expanded}>
-        <CardTitle
+        <CardTitle className='cardTitle' 
           style={{padding: '0'}}
           title=<span style={{fontSize:'18px'}}>{offerText}</span>
           subtitle= {'Limit: ' + limit}

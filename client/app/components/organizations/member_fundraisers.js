@@ -20,7 +20,7 @@ export default React.createClass({
     return (
       <Link to={'member_fundraiser'} params={{organizationId: organization.id}}>
         <Card>
-          <CardHeader
+          <CardHeader className='cardHeader' 
             title={organization.name}
             subtitle={organization.category}
             avatar={organization.logoURL}/>
@@ -50,7 +50,7 @@ export default React.createClass({
       .map(this.renderOrganizationLink)
     var output = fundraiserLinks.length > 0
       ? <Card style={{ margin: '15px auto'}}>
-        <CardMedia className='overlay_title' overlay={<div style={{margin: '0 0 8px 8px', fontSize: '36px', color: '#FF7070', display: 'block', lineHeight: '36px'}}> Your Fundraising</div>}>
+        <CardMedia className='overlay_title' overlay={<div style={{fontFamily: "'Fjalla One', sans-serif !important", margin: '0 0 8px 8px', fontSize: '36px', color: '#FF7070', display: 'block', lineHeight: '36px'}}> Your Fundraising</div>}>
           <img src={moneyPicture} />
         </CardMedia>
           {fundraiserLinks}

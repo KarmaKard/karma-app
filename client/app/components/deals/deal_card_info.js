@@ -52,21 +52,21 @@ export default React.createClass({
           hintText="Email of person you want to give card to."
           floatingLabelText="Recipient's Email" 
           onChange={this.emailChanged}/>
-        <RaisedButton style={{margin:'10px 0'}} fullWidth={true} onClick={this.sendShare} disabled={this.state.buttonDisabled} label='Send Share' />
-        <RaisedButton style={{margin:'10px 0'}} fullWidth={true} onClick={this.cancelShare} label='Cancel Share' />
+        <RaisedButton className='raisedButton' primary={true} style={{margin:'10px 0'}} fullWidth={true} onClick={this.sendShare} disabled={this.state.buttonDisabled} label='Send Share' />
+        <RaisedButton className='raisedButton' primary={true} style={{margin:'10px 0'}} fullWidth={true} onClick={this.cancelShare} label='Cancel Share' />
       </div>
     : <div expandable={true}>
-        <RaisedButton style={{margin:'10px 0'}} fullWidth={true} onClick={this.showShare} label='Share This Card' />
+        <RaisedButton className='raisedButton' primary={true} style={{margin:'10px 0'}} fullWidth={true} onClick={this.showShare} label='Share This Card' />
       </div>
     return (
       <Card style={{padding:'5px 10px'}}> 
-        <CardHeader
+        <CardHeader className='cardHeader' 
           title={'Card Active Dates: ' + formatDateString(this.props.donationDate) + ' - ' + formatDateString(this.props.expirationDate)}
           subtitle={'Fundraiser: ' + this.props.organization.name}
           avatar=<Avatar>{this.props.cardCounter}</Avatar>
           showExpandableButton={true}/>
-        <CardText expandable={true}>Usage Amount: {this.props.redemptions.length}</CardText>
-        <CardText expandable={true}>Saved Amount: ${this.props.savedAmount}</CardText>
+        <CardText className='cardText'  expandable={true}>Usage Amount: {this.props.redemptions.length}</CardText>
+        <CardText className='cardText'  expandable={true}>Saved Amount: ${this.props.savedAmount}</CardText>
         {showShare}
 
       </Card>

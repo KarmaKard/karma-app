@@ -78,21 +78,21 @@ export default React.createClass({
       .map(this.renderLocationList)
     return (
       <div>
-        <CardTitle title="Cashier Confirmation" />
+        <CardTitle className='cardTitle'  title="Cashier Confirmation" />
         <Card>
-          <CardHeader
+          <CardHeader className='cardHeader' 
             title={organization.name}
             subtitle={organization.category}
             avatar={organization.logoURL}/>
 
-          <CardText>Deal: {deal.dealText}</CardText>
-          <CardText>Maximum Savings: {deal.dollarValue}</CardText>
-          <CardText>
+          <CardText className='cardText' >Deal: {deal.dealText}</CardText>
+          <CardText className='cardText' >Maximum Savings: {deal.dollarValue}</CardText>
+          <CardText className='cardText' >
           Locations where valid:
           <ul style={{padding:'10px 0 0 20px'}}>{locations}</ul>
         </CardText>
-        <CardText>{user.firstName} has {redemptionsLeft} redemptions remaining on this deal.</CardText>
-         <RaisedButton style={{margin: '25px auto'}} label='Confirm Redemption' fullWidth={true} onClick={this.redeem} />
+        <CardText className='cardText' >{user.firstName} has {redemptionsLeft} redemptions remaining on this deal.</CardText>
+         <RaisedButton className='raisedButton' primary={true} style={{margin: '25px auto'}} label='Confirm Redemption' fullWidth={true} onClick={this.redeem} />
         </Card>
       </div>
       )

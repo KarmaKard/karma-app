@@ -34,10 +34,10 @@ export default React.createClass({
   injectTapEventPlugin()
     return (
       <div>
-        <CardTitle title='Oganization Type:' />
-          <RaisedButton label='Business' onClick={this.didChooseBusiness} style={{margin: '10px auto'}} fullWidth={true} />
+        <CardTitle className='cardTitle'  title='Oganization Type:' />
+          <RaisedButton className='raisedButton' primary={true} label='Business' onClick={this.didChooseBusiness} style={{margin: '10px auto'}} fullWidth={true} />
 
-          <RaisedButton label='Fundraiser' onClick={this.didChooseFundraiser} style={{margin: '10px auto'}} fullWidth={true} />
+          <RaisedButton className='raisedButton' primary={true} label='Fundraiser' onClick={this.didChooseFundraiser} style={{margin: '10px auto'}} fullWidth={true} />
 
       </div>
     )

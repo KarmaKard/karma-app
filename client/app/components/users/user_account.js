@@ -102,9 +102,9 @@ export default React.createClass({
     
     return (
       <div>
-        <CardTitle title='Account'/>
+        <CardTitle className='cardTitle'  title='Account'/>
         <Card style={{margin: '15px auto'}}>
-        <CardMedia className='overlay_title' overlay={<div style={{margin: '0 0 8px 8px', fontSize: '36px', color: '#FF7070', display: 'block', lineHeight: '36px'}}> Your Deal Cards</div>}>
+        <CardMedia className='overlay_title' overlay={<div style={{fontFamily: "'Fjalla One', sans-serif !important", margin: '0 0 8px 8px', fontSize: '36px', color: '#FF7070', display: 'block', lineHeight: '36px'}}> Your Deal Cards</div>}>
           <img src={dealCardPicture} />
         </CardMedia>
           <CardTitle
@@ -113,14 +113,14 @@ export default React.createClass({
           <DealCards {... this.props} donations={donations} user={user} totalSaved={this.props.totalSaved} />
         </Card>
         <Card style={{margin: '15px auto'}}>
-        <CardMedia className='overlay_title' overlay={<div style={{margin: '0 0 8px 8px', fontSize: '36px', color: '#FF7070', display: 'block', lineHeight: '36px'}}> Your Organizations</div>}>
+        <CardMedia className='overlay_title' overlay={<div style={{fontFamily: "'Fjalla One', sans-serif !important", margin: '0 0 8px 8px', fontSize: '36px', color: '#FF7070', display: 'block', lineHeight: '36px'}}> Your Organizations</div>}>
           <img src={organizationsPicture} />
         </CardMedia>
           <NonAdminManageOrganizations organizations={organizations} user={user} />
         </Card>
 
         <MemberFundraisers user={user} memberFundraisers={memberFundraisers} fundraiserMembers={fundraiserMembers} />
-        <RaisedButton style={{margin: '20px 0 0 0'}} fullWidth={true} onClick={this.logOut} label="Log Out" />
+        <RaisedButton className='raisedButton' primary={true} style={{margin: '20px 0 0 0'}} fullWidth={true} onClick={this.logOut} label="Log Out" />
       </div>
     )
   }

@@ -175,7 +175,7 @@ export default React.createClass({
     var dealsComponents = deals.map(this.lookupDeal)
     var saveButton = this.state.buttonDisabled
       ? null
-      : (<RaisedButton 
+      : (<RaisedButton className='raisedButton' primary={true} 
           fullWidth={true} 
           onClick={this.saveClicked} 
           disabled={this.state.buttonDisabled}
@@ -194,7 +194,7 @@ export default React.createClass({
     ]
 
     var displayAddDropdown = !this.state.displayAddDropdown
-      ? (<RaisedButton 
+      ? (<RaisedButton className='raisedButton' primary={true} 
           expandable={true}
           fullWidth={true} 
           onClick={this.showDropDown} 
@@ -217,7 +217,7 @@ export default React.createClass({
             disabled={this.state.editDisabled}/>
         )
     var cancelButton = this.state.displayAddDropdown
-      ? <RaisedButton 
+      ? <RaisedButton className='raisedButton' primary={true} 
           expandable={true}
           fullWidth={true} 
           onClick={this.hideDropDown} 
@@ -229,7 +229,7 @@ export default React.createClass({
       : null
     return (
       <div>
-        <CardText>*One free deal and one or more paid deal(s) are required</CardText>
+        <CardText className='cardText' >*One free deal and one or more paid deal(s) are required</CardText>
         {dealsComponents}
         {displayAddDropdown}
         <div ref="addDealPlaceholder">{this.state.newDealPlaceholder}</div>

@@ -29,11 +29,11 @@ export default React.createClass({
   injectTapEventPlugin()
     return (
       <div>
-      <CardTitle title='Donor Email' />
-        <CardText>KarmaKard Activation has been sent</CardText>
-        <CardText>The donor may now activate their Karmakard with the activation link(s) that they received.</CardText>
+      <CardTitle className='cardTitle'  title='Donor Email' />
+        <CardText className='cardText' >KarmaKard Activation has been sent</CardText>
+        <CardText className='cardText' >The donor may now activate their Karmakard with the activation link(s) that they received.</CardText>
         <Link to='member_fundraiser' params={{organizationId: this.props.organization.id}}>
-          <RaisedButton 
+          <RaisedButton className='raisedButton' primary={true} 
             style={{margin: '15px 0'}} 
             label="Back To Fundraising Dashboard" 
             fullWidth={true} />

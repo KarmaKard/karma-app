@@ -50,6 +50,7 @@ import RedemptionSuccess from './components/organizations/handlers/show_redempti
 import AddRedemptions from './components/organizations/handlers/add_redemptions'
 import Survey from './components/organizations/handlers/survey'
 var ThemeManager = new mui.Styles.ThemeManager()
+let Colors = mui.Styles.Colors
 
 var App = React.createClass({
 
@@ -96,6 +97,10 @@ var App = React.createClass({
       flux.stores.organizations.addListener('change', this.storeChange)
       flux.stores.users.addListener('change', this.storeChange)
       flux.stores.deals.addListener('change', this.storeChange)
+      ThemeManager.setPalette({
+        primary1Color: Colors.lightBlue300,
+        accent1Color: '#FF7070'
+      })
     },
 
     componentWillUnmount () {
@@ -156,6 +161,7 @@ var App = React.createClass({
         <AppCanvas>
           <AppBar
             showMenuIconButton={true}
+            style={{boxShadow: '0 1px 6px rgba(255, 112, 112, 0.48), 0 1px 4px rgba(255, 112, 112, 0.56)'}}
             title=<div className='karmatitle'></div>
             iconElementRight={<div style={{width: 80 + 'px'}}></div>}
             iconElementLeft={backLink}/>
@@ -185,6 +191,7 @@ export default (
     <Route name='login' handler={Login} path='login' />
     <Route name='join_options' handler={JoinOptions} path='join_options' />
     <Route name='register' handler={Register} path='register' />
+    <Route name='create_organization' handler={NewOrganization} path='new' />
     <Route name='add_fundraiser_member' handler={AddFundraiserMember} path='add_fundraiser_member/:fundraiserMemberId' />
     <Route name='activate_donation' handler={ActivateDonation} path='activate/:paymentId' />
     <Route name='activate_shared_card' handler={ActivateSharedCard} path='activate/shared/:donationId' />
@@ -218,7 +225,6 @@ export default (
 
     <Route name='organizations' handler={Organizations} path='organizations'>
       <DefaultRoute handler={OrganizationsUserManages} />
-      <Route name='create_organization' handler={NewOrganization} path='new' />
       <Route name='member_fundraisers' handler={MemberFundraisers} path='fundraisers' />
       <Route name='organization' handler={Organization} path=':organizationId' >
         <DefaultRoute handler={ShowOrganizationProfile} />

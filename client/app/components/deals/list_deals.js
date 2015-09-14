@@ -32,7 +32,7 @@ export default React.createClass({
   },
 
   componentWillMount () {
-    this.props.showBackLink(false)
+    this.props.showBackLink(true)
   },
 
   childContextTypes: {
@@ -145,11 +145,11 @@ export default React.createClass({
     return (
        <Card expandable={true} style={{width: '95%', margin: '2% auto', padding: '1% 2% 1% 2%', boxShadow: '0 1px 6px rgba(246, 115, 133, 0.35), 0 1px 4px rgba(246, 115, 133, 0.41)', border: '1px solid #F67385'}}>
         <div style={{width: '100%', height: '100%'}}>
-          <CardTitle style={{float:'left', width:'80%', lineHeight: '24px', padding: 0}} 
-            title=<span style={{fontSize: '20px', color: 'black', fontFamily: 'sans-serif', fontWeight: '500', verticalAlign: 'middle'}} >{deal.dealText}</span> 
+          <CardTitle  style={{float:'left', width:'80%', padding: '0 !important'}} 
+            title=<span style={{fontSize: '18px', lineHeight: '0 !important', color: 'black', fontFamily: 'sans-serif', fontWeight: '500', verticalAlign: 'middle'}} >{deal.dealText}</span> 
             subtitle={'$' + deal.dollarValue + ' savings per use'}/>
           <div style={{padding: '3px 0 0 0'}}>
-            <FloatingActionButton  mini={true} style={{float:'right', top: '30px'}}>
+            <FloatingActionButton className='floatingActionButton'   mini={true} style={{float:'right', top: '30px'}}>
               <span style={{color: 'white'}}>
                 {deal.limit}
               </span>
@@ -183,29 +183,29 @@ export default React.createClass({
     return (
 
       <Card initiallyExpanded={false}>
-      <CardHeader
+      <CardHeader className='cardHeader' 
         title={organization.name}
         subtitle={subtitle}
         avatar={organization.logoURL}
         showExpandableButton={true}/>
-          <CardText expandable={true} ><span style={{fontWeight: 'bold'}}>Description: </span>{organization.description}</CardText>
-          <CardText expandable={true} >
+          <CardText className='cardText'  expandable={true} ><span style={{fontWeight: 'bold'}}>Description: </span>{organization.description}</CardText>
+          <CardText className='cardText'  expandable={true} >
             <span style={{fontWeight: 'bold'}}>Locations: </span>
             <ul>
               {locations}
             </ul>
           </CardText>
-          <CardText expandable={true} style={{fontWeight: 'bold', float: 'left'}}>Deal Text</CardText>
-          <CardText expandable={true} style={{fontWeight: 'bold', float: 'right'}}>Usage Limit</CardText>
+          <CardText className='cardText'  expandable={true} style={{fontWeight: 'bold', float: 'left'}}>Deal Text</CardText>
+          <CardText className='cardText'  expandable={true} style={{fontWeight: 'bold', float: 'right'}}>Usage Limit</CardText>
           {deals}
-          <CardText expandable={true} style={{padding: '5px'}}></CardText>
+          <CardText className='cardText'  expandable={true} style={{padding: '5px'}}></CardText>
       </Card>
       
     )
   },
 
   render() {
-  injectTapEventPlugin()
+    injectTapEventPlugin()
 
     var organizations = this.props.organizations
 
@@ -217,7 +217,7 @@ export default React.createClass({
       var headerImage = require('../../../assets/img/' + category.toLowerCase() + '.jpg')
       return (
         <Card style={{ margin: '15px auto'}}>
-        <CardMedia className='overlay_title' overlay={<div style={{margin: '0 0 8px 8px', fontSize: '36px', color: '#FF7070', display: 'block', lineHeight: '36px'}}> {category}</div>}>
+        <CardMedia className='overlay_title' overlay={<div style={{fontFamily: "'Fjalla One', sans-serif !important", margin: '0 0 8px 8px', fontSize: '36px', color: '#FF7070', display: 'block', lineHeight: '36px'}}> {category}</div>}>
           <img src={headerImage} />
         </CardMedia>
 
@@ -245,7 +245,7 @@ export default React.createClass({
       if (organizationLinks.length === 0) {return}
       return (
         <Card style={{backgroundColor:'#FF7070', margin: '15px auto'}}>
-        <CardTitle 
+        <CardTitle className='cardTitle'  
           title=<span style={{fontSize: '30px', margin: '0px 0 0 15px', color: 'white', display: 'block', lineHeight: '20px'}} >{bestReference}</span> />
           {organizationLinks}
         </Card>
@@ -259,7 +259,7 @@ export default React.createClass({
     } else if (searchReturnOrganizations.length === 0 && this.state.searchLength !== 0) {
       cardFill = (
         <Card>
-          <CardText>Couldnt find your search input.</CardText>
+          <CardText className='cardText' >Couldnt find your search input.</CardText>
         </Card>
       )
     } else {

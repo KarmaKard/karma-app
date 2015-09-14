@@ -6,7 +6,7 @@ import WizardName from './wizard_name'
 import WizardCategory from './wizard_category'
 import WizardLogo from './wizard_logo'
 import Registration from '../../users/register'
-import LoginForm from '../../users/login_form'
+import LoginForm from '../../users/reusable_login_form'
 import mui from 'material-ui'
 import {AppBar, AppCanvas, IconButton, Card, FlatButton} from 'material-ui'
 
@@ -28,8 +28,6 @@ export default React.createClass({
       isExistingUser: true
     }
   },
-
-  
 
   componentWillMount () {
     this.props.showBackLink(true)
@@ -123,8 +121,8 @@ export default React.createClass({
   getWizardComponent () {
     if (!this.props.user) {
       return this.state.isExistingUser
-      ? <LoginForm loginErrors={this.props.loginErrors} setFbLogin={this.setFbLogin} userLogin={this.userLogin} />
-      : <Registration setFbLogin={this.setFbLogin} userLogin={this.userLogin} createUser={this.createUser}/>
+      ? <LoginForm toggleForm={this.toggleForm} loginErrors={this.props.loginErrors} setFbLogin={this.setFbLogin} userLogin={this.userLogin} />
+      : <Registration toggleForm={this.toggleForm} setFbLogin={this.setFbLogin} userLogin={this.userLogin} createUser={this.createUser}/>
     }
 
     switch (this.state.step) {
@@ -160,9 +158,9 @@ export default React.createClass({
     }
 
     return (
-      <div>
+      <Card className='main_card'>
         {this.getWizardComponent()}
-      </div>
+      </Card>
     )
   }
 })

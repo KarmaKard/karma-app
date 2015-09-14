@@ -98,7 +98,7 @@ export default React.createClass({
 
     if(dealsStatus && keywordsStatus && locationsStatus && profileStatus) {
         message = "All required information has been completed. Please thoroughly review your information before you submit this business to be reviewed."
-        submitButton = <RaisedButton 
+        submitButton = <RaisedButton className='raisedButton' primary={true} 
                 fullWidth={true} 
                 onClick={this.submitToReview} 
                 label="Submit To Review" 
@@ -109,7 +109,7 @@ export default React.createClass({
 
     if(this.props.organization.status === "pending" && this.props.user.roles.superadmin){
       message = "Please Review this organization and Click the button to authorize their deals on our app."
-      submitButton = <RaisedButton 
+      submitButton = <RaisedButton className='raisedButton' primary={true} 
                 fullWidth={true} 
                 onClick={this.confirmOrganization} 
                 label="Confirm Organization" 
@@ -134,44 +134,44 @@ export default React.createClass({
     
     return (
       <div>
-        <CardTitle title={this.props.organization.name} />
-        <CardText>{message}</CardText>
+        <CardTitle className='cardTitle'  title={this.props.organization.name} />
+        <CardText className='cardText' >{message}</CardText>
         {submitButton}
         <Card style={{padding: '0 2%'}} initiallyExpanded={false}>
-          <CardHeader
+          <CardHeader className='cardHeader' 
             title=<span style={{fontSize:'30px'}}>Profile</span>
             avatar={profileStatus}
             showExpandableButton={true}>
           </CardHeader> 
           <BusinessProfile expandable={true} {... this.props}/>
-          <CardText style={{padding: '5px 0'}} expandable={true}></CardText>
+          <CardText className='cardText'  style={{padding: '5px 0'}} expandable={true}></CardText>
         </Card>
         <Card style={{padding: '0 2%'}} initiallyExpanded={false}>
-          <CardHeader
+          <CardHeader className='cardHeader' 
             title=<span style={{fontSize:'30px'}}>Locations</span>
             avatar={locationsStatus}
             showExpandableButton={true}>
           </CardHeader> 
           <Locations expandable={true} {... this.props} />
-          <CardText style={{padding: '5px 0'}} expandable={true}></CardText>
+          <CardText className='cardText'  style={{padding: '5px 0'}} expandable={true}></CardText>
         </Card>
         <Card style={{padding: '0 2%'}} initiallyExpanded={false}>
-          <CardHeader
+          <CardHeader className='cardHeader' 
             title=<span style={{fontSize:'30px'}}>Keywords</span>
             avatar={keywordsStatus}
             showExpandableButton={true}>
           </CardHeader> 
           <Keywords expandable={true} {... this.props} />
-          <CardText style={{padding: '5px 0'}} expandable={true}></CardText>
+          <CardText className='cardText'  style={{padding: '5px 0'}} expandable={true}></CardText>
         </Card>
         <Card style={{padding: '0 2%'}} initiallyExpanded={false}>
-          <CardHeader
+          <CardHeader className='cardHeader' 
             title=<span style={{fontSize:'30px'}}>Deals</span>
             avatar={dealsStatus}
             showExpandableButton={true}>
           </CardHeader> 
           <DealBuilder expandable={true} {... this.props} />
-          <CardText style={{padding: '5px 0'}} expandable={true}></CardText>
+          <CardText className='cardText'  style={{padding: '5px 0'}} expandable={true}></CardText>
         </Card>
 
         <ul className="toDoList">

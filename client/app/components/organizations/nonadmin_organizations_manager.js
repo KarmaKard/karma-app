@@ -21,7 +21,7 @@ export default React.createClass({
     return (
       <Link to={'organization_user_manages'} params={{organizationId: organization.id}}>
         <Card>
-          <CardHeader
+          <CardHeader className='cardHeader' 
             title={organization.name}
             subtitle={organization.status}
             avatar={organization.logoURL}/>
@@ -75,7 +75,7 @@ export default React.createClass({
       : null
 
     var newOrganization= !fundraisers && !businesses 
-      ? <CardText>Have a business or fundraiser? KarmaKard is a valuable advertizing platform where you receive actual
+      ? <CardText className='cardText' >Have a business or fundraiser? KarmaKard is a valuable advertizing platform where you receive actual
         feedback on the deals you are offering through the data we collect on each deal redemption. KarmaKard provides a fast
         simple and effective way to fundraise. There is good Karma waiting for your organization. :)
       </CardText>
@@ -86,7 +86,7 @@ export default React.createClass({
         {businesses}
         {fundraisers}
         {newOrganization}
-        <RaisedButton onClick={this.newOrganization} style={{minWidth:'96%',height:'36px', margin:'2%'}} fullWidth={true} label="Add an Organization" />
+        <RaisedButton className='raisedButton' primary={true} onClick={this.newOrganization} style={{minWidth:'96%',height:'36px', margin:'2%'}} fullWidth={true} label="Add an Organization" />
       </div>
     )
   }

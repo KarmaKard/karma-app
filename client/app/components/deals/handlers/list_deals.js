@@ -103,11 +103,11 @@ export default React.createClass({
     var fundraiserLink 
 
     if (fundraiserNameToken && memberNameToken) {
-      fundraiserLink = <Link to = 'fundraiser_join' params={{fundraiserName: fundraiserNameToken, fundraiserMemberName: memberNameToken}}><RaisedButton fullWidth={true} style={{margin:'10px 0 0 0'}} label='Donate' /></Link>
+      fundraiserLink = <Link to = 'fundraiser_join' params={{fundraiserName: fundraiserNameToken, fundraiserMemberName: memberNameToken}}><RaisedButton className='raisedButton' primary={true} fullWidth={true} style={{margin:'10px 0 0 0'}} label='Donate' /></Link>
     } else if (fundraiserNameToken && !memberNameToken) {
-      fundraiserLink = <Link to = 'fundraiser_join' params={{fundraiserName: fundraiserNameToken}}><RaisedButton fullWidth={true} style={{margin:'10px 0 0 0'}} label='Donate' /></Link>
+      fundraiserLink = <Link to = 'fundraiser_join' params={{fundraiserName: fundraiserNameToken}}><RaisedButton className='raisedButton' primary={true} fullWidth={true} style={{margin:'10px 0 0 0'}} label='Donate' /></Link>
     } else {
-      fundraiserLink = <Link to = 'fundraisers'><RaisedButton fullWidth={true} style={{margin:'10px 0 0 0'}} label='Donate to a local Fundraiser' /></Link>
+      fundraiserLink = <Link to = 'fundraisers'><RaisedButton className='raisedButton' primary={true} fullWidth={true} style={{margin:'10px 0 0 0'}} label='Donate to a local Fundraiser' /></Link>
     }
 
     var form = <DealList {... this.props}
@@ -116,7 +116,7 @@ export default React.createClass({
                   deals={deals} />
     return (
       <Card className='main_card'>
-        <CardTitle title='KarmaKard'/>
+        <CardTitle className='cardTitle'  title='KarmaKard'/>
         {fundraiserLink}
         {form}
         {fundraiserLink}

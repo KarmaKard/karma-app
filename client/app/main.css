@@ -220,3 +220,42 @@ hr {
   margin-right: 0px !important;
   margin-left: 0px !important;
 }
+
+.raisedButton {
+  background-color: #FF7070 !important;
+}
+
+.raisedButton span {
+  font-family: 'Fjalla One', sans-serif !important;
+  font-size: 18px !important;
+}
+
+.cardText, .cardText span {
+  font-family: sans-serif !important;
+  font-weight: 300;
+  font-size: 18px !important;
+}
+
+.floatingActionButton {
+  background-color: #FF7070 !important;
+}
+
+.cardHeader > div > :first-child {
+  font-family: 'Fjalla One', sans-serif !important;
+  font-size: 18px !important;
+}
+
+.cardTitle {
+  margin: 10px 0 !important;
+  padding: 0 !important;
+}
+
+.cardTitle span {
+  font-family: 'Fjalla One', sans-serif !important;
+  font-size: 36px !important;
+  color: #4FC3F7 !important;
+}
+
+.bottomTabs div{
+   background-color: #464646 !important;
+}

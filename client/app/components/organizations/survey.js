@@ -35,7 +35,7 @@ export default React.createClass({
   },
 
   renderAnswerLink (option, i) {
-    return <RaisedButton style={{margin: '25px 0'}} label={option} fullWidth={true} onClick={this.saveResponse} value={option}/>
+    return <RaisedButton className='raisedButton' primary={true} style={{margin: '25px 0'}} label={option} fullWidth={true} onClick={this.saveResponse} value={option}/>
   },
 
   childContextTypes: {
@@ -66,9 +66,9 @@ export default React.createClass({
 
     return (
       <div>
-        <CardTitle title="Are You Sure?" />
-        <CardText>Before you hand your phone to the cashier, confirm your redemption by answering the following:</CardText>
-        <CardTitle title=<span style={{fontSize: "24px", color: "rgb(66, 66, 66)"}}>{questionText}</span> />
+        <CardTitle className='cardTitle'  title="Are You Sure?" />
+        <CardText className='cardText' >Before you hand your phone to the cashier, confirm your redemption by answering the following:</CardText>
+        <CardTitle className='cardTitle'  title=<span style={{fontSize: "24px", color: "rgb(66, 66, 66)"}}>{questionText}</span> />
           {options}
       </div>
     )

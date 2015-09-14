@@ -199,7 +199,7 @@ export default React.createClass({
             defaultChecked={this.state.tosChecked}
             onCheck={this.tosCheckedChange}/>
 
-          <RaisedButton 
+          <RaisedButton className='raisedButton' primary={true} 
                 disabled={this.state.buttonDisabled}
                 fullWidth={true} 
                 onClick={this.saveBankData} 

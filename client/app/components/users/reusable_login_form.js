@@ -125,20 +125,22 @@ export default React.createClass({
       : null
 
     var disabledLogin = this.state.disabledLogin 
-      ? <RaisedButton 
+      ? <RaisedButton
+          primary={true} 
           fullWidth={true} 
           onClick={this.didLogin} 
-          className='login_button' 
+          className='login_button raisedButton' 
           label="Login" 
           disabled={true}
           style={{
             margin: '15px 0 0 0'
           }}/>
       : <RaisedButton 
+          primary={true} 
           fullWidth={true} 
           onTouchTap={this.didLogin} 
           onClick={this.didLogin}
-          className='login_button' 
+          className='login_button raisedButton' 
           label="Login" 
           style={{
             margin: '15px 0 0 0'
@@ -161,7 +163,7 @@ export default React.createClass({
 
     return (
       <div>
-          <CardTitle title='Login'/>
+          <CardTitle className='cardTitle'  title='Login'/>
           {loginErrorMessage}
             <TextField
               onBlur={this.setEmail}
@@ -173,12 +175,12 @@ export default React.createClass({
             {forgotPassword}
             {disabledLogin}
 
-          <RaisedButton onClick={this.handleClick} style={{margin: '30px auto'}} className='fb_button' fullWidth={true}>
+          <RaisedButton primary={true} onClick={this.handleClick} style={{margin: '30px auto'}} className='fb_button' fullWidth={true}>
             <i style={{color: '#3A5795', margin: '4px 47%', float: 'left'}} className='fa fa-facebook fa-2x fa-inverse'></i>
           </RaisedButton>
 
           <hr style={{margin: '10px 0'}} />
-            <RaisedButton onClick={this.props.toggleForm} style={{margin: '30px auto'}} label="New User?"  fullWidth={true}>
+            <RaisedButton className='raisedButton' primary={true} onClick={this.props.toggleForm} style={{margin: '30px auto'}} label="New User?"  fullWidth={true}>
             </RaisedButton>
       </div>
     )

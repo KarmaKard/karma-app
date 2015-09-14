@@ -96,7 +96,7 @@ export default React.createClass({
     ]
     return (
       <div>
-        <CardTitle title='Donation Amount' />
+        <CardTitle className='cardTitle'  title='Donation Amount' />
         <SelectField
           expandable={true}
           value={cardAmount}
@@ -114,7 +114,7 @@ export default React.createClass({
           fullWidth={true}
           errorText={this.state.donationAmountMessage}
           floatingLabelText="Donation Amount ($)" />
-          <RaisedButton 
+          <RaisedButton className='raisedButton' primary={true} 
             style={{margin: '15px 0'}} 
             label="Next" 
             fullWidth={true} 

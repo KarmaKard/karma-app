@@ -88,7 +88,7 @@ export default React.createClass({
     
     return (
       <div>
-        <CardText>Keywords are not seen by customers but are used to determine relevant search results. *One keyword Required</CardText>
+        <CardText className='cardText' >Keywords are not seen by customers but are used to determine relevant search results. *One keyword Required</CardText>
          <TextField
           hintText="Fast Food, Chinese, Date Night, Skating "
           fullWidth={true}
@@ -129,7 +129,7 @@ export default React.createClass({
           onChange={this.changeKeyword5}
           disabled={this.props.editDisabled} />
 
-          <RaisedButton 
+          <RaisedButton className='raisedButton' primary={true} 
             disabled={this.state.disableButton}
             fullWidth={true} 
             onClick={this.saveKeywords} 

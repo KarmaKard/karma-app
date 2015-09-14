@@ -41,9 +41,9 @@ export default React.createClass({
   injectTapEventPlugin()
     return (
       <div>
-        <CardTitle title='Payment Type' />
-        <RaisedButton style={{margin: '15px 0'}} label="Cash / Check" fullWidth={true} value='cash' onClick={this.setTypeCash} />
-        <RaisedButton style={{margin: '15px 0'}} label="Square Slider" fullWidth={true} value='square' onClick={this.setTypeSquare} />
+        <CardTitle className='cardTitle'  title='Payment Type' />
+        <RaisedButton className='raisedButton' primary={true} style={{margin: '15px 0'}} label="Cash / Check" fullWidth={true} value='cash' onClick={this.setTypeCash} />
+        <RaisedButton className='raisedButton' primary={true} style={{margin: '15px 0'}} label="Square Slider" fullWidth={true} value='square' onClick={this.setTypeSquare} />
       </div>
     )
   }

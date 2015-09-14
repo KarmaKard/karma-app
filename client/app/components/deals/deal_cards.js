@@ -89,7 +89,7 @@ export default React.createClass({
     return (
       <div>
         {dealCardLinks}
-        <RaisedButton onClick={this.donateAgain} style={{minWidth:'96%',height:'36px', margin:'2%'}} fullWidth={true} label="Donate Again!" />
+        <RaisedButton className='raisedButton' primary={true} onClick={this.donateAgain} style={{minWidth:'96%',height:'36px', margin:'2%'}} fullWidth={true} label="Donate Again!" />
       </div>
     )
   }

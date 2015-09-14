@@ -82,7 +82,7 @@ export default React.createClass({
   },
 
   render() {
-  injectTapEventPlugin()
+    injectTapEventPlugin()
 
     return (
       <NewUser />

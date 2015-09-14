@@ -166,7 +166,7 @@ export default React.createClass({
       ? <RaisedButton
           fullWidth={true}
           onClick={this.registerClicked}
-          className='register_button'
+          className='raisedButton'
           label='Register'
           disabled={true}
           style={{
@@ -175,7 +175,7 @@ export default React.createClass({
       : <RaisedButton
           fullWidth={true}
           onClick={this.registerClicked}
-          className='register_button'
+          className='raisedButton'
           label='Register'
           style={{
             margin: '15px 0 0 0'
@@ -184,7 +184,7 @@ export default React.createClass({
     return (
       <div>
         {mismatchPasswords}
-          <CardTitle title='Registration'/>
+          <CardTitle className='cardTitle'  title='Registration'/>
           <TextField
             onBlur={this.setFirstName}
             type='text'
@@ -218,13 +218,13 @@ export default React.createClass({
             floatingLabelText='Confirm Password' />
           {disabledRegister}
           <hr/>
-          <RaisedButton onClick={this.handleFbClick} className='fb_button' style={{margin: '20px auto', float: 'left'}} fullWidth={true}>
+          <RaisedButton primary={true}  onClick={this.handleFbClick} className='fb_button' style={{margin: '20px auto', float: 'left'}} fullWidth={true}>
             <i style={{color: '#3A5795', margin: '4px 47%', float: 'left'}} className='fa fa-facebook fa-2x fa-inverse'></i>
           </RaisedButton>
           
           <hr style={{margin: '10px 0'}} />
 
-          <RaisedButton onClick={this.props.toggleForm} style={{margin: '30px auto'}} label="Already A User?"  fullWidth={true}>
+          <RaisedButton className='raisedButton' primary={true} onClick={this.props.toggleForm} style={{margin: '30px auto'}} label="Already A User?"  fullWidth={true}>
           </RaisedButton>
       </div>
 

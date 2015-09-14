@@ -60,7 +60,7 @@ export default React.createClass({
             hintText='ABC Co.'
             floatingLabelText={capitalizedType + ' Name'} 
             errorText={this.state.nameErrorMessage}/>
-          <RaisedButton 
+          <RaisedButton className='raisedButton' primary={true} 
             onClick={this.nextClicked} 
             label='Next' 
             disabled={this.state.buttonDisabled} 

@@ -129,7 +129,7 @@ export default React.createClass({
     return (
       <div>
       {mapImage}
-      <CardText>*One location Required</CardText>
+      <CardText className='cardText' >*One location Required</CardText>
         <div>
           <List>
             {listItems}
@@ -155,7 +155,7 @@ export default React.createClass({
           errorText={this.state.zipErrorMessage}
           errorStyle={{color:this.state.zipErrorColor}}/>
 
-          <RaisedButton 
+          <RaisedButton className='raisedButton' primary={true} 
             label="Add Location" 
             fullWidth={true}
             onClick={this.handleAddNew} 

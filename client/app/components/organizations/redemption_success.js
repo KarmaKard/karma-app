@@ -46,16 +46,16 @@ export default React.createClass({
     var amountSaved =(Math.round(this.props.amountSaved * 100)/100).toFixed(2)
     return(
       <div>
-        <CardTitle title={'You Just Saved $' + amountSaved + '!'} />
-        <CardText>You now have {redemptionsLeft} redemptions remaining.</CardText>
-        <CardText>Rate your experience </CardText>
+        <CardTitle className='cardTitle'  title={'You Just Saved $' + amountSaved + '!'} />
+        <CardText className='cardText' >You now have {redemptionsLeft} redemptions remaining.</CardText>
+        <CardText className='cardText' >Rate your experience </CardText>
         <div style={{width: '50%', float: 'left'}}>
-        <FloatingActionButton style={{margin: '0 35%'}} value='satisfied' onClick={this.recordExperience}>
+        <FloatingActionButton className='floatingActionButton'  style={{margin: '0 35%'}} value='satisfied' onClick={this.recordExperience}>
           <i className="material-icons md-48">mood</i>
         </FloatingActionButton>
         </div>
         <div style={{width: '50%', float: 'left'}}>
-        <FloatingActionButton style={{margin: '0 35%'}} value='dissatisfied' onClick={this.recordExperience}>
+        <FloatingActionButton className='floatingActionButton'  style={{margin: '0 35%'}} value='dissatisfied' onClick={this.recordExperience}>
           <i className="material-icons md-48">mood_bad</i>
         </FloatingActionButton>
         </div>

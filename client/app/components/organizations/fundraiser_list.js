@@ -64,7 +64,7 @@ export default React.createClass({
 
     return (
         <Card className='main_card'>
-          <CardTitle
+          <CardTitle className='cardTitle' 
             title="Select a fundraiser" />
           <List>
             {fundraiserLinks}

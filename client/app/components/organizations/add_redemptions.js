@@ -22,10 +22,10 @@ export default React.createClass({
   injectTapEventPlugin()
     return (
       <div>
-        <CardTitle title="Want More?" />
-        <CardText>Donate to a local Fundraiser to get access to more deals. See the available deals below. </CardText>
+        <CardTitle className='cardTitle'  title="Want More?" />
+        <CardText className='cardText' >Donate to a local Fundraiser to get access to more deals. See the available deals below. </CardText>
         <Link to='list_deals'>
-          <RaisedButton fullWidth={true} label="Donate for more deals!" />
+          <RaisedButton className='raisedButton' primary={true} fullWidth={true} label="Donate for more deals!" />
         </Link>
       </div>
     )

@@ -282,7 +282,7 @@ export default React.createClass({
             color={[255, 255, 255, 0.6]} // RGBA 
             scale={this.state.zoom} />
           <Slider name="slider1" onChange={this.zoom} defaultValue={1.2} max={2} min={1} />
-          <RaisedButton fullWidth={true} label = 'Crop Image' onClick={this.handleCrop} />
+          <RaisedButton className='raisedButton' primary={true} fullWidth={true} label = 'Crop Image' onClick={this.handleCrop} />
         </Card>
       )
     } else {
@@ -373,7 +373,7 @@ export default React.createClass({
             errorText={this.state.descriptionCounter}
             errorStyle={{color:this.state.descriptionCounterColor}}/>
 
-            <RaisedButton 
+            <RaisedButton className='raisedButton' primary={true} 
                 disabled={this.state.buttonDisabled}
                 fullWidth={true} 
                 onClick={this.saveProfile} 

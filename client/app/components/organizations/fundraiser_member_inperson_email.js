@@ -58,14 +58,14 @@ export default React.createClass({
   
     return (
       <div>
-        <CardTitle title='Donor Email' />
-        <CardText>If card(s) are being purchased, an email will be sent with easy activation.</CardText>
+        <CardTitle className='cardTitle'  title='Donor Email' />
+        <CardText className='cardText' >If card(s) are being purchased, an email will be sent with easy activation.</CardText>
         <TextField
           hintText="peter@karmakard.org"
           onChange={this.setEmailValue}
           fullWidth={true}
           floatingLabelText="Donor's Email" />
-        <RaisedButton 
+        <RaisedButton className='raisedButton' primary={true} 
           style={{margin: '15px 0'}} 
           label="Next" 
           fullWidth={true} 

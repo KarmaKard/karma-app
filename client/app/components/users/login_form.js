@@ -4,7 +4,7 @@ import { flux } from '../../main'
 import {Link} from 'react-router'
 import mui from 'material-ui'
 import {AppBar, FlatButton, Card, CardTitle, TextField, RaisedButton} from 'material-ui'
-
+let Colors = mui.Styles.Colors
 var ThemeManager = new mui.Styles.ThemeManager()
 
 export default React.createClass({
@@ -126,18 +126,20 @@ export default React.createClass({
 
     var disabledLogin = this.state.disabledLogin 
       ? <RaisedButton 
+          className='raisedButton login_button' 
+          primary={true} 
           fullWidth={true} 
           onClick={this.didLogin} 
-          className='login_button' 
           label="Login" 
           disabled={true}
           style={{
             margin: '15px 0 0 0'
           }}/>
       : <RaisedButton 
+          primary={true} 
           fullWidth={true} 
           onTouchTap={this.didLogin} 
-          className='login_button' 
+          className='raisedButton login_button' 
           label="Login" 
           style={{
             margin: '15px 0 0 0'
@@ -160,7 +162,7 @@ export default React.createClass({
 
     return (
       <div>
-          <CardTitle title='Login'/>
+          <CardTitle className='cardTitle'  title='Login'/>
           {loginErrorMessage}
             <TextField
               onBlur={this.setEmail}
@@ -172,14 +174,14 @@ export default React.createClass({
             {forgotPassword}
             {disabledLogin}
 
-          <RaisedButton onClick={this.handleClick} style={{margin: '30px auto'}} className='fb_button' fullWidth={true}>
+          <RaisedButton primary={true}  onClick={this.handleClick} style={{margin: '30px auto'}} className='fb_button' fullWidth={true}>
             <i style={{color: '#3A5795', margin: '4px 47%', float: 'left'}} className='fa fa-facebook fa-2x fa-inverse'></i>
           </RaisedButton>
 
           <hr style={{margin: '10px 0'}} />
 
           <Link to='join_options' >
-            <RaisedButton style={{margin: '30px auto'}} label="New User?"  fullWidth={true}>
+            <RaisedButton className='raisedButton' primary={true}  style={{margin: '30px auto'}} label="New User?"  fullWidth={true}>
             </RaisedButton>
           </Link>
       </div>

@@ -59,20 +59,20 @@ export default React.createClass({
     var fundraiser = this.props.organization
     return (
       <Card className='main_card'>
-          <CardHeader
+          <CardHeader className='cardHeader' 
             avatar=<Avatar size={40} src={fundraiser.logoURL} />
             style={{padding: '0 8px'}}
             title={fundraiser.name} />
-          <CardText>Description:{fundraiser.description}</CardText>
-          <CardText>Purpose: {fundraiser.purpose}</CardText>
+          <CardText className='cardText' >Description:{fundraiser.description}</CardText>
+          <CardText className='cardText' >Purpose: {fundraiser.purpose}</CardText>
           <hr/>
           <div>
-            <CardTitle title=<span style={{fontSize:'26px'}} >Why KarmaKard?</span> />
-            <CardText>KarmaKard teams up with fundraisers and local businesses to bring the ultimate deal card. If you donate, you will receive.... This will be a place that we will sell you on the idea of our card...</CardText>
+            <CardTitle className='cardTitle'  title=<span style={{fontSize:'26px'}} >Why KarmaKard?</span> />
+            <CardText className='cardText' >KarmaKard teams up with fundraisers and local businesses to bring the ultimate deal card. If you donate, you will receive.... This will be a place that we will sell you on the idea of our card...</CardText>
           </div>
           <hr />
-          <Link to='list_deals'><RaisedButton fullWidth={true} style={{margin:'10px 0 20px 0'}} label='Check out the list of deals' /></Link>
-          <Link to='donate' params={{organizationId: fundraiser.id}}><RaisedButton fullWidth={true} label='Donate Now' /></Link>
+          <Link to='list_deals'><RaisedButton className='raisedButton' primary={true} fullWidth={true} style={{margin:'10px 0 20px 0'}} label='Check out the list of deals' /></Link>
+          <Link to='donate' params={{organizationId: fundraiser.id}}><RaisedButton className='raisedButton' primary={true} fullWidth={true} label='Donate Now' /></Link>
         </Card>
     )
   }

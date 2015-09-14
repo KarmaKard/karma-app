@@ -21,27 +21,24 @@ export default React.createClass({
   render() {
 
     return (
-      <div>
-        <Card
-          className='main_card'>
-        <CardTitle title='Get Good Karma!'/>
-          <CardText>Give good, Get good. In order to have full access to KarmaKard, we ask that you give to a local fundraising organization. A $30 dollar donation will give you instant access to thousands of dollars in exclusive deals.</CardText>
-          <Link to='list_deals'><RaisedButton fullWidth={true} style={{margin:'10px 0 20px 0'}} label='Check out the list of deals' /></Link>
-          <Link to='fundraisers'><RaisedButton fullWidth={true} label='Donate to a local fundraiser' /></Link>
+      <Card className='main_card'>
+        <Card style={{margin:'10px 0 20px 0', padding:'10px 5px'}}>
+        <CardTitle className='cardTitle'  title='Get Good Karma!'/>
+          <CardText className='cardText'>Give good, Get good. In order to have full access to KarmaKard, we ask that you give to a local fundraising organization. A $30 dollar donation will give you instant access to thousands of dollars in exclusive deals.</CardText>
+          <Link to='list_deals'><RaisedButton className='raisedButton' primary={true} fullWidth={true} style={{margin:'10px 0 20px 0'}} label='Check out the list of deals' /></Link>
+          <Link to='fundraisers'><RaisedButton className='raisedButton' primary={true} fullWidth={true} label='Donate to a local fundraiser' /></Link>
         </Card>
-        <Card
-          className='main_card'>
-        <CardTitle title='Have an Organization?'/>
-        <CardText>If you have a business or a fundraiser, you can signup and apply for your organization to be a part of Karmakard!</CardText>
-        <Link to='create_organization'><RaisedButton fullWidth={true} style={{margin:'10px 0 0 0'}} label='Register your organization' /></Link>
+        <Card style={{margin:'10px 0 20px 0', padding:'10px 5px'}}>
+        <CardTitle className='cardTitle'  title='Have an Organization?'/>
+        <CardText className='cardText' >If you have a business or a fundraiser, you can signup and apply for your organization to be a part of Karmakard!</CardText>
+        <Link to='create_organization'><RaisedButton className='raisedButton' primary={true} fullWidth={true} style={{margin:'10px 0 0 0'}} label='Register your organization' /></Link>
         </Card>
-        <Card
-          className='main_card'>
-        <CardTitle title='Already a User?'/>
-        <CardText>Click here to go to the login page.</CardText>
-        <Link to='login'><RaisedButton fullWidth={true} style={{margin:'10px 0 0 0'}} label='Login' /></Link>
+        <Card style={{margin:'10px 0 20px 0', padding:'10px 5px'}}>
+        <CardTitle className='cardTitle'  title='Already a User?'/>
+        <CardText className='cardText' >Click here to go to the login page.</CardText>
+        <Link to='login'><RaisedButton className='raisedButton' primary={true} fullWidth={true} style={{margin:'10px 0 0 0'}} label='Login' /></Link>
         </Card>
-      </div>
+      </Card>
     )
   }
 })
