@@ -174,11 +174,11 @@ console.log('3')
     // stringify and encode the policy
   var stringPolicy = JSON.stringify(s3Policy);
   var base64Policy = Buffer(stringPolicy, "utf-8").toString("base64");
-console.log('4')
+console.log(process.env.AWS_SECRET_KEY_ID, base64Policy)
   // sign the base64 encoded policy
   var signature = crypto.createHmac("sha1", process.env.AWS_SECRET_KEY_ID)
     .update(new Buffer(base64Policy, "utf-8")).digest("base64");
-console.log('5')
+
     var xhr = new XMLHttpRequest()
     var fd = new FormData()
     var key = 'uploads/' + this.props.organization.id + '_' + Date.now() + '.png'
