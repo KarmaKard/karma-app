@@ -158,10 +158,10 @@ export default React.createClass({
   },
 
   handleCrop () {
-
+    console.log('1')
     var imageData = this.refs.cropper.getImage().replace(/^data:image\/(png|jpg);base64,/, "")
     var imageBlob = this.b64toBlob(imageData, this.state.imageType)
-
+console.log('2')
     var s3Policy = { "expiration": "2020-12-01T12:00:00.000Z",
             "conditions": [
             {"bucket": 'karmakard'},
@@ -170,19 +170,19 @@ export default React.createClass({
             ["content-length-range", 0, 524288000]
             ]
           };
-
+console.log('3')
     // stringify and encode the policy
   var stringPolicy = JSON.stringify(s3Policy);
   var base64Policy = Buffer(stringPolicy, "utf-8").toString("base64");
-
+console.log('4')
   // sign the base64 encoded policy
   var signature = crypto.createHmac("sha1", process.env.AWS_SECRET_KEY_ID)
     .update(new Buffer(base64Policy, "utf-8")).digest("base64");
-
+console.log('5')
     var xhr = new XMLHttpRequest()
     var fd = new FormData()
     var key = 'uploads/' + this.props.organization.id + '_' + Date.now() + '.png'
-
+console.log('6')
     // Populate the Post paramters.
     fd.append('key', key);
     fd.append('AWSAccessKeyId', 'AKIAJPJSSDYIMIBTAXSA');
@@ -191,10 +191,10 @@ export default React.createClass({
     fd.append('Content-Type', this.state.imageType)
     // This file object is retrieved from a file input.
     fd.append('file', imageBlob);
-
+console.log('7')
     xhr.open('POST', 'https://karmakard.s3.amazonaws.com', true);
     xhr.send(fd)
-
+console.log('8')
     xhr.upload.addEventListener('progress', function(e) {
       if (firstProgressEvent) {
         _this.total += e.total;
@@ -203,11 +203,11 @@ export default React.createClass({
       _this.loaded += (e.loaded - lastBytesLoaded);
       _this.onProgress(_this.loaded / _this.total);
     }, false);
-
+console.log('10')
     xhr.onreadystatechange = function() {
       if (xhr.readyState != 4)  { return; }
       var uploadedImageURL = 'https://karmakard.s3.amazonaws.com/' + key
-      
+      console.log('11')
       this.setState({
         buttonDisabled: false,
         cropperOpen: false,
@@ -216,6 +216,7 @@ export default React.createClass({
         logoURL: uploadedImageURL
       })
     }.bind(this)
+    console.log('12')
   },
 
   b64toBlob (b64Data, contentType, sliceSize) {
