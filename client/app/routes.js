@@ -3,6 +3,7 @@ import { flux } from './main'
 import React from 'react'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 import mui from 'material-ui'
+import LogoIcon from '../assets/img/blackandwhitelogo.png'
 import {AppCanvas, AppBar, Tabs, Tab, FlatButton, FontIcon, UserSideBar, CardTitle, Card, CardMedia, CardHeader, TextField, List, ListItem, RaisedButton, CardText, FloatingActionButton} from 'material-ui'
 import Login from './components/users/handlers/login'
 import JoinOptions from './components/users/handlers/join_options'
@@ -155,14 +156,15 @@ var App = React.createClass({
       if (this.state.showBackLink) {
         backLink = (<button onClick={this.goBack} className='karma_button'><i style={{color: 'white'}} className="material-icons md-48 md-light">keyboard_arrow_left</i></button>)
       } else {
-        backLink = (<div style={{width: 80 + 'px'}}></div>)
+        backLink = (<div style={{width: 60 + 'px'}}></div>)
       }
       return (
         <AppCanvas>
           <AppBar
             showMenuIconButton={true}
-            style={{boxShadow: '0 1px 6px rgba(255, 112, 112, 0.48), 0 1px 4px rgba(255, 112, 112, 0.56)'}}
-            title=<div className='karmatitle'></div>
+            className='appBar'
+            style={{borderBottom: '3px rgba(255, 155, 155, 0.9) solid', padding:'5px 0 !important' }}
+            title=<div className='karmatitle'><img style={{width: '44px', height: '45px'}} src={LogoIcon} /></div>
             iconElementRight={<div style={{width: 80 + 'px'}}></div>}
             iconElementLeft={backLink}/>
           <div className='spacer'></div>

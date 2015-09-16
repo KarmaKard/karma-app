@@ -1,2 +1,4 @@
 NODE_ENV=production
 API_HOST=https://{{ server_name }}
+AWS_SECRET_KEY_ID='TuGEKgjVh7w2WrJj+XuhiEUIxjsybyJX7YgiIpae'
+GOOGLE_MAPS_KEY='AIzaSyBm4B7SMPjld2uuinozMm2O-WwkKS7wT_M'

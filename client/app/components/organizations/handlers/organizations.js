@@ -74,7 +74,7 @@ export default React.createClass({
         <div className='spacer'></div>
         <Tabs className='bottomTabs' initialSelectedIndex={1} style={{zIndex:100, bottom:-4, position: 'fixed', width: '100%'}}>
           <Tab onClick={this.toDeals} value='0' label=<i className="material-icons md-36">local_offer</i> ></Tab>
-          <Tab onClick={this.toAccount} value='1' style={{color: 'rgb(255, 112, 112)', boxShadow: '0 -6px 14px rgba(255, 112, 112, 0.48), 0 -2px 7px rgba(255, 112, 112, 0.56)'}} label=<i className="material-icons md-36">account_box</i> ></Tab>
+          <Tab onClick={this.toAccount} value='1' style={{color: 'rgb(255, 112, 112)', backgroundColor: '#313131 !important', borderTop: '2px #FF7070 solid'}} label=<i className="material-icons md-36">account_box</i> ></Tab>
         </Tabs>
       </div>
     )

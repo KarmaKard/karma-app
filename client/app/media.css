@@ -49,11 +49,6 @@
 
   .back_button {
     float: left;
-    margin: 8px 0 0 10px;
-  }
-
-  .karma_button {
-    font-size: 28px;
   }
 
   .mobile_page_title {
@@ -136,7 +131,6 @@
 
   .back_button {
     float: left;
-    margin: 25px 0 0 75px;
   }
 
   .header_center {
@@ -157,11 +151,6 @@
     border-color: #000;
     overflow: auto
   }
-
-  .karma_button {
-    font-size: 36px;
-  }
-
   .disappear {
     display: none;
   }

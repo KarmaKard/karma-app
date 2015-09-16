@@ -63,7 +63,6 @@ export default React.createClass({
         <div className='main_card'>
           <div className='content_box-header'>Register</div>
           <Register setRegistrationInfo={this.setRegistrationInfo} setFbLogin={this.setFbLogin} createUser={this.createUser}/>
-           <input type='submit' ref='button' onClick={this.didClick} className='karma_button' value='Submit'/>
         </div>
       </div>
     )

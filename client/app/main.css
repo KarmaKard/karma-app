@@ -55,9 +55,7 @@ button {
 .karmatitle {
   width: 44px; 
   height: 45px;
-  margin-top: 8px;
-  margin: 8px auto;
-  background: url("../assets/img/blackandwhitelogo45.png");
+  margin:auto;
 }
 
 .list-header {
@@ -228,6 +226,7 @@ hr {
 .raisedButton span {
   font-family: 'Fjalla One', sans-serif !important;
   font-size: 18px !important;
+  color: white !important;
 }
 
 .cardText, .cardText span {
@@ -238,6 +237,11 @@ hr {
 
 .floatingActionButton {
   background-color: #FF7070 !important;
+}
+
+.appBar > div {
+  margin-top:0 !important;
+  margin-bottom: -10px !important
 }
 
 .cardHeader > div > :first-child {
