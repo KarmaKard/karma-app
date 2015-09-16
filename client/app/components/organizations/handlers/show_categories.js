@@ -263,7 +263,7 @@ export default React.createClass({
       return (
         <Card style={{backgroundColor:'#FF7070', margin: '15px auto'}}>
         <CardTitle className='cardTitle'  
-          title=<span style={{fontSize: '30px', margin: '0px 0 0 15px', color: 'white', display: 'block', lineHeight: '20px'}} >{bestReference}</span> />
+          title=<span style={{fontSize: '26px !important', margin: '2px 0 0 15px', color: 'white !important', display: 'block', lineHeight: '20px'}} >{bestReference}</span> />
           {organizationLinks}
         </Card>
       )

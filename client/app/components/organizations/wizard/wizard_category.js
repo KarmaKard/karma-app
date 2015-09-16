@@ -1,7 +1,7 @@
 import React from 'react'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 import mui from 'material-ui'
-import {AppBar, IconButton, CardTitle, FlatButton, RaisedButton, TextField} from 'material-ui'
+import {AppBar, SelectField, IconButton, CardTitle, FlatButton, RaisedButton, TextField} from 'material-ui'
 
 var ThemeManager = new mui.Styles.ThemeManager()
 
@@ -10,29 +10,56 @@ export default React.createClass({
     router: React.PropTypes.func
   },
 
+  getInitialState () {
+    return {
+      category: null
+    }
+  },
+
+  changeCategory (e) {
+    this.setState({category: e.target.value})
+  },
+
   nextClicked(e) {
     e.preventDefault()
-    var category = React.findDOMNode(this.refs.category).value
+    var category = this.state.category
     this.props.setCategory(category)
   },
 
-  render() {
+  render () {
+
+    var categories = [
+      {value: 'Dining', text: 'Dining'},
+      {value: 'Entertainment', text: 'Entertainment'},
+      {value: 'Health & Fitness', text: 'Health & Fitness'},
+      {value: 'Home & Garden', text: 'Home & Garden'},
+      {value: 'Professional', text: 'Professional'},
+      {value: 'Services', text: 'Services'},
+      {value: 'Shopping', text: 'Shopping'}
+    ]
+
+    var stateCategory = this.state.category ? this.state.category : null
     return (
       <div>
-        <div className="content_box-header">Business Category</div>
-        
-        <select ref="category" className="karma_input">
-          <option value="Dining">Dining</option>
-          <option value="Entertainment"> Entertainment</option>
-          <option value="Health & Fitness">Health & Fitness</option>
-          <option value="Home & Garden">Home & Garden</option>
-          <option value="Professional">Professional</option>
-          <option value="Services">Services</option>
-          <option value="Shopping">Shopping</option>
-        </select>
-        <form>
-          <input type="submit" ref="button" onClick={this.nextClicked} className="karma_button" value="Next" />
-        </form>
+        <CardTitle className="cardTitle">Business Category</CardTitle>
+        <SelectField
+          hintText="Business Category"
+          floatingLabelText="Business Category"
+          value={stateCategory}
+          onChange={this.changeCategory}
+          valueMember="value"
+          displayMember="text"
+          fullWidth={true}
+          menuItems={categories}/>
+        <RaisedButton
+          primary={true} 
+          fullWidth={true} 
+          onClick={this.nextClicked} 
+          className='raisedButton' 
+          label="Next" 
+          style={{
+            margin: '15px 0 0 0'
+          }}/>
       </div>
     )
   }

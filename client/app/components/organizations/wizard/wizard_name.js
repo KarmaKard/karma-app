@@ -52,7 +52,7 @@ export default React.createClass({
     var capitalizedType = orgType === 'business' ? 'Business' : 'Fundraiser'
     return (
       <div>
-        <div className='content_box-header'>{capitalizedType} Name</div>
+        <CardTitle className='cardTitle'> {capitalizedType} Name</CardTitle>
         <form>
           <TextField
             fullWidth={true}

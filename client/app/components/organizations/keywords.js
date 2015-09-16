@@ -80,11 +80,11 @@ export default React.createClass({
   render() {
     var keyword1, keyword2, keyword3, keyword4, keyword5
 
-      keyword1 = this.state.keyword1 ? this.state.keyword1 : this.props.organization.keywords[0]
-      keyword2 = this.state.keyword2 ? this.state.keyword2 : this.props.organization.keywords[1]
-      keyword3 = this.state.keyword3 ? this.state.keyword3 : this.props.organization.keywords[2]
-      keyword4 = this.state.keyword4 ? this.state.keyword4 : this.props.organization.keywords[3]
-      keyword5 = this.state.keyword5 ? this.state.keyword5 : this.props.organization.keywords[4]
+      keyword1 = this.state.keyword1
+      keyword2 = this.state.keyword2
+      keyword3 = this.state.keyword3
+      keyword4 = this.state.keyword4
+      keyword5 = this.state.keyword5
     
     return (
       <div>
@@ -93,7 +93,7 @@ export default React.createClass({
           hintText="Fast Food, Chinese, Date Night, Skating "
           fullWidth={true}
           floatingLabelText="Keyword 1"
-          defaultValue={keyword1} 
+          value={keyword1} 
           onChange={this.changeKeyword1}
           disabled={this.props.editDisabled} />
 
@@ -101,7 +101,7 @@ export default React.createClass({
           hintText="Fast Food, Chinese, Date Night, Skating "
           fullWidth={true}
           floatingLabelText="Keyword 2"
-          defaultValue={keyword2} 
+          value={keyword2} 
           onChange={this.changeKeyword2}
           disabled={this.props.editDisabled} />
 
@@ -109,7 +109,7 @@ export default React.createClass({
           hintText="Fast Food, Chinese, Date Night, Skating "
           fullWidth={true}
           floatingLabelText="Keyword 3"
-          defaultValue={keyword3} 
+          value={keyword3} 
           onChange={this.changeKeyword3}
           disabled={this.props.editDisabled} />
 
@@ -117,7 +117,7 @@ export default React.createClass({
           hintText="Fast Food, Chinese, Date Night, Skating "
           fullWidth={true}
           floatingLabelText="Keyword 4"
-          defaultValue={keyword4} 
+          value={keyword4} 
           onChange={this.changeKeyword4}
           disabled={this.props.editDisabled} />
 
@@ -125,7 +125,7 @@ export default React.createClass({
           hintText="Fast Food, Chinese, Date Night, Skating "
           fullWidth={true}
           floatingLabelText="Keyword 5"
-          defaultValue={keyword5} 
+          value={keyword5} 
           onChange={this.changeKeyword5}
           disabled={this.props.editDisabled} />
 

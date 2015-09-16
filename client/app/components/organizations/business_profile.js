@@ -158,10 +158,8 @@ export default React.createClass({
   },
 
   handleCrop () {
-    console.log('1')
     var imageData = this.refs.cropper.getImage().replace(/^data:image\/(png|jpg);base64,/, "")
     var imageBlob = this.b64toBlob(imageData, this.state.imageType)
-console.log('2')
     var s3Policy = { "expiration": "2020-12-01T12:00:00.000Z",
             "conditions": [
             {"bucket": 'karmakard'},
@@ -170,11 +168,10 @@ console.log('2')
             ["content-length-range", 0, 524288000]
             ]
           };
-console.log('3')
+
     // stringify and encode the policy
   var stringPolicy = JSON.stringify(s3Policy);
   var base64Policy = Buffer(stringPolicy, "utf-8").toString("base64");
-console.log(process.env.AWS_SECRET_KEY_ID, base64Policy)
   // sign the base64 encoded policy
   var signature = crypto.createHmac("sha1", process.env.AWS_SECRET_KEY_ID)
     .update(new Buffer(base64Policy, "utf-8")).digest("base64");
@@ -182,7 +179,6 @@ console.log(process.env.AWS_SECRET_KEY_ID, base64Policy)
     var xhr = new XMLHttpRequest()
     var fd = new FormData()
     var key = 'uploads/' + this.props.organization.id + '_' + Date.now() + '.png'
-console.log('6')
     // Populate the Post paramters.
     fd.append('key', key);
     fd.append('AWSAccessKeyId', 'AKIAJPJSSDYIMIBTAXSA');
@@ -191,10 +187,8 @@ console.log('6')
     fd.append('Content-Type', this.state.imageType)
     // This file object is retrieved from a file input.
     fd.append('file', imageBlob);
-console.log('7')
     xhr.open('POST', 'https://karmakard.s3.amazonaws.com', true);
     xhr.send(fd)
-console.log('8')
     xhr.upload.addEventListener('progress', function(e) {
       if (firstProgressEvent) {
         _this.total += e.total;
@@ -203,11 +197,9 @@ console.log('8')
       _this.loaded += (e.loaded - lastBytesLoaded);
       _this.onProgress(_this.loaded / _this.total);
     }, false);
-console.log('10')
     xhr.onreadystatechange = function() {
       if (xhr.readyState != 4)  { return; }
       var uploadedImageURL = 'https://karmakard.s3.amazonaws.com/' + key
-      console.log('11')
       this.setState({
         buttonDisabled: false,
         cropperOpen: false,
@@ -216,7 +208,6 @@ console.log('10')
         logoURL: uploadedImageURL
       })
     }.bind(this)
-    console.log('12')
   },
 
   b64toBlob (b64Data, contentType, sliceSize) {
@@ -274,11 +265,11 @@ console.log('10')
       avatarCropper = (
         <Card style={{padding: '2%', margin: '0 auto'}}>
           <AvatarEditor
-            style={{width:'100%', height:'100%'}}
             ref='cropper'
+            style={{margin:'auto', display: 'block'}}
             image={this.state.img}
-            width={250}
-            height={250}
+            width={125}
+            height={125}
             border={50}
             color={[255, 255, 255, 0.6]} // RGBA 
             scale={this.state.zoom} />
@@ -289,7 +280,7 @@ console.log('10')
     } else {
       var logoURL = this.props.organization.logoURL ? this.props.organization.logoURL : this.state.croppedImg
       avatarCropper = (
-        <Card style={{margin:'0 auto'}} className="avatar-photo">
+        <Card style={{margin:'0 auto', height: '125px', width:'125px'}} className="avatar-photo">
           <input ref="in" type="file" accept="image/*" onChange={this.handleFile} />
           <div className="avatar-edit">
             <span>Logo Upload</span>

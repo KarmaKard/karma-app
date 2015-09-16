@@ -1,7 +1,9 @@
 import express from 'express'
+import premailer from 'premailer-api'
+var MailComposer = require('mailcomposer').MailComposer
+import * as emailTemplates from '../common/email_templates/templates'
 import * as organizationsTable from './organizations-table'
 import validateCreate from './validators/validate-create'
-import validateUpdate from './validators/validate-update'
 import * as usersTable from './../users/users-table'
 import * as auth from '../common/middleware/authentication'
 import { encode as encodeToken } from '../common/services/token'
@@ -77,32 +79,38 @@ export async function confirm (req, res, next) {
     var fundraiserMembers = req.body.fundraiserMembers
     if (organization.status === 'active') {
       organization = await organizationsTable.update(organization)
-      var recipients = {}
-      var recipientEmails = []
-      fundraiserMembers.forEach(fundraiserMember => {
-        recipientEmails.push(fundraiserMember.email)
-        recipients[fundraiserMember.email] = {
-          organizationName: organization.name,
-          name: fundraiserMember.name,
-          url: config.domain.base_url + '/#/add_fundraiser_member/' + fundraiserMember.id
-        }
+      res.status(201).json({organization})
+      fundraiserMembers.forEach(async function(fundraiserMember) {
+        var activationLink = config.domain.base_url + '/#/add_fundraiser_member/' + fundraiserMember.id
+        var emailTemplate = await emailTemplates.addFundraiserMember(fundraiserMember, organization, activationLink)
+        premailer.prepare({html: emailTemplate }, async function(e, email) {
+          try {
+            var mailcomposer = new MailComposer()
+            await mailcomposer.setMessageOption({
+              from: 'KarmaKard Fundraising <fundraising@karmakard.org>',
+              to: fundraiserMember.email,
+              subject: organization.name + ' Has Added You',
+              body: 'Hello ' + fundraiserMember.name + ', ' + organization.name + ' has added you as a fundraiser for their team. Go ahead and join by clicking the following link and logging in or registering.  ' + activationLink,
+              html: email.html
+            })
+            await mailcomposer.buildMessage(async function(mailBuildError, messageSource) {
+              try {
+                var dataToSend = {
+                    to: fundraiserMember.email,
+                    message: messageSource
+                }
+                var mailgunResponse = await mailgun.sendMimeMessage(dataToSend)
+                console.log(mailgunResponse)
+              } catch (e) {
+                next(e)
+              }
+            })
+
+          } catch (e) {
+            next(e)
+          }
+        })
       })
-
-      var data = {
-        from: 'KarmaKard Fundraising <fundraising@karmakard.org>',
-        to: recipientEmails,
-        subject: '%recipient.organizationName% has added you',
-        'recipient-variables': JSON.stringify(recipients),
-        text: 'Hello %recipient.name%, %recipient.organizationName% has added you as a fundraiser for their team. Go ahead and join by clicking the following link and logging in or registering.  %recipient.url%'
-      }
-
-      var mailgunResponse = await mailgun.send(data)
-      if (mailgunResponse) {
-        organization = await organizationsTable.update(req.body.organization)
-        return res.status(201).json({organization})
-      } else {
-        return res.status(400).send('Was not able to send email to this person.')
-      }
     }
   } catch (e) {
     next(e)

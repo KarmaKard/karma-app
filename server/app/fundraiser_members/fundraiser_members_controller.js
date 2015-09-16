@@ -1,4 +1,6 @@
 import express from 'express'
+import premailer from 'premailer-api'
+var MailComposer = require("mailcomposer").MailComposer
 import * as organizationsTable from '../organizations/organizations-table'
 import * as usersTable from '../users/users-table'
 import * as dealsTable from '../deals/deals-table'

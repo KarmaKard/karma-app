@@ -237,11 +237,11 @@ export default React.createClass({
       avatarCropper = (
        <Card style={{padding: '2%', margin: '0 auto'}}>
           <AvatarEditor
-            style={{width:'100%', height:'100%'}}
             ref='cropper'
+            style={{margin:'auto', display: 'block'}}
             image={this.state.img}
-            width={250}
-            height={250}
+            width={125}
+            height={125}
             border={50}
             color={[255, 255, 255, 0.6]} // RGBA 
             scale={this.state.zoom} />
@@ -252,7 +252,7 @@ export default React.createClass({
     } else {
       var logoURL = this.props.organization.logoURL ? this.props.organization.logoURL : this.state.croppedImg
       avatarCropper = (
-         <Card style={{margin:'0 auto'}} className="avatar-photo">
+         <Card style={{margin: '0 auto', height: '125px', width:'125px'}} className="avatar-photo">
           <input ref="in" type="file" accept="image/*" onChange={this.handleFile} />
           <div className="avatar-edit">
             <span>Logo Upload</span>
