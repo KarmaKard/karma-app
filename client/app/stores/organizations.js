@@ -33,8 +33,11 @@ export default class OrganizationStore extends Store {
   }
 
   replaceOrganization (organization) {
+    console.log('store object', organization)
     var allOrganizations = this.state.organizations
+    console.log('allOrganizations before', allOrganizations)
     allOrganizations.splice(allOrganizations.map(function (x) {return x.id }).indexOf(organization.id), 1, organization)
+    console.log('allOrganizations after', allOrganizations)
     this.setState({organization: allOrganizations})
   }
 

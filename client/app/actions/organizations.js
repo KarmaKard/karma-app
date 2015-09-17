@@ -19,6 +19,7 @@ export default class OrganizationsActions extends Actions {
     var p = KarmaAPI.updateOrganization(organization)
     p.then(organization => {
       if (organization) {
+        console.log('actions',organization)
         this.dispatch('updateOrganization', organization)
       }
     })

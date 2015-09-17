@@ -85,6 +85,8 @@ export default React.createClass({
       keyword3 = this.state.keyword3
       keyword4 = this.state.keyword4
       keyword5 = this.state.keyword5
+
+    console.log(this.state)
     
     return (
       <div>
