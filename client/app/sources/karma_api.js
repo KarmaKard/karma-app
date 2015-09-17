@@ -235,7 +235,6 @@ export function updateOrganization (organization) {
         if (err) {
           return reject(err)
         }
-        console.log('kAPI', res.body.organization)
         resolve(res.body.organization)
       })
   })

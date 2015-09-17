@@ -72,13 +72,12 @@ export default React.createClass({
     var locationsStatus = this.props.organization.locations.length === 0 ? 0 : 1
 
     var keywordsStatus = 0
-    console.log('business dashboard checker', this.props.organization.keywords)
     for (var i = 0; i < this.props.organization.keywords.length; i++) {
       if (this.state.organization.keywords[i]) {
         keywordsStatus = 1
       }
     }
-    console.log('business dashboard checked', keywordsStatus)
+        
     var dealsStatus
     if(this.props.deals.length >= 2){
       var freeDealExists
