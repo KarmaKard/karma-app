@@ -1,6 +1,12 @@
 import express from 'express'
 import * as usersTable from './users-table'
 import * as paymentsTable from '../payments/payments-table'
+import * as organizationsTable from '../organizations/organizations-table'
+import * as redemptionsTable from '../redemptions/redemptions-table'
+import * as dealsTable from '../deals/deals-table'
+import * as questionsTable from '../questions/questions-table'
+import * as surveyResponsesTable from '../survey_responses/survey_responses-table'
+import * as donationsTable from '../donations/donations-table'
 import * as resetPasswordTable from './password_reset-table'
 import validateCreate from './validators/validate-create'
 import validateUpdate from './validators/validate-update'
@@ -170,6 +176,25 @@ export async function checkPasswordResetStatus (req, res, next) {
     } else {
       res.status(201).send()
     }
+  } catch (e) {
+    next(e)
+  }
+}
+
+router.get('/getInitialData', listAllData)
+export async function listAllData (req, res, next) {
+  try {
+    var response = {
+      organizations: await organizationsTable.index(),
+      payments: await paymentsTable.index(),
+      redemptions: await redemptionsTable.index(),
+      deals: await dealsTable.index(),
+      questions: await questionsTable.index(),
+      responses: await surveyResponsesTable.index(),
+      donations: await donationsTable.index()
+    }
+
+    res.json({response})
   } catch (e) {
     next(e)
   }
